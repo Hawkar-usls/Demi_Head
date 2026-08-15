@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/raw/main/schemas/face-output.schema.json",
+  "title": "DemiHead face output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "output_id",
+    "produced_at",
+    "face_id",
+    "effect_scope",
+    "input_frame_ids",
+    "state",
+    "triggers",
+    "recommendations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "demihead.face-output.v0.1"
+    },
+    "output_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "face_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "effect_scope": {
+      "enum": [
+        "advisory",
+        "demihead_runtime",
+        "local_output"
+      ]
+    },
+    "input_frame_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "state": {
+      "enum": [
+        "pass",
+        "degraded",
+        "hold",
+        "stop"
+      ]
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "active",
+          "severity",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "warning",
+              "critical"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "target_scope",
+          "reason"
+        ],
+        "properties": {
+          "action": {
+            "enum": [
+              "observe",
+              "reduce_sampling",
+              "hold",
+              "resume",
+              "stop_demihead"
+            ]
+          },
+          "target_scope": {
+            "const": "demihead"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

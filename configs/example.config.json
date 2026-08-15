@@ -1,0 +1,53 @@
+{
+  "$schema": "../schemas/config.schema.json",
+  "schema_version": "demihead.config.v0.1",
+  "runtime": {
+    "sample_interval_ms": 2000,
+    "freshness_limit_ms": 6000,
+    "window_samples": 30,
+    "max_observer_cpu_percent": 0.5,
+    "max_observer_memory_mb": 64,
+    "max_loop_lag_ms": 250,
+    "budget_breach_limit": 3
+  },
+  "privacy": {
+    "collect_command_line": false,
+    "collect_environment": false,
+    "collect_payloads": false,
+    "collect_network_content": false,
+    "redact_host_identity": true
+  },
+  "targets": [
+    {
+      "id": "first-opt-in-process",
+      "enabled": false,
+      "adapter": "windows_process_counters",
+      "process_names": [
+        "replace-me.exe"
+      ]
+    }
+  ],
+  "faces": [
+    {
+      "id": "mirror",
+      "enabled": true,
+      "effect_scope": "advisory"
+    },
+    {
+      "id": "steward",
+      "enabled": true,
+      "effect_scope": "demihead_runtime"
+    },
+    {
+      "id": "registry",
+      "enabled": false,
+      "effect_scope": "local_output"
+    }
+  ],
+  "output": {
+    "format": "jsonl",
+    "path": "output/demihead.jsonl",
+    "max_file_mb": 16,
+    "retained_files": 4
+  }
+}

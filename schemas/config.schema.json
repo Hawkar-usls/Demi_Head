@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/raw/main/schemas/config.schema.json",
+  "title": "DemiHead configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "runtime",
+    "privacy",
+    "targets",
+    "faces",
+    "output"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "demihead.config.v0.1"
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sample_interval_ms",
+        "freshness_limit_ms",
+        "window_samples",
+        "max_observer_cpu_percent",
+        "max_observer_memory_mb",
+        "max_loop_lag_ms",
+        "budget_breach_limit"
+      ],
+      "properties": {
+        "sample_interval_ms": {
+          "type": "integer",
+          "minimum": 250
+        },
+        "freshness_limit_ms": {
+          "type": "integer",
+          "minimum": 250
+        },
+        "window_samples": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 10000
+        },
+        "max_observer_cpu_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "max_observer_memory_mb": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_loop_lag_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "budget_breach_limit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collect_command_line",
+        "collect_environment",
+        "collect_payloads",
+        "collect_network_content",
+        "redact_host_identity"
+      ],
+      "properties": {
+        "collect_command_line": {
+          "const": false
+        },
+        "collect_environment": {
+          "const": false
+        },
+        "collect_payloads": {
+          "const": false
+        },
+        "collect_network_content": {
+          "const": false
+        },
+        "redact_host_identity": {
+          "type": "boolean"
+        }
+      }
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "enabled",
+          "adapter",
+          "process_names"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "adapter": {
+            "const": "windows_process_counters"
+          },
+          "process_names": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "faces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "enabled",
+          "effect_scope"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "effect_scope": {
+            "enum": [
+              "advisory",
+              "demihead_runtime",
+              "local_output"
+            ]
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "path",
+        "max_file_mb",
+        "retained_files"
+      ],
+      "properties": {
+        "format": {
+          "const": "jsonl"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "max_file_mb": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "retained_files": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

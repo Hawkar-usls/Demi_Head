@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/raw/main/schemas/signal-frame.schema.json",
+  "title": "DemiHead signal frame",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "frame_id",
+    "observed_at",
+    "source",
+    "metrics",
+    "signals",
+    "quality",
+    "observer_cost",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "demihead.signal-frame.v0.1"
+    },
+    "frame_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_id",
+        "target_id",
+        "sample_interval_ms"
+      ],
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "process_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pid": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "sample_interval_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "number",
+          "null"
+        ]
+      }
+    },
+    "signals": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/signal"
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "freshness_ms",
+        "issues"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "valid",
+            "degraded",
+            "stale",
+            "unavailable"
+          ]
+        },
+        "freshness_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observer_cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cpu_percent",
+        "memory_mb",
+        "loop_lag_ms",
+        "budget_state"
+      ],
+      "properties": {
+        "cpu_percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "memory_mb": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "loop_lag_ms": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "budget_state": {
+          "enum": [
+            "within",
+            "near",
+            "exceeded",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collector_version",
+        "normalizer_id"
+      ],
+      "properties": {
+        "collector_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalizer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "config_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "host_pseudonym": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "unit",
+        "confidence",
+        "freshness_ms",
+        "status",
+        "source_metrics"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "freshness_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "degraded",
+            "stale",
+            "unavailable"
+          ]
+        },
+        "source_metrics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
