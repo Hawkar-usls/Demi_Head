@@ -1,128 +1,203 @@
 <div align="center">
 
-# Janus DemiHead
-### Ambient process telemetry adapter for structured, resource-aware signals
+# JANUS DemiHead
+### KETO / CETUS Guardian Mesh reference head
 
-![Status](https://img.shields.io/badge/status-work%20in%20progress-f0ad4e)
-![Mode](https://img.shields.io/badge/mode-read--only%20observer-2f81f7)
-![Scope](https://img.shields.io/badge/scope-local--first-6e7681)
+![Status](https://img.shields.io/badge/status-active%20prototype-2f81f7)
+![Mode](https://img.shields.io/badge/default-read--only%20verification-8957e5)
+![Authority](https://img.shields.io/badge/mass%20effect%20budget-0-critical)
 
-`observe` · `normalize` · `gate` · `project`
+`observe` · `collapse roots` · `verify provenance` · `preserve disagreement` · `release control`
 
 </div>
 
-> **Status: Work in Progress.** The repository foundation and data contracts are present. The runtime collector, Storj adapter, and overhead benchmarks are not implemented yet.
+> **DemiHead is the integration head for the JANUS Guardian Mesh / Armor of God civic-information branch.** It combines the repository's original local-first observer foundation with bounded claim decomposition, source-root collapse, evidence-state receipts, Face orchestration contracts, and fail-safe civic-service architecture.
 
-[Русская версия](docs/README.ru.md)
+## Mission
 
-## Abstract
-
-DemiHead is a proposed local-first adapter that turns operating-system telemetry from already running processes into bounded, machine-readable signals and triggers for the Janus ecosystem.
-
-An observed application continues to run unchanged. DemiHead reads only explicitly allowed counters, derives deltas and normalized state, applies freshness and resource-budget gates, and projects the result through pluggable output views called **faces**.
-
-The project does not assume literal zero-cost observation. Its own CPU, memory, disk, and timing cost must be measured and kept inside a declared budget.
-
-## Current state
-
-| Surface | Status |
-| --- | --- |
-| Public project boundary | `IMPLEMENTED` |
-| Architecture and terminology | `DRAFTED` |
-| JSON signal / face contracts | `DRAFTED` |
-| Contract validation and CI | `IMPLEMENTED` |
-| Runtime process collector | `NOT_IMPLEMENTED` |
-| Storj-specific adapter | `NOT_IMPLEMENTED` |
-| Measured overhead | `NOT_PERFORMED` |
-| Autonomous control of external processes | `NOT_CLAIMED` |
-
-Machine-readable status: [`PROJECT_STATUS.json`](PROJECT_STATUS.json)
-
-## Core model
+DemiHead is not a ministry of truth and not an engagement engine. Its target is narrower:
 
 ```text
-existing process
-      |
-      | OS-exposed, allowlisted counters only
-      v
-source adapter -> observation window -> normalization -> safety gate
-                                                       |
-                           +---------------------------+------------------+
-                           |                           |                  |
-                           v                           v                  v
-                      mirror face                steward face       registry face
-                   normalized state          DemiHead pacing       evidence record
+INPUT
+  -> CLAIM
+  -> PRESENTATIONS
+  -> SOURCE ROOTS
+  -> CHRONOLOGY / FRESHNESS
+  -> SUPPORT / CONTRADICTION / UNKNOWN
+  -> BOUNDED RESULT
+  -> HUMAN INSPECTION
+  -> RELEASE CONTROL
 ```
 
-A useful number is not an arbitrary hash. It is a bounded derived signal with provenance:
+The reference implementation must make it easier to inspect evidence without turning JANUS into a covert persuasion system.
 
 ```text
-signal = f(metric_delta, local_baseline, freshness, confidence, observer_budget)
+SOURCE_COUNT != INDEPENDENT_ROOT_COUNT
+OFFICIAL_POSITION != EXCLUSIVE_OBJECTIVE_TRUTH
+STALE != CURRENT
+NO_SOURCE != FALSE
+MODEL_OUTPUT != EVIDENCE
+MORE_FACES != MORE_RIGHTS
 ```
 
-Missing or stale measurements remain unknown. They are never silently converted to zero.
+## Why DemiHead
 
-## Faces
+The repository already contained a useful lower layer: a read-only observer that converts allowlisted local process telemetry into normalized frames through freshness and budget gates. That design is preserved as **Observer Head** rather than discarded.
 
-A face is a deterministic projection of one shared signal frame. Face names are provisional until the first vertical slice is implemented.
+DemiHead now hosts several bounded heads over the same constitutional boundary:
 
-- **Mirror** exposes normalized process state without issuing commands.
-- **Steward** adjusts DemiHead's own sampling pressure or emits advisory hold/resume triggers.
-- **Registry** emits bounded JSON evidence for later inspection.
+| Head | Purpose | Default external effect |
+| --- | --- | --- |
+| `observer` | local telemetry / degraded-mode state | none |
+| `claim` | normalize a submitted claim | none |
+| `source-graph` | collapse derivative presentations to provenance roots | none |
+| `independence` | count authenticated roots/failure domains separately | none |
+| `review` | preserve disagreement / HOLD | none |
+| `guardian` | produce a bounded evidence-state response | local output only |
+| `release-control` | stop escalation when information need is satisfied | reduces activity |
 
-The v0.1 contract does not authorize a face to inject into, impersonate, hide from, or control an observed process.
+External publication, outreach, platform posting, political targeting, identity creation and state action are **not** part of the reference head.
 
-## First vertical slice
+## KETO / CETUS model
 
-The first implementation target is deliberately narrow:
+`KETO` is the portfolio-audit / composition layer: it may discover useful mechanisms across JANUS projects, but discovery never grants authority.
 
-1. observe one opt-in Windows process through ordinary OS counters;
-2. sample CPU, memory, and cumulative I/O counters at a conservative interval;
-3. derive rate, stability, freshness, and activity signals;
-4. emit JSON Lines conforming to the published schemas;
-5. measure DemiHead's own overhead and fail closed when its budget is exceeded.
+`CETUS` is a bounded case object: one submitted incident, claim, message, banner, post or source cluster being inspected.
 
-Storj is the first candidate adapter, but its application semantics and network payloads remain outside the observer boundary unless a documented public API is explicitly selected later.
-
-## Boundary
+`KRAKEN_MODE` remains a post-ironic operator alias only.
 
 ```text
-MATURITY = WORK_IN_PROGRESS
-OPERATING_MODE = READ_ONLY_OBSERVER
-ZERO_OVERHEAD = NOT_CLAIMED
-EXTERNAL_PROCESS_INJECTION = FORBIDDEN
-MEMORY_SCRAPING = FORBIDDEN
-CREDENTIAL_OR_PAYLOAD_CAPTURE = FORBIDDEN
-STEALTH_OR_CONTROL_BYPASS = FORBIDDEN
-AUTONOMOUS_EXTERNAL_PROCESS_CONTROL = NOT_IMPLEMENTED
-PROFIT_OR_EFFICIENCY_GAIN = NOT_ESTABLISHED
+KETO_DISCOVERS_CAPABILITIES
+KETO_DOES_NOT_INHERIT_AUTHORITY
 ```
 
-Read [`SECURITY.md`](SECURITY.md) before adding a source adapter.
+Canonical design record:
 
-## Reviewer path
+- `janus-meta-registry/data/JANUS-GENESIS-GUARDIAN-MESH-KETO-CETUS-ECOSYSTEM-SWEEP-AND-CIVIC-RESILIENCE-v1.2.json`
+- mirrored in `Janus_Genesis/docs/`
 
-1. [`PROJECT_STATUS.json`](PROJECT_STATUS.json) - maturity and claim boundary.
-2. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) - pipeline, contracts, and failure behavior.
-3. [`docs/GLOSSARY.md`](docs/GLOSSARY.md) - translation from project metaphors to engineering terms.
-4. [`docs/CROSS_REPO_LINEAGE.md`](docs/CROSS_REPO_LINEAGE.md) - inherited Janus patterns and explicit exclusions.
-5. [`docs/ROADMAP.md`](docs/ROADMAP.md) - gated implementation sequence.
-6. [`schemas/`](schemas/) - machine-readable contracts.
+## First executable vertical slice
 
-Run the same contract check used by CI with `python tools/validate_repository.py` after installing [`requirements-dev.txt`](requirements-dev.txt).
+The repository now targets a small deterministic reference path:
 
-## Janus lineage
+```bash
+python tools/keto_reference.py examples/case_echo_collapse.json
+```
 
-DemiHead reuses bounded design patterns from sibling repositories: observer-first measurement from `janus-io-public`, explicit protocol boundaries from `janus-distributed-ai-swarm`, fail-closed evidence discipline from `AIFC` and `Janus-Fundamentum`, portable JSON contracts from `Janus_Genesis`, and resource-monitoring lessons from the legacy `Janus-Demiurge` sandbox.
+The tool does **not** browse the web and does not decide objective truth. It demonstrates the core accounting rules:
 
-No sibling source code has been copied into this repository at the foundation stage. See the [lineage record](docs/CROSS_REPO_LINEAGE.md).
+1. parse one case;
+2. preserve every presentation;
+3. collapse presentations by declared `root_id`;
+4. keep stale/current state explicit;
+5. separate official-position roots from independent roots;
+6. preserve support and contradiction together;
+7. emit `UNRESOLVED`, `SUPPORTED_BY_PRESENT_SOURCES`, `CONTRADICTED_BY_PRESENT_SOURCES`, or `CONTESTED`;
+8. emit a release-control recommendation rather than another engagement loop.
 
-## Naming
+A later live source adapter must earn admission through separate security, provenance, freshness and governance gates.
 
-The public display name is **Janus DemiHead**. The repository is still named `Demi_Head` while the final slug is discussed. The current recommendation is `Janus-DemiHead` for clear ecosystem ownership and readable GitHub URLs.
+## Cross-repository composition
+
+DemiHead intentionally composes **patterns**, not ambient privileges:
+
+- **Janus_Genesis** — Face microcontrol, authority epochs, typed capability boundaries and receipts;
+- **JANUS Meta Registry / OPIR / Connection** — semantic lineage, correction descendants, source-unit collapse and authenticated independence;
+- **HRain / iNaiHR** — human-visible graph and inspectable semantic decomposition;
+- **AIFC** — canonicalization, witness lifecycle, append-only evidence and fail-closed verification;
+- **Fast-CAT-SHAiTan** — blinded human review and disagreement preservation;
+- **Janus-Fundamentum** — falsification, negative-result preservation and claim ceilings;
+- **janus-io / janus-io-public** — proof-of-observation and counterfactual incident review;
+- **Janus-Cosmos** — anti-pseudoreplication and blind-gate discipline;
+- **janus-distributed-ai-swarm** — stale visibility, local degraded mode and no-fake-sensor rules.
+
+See [`docs/CROSS_REPO_LINEAGE.md`](docs/CROSS_REPO_LINEAGE.md) and [`docs/GUARDIAN_MESH.md`](docs/GUARDIAN_MESH.md).
+
+## Civic-service direction
+
+A future public-service deployment may expose user-invoked web/PWA/bot/SMS-bootstrap interfaces, but this repository does not claim connection to Ukrainian state systems or production readiness.
+
+A civic deployment must preserve:
+
+```text
+OFFICIAL_POSITION || INDEPENDENT_EVIDENCE || CONTRADICTIONS || UNKNOWN
+```
+
+rather than collapsing everything into a state-issued boolean.
+
+The citizen must be able to inspect sources, disagree, appeal, opt out, remove optional personalization context and leave the service.
+
+## Doomsday firewall
+
+DemiHead has a deliberately boring answer to the "what if the monster grows teeth?" problem:
+
+```text
+MASS_EFFECT_BUDGET_DEFAULT = 0
+NO_COVERT_MASS_PERSUASION
+NO_SELF_SPAWNING_PUBLIC_IDENTITIES
+NO_AUTONOMOUS_ASTROTURF
+NO_UNSOLICITED_PERSONALIZED_POLITICAL_OUTREACH
+NO_OPTIMIZATION_ON_BELIEF_CHANGE
+NO_PSYCHOLOGICAL_VULNERABILITY_TARGETING
+NO_MODEL_WRITABLE_CONSTITUTION
+AMBIGUOUS_EFFECT != RETRY_PERMISSION
+```
+
+Many Faces may review a proposal; they do not manufacture external authority.
+
+## Repository map
+
+```text
+Demi_Head/
+├── README.md
+├── PROJECT_STATUS.json
+├── SECURITY.md
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── GUARDIAN_MESH.md
+│   ├── CROSS_REPO_LINEAGE.md
+│   ├── GLOSSARY.md
+│   └── ROADMAP.md
+├── schemas/
+│   ├── config.schema.json
+│   ├── signal-frame.schema.json
+│   ├── face-output.schema.json
+│   └── keto-case.schema.json
+├── configs/
+│   ├── example.config.json
+│   └── keto.example.json
+├── examples/
+│   └── case_echo_collapse.json
+└── tools/
+    ├── keto_reference.py
+    └── validate_repository.py
+```
+
+## Current boundary
+
+```text
+MATURITY = ACTIVE_PROTOTYPE
+LIVE_FACT_CHECKING = NOT_IMPLEMENTED
+STATE_API_INTEGRATION = NOT_ESTABLISHED
+PLATFORM_AUTOMATION = NOT_IMPLEMENTED
+MASS_PUBLICATION = FORBIDDEN_BY_DEFAULT
+COERCIVE_OR_COVERT_PERSUASION = FORBIDDEN
+OBJECTIVE_TRUTH_FROM_MODEL_OUTPUT = FORBIDDEN
+READ_ONLY_LOCAL_REFERENCE_PATH = IMPLEMENTATION_TARGET
+```
+
+Schema validity establishes structure, not truth. A hash establishes integrity, not truth. Multiple presentations establish repetition, not independence.
+
+## Validation
+
+```bash
+python -m pip install -r requirements-dev.txt
+python tools/validate_repository.py
+python -m unittest discover -s tests -v
+```
 
 ## License
 
 Apache License 2.0. See [`LICENSE`](LICENSE).
 
-Presentation follows the account's [public repository standard](https://github.com/Hawkar-usls/Janus/blob/main/docs/PUBLIC_REPOSITORY_PRESENTATION_STANDARD.md). No affiliation with MIT is implied by the presentation style.
+**Canonical motto:** *Let the mother of monsters birth checks, not masters.*
