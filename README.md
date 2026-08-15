@@ -11,6 +11,8 @@
 
 </div>
 
+**Languages:** [Українська](docs/README.uk.md) · [Русская / post-irony](docs/README.ru.md) · [KETO/CETUS naming](docs/KETO_CETUS.md)
+
 > **DemiHead is the integration head for the JANUS Guardian Mesh / Armor of God civic-information branch.** It combines the repository's original local-first observer foundation with bounded claim decomposition, source-root collapse, evidence-state receipts, Face orchestration contracts, and fail-safe civic-service architecture.
 
 ## Mission
@@ -155,19 +157,25 @@ Demi_Head/
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── GUARDIAN_MESH.md
+│   ├── KETO_CETUS.md
 │   ├── CROSS_REPO_LINEAGE.md
+│   ├── README.uk.md
+│   ├── README.ru.md
 │   ├── GLOSSARY.md
 │   └── ROADMAP.md
 ├── schemas/
 │   ├── config.schema.json
 │   ├── signal-frame.schema.json
 │   ├── face-output.schema.json
-│   └── keto-case.schema.json
+│   ├── keto-case.schema.json
+│   └── keto-result.schema.json
 ├── configs/
 │   ├── example.config.json
 │   └── keto.example.json
 ├── examples/
 │   └── case_echo_collapse.json
+├── tests/
+│   └── test_keto_reference.py
 └── tools/
     ├── keto_reference.py
     └── validate_repository.py
@@ -183,7 +191,7 @@ PLATFORM_AUTOMATION = NOT_IMPLEMENTED
 MASS_PUBLICATION = FORBIDDEN_BY_DEFAULT
 COERCIVE_OR_COVERT_PERSUASION = FORBIDDEN
 OBJECTIVE_TRUTH_FROM_MODEL_OUTPUT = FORBIDDEN
-READ_ONLY_LOCAL_REFERENCE_PATH = IMPLEMENTATION_TARGET
+READ_ONLY_LOCAL_REFERENCE_PATH = IMPLEMENTED
 ```
 
 Schema validity establishes structure, not truth. A hash establishes integrity, not truth. Multiple presentations establish repetition, not independence.
