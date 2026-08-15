@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/keto-result.schema.json",
+  "title": "JANUS DemiHead KETO bounded result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "case_id",
+    "claim",
+    "accounting",
+    "roots",
+    "official_position_roots",
+    "authenticated_independent_roots",
+    "current_support_roots",
+    "current_contradiction_roots",
+    "stale_presentations",
+    "unknown_freshness_presentations",
+    "evidence_state",
+    "truth_claim",
+    "mass_effect_budget",
+    "release_control",
+    "invariants"
+  ],
+  "properties": {
+    "schema": {"const": "janus.demihead.keto_result.v1"},
+    "case_id": {"type": "string", "minLength": 1},
+    "claim": {"type": "object"},
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentation_count",
+        "root_count",
+        "current_support_root_count",
+        "current_contradiction_root_count",
+        "official_position_root_count",
+        "authenticated_independent_root_count",
+        "stale_presentation_count",
+        "unknown_freshness_presentation_count"
+      ],
+      "properties": {
+        "presentation_count": {"type": "integer", "minimum": 0},
+        "root_count": {"type": "integer", "minimum": 0},
+        "current_support_root_count": {"type": "integer", "minimum": 0},
+        "current_contradiction_root_count": {"type": "integer", "minimum": 0},
+        "official_position_root_count": {"type": "integer", "minimum": 0},
+        "authenticated_independent_root_count": {"type": "integer", "minimum": 0},
+        "stale_presentation_count": {"type": "integer", "minimum": 0},
+        "unknown_freshness_presentation_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "roots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["root_id", "presentation_count", "current_presentation_count", "source_classes", "current_relations", "independence_states"],
+        "properties": {
+          "root_id": {"type": "string"},
+          "presentation_count": {"type": "integer", "minimum": 1},
+          "current_presentation_count": {"type": "integer", "minimum": 0},
+          "source_classes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "current_relations": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "independence_states": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    },
+    "official_position_roots": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "authenticated_independent_roots": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "current_support_roots": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "current_contradiction_roots": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "stale_presentations": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "unknown_freshness_presentations": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "evidence_state": {
+      "type": "string",
+      "enum": ["UNRESOLVED", "SUPPORTED_BY_PRESENT_SOURCES", "CONTRADICTED_BY_PRESENT_SOURCES", "CONTESTED"]
+    },
+    "truth_claim": {"const": "NOT_MADE"},
+    "mass_effect_budget": {"const": 0},
+    "release_control": {
+      "type": "string",
+      "enum": [
+        "SHOW_CONFLICT_AND_STOP_ESCALATION_UNLESS_NEW_EVIDENCE",
+        "WAIT_FOR_PRIMARY_OR_INDEPENDENT_EVIDENCE",
+        "SHOW_ROOTS_AND_ALLOW_USER_TO_EXIT"
+      ]
+    },
+    "invariants": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true}
+  }
+}
