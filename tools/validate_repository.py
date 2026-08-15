@@ -24,6 +24,7 @@ def validate_json_documents() -> None:
     paths.extend(sorted((ROOT / "configs").glob("*.json")))
     paths.extend(sorted((ROOT / "schemas").glob("*.json")))
     paths.extend(sorted((ROOT / "examples").glob("*.json")))
+    paths.extend(sorted((ROOT / "docs").glob("*.json")))
     for path in paths:
         load_json(path)
 
@@ -35,10 +36,15 @@ def validate_schemas() -> dict[str, object]:
     for schema in schemas.values():
         Draft202012Validator.check_schema(schema)
 
-    config = load_json(ROOT / "configs" / "example.config.json")
+    observer_config = load_json(ROOT / "configs" / "example.config.json")
     Draft202012Validator(
         schemas["config.schema.json"], format_checker=FormatChecker()
-    ).validate(config)
+    ).validate(observer_config)
+
+    keto_config = load_json(ROOT / "configs" / "keto.example.json")
+    Draft202012Validator(
+        schemas["keto-config.schema.json"], format_checker=FormatChecker()
+    ).validate(keto_config)
 
     keto_case = load_case(ROOT / "examples" / "case_echo_collapse.json")
     Draft202012Validator(
@@ -108,7 +114,7 @@ def main() -> None:
     validate_schemas()
     validate_keto_invariants()
     validate_markdown_links()
-    print("Repository contracts, generated KETO result, invariants, and local documentation links are valid.")
+    print("Repository contracts, JSON mirrors, generated KETO result, invariants, and local documentation links are valid.")
 
 
 if __name__ == "__main__":
