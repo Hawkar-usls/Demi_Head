@@ -1,0 +1,34 @@
+{
+  "schema": "janus.demihead.keto_config.v1",
+  "mode": "local_reference",
+  "mass_effect_budget": 0,
+  "truth_labels": false,
+  "source_policy": {
+    "require_root_id_when_known": true,
+    "stale_is_current": false,
+    "official_is_exclusive_truth": false,
+    "unknown_is_false": false
+  },
+  "review_policy": {
+    "preserve_disagreement": true,
+    "allow_unresolved_terminal_state": true,
+    "face_count_is_authority": false
+  },
+  "release_control": {
+    "enabled": true,
+    "prefer_finite_answer": true,
+    "recommend_exit_when_no_new_evidence": true
+  },
+  "language_policy": {
+    "primary": ["uk", "en"],
+    "optional": ["ru"],
+    "evidence_status_must_be_invariant": true,
+    "disable_humor_for_high_stakes": true
+  },
+  "external_effects": {
+    "network_reads": false,
+    "platform_writes": false,
+    "mass_publication": false,
+    "identity_creation": false
+  }
+}
