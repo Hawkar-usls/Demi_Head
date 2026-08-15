@@ -1,0 +1,80 @@
+{
+  "schema_id": "hawkar.project-status.v1",
+  "project": "Janus DemiHead",
+  "repository": "https://github.com/Hawkar-usls/Demi_Head",
+  "portfolio_class": "engineering_prototype",
+  "last_reviewed": "2026-08-15",
+  "maturity": "WORK_IN_PROGRESS",
+  "completion_status": "INCOMPLETE",
+  "summary": "Local-first, read-only adapter for transforming allowlisted process telemetry into normalized signals, safety-gated triggers, and pluggable Janus face outputs.",
+  "implemented": [
+    "public project and security boundary",
+    "draft architecture and terminology",
+    "draft configuration, signal-frame, and face-output JSON schemas",
+    "repository contract validator and CI workflow",
+    "cross-repository lineage record",
+    "gate-based roadmap"
+  ],
+  "not_established": [
+    "runtime process collection",
+    "Storj compatibility",
+    "universal process compatibility",
+    "measured low overhead",
+    "efficiency improvement",
+    "profitability improvement",
+    "production readiness"
+  ],
+  "not_claimed": [
+    "literal zero overhead",
+    "authority to inject into or control observed processes",
+    "credential or payload access",
+    "stealth or permission bypass",
+    "scientific validation"
+  ],
+  "flagship_research": false,
+  "current_scope": {
+    "repository_foundation": "IMPLEMENTED",
+    "architecture_contract": "DRAFTED",
+    "signal_and_face_schemas": "DRAFTED",
+    "runtime_collector": "NOT_IMPLEMENTED",
+    "storj_adapter": "NOT_IMPLEMENTED",
+    "overhead_benchmark": "NOT_PERFORMED",
+    "external_process_control": "NOT_IMPLEMENTED"
+  },
+  "operating_boundary": {
+    "local_first": true,
+    "read_only_observation": true,
+    "allowlisted_sources_only": true,
+    "process_injection": false,
+    "process_impersonation": false,
+    "memory_scraping": false,
+    "credential_capture": false,
+    "payload_capture": false,
+    "stealth_or_control_bypass": false,
+    "autonomous_external_process_control": false
+  },
+  "claim_boundary": {
+    "zero_overhead": "NOT_CLAIMED",
+    "efficiency_gain": "NOT_ESTABLISHED",
+    "profitability_gain": "NOT_ESTABLISHED",
+    "universal_process_compatibility": "NOT_ESTABLISHED",
+    "production_readiness": "NOT_CLAIMED",
+    "scientific_validation": "NOT_PERFORMED"
+  },
+  "first_gate": "Implement one opt-in Windows process-counter adapter, emit schema-valid JSON Lines, and measure DemiHead's own CPU, memory, disk, and timing overhead.",
+  "reviewer_path": [
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/GLOSSARY.md",
+    "docs/CROSS_REPO_LINEAGE.md",
+    "docs/ROADMAP.md",
+    "SECURITY.md",
+    "schemas/"
+  ],
+  "current_repository_name": "Demi_Head",
+  "recommended_repository_name": "Janus-DemiHead",
+  "rename_performed": false,
+  "meta_registry": "https://github.com/Hawkar-usls/janus-meta-registry",
+  "visibility_policy": "https://github.com/Hawkar-usls/Janus/blob/main/portfolio-visibility.json",
+  "presentation_standard": "https://github.com/Hawkar-usls/Janus/blob/main/docs/PUBLIC_REPOSITORY_PRESENTATION_STANDARD.md"
+}
