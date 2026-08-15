@@ -21,11 +21,12 @@ def validate_json_documents() -> None:
     paths = [ROOT / "PROJECT_STATUS.json"]
     paths.extend(sorted((ROOT / "configs").glob("*.json")))
     paths.extend(sorted((ROOT / "schemas").glob("*.json")))
+    paths.extend(sorted((ROOT / "examples").glob("*.json")))
     for path in paths:
         load_json(path)
 
 
-def validate_schemas() -> None:
+def validate_schemas() -> dict[str, object]:
     schemas = {
         path.name: load_json(path) for path in sorted((ROOT / "schemas").glob("*.json"))
     }
@@ -36,6 +37,32 @@ def validate_schemas() -> None:
     Draft202012Validator(
         schemas["config.schema.json"], format_checker=FormatChecker()
     ).validate(config)
+
+    keto_case = load_json(ROOT / "examples" / "case_echo_collapse.json")
+    Draft202012Validator(
+        schemas["keto-case.schema.json"], format_checker=FormatChecker()
+    ).validate(keto_case)
+
+    return schemas
+
+
+def validate_keto_invariants() -> None:
+    case = load_json(ROOT / "examples" / "case_echo_collapse.json")
+    assert isinstance(case, dict)
+    presentations = case["presentations"]
+    root_ids = {item["root_id"] for item in presentations}
+
+    if len(presentations) <= len(root_ids):
+        raise ValueError("Synthetic KETO fixture must contain derivative presentations to exercise root collapse")
+
+    if not any(item["freshness"] == "stale" for item in presentations):
+        raise ValueError("Synthetic KETO fixture must exercise stale/current separation")
+
+    current_relations = {
+        item["relation"] for item in presentations if item["freshness"] == "current"
+    }
+    if not {"supports", "contradicts"}.issubset(current_relations):
+        raise ValueError("Synthetic KETO fixture must preserve a support/contradiction conflict")
 
 
 def validate_markdown_links() -> None:
@@ -63,8 +90,9 @@ def validate_markdown_links() -> None:
 def main() -> None:
     validate_json_documents()
     validate_schemas()
+    validate_keto_invariants()
     validate_markdown_links()
-    print("Repository contracts and local documentation links are valid.")
+    print("Repository contracts, KETO fixture invariants, and local documentation links are valid.")
 
 
 if __name__ == "__main__":
