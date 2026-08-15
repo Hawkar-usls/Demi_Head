@@ -26,3 +26,9 @@ jobs:
 
       - name: Validate contracts and documentation
         run: python tools/validate_repository.py
+
+      - name: Run KETO reference tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Run deterministic KETO fixture
+        run: python tools/keto_reference.py examples/case_echo_collapse.json --output /tmp/keto-result.json
