@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/keto-config.schema.json",
+  "title": "JANUS DemiHead KETO configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "mode", "mass_effect_budget", "truth_labels", "source_policy", "review_policy", "release_control", "language_policy", "external_effects"],
+  "properties": {
+    "schema": {"const": "janus.demihead.keto_config.v1"},
+    "mode": {"const": "local_reference"},
+    "mass_effect_budget": {"const": 0},
+    "truth_labels": {"const": false},
+    "source_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["require_root_id_when_known", "stale_is_current", "official_is_exclusive_truth", "unknown_is_false"],
+      "properties": {
+        "require_root_id_when_known": {"const": true},
+        "stale_is_current": {"const": false},
+        "official_is_exclusive_truth": {"const": false},
+        "unknown_is_false": {"const": false}
+      }
+    },
+    "review_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preserve_disagreement", "allow_unresolved_terminal_state", "face_count_is_authority"],
+      "properties": {
+        "preserve_disagreement": {"const": true},
+        "allow_unresolved_terminal_state": {"const": true},
+        "face_count_is_authority": {"const": false}
+      }
+    },
+    "release_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "prefer_finite_answer", "recommend_exit_when_no_new_evidence"],
+      "properties": {
+        "enabled": {"const": true},
+        "prefer_finite_answer": {"const": true},
+        "recommend_exit_when_no_new_evidence": {"const": true}
+      }
+    },
+    "language_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "optional", "evidence_status_must_be_invariant", "disable_humor_for_high_stakes"],
+      "properties": {
+        "primary": {"type": "array", "contains": {"const": "uk"}, "minContains": 1},
+        "optional": {"type": "array", "items": {"type": "string"}},
+        "evidence_status_must_be_invariant": {"const": true},
+        "disable_humor_for_high_stakes": {"const": true}
+      }
+    },
+    "external_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network_reads", "platform_writes", "mass_publication", "identity_creation"],
+      "properties": {
+        "network_reads": {"const": false},
+        "platform_writes": {"const": false},
+        "mass_publication": {"const": false},
+        "identity_creation": {"const": false}
+      }
+    }
+  }
+}
