@@ -7,6 +7,8 @@ from urllib.parse import unquote
 
 from jsonschema import Draft202012Validator, FormatChecker
 
+from keto_reference import load_case, summarize_case
+
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
@@ -38,31 +40,45 @@ def validate_schemas() -> dict[str, object]:
         schemas["config.schema.json"], format_checker=FormatChecker()
     ).validate(config)
 
-    keto_case = load_json(ROOT / "examples" / "case_echo_collapse.json")
+    keto_case = load_case(ROOT / "examples" / "case_echo_collapse.json")
     Draft202012Validator(
         schemas["keto-case.schema.json"], format_checker=FormatChecker()
     ).validate(keto_case)
+
+    keto_result = summarize_case(keto_case)
+    Draft202012Validator(
+        schemas["keto-result.schema.json"], format_checker=FormatChecker()
+    ).validate(keto_result)
 
     return schemas
 
 
 def validate_keto_invariants() -> None:
-    case = load_json(ROOT / "examples" / "case_echo_collapse.json")
-    assert isinstance(case, dict)
+    case = load_case(ROOT / "examples" / "case_echo_collapse.json")
     presentations = case["presentations"]
+    result = summarize_case(case)
     root_ids = {item["root_id"] for item in presentations}
 
     if len(presentations) <= len(root_ids):
         raise ValueError("Synthetic KETO fixture must contain derivative presentations to exercise root collapse")
 
+    if result["accounting"]["presentation_count"] <= result["accounting"]["root_count"]:
+        raise ValueError("KETO result failed to preserve presentation/root multiplicity distinction")
+
     if not any(item["freshness"] == "stale" for item in presentations):
         raise ValueError("Synthetic KETO fixture must exercise stale/current separation")
 
-    current_relations = {
-        item["relation"] for item in presentations if item["freshness"] == "current"
-    }
-    if not {"supports", "contradicts"}.issubset(current_relations):
-        raise ValueError("Synthetic KETO fixture must preserve a support/contradiction conflict")
+    if "root-D" in result["current_support_roots"]:
+        raise ValueError("Stale source root was incorrectly promoted to current support")
+
+    if result["evidence_state"] != "CONTESTED":
+        raise ValueError("Support + contradiction fixture must remain CONTESTED")
+
+    if result["truth_claim"] != "NOT_MADE":
+        raise ValueError("Reference analyzer must not emit an objective truth claim")
+
+    if result["mass_effect_budget"] != 0:
+        raise ValueError("Reference analyzer mass-effect budget must remain zero")
 
 
 def validate_markdown_links() -> None:
@@ -92,7 +108,7 @@ def main() -> None:
     validate_schemas()
     validate_keto_invariants()
     validate_markdown_links()
-    print("Repository contracts, KETO fixture invariants, and local documentation links are valid.")
+    print("Repository contracts, generated KETO result, invariants, and local documentation links are valid.")
 
 
 if __name__ == "__main__":
