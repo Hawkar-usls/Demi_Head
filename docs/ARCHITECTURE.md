@@ -2,180 +2,271 @@
 
 ## Objective
 
-DemiHead converts low-cost, read-only observations of existing local processes into structured signals. The runtime must remain independently measurable, bounded, and removable without changing the observed application.
+DemiHead is a local-first JANUS integration head with two deliberately separated planes:
 
-The architecture separates observation from interpretation and interpretation from action:
+1. **Observer Plane** — the repository's original read-only telemetry adapter design.
+2. **Guardian Plane** — KETO/CETUS claim, provenance, source-root, disagreement and release-control processing.
+
+Both planes obey the same constitutional rule:
 
 ```text
-source adapter
-  -> raw sample
-  -> observation window
-  -> derived metrics
-  -> normalized signals
-  -> quality and budget gates
-  -> face projections
-  -> local sinks
+OBSERVATION / ANALYSIS
+!=
+EXTERNAL AUTHORITY
 ```
 
-## Design invariants
+## Top-level architecture
 
 ```text
-OBSERVED_PROCESS_BEHAVIOR = UNCHANGED_BY_DEFAULT
-READ_ONLY_SOURCE = REQUIRED
-SOURCE_ALLOWLIST = REQUIRED
+                     JANUS DemiHead
+                           |
+          +----------------+----------------+
+          |                                 |
+          v                                 v
+   OBSERVER PLANE                      GUARDIAN PLANE
+   local counters                      submitted case
+          |                                 |
+   observation window                  claim normalization
+          |                                 |
+   normalized frame                    source-root graph
+          |                                 |
+   freshness/budget gate               time/correction gate
+          |                                 |
+   bounded Faces                       independence/review
+          |                                 |
+   local sinks                         bounded evidence state
+          |                                 |
+          +---------------+-----------------+
+                          v
+                  CONSTITUTION GATE
+                          |
+                          v
+                   RELEASE CONTROL
+```
+
+The default reference implementation has no autonomous public side effect.
+
+## Global invariants
+
+```text
+READ_ONLY_BY_DEFAULT = TRUE
+MASS_EFFECT_BUDGET_DEFAULT = 0
 MISSING_DATA = UNKNOWN
-STALE_DATA = NOT_ACTIONABLE
-FACE_OUTPUT = DERIVED_FROM_SHARED_FRAME
-OBSERVER_COST = MEASURED
-BUDGET_EXCEEDED = DEGRADE_OR_STOP
-EXTERNAL_SIDE_EFFECT = EXPLICITLY_OUT_OF_SCOPE_FOR_V0_1
+STALE != CURRENT
+SOURCE_COUNT != INDEPENDENT_ROOT_COUNT
+WITNESS_COUNT != FAILURE_DOMAIN_COUNT
+FACE_COUNT != VOTING_POWER
+MODEL_OUTPUT != EVIDENCE
+OFFICIAL_POSITION != EXCLUSIVE_OBJECTIVE_TRUTH
+DISAGREEMENT != ERROR
+UNRESOLVED != FAILURE
+AMBIGUOUS_EFFECT != RETRY_PERMISSION
 ```
 
-An adapter that cannot satisfy these invariants does not enter the default runtime.
+---
 
-## Components
+# Observer Plane
 
-### 1. Source adapter
+## Source adapter
 
-A source adapter reads one documented telemetry surface. The first planned adapter uses ordinary Windows process counters for an opt-in process match.
+A source adapter reads one documented telemetry surface. The first historical target is ordinary Windows process counters for an opt-in process match.
 
-Permitted v0.1 classes:
+Permitted classes include minimum process identity, CPU time, memory working set, cumulative I/O counters, lifecycle state and monotonic sampling time.
 
-- process identity needed for an allowlist match;
-- CPU time counters;
-- memory working-set counters;
-- cumulative read/write operation and byte counters;
-- process lifecycle state;
-- monotonic sampling time.
-
-Excluded v0.1 classes:
+Excluded by default:
 
 - process memory contents;
-- command-line secrets or environment variables;
+- command-line secrets/environment variables;
 - application payloads;
-- keystrokes, screen content, clipboard content, or credentials;
-- packet interception or TLS bypass;
-- code injection, hooks, impersonation, or undocumented control channels.
+- keystrokes, clipboard, screen or credentials;
+- packet interception/TLS bypass;
+- injection, hooks, impersonation or undocumented control channels.
 
-Each adapter reports capability and permission failures as data-quality states. It must not escalate privileges automatically.
+## Observation window and normalizer
 
-### 2. Observation window
+Cumulative counters are converted into bounded deltas/rates. First sample establishes a baseline; reset/PID reuse/clock reversal invalidates the affected delta. Unavailable metrics remain unknown.
 
-Most operating-system counters are cumulative. DemiHead therefore stores a small bounded window and derives rates from differences between monotonic samples.
+Every signal must carry value/unit, confidence, freshness, quality, source fields and normalizer version.
 
-Rules:
-
-- the first sample establishes a baseline and emits no rate;
-- counter reset, PID reuse, or clock reversal invalidates the affected delta;
-- a gap larger than the configured freshness limit produces a stale frame;
-- unavailable metrics remain `null` or absent, never synthetic zeroes;
-- the window has an explicit memory limit.
-
-### 3. Signal normalizer
-
-The normalizer maps heterogeneous metrics into comparable, bounded signals. Candidate methods include exponentially weighted baselines, robust deviation scores, and clipped ratios. The exact method must be versioned in the emitted frame.
-
-Every signal carries:
-
-- value and unit;
-- confidence in `[0, 1]`;
-- freshness;
-- quality status;
-- source metric names;
-- normalizer identifier and version.
-
-The first implementation should prefer simple deterministic transforms over a learned model. A learned model can be evaluated later against the same frozen input/output contract.
-
-### 4. Safety and budget gate
-
-The gate decides whether a frame is usable and whether DemiHead itself may continue at the current sampling pressure.
-
-Inputs include:
-
-- signal freshness and quality;
-- adapter error rate;
-- observed host pressure;
-- DemiHead CPU, memory, I/O, and loop-lag measurements;
-- configured hard limits.
+## Observer safety/budget gate
 
 Possible outcomes:
 
 ```text
-PASS       emit the frame normally
-DEGRADED   emit with explicit quality flags
-HOLD       pause expensive work and retain only a heartbeat
-STOP       close the adapter and require a new start condition
+PASS
+DEGRADED
+HOLD
+STOP
 ```
 
-No gate result may be represented as a successful zero-valued observation.
+The observer accounts for its own CPU, memory, I/O and loop lag. If the declared budget is repeatedly exceeded, DemiHead reduces or stops its own work; it does not modify the observed process.
 
-### 5. Faces
+## Observer Faces
 
-A face is a pure or side-effect-bounded projection from a shared signal frame. It does not get privileged access to the observed process.
+Historical initial Faces remain useful as a local pattern:
 
-Initial candidate faces:
+- `mirror` — expose normalized state;
+- `steward` — adjust DemiHead's own sampling pressure;
+- `registry` — preserve bounded local evidence.
 
-| Face | Purpose | Allowed effect |
-| --- | --- | --- |
-| `mirror` | expose normalized state | local output only |
-| `steward` | recommend or apply DemiHead pacing | DemiHead runtime only |
-| `registry` | preserve bounded evidence records | configured local file only |
+No observer Face gains privileged access to the observed process.
 
-Face names and the final set remain open design decisions. All faces must declare their effect scope in the output envelope.
+---
 
-### 6. Sinks
+# Guardian Plane
 
-The first sinks should be local and replaceable:
+## CETUS case
 
-- JSON Lines for replay and inspection;
-- console output for development;
-- optional bounded summaries for the JANUS Meta Registry.
+A CETUS case is one submitted information problem represented by `schemas/keto-case.schema.json`.
 
-Network sinks, dashboards, and cross-device routing are later gates. They require explicit authentication, privacy, backpressure, and failure-domain design.
+The current reference input is intentionally simple:
+
+```text
+claim
++
+presentations[]
+```
+
+Each presentation declares a provenance root when known, source class, relation to the claim, freshness and independence status.
+
+The fixture is synthetic. The runtime currently performs no web retrieval.
+
+## Source-root graph
+
+Presentations are grouped by `root_id`.
+
+```text
+100 presentations from root A
+=
+100 presentations
++
+1 declared root
+```
+
+Unknown provenance is not silently merged. Unknown-root presentations remain separate unknowns until evidence links them.
+
+## Chronology and stale guard
+
+Only `freshness=current` presentations enter current support/contradiction accounting. Stale presentations remain visible in the receipt but do not masquerade as current evidence.
+
+Later versions may support correction and supersession edges explicitly.
+
+## Independence head
+
+The current reference analyzer counts only `authenticated_independent` roots in its strongest independence counter. `declared_independent` is preserved but not silently promoted.
+
+Future independence receipts should bind source identity, failure domain, publication lineage and independent observation path where applicable.
+
+## Evidence state
+
+The local prototype emits one of four bounded states:
+
+```text
+UNRESOLVED
+SUPPORTED_BY_PRESENT_SOURCES
+CONTRADICTED_BY_PRESENT_SOURCES
+CONTESTED
+```
+
+These labels describe the supplied source graph. They are not objective truth labels.
+
+```text
+truth_claim = NOT_MADE
+```
+
+## Official-source separation
+
+Official-source roots are reported separately from authenticated independent roots.
+
+This allows a civic UI to say:
+
+```text
+OFFICIAL POSITION: X
+INDEPENDENT SUPPORT: Y
+CONTRADICTION: Z
+UNKNOWN: ...
+```
+
+without hiding disagreements behind one boolean.
+
+## Review / disagreement
+
+Support and contradiction can coexist. If both have current roots, the terminal state is `CONTESTED`.
+
+The architecture does not use presentation majority to erase contradiction.
+
+## Release control
+
+The final head asks whether more interaction is useful.
+
+Reference recommendations include:
+
+- `SHOW_CONFLICT_AND_STOP_ESCALATION_UNLESS_NEW_EVIDENCE`
+- `WAIT_FOR_PRIMARY_OR_INDEPENDENT_EVIDENCE`
+- `SHOW_ROOTS_AND_ALLOW_USER_TO_EXIT`
+
+The service is allowed to end a session without manufacturing another recommendation.
+
+---
+
+# Constitution Gate
+
+Any future capability that creates external effects sits **after** analysis and requires a separately admitted authority path.
+
+Forbidden by default:
+
+```text
+COVERT_MASS_PERSUASION
+SELF_SPAWNING_PUBLIC_IDENTITIES
+AUTONOMOUS_ASTROTURF
+UNSOLICITED_PERSONALIZED_POLITICAL_OUTREACH
+OPTIMIZATION_ON_BELIEF_CHANGE
+PSYCHOLOGICAL_VULNERABILITY_TARGETING
+MODEL_WRITABLE_CONSTITUTION
+```
+
+Internal Face plurality cannot create permission.
+
+## Safe harbor
+
+If central services, credentials, freshness or authority become uncertain:
+
+```text
+freeze high-impact effects
+retain safe read-only verification
+label stale/cache age
+preserve user exit
+record reconciliation state
+```
+
+No answer is invented merely to preserve availability.
+
+---
+
+# Future adapters
+
+A new live information adapter must include:
+
+1. documented source/API;
+2. authentication and permission statement;
+3. source-class and provenance semantics;
+4. freshness/correction semantics;
+5. deterministic missing/stale/contradiction fixtures;
+6. retention/redaction rules;
+7. rate-limit/backpressure behavior;
+8. explicit external-effect scope;
+9. rollback and negative-result path;
+10. independent review before high-impact deployment.
+
+A platform adapter that posts, messages, creates identities or changes user state is **not** a normal source adapter and must pass a separate high-impact capability gate.
 
 ## Data contracts
 
-The initial machine contracts are:
+Current contracts:
 
 - [`../schemas/config.schema.json`](../schemas/config.schema.json)
 - [`../schemas/signal-frame.schema.json`](../schemas/signal-frame.schema.json)
 - [`../schemas/face-output.schema.json`](../schemas/face-output.schema.json)
+- [`../schemas/keto-case.schema.json`](../schemas/keto-case.schema.json)
 
-Schema validity establishes structure only. It does not establish that a source was truthful, a signal was useful, or an efficiency claim is correct.
-
-## Resource accounting
-
-"No added load" is treated as a target budget, not a literal claim. The observer must account for its own cost using at least:
-
-- process CPU time per wall-clock interval;
-- resident memory;
-- bytes written and read by DemiHead;
-- sample-loop lag;
-- dropped or delayed samples.
-
-The benchmark must compare an idle baseline, observed-process-only baseline, and observed-process-plus-DemiHead run under a fixed protocol. Results may be positive, null, negative, or inconclusive.
-
-## Failure behavior
-
-DemiHead fails closed when:
-
-- the target cannot be identified unambiguously;
-- permission changes invalidate the adapter contract;
-- timestamps or counters cannot produce a valid delta;
-- the observer budget is exceeded repeatedly;
-- output cannot be written without unbounded buffering;
-- a face requests an undeclared effect scope.
-
-Failing closed means reducing or stopping DemiHead's work. It does not mean terminating or modifying the observed process.
-
-## Extension rule
-
-A new adapter or face must include:
-
-1. a documented public or OS-supported source surface;
-2. a privacy and permission statement;
-3. deterministic fixtures for counter resets, stale data, and missing data;
-4. an overhead measurement path;
-5. explicit effect scope;
-6. schema-valid example output;
-7. a negative-result and rollback path.
+Schema validity establishes structure only. It does not establish source truth, independence, usefulness or deployment safety.
