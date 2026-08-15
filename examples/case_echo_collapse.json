@@ -1,0 +1,82 @@
+{
+  "schema": "janus.demihead.keto_case.v1",
+  "case_id": "SYNTHETIC-ECHO-COLLAPSE-001",
+  "claim": {
+    "text": "Synthetic fixture: a claim appears in many presentations, but most derive from one source root.",
+    "language": "en",
+    "submitted_by": "synthetic-test",
+    "high_stakes": false
+  },
+  "presentations": [
+    {
+      "presentation_id": "telegram-repost-01",
+      "root_id": "root-A",
+      "source_class": "derived_media",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "dependent",
+      "published_at": "2026-08-16T00:00:00Z",
+      "source_ref": "synthetic://repost/01",
+      "note": "Derivative presentation of root-A."
+    },
+    {
+      "presentation_id": "telegram-repost-02",
+      "root_id": "root-A",
+      "source_class": "derived_media",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "dependent",
+      "published_at": "2026-08-16T00:01:00Z",
+      "source_ref": "synthetic://repost/02",
+      "note": "Derivative presentation of root-A."
+    },
+    {
+      "presentation_id": "social-repost-03",
+      "root_id": "root-A",
+      "source_class": "social_account",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "dependent",
+      "published_at": "2026-08-16T00:02:00Z",
+      "source_ref": "synthetic://repost/03",
+      "note": "Another presentation, not another witness."
+    },
+    {
+      "presentation_id": "official-statement",
+      "root_id": "root-B",
+      "source_class": "official",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "declared_independent",
+      "published_at": "2026-08-16T00:03:00Z",
+      "source_ref": "synthetic://official/B",
+      "note": "Official position; not automatically objective truth."
+    },
+    {
+      "presentation_id": "independent-primary-document",
+      "root_id": "root-C",
+      "source_class": "primary_document",
+      "relation": "contradicts",
+      "freshness": "current",
+      "independence": "authenticated_independent",
+      "published_at": "2026-08-16T00:04:00Z",
+      "source_ref": "synthetic://primary/C",
+      "note": "Independent contradiction retained rather than averaged away."
+    },
+    {
+      "presentation_id": "old-article",
+      "root_id": "root-D",
+      "source_class": "independent_media",
+      "relation": "supports",
+      "freshness": "stale",
+      "independence": "declared_independent",
+      "published_at": "2025-01-01T00:00:00Z",
+      "source_ref": "synthetic://old/D",
+      "note": "Stale support must not be counted as current support."
+    }
+  ],
+  "expected_policy": {
+    "mass_effect_budget": 0,
+    "allow_objective_truth_label": false
+  }
+}
