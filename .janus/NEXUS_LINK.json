@@ -15,8 +15,22 @@
     "tools/nexus_fundamentum_adapter.py",
     "tools/nexus_guardian_ingress.py",
     "tools/nexus_registry_ingress.py",
-    "tools/sysear_observer_normalizer.py"
+    "tools/sysear_observer_normalizer.py",
+    "tools/nexus_local_transport.py"
   ],
+  "transport": {
+    "contract": "JANUS_NEXUS_LOCAL_TRANSPORT_V1",
+    "authentication": "HMAC-SHA256_REFERENCE",
+    "freshness_gate": true,
+    "replay_rejection": true,
+    "backpressure_hold": true,
+    "frame_size_cap_bytes": 65536,
+    "socket_listener_enabled": false,
+    "network_io_performed_by_reference": false,
+    "authentication_is_human_identity": false,
+    "authentication_is_authorization": false,
+    "automatic_retry_permitted": false
+  },
   "fundamentum_lineage_repository": "Hawkar-usls/Janus-Fundamentum",
   "fundamentum_lineage_is_runtime_ownership": false,
   "live_cross_repository_transport": false,
