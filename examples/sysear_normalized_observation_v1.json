@@ -1,0 +1,55 @@
+{
+  "schema": "janus.demihead.observation_signal.v1",
+  "fixture_id": "SYSEAR_AGGREGATE_FIXTURE_V1",
+  "fixture": true,
+  "source": {
+    "adapter": "SYSEAR",
+    "class": "LOCAL_ROUTER_TELEMETRY_SANITIZED_AGGREGATE",
+    "raw_identifiers_included": false,
+    "raw_syslog_included": false
+  },
+  "quality": {
+    "freshness": "PASS",
+    "quality_state": "PASS",
+    "quality_score": 0.981333,
+    "spoofability": "PRESENT_NOT_ZERO",
+    "quantum_randomness_claim": false
+  },
+  "signals": [
+    {
+      "name": "network_turbulence",
+      "value": 0.582672,
+      "unit": "normalized_0_1",
+      "confidence": 0.981333
+    },
+    {
+      "name": "security_pressure",
+      "value": 0.09,
+      "unit": "normalized_0_1",
+      "confidence": 0.981333
+    },
+    {
+      "name": "known_presence_confidence",
+      "value": 0.804693,
+      "unit": "normalized_0_1",
+      "confidence": 0.981333
+    }
+  ],
+  "normalization": {
+    "contract": "JANUS_SYSEAR_OBSERVER_NORMALIZER_V1",
+    "jitter_reference_us": 5000.0,
+    "drop_ratio_full_scale": 0.2,
+    "minimum_full_quality_sample_count": 20,
+    "stale_after_seconds": 300.0,
+    "entropy_hint_eligible": false,
+    "entropy_hint_delta": 0.0,
+    "reason_entropy_hint_disabled": "Network timing and event rates are spoofable and are not a validated hardware entropy source."
+  },
+  "control": {
+    "advisory_only": true,
+    "direct_model_temperature_control": false,
+    "cryptographic_entropy_source": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  }
+}
