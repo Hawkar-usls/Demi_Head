@@ -8,9 +8,10 @@ import secrets
 import sys
 import time
 from pathlib import Path
-from typing import Any, MutableSet
+from typing import Any
 
 from nexus_habitat import validate_envelope
+from nexus_replay_ledger import MemoryReplayGuard
 
 
 FRAME_SCHEMA = "janus.demihead.nexus_transport_frame.v1"
@@ -115,8 +116,8 @@ def validate_frame(
     frame: dict[str, Any],
     *,
     principal_lookup: dict[str, dict[str, Any]],
+    replay_guard: Any,
     now_ms: int | None = None,
-    replay_cache: MutableSet[str] | None = None,
     queue_depth: int = 0,
     queue_capacity: int = 128,
 ) -> dict[str, Any]:
@@ -126,6 +127,8 @@ def validate_frame(
         raise ValueError("Incoming transport frame exceeds maximum size")
     if frame.get("contract") != TRANSPORT_CONTRACT:
         raise ValueError("Transport contract mismatch")
+    if replay_guard is None or not callable(getattr(replay_guard, "consume", None)):
+        raise ValueError("A replay guard with atomic consume() is required")
 
     sender_id = frame.get("sender_id")
     key_id = frame.get("key_id")
@@ -184,8 +187,7 @@ def validate_frame(
         raise ValueError("Frame is stale")
 
     replay_key = f"{sender_id}:{key_id}:{nonce}"
-    if replay_cache is not None and replay_key in replay_cache:
-        raise ValueError("Replay detected")
+    expires_at_ms = issued_at_ms + ttl_ms
 
     if isinstance(queue_capacity, bool) or not isinstance(queue_capacity, int) or queue_capacity < 1:
         raise ValueError("queue_capacity must be an integer >= 1")
@@ -196,19 +198,22 @@ def validate_frame(
             "schema": "janus.demihead.nexus_transport_admission.v1",
             "status": "HOLD_BACKPRESSURE",
             "frame_sha256": sha256(frame),
-            "replay_key": replay_key,
+            "replay_key_sha256": hashlib.sha256(replay_key.encode("utf-8")).hexdigest(),
             "queue": {"depth": queue_depth, "capacity": queue_capacity},
             "control": {
                 "automatic_retry_permitted": False,
                 "delivery_performed": False,
+                "replay_nonce_consumed": False,
                 "authority_delta": 0,
                 "mass_effect_budget_delta": 0,
             },
         }
 
-    if replay_cache is not None:
-        replay_cache.add(replay_key)
+    if not replay_guard.consume(replay_key, expires_at_ms=expires_at_ms, now_ms=now):
+        raise ValueError("Replay detected")
 
+    persistent_replay = bool(getattr(replay_guard, "persistent", False))
+    replay_kind = str(getattr(replay_guard, "kind", "UNKNOWN"))
     return {
         "schema": "janus.demihead.nexus_transport_admission.v1",
         "status": "AUTHENTICATED_FRAME_ADMITTED",
@@ -217,7 +222,7 @@ def validate_frame(
         "sender_id": sender_id,
         "key_id": key_id,
         "source_head": source_head,
-        "replay_key": replay_key,
+        "replay_key_sha256": hashlib.sha256(replay_key.encode("utf-8")).hexdigest(),
         "freshness": {"age_ms": max(0, age_ms), "ttl_ms": ttl_ms},
         "authentication": {
             "hmac_verified": True,
@@ -226,12 +231,16 @@ def validate_frame(
             "human_identity_established": False,
             "world_effect_authorization_established": False,
         },
+        "replay_protection": {
+            "guard_kind": replay_kind,
+            "persistent": persistent_replay,
+            "nonce_consumed_atomically": True,
+        },
         "control": {
             "delivery_performed": False,
             "target_execution_performed": False,
             "automatic_retry_permitted": False,
             "network_io_performed": False,
-            "persistent_replay_ledger_used": False,
             "authority_delta": 0,
             "mass_effect_budget_delta": 0,
         },
@@ -280,8 +289,8 @@ def self_test() -> dict[str, Any]:
         nonce="00112233445566778899aabbccddeeff",
         ttl_ms=30_000,
     )
-    cache: set[str] = set()
-    admitted = validate_frame(frame, principal_lookup=principals, now_ms=issued + 100, replay_cache=cache)
+    guard = MemoryReplayGuard()
+    admitted = validate_frame(frame, principal_lookup=principals, replay_guard=guard, now_ms=issued + 100)
     checks = {
         "authenticated_frame_admitted": admitted["status"] == "AUTHENTICATED_FRAME_ADMITTED",
         "sender_binding_verified": admitted["authentication"]["key_bound_sender_verified"] is True,
@@ -290,18 +299,19 @@ def self_test() -> dict[str, Any]:
         "world_effect_authorization_not_claimed": admitted["authentication"]["world_effect_authorization_established"] is False,
         "delivery_not_performed": admitted["control"]["delivery_performed"] is False,
         "network_io_not_performed": admitted["control"]["network_io_performed"] is False,
-        "persistent_replay_ledger_not_claimed": admitted["control"]["persistent_replay_ledger_used"] is False,
+        "replay_consumed_atomically": admitted["replay_protection"]["nonce_consumed_atomically"] is True,
+        "memory_replay_guard_not_claimed_persistent": admitted["replay_protection"]["persistent"] is False,
     }
 
     try:
-        validate_frame(frame, principal_lookup=principals, now_ms=issued + 200, replay_cache=cache)
+        validate_frame(frame, principal_lookup=principals, replay_guard=guard, now_ms=issued + 200)
     except ValueError:
         checks["replay_rejected"] = True
     else:
         checks["replay_rejected"] = False
 
     try:
-        validate_frame(frame, principal_lookup=principals, now_ms=issued + 31_000)
+        validate_frame(frame, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 31_000)
     except ValueError:
         checks["stale_rejected"] = True
     else:
@@ -310,7 +320,7 @@ def self_test() -> dict[str, Any]:
     tampered = json.loads(json.dumps(frame))
     tampered["sender_id"] = "ATTACKER"
     try:
-        validate_frame(tampered, principal_lookup=principals, now_ms=issued + 100)
+        validate_frame(tampered, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
     except ValueError:
         checks["hmac_tamper_rejected"] = True
     else:
@@ -325,16 +335,14 @@ def self_test() -> dict[str, Any]:
         nonce="11112222333344445555666677778888",
     )
     try:
-        validate_frame(impersonating, principal_lookup=principals, now_ms=issued + 100)
+        validate_frame(impersonating, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
     except ValueError:
         checks["valid_key_sender_impersonation_rejected"] = True
     else:
         checks["valid_key_sender_impersonation_rejected"] = False
 
     other_source = json.loads(json.dumps(envelope))
-    other_source["source_head"] = "FUNDAMENTUM"
-    other_source["target_head"] = "GUARDIAN"
-    other_source["payload_kind"] = "HOLD_RECEIPT"
+    other_source.update({"source_head": "FUNDAMENTUM", "target_head": "GUARDIAN", "payload_kind": "HOLD_RECEIPT"})
     source_impersonation = build_frame(
         other_source,
         sender_id="DEMIHEAD.LOCAL",
@@ -344,16 +352,22 @@ def self_test() -> dict[str, Any]:
         nonce="99990000111122223333444455556666",
     )
     try:
-        validate_frame(source_impersonation, principal_lookup=principals, now_ms=issued + 100)
+        validate_frame(source_impersonation, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
     except ValueError:
         checks["valid_key_source_head_impersonation_rejected"] = True
     else:
         checks["valid_key_source_head_impersonation_rejected"] = False
 
-    disabled = json.loads(json.dumps({"enabled": False, "sender_id": "DEMIHEAD.LOCAL", "allowed_source_heads": ["GUARDIAN"]}))
-    disabled["key"] = key
+    disabled = {
+        "TEST_KEY": {
+            "key": key,
+            "enabled": False,
+            "sender_id": "DEMIHEAD.LOCAL",
+            "allowed_source_heads": ["GUARDIAN"],
+        }
+    }
     try:
-        validate_frame(frame, principal_lookup={"TEST_KEY": disabled}, now_ms=issued + 100)
+        validate_frame(frame, principal_lookup=disabled, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
     except ValueError:
         checks["disabled_principal_rejected"] = True
     else:
@@ -362,13 +376,14 @@ def self_test() -> dict[str, Any]:
     backpressure = validate_frame(
         frame,
         principal_lookup=principals,
+        replay_guard=MemoryReplayGuard(),
         now_ms=issued + 100,
-        replay_cache=set(),
         queue_depth=8,
         queue_capacity=8,
     )
     checks["backpressure_holds"] = backpressure["status"] == "HOLD_BACKPRESSURE"
     checks["backpressure_no_retry"] = backpressure["control"]["automatic_retry_permitted"] is False
+    checks["backpressure_does_not_consume_nonce"] = backpressure["control"]["replay_nonce_consumed"] is False
 
     invalid_route = json.loads(json.dumps(envelope))
     invalid_route["target_head"] = "PORTAL"
