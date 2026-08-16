@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-loopback-dispatch-result.schema.json",
+  "title": "JANUS Nexus Loopback Dispatch Result v1",
+  "type": "object",
+  "required": ["schema", "contract", "status", "binding", "control"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_loopback_dispatch_result.v1"},
+    "contract": {"const": "JANUS_NEXUS_LOOPBACK_DISPATCH_V1"},
+    "status": {
+      "enum": [
+        "LOOPBACK_DISPATCH_COMPLETED_LOCAL",
+        "HOLD_NO_LOCAL_ENDPOINT",
+        "HOLD_NO_LOCAL_HANDLER",
+        "HOLD_HANDLER_FAILURE"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "required": ["frame_sha256", "target_head"],
+      "properties": {
+        "frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "envelope_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "acceptance_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "handler_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_head": {"type": "string"},
+        "target_head": {"type": "string", "minLength": 1},
+        "payload_kind": {"type": "string"},
+        "endpoint_id": {"type": ["string", "null"]},
+        "handler_id": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "dispatch": {
+      "type": "object",
+      "properties": {
+        "endpoint_selected_uniquely": {"const": true},
+        "payload_hash_verified": {"const": true},
+        "current_principal_revalidated": {"const": true},
+        "destination_acceptance_verified": {"const": true},
+        "handler_descriptor_verified": {"const": true},
+        "handler_input_size_bytes": {"type": "integer", "minimum": 0, "maximum": 65536},
+        "handler_output_size_bytes": {"type": "integer", "minimum": 0, "maximum": 65536},
+        "local_reference_handler_invoked": {"const": true},
+        "local_in_process_delivery_performed": {"const": true},
+        "completion_established": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "handler_output": {"type": "object"},
+    "hold": {
+      "type": "object",
+      "required": ["reason", "handler_invocation_attempted", "completion_established"],
+      "properties": {
+        "reason": {"type": "string", "minLength": 1},
+        "handler_invocation_attempted": {"type": "boolean"},
+        "completion_established": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "control": {
+      "type": "object",
+      "required": [
+        "network_io_performed",
+        "external_delivery_performed",
+        "world_effect_performed",
+        "automatic_retry_permitted",
+        "authority_delta",
+        "mass_effect_budget_delta"
+      ],
+      "properties": {
+        "socket_listener_enabled": {"const": false},
+        "local_in_process_delivery_performed": {"type": "boolean"},
+        "network_io_performed": {"const": false},
+        "filesystem_io_performed_by_dispatcher": {"const": false},
+        "external_delivery_performed": {"const": false},
+        "world_effect_performed": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "properties": {
+        "exactly_once_delivery_established": {"const": false},
+        "process_isolation_established": {"const": false},
+        "handler_side_effect_attestation_established": {"const": false},
+        "cross_repository_delivery_established": {"const": false},
+        "human_identity_established": {"const": false},
+        "world_effect_authorization_established": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "laws": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "LOOPBACK_DISPATCH_COMPLETED_LOCAL"}}},
+      "then": {"required": ["dispatch", "handler_output", "claim_ceiling", "laws"]}
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["HOLD_NO_LOCAL_ENDPOINT", "HOLD_NO_LOCAL_HANDLER", "HOLD_HANDLER_FAILURE"]
+          }
+        }
+      },
+      "then": {"required": ["hold", "laws"]}
+    }
+  ],
+  "additionalProperties": false
+}
