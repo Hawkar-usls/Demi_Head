@@ -1,0 +1,42 @@
+{
+  "schema": "janus.demihead.reviewer_collection.v1",
+  "case_id": "REVIEW_FIXTURE_001",
+  "frozen_package_id": "cetus-package-001",
+  "required_reviewers": 2,
+  "review_fields": [
+    "evidence_state",
+    "uncertainty_class",
+    "urgency_class",
+    "release_control"
+  ],
+  "reviewers": [
+    {
+      "reviewer_id": "reviewer-A",
+      "attestation_id": "attestation-A",
+      "frozen_package_id": "cetus-package-001",
+      "verifier_status": "PASS",
+      "declared_independent": true,
+      "labels_frozen_before_model_reveal": true,
+      "labels": {
+        "evidence_state": "CONTESTED",
+        "uncertainty_class": "MATERIAL",
+        "urgency_class": "NORMAL",
+        "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+      }
+    },
+    {
+      "reviewer_id": "reviewer-B",
+      "attestation_id": "attestation-B",
+      "frozen_package_id": "cetus-package-001",
+      "verifier_status": "PASS",
+      "declared_independent": true,
+      "labels_frozen_before_model_reveal": true,
+      "labels": {
+        "evidence_state": "CONTESTED",
+        "uncertainty_class": "HIGH",
+        "urgency_class": "NORMAL",
+        "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+      }
+    }
+  ]
+}
