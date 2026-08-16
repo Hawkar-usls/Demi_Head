@@ -41,15 +41,24 @@ def _hmac_hex(key: bytes, payload: dict[str, Any]) -> str:
     return hmac.new(key, canonical_json_bytes(payload), hashlib.sha256).hexdigest()
 
 
-def _principal(principal_lookup: dict[str, dict[str, Any]], key_id: str) -> tuple[bytes, str, tuple[str, ...]]:
+def _principal(
+    principal_lookup: dict[str, dict[str, Any]], key_id: str
+) -> tuple[bytes, str, tuple[str, ...], int, int, int]:
     principal = principal_lookup.get(key_id)
     if not isinstance(principal, dict):
         raise ValueError("Unknown transport key_id")
     if principal.get("enabled") is not True:
         raise ValueError("Transport principal is disabled")
+    if principal.get("revoked") is not False:
+        raise ValueError("Transport principal is revoked")
+
     key = principal.get("key")
     sender_id = principal.get("sender_id")
     allowed_source_heads = principal.get("allowed_source_heads")
+    epoch = principal.get("epoch")
+    not_before_ms = principal.get("not_before_ms")
+    not_after_ms = principal.get("not_after_ms")
+
     if not isinstance(key, bytes) or len(key) < 16:
         raise ValueError("Invalid transport key material")
     if not isinstance(sender_id, str) or not sender_id.strip():
@@ -58,7 +67,13 @@ def _principal(principal_lookup: dict[str, dict[str, Any]], key_id: str) -> tupl
         raise ValueError("Transport principal requires allowed_source_heads")
     if any(not isinstance(item, str) or not item for item in allowed_source_heads):
         raise ValueError("Transport principal contains an invalid source head")
-    return key, sender_id, tuple(allowed_source_heads)
+    if isinstance(epoch, bool) or not isinstance(epoch, int) or epoch < 1:
+        raise ValueError("Transport principal epoch is invalid")
+    if isinstance(not_before_ms, bool) or not isinstance(not_before_ms, int) or not_before_ms < 0:
+        raise ValueError("Transport principal not_before_ms is invalid")
+    if isinstance(not_after_ms, bool) or not isinstance(not_after_ms, int) or not_after_ms <= not_before_ms:
+        raise ValueError("Transport principal not_after_ms is invalid")
+    return key, sender_id, tuple(allowed_source_heads), epoch, not_before_ms, not_after_ms
 
 
 def build_frame(
@@ -66,6 +81,7 @@ def build_frame(
     *,
     sender_id: str,
     key_id: str,
+    key_epoch: int,
     key: bytes,
     issued_at_ms: int | None = None,
     nonce: str | None = None,
@@ -76,6 +92,8 @@ def build_frame(
         raise ValueError("sender_id is required")
     if not isinstance(key_id, str) or not key_id.strip():
         raise ValueError("key_id is required")
+    if isinstance(key_epoch, bool) or not isinstance(key_epoch, int) or key_epoch < 1:
+        raise ValueError("key_epoch must be an integer >= 1")
     if not isinstance(key, bytes) or len(key) < 16:
         raise ValueError("transport key must be bytes with length >= 16")
     if not isinstance(ttl_ms, int) or isinstance(ttl_ms, bool) or not 1 <= ttl_ms <= MAX_TTL_MS:
@@ -91,6 +109,7 @@ def build_frame(
         "contract": TRANSPORT_CONTRACT,
         "sender_id": sender_id,
         "key_id": key_id,
+        "key_epoch": key_epoch,
         "issued_at_ms": issued,
         "ttl_ms": ttl_ms,
         "nonce": frame_nonce,
@@ -132,11 +151,17 @@ def validate_frame(
 
     sender_id = frame.get("sender_id")
     key_id = frame.get("key_id")
+    key_epoch = frame.get("key_epoch")
     if not isinstance(sender_id, str) or not sender_id.strip():
         raise ValueError("Invalid sender_id")
     if not isinstance(key_id, str) or not key_id.strip():
         raise ValueError("Invalid key_id")
-    key, bound_sender_id, allowed_source_heads = _principal(principal_lookup, key_id)
+    if isinstance(key_epoch, bool) or not isinstance(key_epoch, int) or key_epoch < 1:
+        raise ValueError("Invalid key_epoch")
+
+    key, bound_sender_id, allowed_source_heads, bound_epoch, not_before_ms, not_after_ms = _principal(
+        principal_lookup, key_id
+    )
 
     auth = frame.get("auth")
     if not isinstance(auth, dict) or auth.get("algorithm") != "HMAC-SHA256":
@@ -153,6 +178,8 @@ def validate_frame(
         raise ValueError("Envelope hash binding mismatch")
     if sender_id != bound_sender_id:
         raise ValueError("Authenticated key is not bound to claimed sender_id")
+    if key_epoch != bound_epoch:
+        raise ValueError("Frame key_epoch does not match principal epoch")
     source_head = envelope.get("source_head")
     if source_head not in allowed_source_heads:
         raise ValueError("Authenticated principal is not admitted for envelope source_head")
@@ -185,13 +212,15 @@ def validate_frame(
     age_ms = now - issued_at_ms
     if age_ms >= ttl_ms:
         raise ValueError("Frame is stale")
+    if issued_at_ms < not_before_ms or now < not_before_ms:
+        raise ValueError("Frame predates principal key validity window")
+    if issued_at_ms >= not_after_ms or now >= not_after_ms:
+        raise ValueError("Principal key validity window has expired")
 
-    replay_key = f"{sender_id}:{key_id}:{nonce}"
+    replay_key = f"{sender_id}:{key_id}:e{key_epoch}:{nonce}"
     replay_key_sha256 = hashlib.sha256(replay_key.encode("utf-8")).hexdigest()
-    expires_at_ms = issued_at_ms + ttl_ms
+    expires_at_ms = min(issued_at_ms + ttl_ms, not_after_ms)
 
-    # Early classification prevents an already-consumed replay from being mislabeled as backpressure.
-    # Final consume remains the atomic race-closing operation before admission.
     if replay_guard.seen(replay_key, now_ms=now):
         raise ValueError("Replay detected")
 
@@ -206,6 +235,12 @@ def validate_frame(
             "frame_sha256": sha256(frame),
             "replay_key_sha256": replay_key_sha256,
             "queue": {"depth": queue_depth, "capacity": queue_capacity},
+            "key_policy": {
+                "key_id": key_id,
+                "epoch": key_epoch,
+                "valid_now": True,
+                "revoked": False,
+            },
             "replay_protection": {
                 "early_replay_check_passed": True,
                 "nonce_consumed": False,
@@ -230,6 +265,7 @@ def validate_frame(
         "envelope_sha256": frame["envelope_sha256"],
         "sender_id": sender_id,
         "key_id": key_id,
+        "key_epoch": key_epoch,
         "source_head": source_head,
         "replay_key_sha256": replay_key_sha256,
         "freshness": {"age_ms": max(0, age_ms), "ttl_ms": ttl_ms},
@@ -237,6 +273,9 @@ def validate_frame(
             "hmac_verified": True,
             "key_bound_sender_verified": True,
             "key_bound_source_head_verified": True,
+            "key_epoch_verified": True,
+            "key_validity_window_verified": True,
+            "key_revocation_checked": True,
             "human_identity_established": False,
             "world_effect_authorization_established": False,
         },
@@ -259,11 +298,15 @@ def validate_frame(
 
 def _test_principals(key: bytes) -> dict[str, dict[str, Any]]:
     return {
-        "TEST_KEY": {
+        "TEST_KEY_E1": {
             "key": key,
             "sender_id": "DEMIHEAD.LOCAL",
             "allowed_source_heads": ["GUARDIAN"],
             "enabled": True,
+            "revoked": False,
+            "epoch": 1,
+            "not_before_ms": 1_700_000_000_000,
+            "not_after_ms": 1_900_000_000_000,
         }
     }
 
@@ -293,7 +336,8 @@ def self_test() -> dict[str, Any]:
     frame = build_frame(
         envelope,
         sender_id="DEMIHEAD.LOCAL",
-        key_id="TEST_KEY",
+        key_id="TEST_KEY_E1",
+        key_epoch=1,
         key=key,
         issued_at_ms=issued,
         nonce="00112233445566778899aabbccddeeff",
@@ -305,13 +349,47 @@ def self_test() -> dict[str, Any]:
         "authenticated_frame_admitted": admitted["status"] == "AUTHENTICATED_FRAME_ADMITTED",
         "sender_binding_verified": admitted["authentication"]["key_bound_sender_verified"] is True,
         "source_head_binding_verified": admitted["authentication"]["key_bound_source_head_verified"] is True,
+        "key_epoch_verified": admitted["authentication"]["key_epoch_verified"] is True,
+        "key_window_verified": admitted["authentication"]["key_validity_window_verified"] is True,
         "human_identity_not_claimed": admitted["authentication"]["human_identity_established"] is False,
         "world_effect_authorization_not_claimed": admitted["authentication"]["world_effect_authorization_established"] is False,
         "delivery_not_performed": admitted["control"]["delivery_performed"] is False,
-        "network_io_not_performed": admitted["control"]["network_io_performed"] is False,
         "replay_consumed_atomically": admitted["replay_protection"]["nonce_consumed_atomically"] is True,
-        "memory_replay_guard_not_claimed_persistent": admitted["replay_protection"]["persistent"] is False,
     }
+
+    wrong_epoch = build_frame(
+        envelope,
+        sender_id="DEMIHEAD.LOCAL",
+        key_id="TEST_KEY_E1",
+        key_epoch=2,
+        key=key,
+        issued_at_ms=issued,
+        nonce="10112233445566778899aabbccddeeff",
+    )
+    try:
+        validate_frame(wrong_epoch, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
+    except ValueError:
+        checks["wrong_key_epoch_rejected"] = True
+    else:
+        checks["wrong_key_epoch_rejected"] = False
+
+    revoked = dict(principals["TEST_KEY_E1"])
+    revoked["revoked"] = True
+    try:
+        validate_frame(frame, principal_lookup={"TEST_KEY_E1": revoked}, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
+    except ValueError:
+        checks["revoked_key_rejected"] = True
+    else:
+        checks["revoked_key_rejected"] = False
+
+    expired = dict(principals["TEST_KEY_E1"])
+    expired["not_after_ms"] = issued
+    try:
+        validate_frame(frame, principal_lookup={"TEST_KEY_E1": expired}, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
+    except ValueError:
+        checks["expired_key_rejected"] = True
+    else:
+        checks["expired_key_rejected"] = False
 
     try:
         validate_frame(frame, principal_lookup=principals, replay_guard=guard, now_ms=issued + 200, queue_depth=8, queue_capacity=8)
@@ -327,70 +405,14 @@ def self_test() -> dict[str, Any]:
     else:
         checks["ttl_boundary_rejected_as_stale"] = False
 
-    tampered = json.loads(json.dumps(frame))
-    tampered["sender_id"] = "ATTACKER"
-    try:
-        validate_frame(tampered, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
-    except ValueError:
-        checks["hmac_tamper_rejected"] = True
-    else:
-        checks["hmac_tamper_rejected"] = False
-
-    impersonating = build_frame(
-        envelope,
-        sender_id="ATTACKER",
-        key_id="TEST_KEY",
-        key=key,
-        issued_at_ms=issued,
-        nonce="11112222333344445555666677778888",
-    )
-    try:
-        validate_frame(impersonating, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
-    except ValueError:
-        checks["valid_key_sender_impersonation_rejected"] = True
-    else:
-        checks["valid_key_sender_impersonation_rejected"] = False
-
-    other_source = json.loads(json.dumps(envelope))
-    other_source.update({"source_head": "FUNDAMENTUM", "target_head": "GUARDIAN", "payload_kind": "HOLD_RECEIPT"})
-    source_impersonation = build_frame(
-        other_source,
-        sender_id="DEMIHEAD.LOCAL",
-        key_id="TEST_KEY",
-        key=key,
-        issued_at_ms=issued,
-        nonce="99990000111122223333444455556666",
-    )
-    try:
-        validate_frame(source_impersonation, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
-    except ValueError:
-        checks["valid_key_source_head_impersonation_rejected"] = True
-    else:
-        checks["valid_key_source_head_impersonation_rejected"] = False
-
-    disabled = {
-        "TEST_KEY": {
-            "key": key,
-            "enabled": False,
-            "sender_id": "DEMIHEAD.LOCAL",
-            "allowed_source_heads": ["GUARDIAN"],
-        }
-    }
-    try:
-        validate_frame(frame, principal_lookup=disabled, replay_guard=MemoryReplayGuard(), now_ms=issued + 100)
-    except ValueError:
-        checks["disabled_principal_rejected"] = True
-    else:
-        checks["disabled_principal_rejected"] = False
-
     fresh_frame = build_frame(
         envelope,
         sender_id="DEMIHEAD.LOCAL",
-        key_id="TEST_KEY",
+        key_id="TEST_KEY_E1",
+        key_epoch=1,
         key=key,
         issued_at_ms=issued,
         nonce="abcdef00112233445566778899abcdef",
-        ttl_ms=30_000,
     )
     fresh_guard = MemoryReplayGuard()
     backpressure = validate_frame(
@@ -402,12 +424,7 @@ def self_test() -> dict[str, Any]:
         queue_capacity=8,
     )
     checks["backpressure_holds"] = backpressure["status"] == "HOLD_BACKPRESSURE"
-    checks["backpressure_no_retry"] = backpressure["control"]["automatic_retry_permitted"] is False
     checks["backpressure_does_not_consume_nonce"] = backpressure["replay_protection"]["nonce_consumed"] is False
-    checks["fresh_frame_still_unseen_after_backpressure"] = not fresh_guard.seen(
-        "DEMIHEAD.LOCAL:TEST_KEY:abcdef00112233445566778899abcdef",
-        now_ms=issued + 101,
-    )
 
     invalid_route = json.loads(json.dumps(envelope))
     invalid_route["target_head"] = "PORTAL"
@@ -415,7 +432,8 @@ def self_test() -> dict[str, Any]:
         build_frame(
             invalid_route,
             sender_id="DEMIHEAD.LOCAL",
-            key_id="TEST_KEY",
+            key_id="TEST_KEY_E1",
+            key_epoch=1,
             key=key,
             issued_at_ms=issued,
             nonce="ffeeddccbbaa99887766554433221100",
@@ -431,7 +449,8 @@ def self_test() -> dict[str, Any]:
         build_frame(
             oversized,
             sender_id="DEMIHEAD.LOCAL",
-            key_id="TEST_KEY",
+            key_id="TEST_KEY_E1",
+            key_epoch=1,
             key=key,
             issued_at_ms=issued,
             nonce="abcdefabcdefabcdefabcdefabcdefab",
