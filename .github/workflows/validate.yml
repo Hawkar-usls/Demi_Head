@@ -84,7 +84,9 @@ jobs:
       - name: Verify appeal never creates automatic effect authority
         run: |
           python - <<'PY'
-          from tools.reviewer_appeal_gate import self_test
+          import sys
+          sys.path.insert(0, 'tools')
+          from reviewer_appeal_gate import self_test
           result = self_test()
           assert result['status'] == 'PASS'
           assert result['checks']['consensus_correction_is_not_auto_applied'] is True
@@ -92,4 +94,37 @@ jobs:
           assert result['checks']['same_root_does_not_count_twice'] is True
           print('APPEAL_REVIEWER_LEDGER=PASS')
           print('AUTOMATIC_WORLD_EFFECT=false')
+          PY
+
+      - name: Verify frozen adversarial holdout hash before execution
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'tools')
+          from truth_guard_holdout import load_frozen_corpus
+          corpus = load_frozen_corpus(Path('holdout/truth_guard_v1/frozen_corpus.json'))
+          assert corpus['freeze_sha256'] == '4c658ea1532042e2c5db0298285335bbbb9e3e61ab21afd453ff0c846971201f'
+          assert corpus['freeze_payload']['case_count'] == 17
+          assert corpus['freeze_payload']['frozen_before_first_execution'] is True
+          print('FROZEN_BEFORE_EXECUTION=true')
+          print('FREEZE_SHA256', corpus['freeze_sha256'])
+          PY
+
+      - name: Run frozen adversarial truth-guard holdout
+        run: |
+          python tools/truth_guard_holdout.py --corpus holdout/truth_guard_v1/frozen_corpus.json --output /tmp/truth-guard-holdout-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/truth-guard-holdout-result.json').read_text(encoding='utf-8'))
+          assert result['status'] == 'PASS'
+          assert result['passed'] == 17
+          assert result['total'] == 17
+          assert result['independent_external_validation'] is False
+          assert result['real_world_reviewer_independence_established'] is False
+          assert result['universal_truthfulness_established'] is False
+          assert result['production_readiness_established'] is False
+          print('FROZEN_SYNTHETIC_ADVERSARIAL_HOLDOUT=PASS')
+          print('INDEPENDENT_EXTERNAL_VALIDATION=false')
           PY
