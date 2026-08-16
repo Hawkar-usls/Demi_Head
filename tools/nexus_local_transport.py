@@ -127,8 +127,8 @@ def validate_frame(
         raise ValueError("Incoming transport frame exceeds maximum size")
     if frame.get("contract") != TRANSPORT_CONTRACT:
         raise ValueError("Transport contract mismatch")
-    if replay_guard is None or not callable(getattr(replay_guard, "consume", None)):
-        raise ValueError("A replay guard with atomic consume() is required")
+    if replay_guard is None or not callable(getattr(replay_guard, "seen", None)) or not callable(getattr(replay_guard, "consume", None)):
+        raise ValueError("A replay guard with seen() and atomic consume() is required")
 
     sender_id = frame.get("sender_id")
     key_id = frame.get("key_id")
@@ -183,11 +183,17 @@ def validate_frame(
     if issued_at_ms > now + MAX_FUTURE_SKEW_MS:
         raise ValueError("Frame timestamp is too far in the future")
     age_ms = now - issued_at_ms
-    if age_ms > ttl_ms:
+    if age_ms >= ttl_ms:
         raise ValueError("Frame is stale")
 
     replay_key = f"{sender_id}:{key_id}:{nonce}"
+    replay_key_sha256 = hashlib.sha256(replay_key.encode("utf-8")).hexdigest()
     expires_at_ms = issued_at_ms + ttl_ms
+
+    # Early classification prevents an already-consumed replay from being mislabeled as backpressure.
+    # Final consume remains the atomic race-closing operation before admission.
+    if replay_guard.seen(replay_key, now_ms=now):
+        raise ValueError("Replay detected")
 
     if isinstance(queue_capacity, bool) or not isinstance(queue_capacity, int) or queue_capacity < 1:
         raise ValueError("queue_capacity must be an integer >= 1")
@@ -198,19 +204,22 @@ def validate_frame(
             "schema": "janus.demihead.nexus_transport_admission.v1",
             "status": "HOLD_BACKPRESSURE",
             "frame_sha256": sha256(frame),
-            "replay_key_sha256": hashlib.sha256(replay_key.encode("utf-8")).hexdigest(),
+            "replay_key_sha256": replay_key_sha256,
             "queue": {"depth": queue_depth, "capacity": queue_capacity},
+            "replay_protection": {
+                "early_replay_check_passed": True,
+                "nonce_consumed": False,
+            },
             "control": {
                 "automatic_retry_permitted": False,
                 "delivery_performed": False,
-                "replay_nonce_consumed": False,
                 "authority_delta": 0,
                 "mass_effect_budget_delta": 0,
             },
         }
 
     if not replay_guard.consume(replay_key, expires_at_ms=expires_at_ms, now_ms=now):
-        raise ValueError("Replay detected")
+        raise ValueError("Replay detected during atomic admission")
 
     persistent_replay = bool(getattr(replay_guard, "persistent", False))
     replay_kind = str(getattr(replay_guard, "kind", "UNKNOWN"))
@@ -222,7 +231,7 @@ def validate_frame(
         "sender_id": sender_id,
         "key_id": key_id,
         "source_head": source_head,
-        "replay_key_sha256": hashlib.sha256(replay_key.encode("utf-8")).hexdigest(),
+        "replay_key_sha256": replay_key_sha256,
         "freshness": {"age_ms": max(0, age_ms), "ttl_ms": ttl_ms},
         "authentication": {
             "hmac_verified": True,
@@ -234,6 +243,7 @@ def validate_frame(
         "replay_protection": {
             "guard_kind": replay_kind,
             "persistent": persistent_replay,
+            "early_replay_check_passed": True,
             "nonce_consumed_atomically": True,
         },
         "control": {
@@ -304,18 +314,18 @@ def self_test() -> dict[str, Any]:
     }
 
     try:
-        validate_frame(frame, principal_lookup=principals, replay_guard=guard, now_ms=issued + 200)
+        validate_frame(frame, principal_lookup=principals, replay_guard=guard, now_ms=issued + 200, queue_depth=8, queue_capacity=8)
     except ValueError:
-        checks["replay_rejected"] = True
+        checks["consumed_replay_rejected_before_backpressure"] = True
     else:
-        checks["replay_rejected"] = False
+        checks["consumed_replay_rejected_before_backpressure"] = False
 
     try:
-        validate_frame(frame, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 31_000)
+        validate_frame(frame, principal_lookup=principals, replay_guard=MemoryReplayGuard(), now_ms=issued + 30_000)
     except ValueError:
-        checks["stale_rejected"] = True
+        checks["ttl_boundary_rejected_as_stale"] = True
     else:
-        checks["stale_rejected"] = False
+        checks["ttl_boundary_rejected_as_stale"] = False
 
     tampered = json.loads(json.dumps(frame))
     tampered["sender_id"] = "ATTACKER"
@@ -373,17 +383,31 @@ def self_test() -> dict[str, Any]:
     else:
         checks["disabled_principal_rejected"] = False
 
+    fresh_frame = build_frame(
+        envelope,
+        sender_id="DEMIHEAD.LOCAL",
+        key_id="TEST_KEY",
+        key=key,
+        issued_at_ms=issued,
+        nonce="abcdef00112233445566778899abcdef",
+        ttl_ms=30_000,
+    )
+    fresh_guard = MemoryReplayGuard()
     backpressure = validate_frame(
-        frame,
+        fresh_frame,
         principal_lookup=principals,
-        replay_guard=MemoryReplayGuard(),
+        replay_guard=fresh_guard,
         now_ms=issued + 100,
         queue_depth=8,
         queue_capacity=8,
     )
     checks["backpressure_holds"] = backpressure["status"] == "HOLD_BACKPRESSURE"
     checks["backpressure_no_retry"] = backpressure["control"]["automatic_retry_permitted"] is False
-    checks["backpressure_does_not_consume_nonce"] = backpressure["control"]["replay_nonce_consumed"] is False
+    checks["backpressure_does_not_consume_nonce"] = backpressure["replay_protection"]["nonce_consumed"] is False
+    checks["fresh_frame_still_unseen_after_backpressure"] = not fresh_guard.seen(
+        "DEMIHEAD.LOCAL:TEST_KEY:abcdef00112233445566778899abcdef",
+        now_ms=issued + 101,
+    )
 
     invalid_route = json.loads(json.dumps(envelope))
     invalid_route["target_head"] = "PORTAL"
