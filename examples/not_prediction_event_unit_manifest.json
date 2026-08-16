@@ -1,0 +1,41 @@
+{
+  "artifact_id": "DEMIHEAD-NOT-PREDICTION-EVENT-UNIT-FIXTURE",
+  "rows": [
+    {
+      "candidate_id": "CLOCK-LINEAGE-A",
+      "source_root": "HOLY_CLOCK_V1_4_SOURCE",
+      "event_roots": [
+        "CLOCK_2026_07_07_1414",
+        "CLOCK_2026_07_07_2112"
+      ],
+      "observation_selection": {
+        "mode": "SALIENCE_TRIGGERED",
+        "sampling_frame_known": false,
+        "all_opportunities_logged": false,
+        "note": "Lock-screen times were recorded when they became noticeable; ordinary non-salient clock views are not enumerated."
+      }
+    },
+    {
+      "candidate_id": "CLOCK-2112-DERIVATIVE",
+      "source_root": "GORODOK_DERIVATIVE_SOURCE",
+      "event_root": "CLOCK_2026_07_07_2112",
+      "observation_selection": {
+        "mode": "LOOKUP_CONDITIONED",
+        "sampling_frame_known": true,
+        "all_opportunities_logged": false,
+        "note": "Later same-number lookups are conditioned on the already observed coordinate."
+      }
+    },
+    {
+      "candidate_id": "TECHNICAL-CONTROL",
+      "source_root": "TECHNICAL_TIMING_ROOT",
+      "event_root": "TECHNICAL_TRIAL_001",
+      "observation_selection": {
+        "mode": "UNCONDITIONED_OR_PREREGISTERED",
+        "sampling_frame_known": true,
+        "all_opportunities_logged": true,
+        "note": "Synthetic preregistered control with a defined opportunity set."
+      }
+    }
+  ]
+}
