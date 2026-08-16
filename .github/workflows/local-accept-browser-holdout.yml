@@ -119,9 +119,18 @@ jobs:
           assert c['real_user_workspace_touched'] is False
           assert c['production_readiness_established'] is False
           print('REAL_CHROMIUM_LOCAL_ACCEPT_HOLDOUT=PASS')
+          print('CHROMIUM_VERSION', result['browser']['version'])
           print('LIVE_USER_WORKSPACE_TOUCHED=false')
           print('PRODUCTION_NETWORK_LATENCY_MEASURED=false')
           PY
+
+      - name: Preserve browser holdout receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-accept-browser-holdout-${{ github.sha }}
+          path: /tmp/local-accept-browser-holdout-result.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Stop isolated fixture server
         if: always()
