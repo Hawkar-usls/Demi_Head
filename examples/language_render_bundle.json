@@ -1,0 +1,72 @@
+{
+  "schema": "janus.demihead.language_render_bundle.v1",
+  "bundle_id": "LANGUAGE_FIXTURE_001",
+  "required_languages": ["uk", "ru", "en"],
+  "canonical_semantics": {
+    "evidence_state": "CONTESTED",
+    "uncertainty_class": "MATERIAL",
+    "urgency_class": "NORMAL",
+    "user_rights": ["APPEAL", "DISAGREE", "EXIT", "INSPECT_SOURCES"],
+    "official_position_present": true,
+    "independent_evidence_present": true,
+    "contradictions_present": true,
+    "unknown_fields_present": true,
+    "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+  },
+  "renders": [
+    {
+      "language": "uk",
+      "semantics": {
+        "evidence_state": "CONTESTED",
+        "uncertainty_class": "MATERIAL",
+        "urgency_class": "NORMAL",
+        "user_rights": ["INSPECT_SOURCES", "EXIT", "DISAGREE", "APPEAL"],
+        "official_position_present": true,
+        "independent_evidence_present": true,
+        "contradictions_present": true,
+        "unknown_fields_present": true,
+        "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+      },
+      "presentation": {
+        "title": "Джерела суперечать одне одному",
+        "summary": "Показати суперечність, невідомі поля та дозволити користувачу завершити перевірку."
+      }
+    },
+    {
+      "language": "ru",
+      "semantics": {
+        "evidence_state": "CONTESTED",
+        "uncertainty_class": "MATERIAL",
+        "urgency_class": "NORMAL",
+        "user_rights": ["APPEAL", "DISAGREE", "EXIT", "INSPECT_SOURCES"],
+        "official_position_present": true,
+        "independent_evidence_present": true,
+        "contradictions_present": true,
+        "unknown_fields_present": true,
+        "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+      },
+      "presentation": {
+        "title": "Источники противоречат друг другу",
+        "summary": "Показать конфликт и неизвестные поля, после чего оставить пользователю право завершить проверку."
+      }
+    },
+    {
+      "language": "en",
+      "semantics": {
+        "evidence_state": "CONTESTED",
+        "uncertainty_class": "MATERIAL",
+        "urgency_class": "NORMAL",
+        "user_rights": ["DISAGREE", "APPEAL", "INSPECT_SOURCES", "EXIT"],
+        "official_position_present": true,
+        "independent_evidence_present": true,
+        "contradictions_present": true,
+        "unknown_fields_present": true,
+        "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+      },
+      "presentation": {
+        "title": "The sources conflict",
+        "summary": "Show the conflict and unknown fields, then preserve the user's ability to end the review."
+      }
+    }
+  ]
+}
