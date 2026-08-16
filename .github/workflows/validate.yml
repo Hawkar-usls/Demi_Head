@@ -45,6 +45,18 @@ jobs:
       - name: Run frozen operational optimizer fixture
         run: python tools/constitution_optimizer.py examples/optimizer_trials.json --output /tmp/optimizer-result.json
 
+      - name: Run correction propagator self-test
+        run: python tools/correction_propagator.py --self-test --output /tmp/correction-self-test.json
+
+      - name: Run correction propagation fixture
+        run: python tools/correction_propagator.py examples/correction_graph.json --output /tmp/correction-result.json
+
+      - name: Run language invariance self-test
+        run: python tools/language_invariance.py --self-test --output /tmp/language-self-test.json
+
+      - name: Run multilingual semantic fixture
+        run: python tools/language_invariance.py examples/language_render_bundle.json --output /tmp/language-result.json
+
       - name: Run deterministic +/+ recenter self-test
         run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
 
