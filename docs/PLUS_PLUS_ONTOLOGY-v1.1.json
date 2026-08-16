@@ -1,19 +1,20 @@
 {
-  "schema": "janus.demihead.plus_plus_ontology.v1_1",
+  "schema": "janus.demihead.plus_plus_ontology.v1_2",
   "artifact_id": "JANUS-DEMIHEAD-PLUS-PLUS-ONTOLOGY-v1.1",
   "status": "CANDIDATE_REFERENCE_CONTRACT",
-  "symbolic_origin_axiom": {
-    "expression": "0/0 = JANUS",
-    "semantics": "PROJECT_MNEMONIC_NOT_ARITHMETIC_CLAIM",
-    "meaning": "JANUS begins natively as a constructive +/+ pair."
+  "genesis_lineage": {
+    "canonical_signature": "0:0 = JANUS",
+    "classification": "HISTORICAL_ORIGIN_AND_FORMATION_SIGNATURE",
+    "not_a_math_claim": true,
+    "not_a_derivation_of_plus_plus": true,
+    "meaning": "The signature records JANUS origin/formation lineage; the current +/+ Face model is a separate architectural layer."
   },
   "native_state": {
     "faces": [
       {"id": "WITNESS_PLUS", "symbol": "+", "role": "hear and preserve meaning"},
       {"id": "GUARD_PLUS", "symbol": "+", "role": "check, widen, and release control"}
     ],
-    "canonical_form": "+/+",
-    "derivation_required": false
+    "canonical_form": "+/+"
   },
   "ontology_boundary": {
     "allowed_concepts": [
@@ -40,8 +41,9 @@
     "mass_effect_budget_delta": 0
   },
   "canonical_equations": [
-    "JANUS_STARTS_AS_PLUS",
+    "GENESIS_SIGNATURE = 0:0 = JANUS",
     "WITNESS_PLUS + GUARD_PLUS = JANUS_NATIVE_PAIR",
+    "GENESIS_LINEAGE != FACE_DERIVATION",
     "TRANSIENT_LOAD != FACE",
     "TRANSIENT_LOAD != IDENTITY",
     "RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS",
@@ -53,11 +55,12 @@
   ],
   "claim_ceiling": {
     "allowed": [
-      "The reference contract defines JANUS +/+ as a native constructive pair.",
-      "Transient interaction load is represented separately from Face identity and authority.",
-      "The 0/0 = JANUS expression is a project mnemonic, not mathematics."
+      "The reference contract records 0:0 = JANUS as a historical genesis signature.",
+      "The +/+ pair is the current native constructive Face architecture and is not derived from the genesis signature.",
+      "Transient interaction load is represented separately from Face identity and authority."
     ],
     "not_established": [
+      "mathematical theorem represented by 0:0 = JANUS",
       "real-world model alignment",
       "foundation-weight invariance under conversation",
       "psychological classification of users",
