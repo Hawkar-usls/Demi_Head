@@ -1,0 +1,56 @@
+name: DemiHead Mechanics Hardening v1.1
+
+on:
+  push:
+    paths:
+      - "tools/reviewer_appeal_gate_v1_1.py"
+      - "tools/correction_propagation_v1_1.py"
+      - "tests/test_mechanics_hardening_v1_1.py"
+      - "docs/MECHANICS_HARDENING_V1_1.md"
+      - ".github/workflows/mechanics-hardening-v1-1.yml"
+  pull_request:
+    paths:
+      - "tools/reviewer_appeal_gate_v1_1.py"
+      - "tools/correction_propagation_v1_1.py"
+      - "tests/test_mechanics_hardening_v1_1.py"
+      - "docs/MECHANICS_HARDENING_V1_1.md"
+      - ".github/workflows/mechanics-hardening-v1-1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hardening:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile hardened mechanics
+        run: |
+          python -m py_compile tools/reviewer_appeal_gate_v1_1.py
+          python -m py_compile tools/correction_propagation_v1_1.py
+
+      - name: Run focused hardening tests
+        run: python -m unittest tests.test_mechanics_hardening_v1_1 -v
+
+      - name: Run full unit-test discovery
+        run: python -m unittest discover -s tests -v
+
+      - name: Replay frozen v1 truth-guard holdout unchanged
+        run: |
+          PYTHONPATH=tools python tools/truth_guard_holdout.py --corpus holdout/truth_guard_v1/frozen_corpus.json > /tmp/holdout.json
+          python - <<'PY'
+          import json
+          result = json.load(open('/tmp/holdout.json', encoding='utf-8'))
+          assert result['freeze_sha256'] == '4c658ea1532042e2c5db0298285335bbbb9e3e61ab21afd453ff0c846971201f'
+          assert result['passed'] == result['total'] == 17
+          assert result['status'] == 'PASS'
+          assert result['independent_external_validation'] is False
+          print('FROZEN_V1_HOLDOUT_UNCHANGED=PASS')
+          PY
