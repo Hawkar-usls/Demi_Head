@@ -1,0 +1,30 @@
+{
+  "schema": "janus.demihead.hemisphere_packet.v1",
+  "packet_id": "example-left-hrain-001",
+  "hemisphere": "LEFT_HRAIN",
+  "role": "STRUCTURAL_CONTEXT",
+  "captured_at": "2026-08-16T08:53:00Z",
+  "source": {
+    "repository": "Hawkar-usls/Hrain",
+    "bridge_contract": "JANUS_DEMIHEAD_BICAMERAL_BRIDGE_V1",
+    "source_revision": "57e6b7125b81083d6599e434d76ec4cac03ac326",
+    "workspace_mode": "LOCAL_EDITABLE_GRAPH"
+  },
+  "graph": {
+    "nodes": [
+      {"id": 1, "label": "Context", "origin": "USER", "type": "default"},
+      {"id": 2, "label": "Evidence", "origin": "USER", "type": "info"},
+      {"id": 3, "label": "Release", "origin": "SYSTEM", "type": "default"}
+    ],
+    "links": [
+      {"source": 1, "target": 2},
+      {"source": 2, "target": 3}
+    ]
+  },
+  "control": {
+    "read_only_transfer": true,
+    "direct_cross_hemisphere_mutation": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  }
+}
