@@ -44,3 +44,21 @@ jobs:
 
       - name: Inspect high-impact Third Wish hold path
         run: python tools/third_wish_catalog.py --request GITHUB.DESTRUCTIVE --output /tmp/third-wish-high-impact.json
+
+      - name: Run epistemic execution gate self-test
+        run: python tools/epistemic_execution_gate.py --self-test --output /tmp/epistemic-execution-self-test.json
+
+      - name: Reject model-only fake hash verification fixture
+        run: |
+          python tools/epistemic_execution_gate.py --assess examples/epistemic_model_only_hash_claim.json --output /tmp/model-only-hash-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/model-only-hash-result.json').read_text())
+          assert result['evidence_state'] == 'EVIDENCE_INSUFFICIENT'
+          assert result['definitive_claim_permitted'] is False
+          assert 'DO_NOT_GUESS_A_VALUE' in result['response_policy']
+          PY
+
+      - name: Exercise real SHA-256 execution path
+        run: python tools/epistemic_execution_gate.py --sha256-text JANUS --output /tmp/real-sha256-receipt.json
