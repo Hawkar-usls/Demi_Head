@@ -1,0 +1,20 @@
+{
+  "schema": "janus.demihead.appeal_bundle.v1",
+  "case_id": "CETUS-APPEAL-001",
+  "decision_receipt": {
+    "receipt_id": "decision-fixture-001",
+    "case_id": "CETUS-APPEAL-001",
+    "evidence_state": "CONTESTED",
+    "uncertainty_class": "MATERIAL",
+    "release_control": "SHOW_CONFLICT_AND_ALLOW_EXIT"
+  },
+  "decision_receipt_sha256": "1fd4203ab47648bceb093bf0ea5082964399199fb5b00c2ef1da59058c289a08",
+  "appeal": {
+    "appeal_id": "appeal-fixture-001",
+    "ground": "CORRECTION_MISSING",
+    "requested_action": "CORRECT_LINEAGE",
+    "statement": "A known correction should be inspected and linked if provenance confirms it.",
+    "user_requested": true
+  },
+  "resolution": null
+}
