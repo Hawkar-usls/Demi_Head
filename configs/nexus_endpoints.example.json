@@ -1,0 +1,42 @@
+{
+  "schema": "janus.demihead.nexus_endpoint_catalog.v1",
+  "live_network_endpoints": false,
+  "endpoints": [
+    {
+      "schema": "janus.demihead.nexus_endpoint_policy.v1",
+      "endpoint_id": "DEMIHEAD.RELEASE_CONTROL.LOCAL",
+      "enabled": true,
+      "accepted_target_heads": [
+        "RELEASE_CONTROL"
+      ],
+      "local_dispatch_only": true,
+      "external_effect_permitted": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    },
+    {
+      "schema": "janus.demihead.nexus_endpoint_policy.v1",
+      "endpoint_id": "DEMIHEAD.GUARDIAN.LOCAL",
+      "enabled": true,
+      "accepted_target_heads": [
+        "GUARDIAN"
+      ],
+      "local_dispatch_only": true,
+      "external_effect_permitted": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    },
+    {
+      "schema": "janus.demihead.nexus_endpoint_policy.v1",
+      "endpoint_id": "REGISTRY.REFERENCE.LOCAL",
+      "enabled": false,
+      "accepted_target_heads": [
+        "REGISTRY"
+      ],
+      "local_dispatch_only": true,
+      "external_effect_permitted": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  ]
+}
