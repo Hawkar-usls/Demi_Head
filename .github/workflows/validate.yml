@@ -84,7 +84,9 @@ jobs:
       - name: Verify appeal never creates automatic effect authority
         run: |
           python - <<'PY'
-          from tools.reviewer_appeal_gate import self_test
+          import sys
+          sys.path.insert(0, 'tools')
+          from reviewer_appeal_gate import self_test
           result = self_test()
           assert result['status'] == 'PASS'
           assert result['checks']['consensus_correction_is_not_auto_applied'] is True
@@ -97,8 +99,10 @@ jobs:
       - name: Verify frozen adversarial holdout hash before execution
         run: |
           python - <<'PY'
+          import sys
           from pathlib import Path
-          from tools.truth_guard_holdout import load_frozen_corpus
+          sys.path.insert(0, 'tools')
+          from truth_guard_holdout import load_frozen_corpus
           corpus = load_frozen_corpus(Path('holdout/truth_guard_v1/frozen_corpus.json'))
           assert corpus['freeze_sha256'] == '4c658ea1532042e2c5db0298285335bbbb9e3e61ab21afd453ff0c846971201f'
           assert corpus['freeze_payload']['case_count'] == 17
