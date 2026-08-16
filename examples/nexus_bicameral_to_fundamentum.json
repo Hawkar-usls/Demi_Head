@@ -1,0 +1,24 @@
+{
+  "schema": "janus.demihead.nexus_envelope.v1",
+  "contract": "JANUS_NEXUS_HABITAT_V1",
+  "envelope_id": "fixture-bicameral-fundamentum-001",
+  "source_head": "BICAMERAL_BRIDGE",
+  "target_head": "FUNDAMENTUM",
+  "payload_kind": "BICAMERAL_RESULT",
+  "payload_ref": {
+    "sha256": "527483db3e5970ea9cfe3fba69a80a70a757b00e9a060cdea1dac023f78f5566",
+    "locator": "examples/nexus_bicameral_result.json"
+  },
+  "trace": [
+    "HRAIN",
+    "INAIHR"
+  ],
+  "control": {
+    "read_only_transfer": true,
+    "direct_workspace_mutation": false,
+    "external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "ttl_hops": 4
+  }
+}
