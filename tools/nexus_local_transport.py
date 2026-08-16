@@ -10,6 +10,8 @@ import time
 from pathlib import Path
 from typing import Any, MutableSet
 
+from nexus_habitat import validate_envelope
+
 
 FRAME_SCHEMA = "janus.demihead.nexus_transport_frame.v1"
 TRANSPORT_CONTRACT = "JANUS_NEXUS_LOCAL_TRANSPORT_V1"
@@ -53,10 +55,11 @@ def build_frame(
     nonce: str | None = None,
     ttl_ms: int = DEFAULT_TTL_MS,
 ) -> dict[str, Any]:
-    if not isinstance(envelope, dict) or envelope.get("schema") != NEXUS_ENVELOPE_SCHEMA:
-        raise ValueError("Transport accepts only Nexus envelopes")
-    if not sender_id.strip() or not key_id.strip():
-        raise ValueError("sender_id and key_id are required")
+    validate_envelope(envelope)
+    if not isinstance(sender_id, str) or not sender_id.strip():
+        raise ValueError("sender_id is required")
+    if not isinstance(key_id, str) or not key_id.strip():
+        raise ValueError("key_id is required")
     if not isinstance(key, bytes) or len(key) < 16:
         raise ValueError("transport key must be bytes with length >= 16")
     if not isinstance(ttl_ms, int) or isinstance(ttl_ms, bool) or not 1 <= ttl_ms <= MAX_TTL_MS:
@@ -85,13 +88,14 @@ def build_frame(
             "mass_effect_budget_delta": 0,
         },
     }
-    raw_size = len(canonical_json_bytes(frame))
-    if raw_size > MAX_FRAME_BYTES:
+    if len(canonical_json_bytes(frame)) > MAX_FRAME_BYTES:
         raise ValueError("transport frame exceeds maximum size")
     frame["auth"] = {
         "algorithm": "HMAC-SHA256",
         "tag": _hmac_hex(key, _auth_payload(frame)),
     }
+    if len(canonical_json_bytes(frame)) > MAX_FRAME_BYTES:
+        raise ValueError("authenticated transport frame exceeds maximum size")
     return frame
 
 
@@ -106,21 +110,20 @@ def validate_frame(
 ) -> dict[str, Any]:
     if not isinstance(frame, dict) or frame.get("schema") != FRAME_SCHEMA:
         raise ValueError("Unexpected transport frame schema")
+    if len(canonical_json_bytes(frame)) > MAX_FRAME_BYTES:
+        raise ValueError("Incoming transport frame exceeds maximum size")
     if frame.get("contract") != TRANSPORT_CONTRACT:
         raise ValueError("Transport contract mismatch")
 
+    sender_id = frame.get("sender_id")
+    if not isinstance(sender_id, str) or not sender_id.strip():
+        raise ValueError("Invalid sender_id")
     key_id = frame.get("key_id")
     if not isinstance(key_id, str) or key_id not in key_lookup:
         raise ValueError("Unknown transport key_id")
     key = key_lookup[key_id]
     if not isinstance(key, bytes) or len(key) < 16:
         raise ValueError("Invalid transport key material")
-
-    envelope = frame.get("envelope")
-    if not isinstance(envelope, dict) or envelope.get("schema") != NEXUS_ENVELOPE_SCHEMA:
-        raise ValueError("Transport frame does not contain a Nexus envelope")
-    if frame.get("envelope_sha256") != sha256(envelope):
-        raise ValueError("Envelope hash binding mismatch")
 
     auth = frame.get("auth")
     if not isinstance(auth, dict) or auth.get("algorithm") != "HMAC-SHA256":
@@ -131,6 +134,11 @@ def validate_frame(
     expected = _hmac_hex(key, _auth_payload(frame))
     if not hmac.compare_digest(tag, expected):
         raise ValueError("Transport HMAC verification failed")
+
+    envelope = frame.get("envelope")
+    validate_envelope(envelope)
+    if frame.get("envelope_sha256") != sha256(envelope):
+        raise ValueError("Envelope hash binding mismatch")
 
     control = frame.get("transport_control")
     if not isinstance(control, dict):
@@ -161,7 +169,7 @@ def validate_frame(
     if age_ms > ttl_ms:
         raise ValueError("Frame is stale")
 
-    replay_key = f"{frame.get('sender_id')}:{key_id}:{nonce}"
+    replay_key = f"{sender_id}:{key_id}:{nonce}"
     if replay_cache is not None and replay_key in replay_cache:
         raise ValueError("Replay detected")
 
@@ -195,7 +203,7 @@ def validate_frame(
         "status": "AUTHENTICATED_FRAME_ADMITTED",
         "frame_sha256": sha256(frame),
         "envelope_sha256": frame["envelope_sha256"],
-        "sender_id": frame.get("sender_id"),
+        "sender_id": sender_id,
         "key_id": key_id,
         "replay_key": replay_key,
         "freshness": {
@@ -272,9 +280,8 @@ def self_test() -> dict[str, Any]:
     else:
         checks["replay_rejected"] = False
 
-    stale = json.loads(json.dumps(frame))
     try:
-        validate_frame(stale, key_lookup={"TEST_KEY": key}, now_ms=issued + 31_000)
+        validate_frame(frame, key_lookup={"TEST_KEY": key}, now_ms=issued + 31_000)
     except ValueError:
         checks["stale_rejected"] = True
     else:
@@ -299,6 +306,38 @@ def self_test() -> dict[str, Any]:
     )
     checks["backpressure_holds"] = backpressure["status"] == "HOLD_BACKPRESSURE"
     checks["backpressure_no_retry"] = backpressure["control"]["automatic_retry_permitted"] is False
+
+    invalid_route = json.loads(json.dumps(envelope))
+    invalid_route["target_head"] = "PORTAL"
+    try:
+        build_frame(
+            invalid_route,
+            sender_id="DEMIHEAD.LOCAL",
+            key_id="TEST_KEY",
+            key=key,
+            issued_at_ms=issued,
+            nonce="ffeeddccbbaa99887766554433221100",
+        )
+    except ValueError:
+        checks["semantically_invalid_nexus_route_rejected"] = True
+    else:
+        checks["semantically_invalid_nexus_route_rejected"] = False
+
+    oversized = json.loads(json.dumps(envelope))
+    oversized["payload_ref"]["locator"] = "x" * (MAX_FRAME_BYTES + 1)
+    try:
+        build_frame(
+            oversized,
+            sender_id="DEMIHEAD.LOCAL",
+            key_id="TEST_KEY",
+            key=key,
+            issued_at_ms=issued,
+            nonce="abcdefabcdefabcdefabcdefabcdefab",
+        )
+    except ValueError:
+        checks["oversized_frame_rejected"] = True
+    else:
+        checks["oversized_frame_rejected"] = False
 
     return {
         "status": "PASS" if all(checks.values()) else "FAIL",
