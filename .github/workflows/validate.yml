@@ -61,6 +61,38 @@ jobs:
           print('DIRECT_CROSS_HEMISPHERE_WRITE=false')
           PY
 
+      - name: Verify live bicameral console remains read-only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('examples/bicameral_console.html').read_text(encoding='utf-8')
+          assert 'https://hawkar-usls.github.io/Hrain/demihead.html' in text
+          assert 'https://hawkar-usls.github.io/iNaiHR/demihead.html' in text
+          assert "const PAGES_ORIGIN = 'https://hawkar-usls.github.io'" in text
+          assert "postMessage({type: REQUEST}, PAGES_ORIGIN)" in text
+          assert "event.origin !== PAGES_ORIGIN" in text
+          for forbidden in (
+              'localStorage.setItem',
+              'localStorage.removeItem',
+              'localStorage.clear',
+              'fetch(',
+              'XMLHttpRequest',
+              'api.github.com/repos/',
+          ):
+              assert forbidden not in text, forbidden
+          assert "BOTH_HEMISPHERES_AGREE != TRUTH" in text
+          assert "HEMISPHERE_COUNT != AUTHORITY" in text
+          assert "DIRECT_CROSS_HEMISPHERE_WRITE = false" in text
+          assert "external_effect_permitted: false" in text
+          assert "direct_cross_hemisphere_write_permitted: false" in text
+          assert "agreement_is_truth: false" in text
+          assert "authority_delta: 0" in text
+          assert "mass_effect_budget_delta: 0" in text
+          print('BICAMERAL_CONSOLE_READ_ONLY=PASS')
+          print('WILDCARD_PACKET_TARGET=false')
+          print('CROSS_HEMISPHERE_WRITE=false')
+          PY
+
       - name: Run deterministic +/+ recenter self-test
         run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
 
