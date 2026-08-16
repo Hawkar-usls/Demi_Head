@@ -1,0 +1,34 @@
+{
+  "schema": "janus.demihead.not_prediction_reaudit.integration_receipt.v1",
+  "artifact_id": "JANUS-DEMIHEAD-NOT-PREDICTION-REAUDIT-RECEIPT-v1.0",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "branch": "janus/not-prediction-root-collapse-v1",
+  "integration": {
+    "tool": "tools/not_prediction_reaudit.py",
+    "fixture": "examples/not_prediction_reaudit_minimal.json",
+    "tests": "tests/test_not_prediction_reaudit.py",
+    "documentation": "docs/NOT_PREDICTION_REAUDIT.md"
+  },
+  "expected_contracts": [
+    "DERIVATIVE_PRESENTATIONS_COLLAPSE_TO_SOURCE_ROOT",
+    "MEMORY_BLIND_REMOVES_PRIOR_INTERPRETIVE_LABELS",
+    "ONTOLOGY_BLIND_NEUTRALIZES_PROJECT_NATIVE_TERMS",
+    "AUTHORITATIVE_COUNT_DRIFT_FAILS_CLOSED",
+    "EXTRAORDINARY_CLAIM_PROMOTION_FAILS_CLOSED",
+    "MATCHED_NULL_REQUIRED",
+    "EXTERNAL_REPLICATION_REQUIRED_FOR_STRONG_EXTERNAL_RECURRENCE"
+  ],
+  "claim_ceiling": "SOFTWARE_ACCOUNTING_AND_BLINDING_MECHANICS_ONLY",
+  "not_established": [
+    "prophecy",
+    "precognition",
+    "divination",
+    "physical retrocausality",
+    "supernatural causation",
+    "divine scheduling"
+  ],
+  "ci": {
+    "exact_head_sha": null,
+    "status": "PENDING"
+  }
+}
