@@ -69,8 +69,7 @@
       "target_claim": "An extant bound source explicitly assigns Sobek the search or custody of Osiris's phallus specifically.",
       "evidence_ids": [
         "BD42_PHALLUS_OSIRIS_CONTEXT",
-        "KHOIAK_PHALLUS_FINDING_CONTEXT",
-        "BD113_SOBEK_WATER_RECOVERY_SUPPORT"
+        "KHOIAK_PHALLUS_FINDING_CONTEXT"
       ]
     },
     {
@@ -78,7 +77,6 @@
       "text": "Подтверждается ли, что ты искал именно этот фаллос и не смог его найти?",
       "target_claim": "Sobek specifically searched for Osiris's phallus and failed to recover it.",
       "evidence_ids": [
-        "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
         "BD42_PHALLUS_OSIRIS_CONTEXT",
         "KHOIAK_PHALLUS_FINDING_CONTEXT"
       ]
