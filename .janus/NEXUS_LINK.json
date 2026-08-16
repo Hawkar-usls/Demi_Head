@@ -20,16 +20,27 @@
   ],
   "transport": {
     "contract": "JANUS_NEXUS_LOCAL_TRANSPORT_V1",
+    "schema": "schemas/nexus-transport-frame.schema.json",
+    "documentation": "docs/NEXUS_LOCAL_TRANSPORT.md",
     "authentication": "HMAC-SHA256_REFERENCE",
+    "principal_binding": {
+      "key_id_to_sender_id": true,
+      "key_id_to_allowed_source_heads": true,
+      "disabled_principal_rejected": true,
+      "human_identity_established": false,
+      "world_effect_authorization_established": false
+    },
     "freshness_gate": true,
-    "replay_rejection": true,
+    "replay_rejection": "PROCESS_LOCAL_CACHE_REFERENCE",
+    "persistent_replay_ledger": false,
+    "key_rotation_persistence": false,
+    "key_revocation_persistence": false,
     "backpressure_hold": true,
     "frame_size_cap_bytes": 65536,
     "socket_listener_enabled": false,
     "network_io_performed_by_reference": false,
-    "authentication_is_human_identity": false,
-    "authentication_is_authorization": false,
-    "automatic_retry_permitted": false
+    "automatic_retry_permitted": false,
+    "production_key_material_committed": false
   },
   "fundamentum_lineage_repository": "Hawkar-usls/Janus-Fundamentum",
   "fundamentum_lineage_is_runtime_ownership": false,
