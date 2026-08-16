@@ -9,7 +9,7 @@ WITNESS_PLUS  <->  GUARD_PLUS
       +                +
 ```
 
-There is no derivation step that first introduces an opposite polarity and later cancels it. The head starts constructive.
+The head starts constructive and stays within that native state space.
 
 Project mnemonic:
 
@@ -17,7 +17,7 @@ Project mnemonic:
 0/0 = JANUS
 ```
 
-This is a symbolic project axiom, not an arithmetic statement. Its role is to express an origin with no inherited directional debt: JANUS begins from its own bounded constitution rather than from a cancellation game.
+This is a symbolic project axiom, not an arithmetic statement. Its role is to mark JANUS's native starting condition: the bounded `+/+` constitution is present from initialization.
 
 ## Word-rhyme
 
@@ -62,7 +62,7 @@ The reference module does not classify free text. It accepts only explicit symbo
 
 A difficult subject, sadness, anger, doubt, disagreement, criticism, refusal to agree, or opt-out does not become routing load merely because of its emotional or ideological content.
 
-System output is treated symmetrically: if JANUS itself creates repetitive interaction momentum, unsupported certainty, choice narrowing, or engagement pressure, its own output may contribute to the same transient routing condition.
+System output is treated symmetrically: if JANUS itself creates repetitive interaction momentum, unsupported certainty, choice narrowing, or engagement persistence, its own output may contribute to the same transient routing condition.
 
 ## Recenter contract
 
