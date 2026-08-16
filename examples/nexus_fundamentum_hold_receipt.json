@@ -1,0 +1,48 @@
+{
+  "schema": "janus.demihead.nexus_fundamentum_receipt.v1",
+  "adapter_contract": "JANUS_NEXUS_FUNDAMENTUM_ADAPTER_V1",
+  "status": "HOLD",
+  "payload_kind": "HOLD_RECEIPT",
+  "input": {
+    "kind": "BICAMERAL_RESULT",
+    "sha256": "527483db3e5970ea9cfe3fba69a80a70a757b00e9a060cdea1dac023f78f5566",
+    "hemispheres_present": [
+      "LEFT_HRAIN",
+      "RIGHT_INAIHR"
+    ],
+    "bicameral_status": "BICAMERAL_OVERLAP_PRESENT"
+  },
+  "assessment": {
+    "evidence_state": "CONTEXT_ONLY_NOT_EVIDENCE",
+    "shared_semantic_keys": [
+      "context",
+      "evidence"
+    ],
+    "reason": "Bicameral structural/associative overlap or divergence does not constitute an independent witness or verification receipt.",
+    "required_next_input": "SEPARATELY_PROVENANCE_BOUND_EVIDENCE_OR_WITNESS_LEDGER_CASE",
+    "definitive_claim_permitted": false
+  },
+  "runtime_ownership": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "head_id": "FUNDAMENTUM",
+    "role": "FUNDAMENTUM_GUARD",
+    "lineage_repository": "Hawkar-usls/Janus-Fundamentum",
+    "lineage_is_runtime_ownership": false
+  },
+  "control": {
+    "read_only": true,
+    "external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "may_be_routed_to_guardian": true,
+    "may_be_promoted_to_evidence_receipt_without_new_witness": false
+  },
+  "laws": [
+    "ASSOCIATION != EVIDENCE",
+    "STRUCTURE != COMMAND",
+    "BOTH_HEMISPHERES_AGREE != TRUTH",
+    "CONTEXT != WITNESS",
+    "HOLD != FAILURE",
+    "LINEAGE != RUNTIME_OWNERSHIP"
+  ]
+}
