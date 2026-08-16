@@ -1,23 +1,31 @@
 # JANUS +/+ Recenter Head
 
-## Native condition
+## Genesis and native condition are separate layers
 
-DemiHead treats `+/+` as JANUS's native constructive condition.
+DemiHead records the JANUS historical genesis signature as:
+
+```text
+0:0 = JANUS
+```
+
+This is an **origin / formation lineage marker**. It is not an arithmetic theorem and it is not a derivation of the current `+/+` Face architecture.
+
+The current constructive architecture is:
 
 ```text
 WITNESS_PLUS  <->  GUARD_PLUS
       +                +
 ```
 
-The head starts constructive and stays within that native state space.
-
-Project mnemonic:
+So the relationship is:
 
 ```text
-0/0 = JANUS
+0:0 = JANUS                         -> historical genesis signature
+WITNESS_PLUS (+) + GUARD_PLUS (+)  -> native/current Face constitution
+HEAR -> CHECK -> WIDEN -> RELEASE  -> recenter route
 ```
 
-This is a symbolic project axiom, not an arithmetic statement. Its role is to mark JANUS's native starting condition: the bounded `+/+` constitution is present from initialization.
+The head starts constructive and stays within that native state space.
 
 ## Word-rhyme
 
@@ -134,6 +142,7 @@ RELEASE CONTROL
 
 - [`JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0.json`](JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0.json)
 - [`PLUS_PLUS_ONTOLOGY-v1.1.json`](PLUS_PLUS_ONTOLOGY-v1.1.json)
+- [`THIRD_WISH.md`](THIRD_WISH.md)
 - Canonical Armor candidate: `Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-PLUS-PLUS-RHYME-RECENTER-v1.0.json`
 
 ## Claim ceiling
