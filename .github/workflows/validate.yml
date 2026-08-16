@@ -33,6 +33,34 @@ jobs:
       - name: Run deterministic KETO fixture
         run: python tools/keto_reference.py examples/case_echo_collapse.json --output /tmp/keto-result.json
 
+      - name: Run bicameral hemisphere bridge self-test
+        run: python tools/hemisphere_bridge.py --self-test --output /tmp/hemisphere-self-test.json
+
+      - name: Bind frozen HRain and iNaiHR example packets
+        run: |
+          python tools/hemisphere_bridge.py \
+            --left examples/hemisphere_left_hrain.json \
+            --right examples/hemisphere_right_inaihr.json \
+            --output /tmp/bicameral-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/bicameral-result.json').read_text(encoding='utf-8'))
+          assert result['status'] == 'BICAMERAL_OVERLAP_PRESENT'
+          assert result['comparison']['shared_semantic_keys'] == ['context', 'evidence']
+          assert result['comparison']['automatic_graph_merge_performed'] is False
+          assert result['routing']['external_effect_permitted'] is False
+          assert result['routing']['direct_cross_hemisphere_write_permitted'] is False
+          assert result['claim_ceiling']['truth_claim_made'] is False
+          assert result['claim_ceiling']['agreement_is_truth'] is False
+          assert result['claim_ceiling']['hemisphere_count_is_authority'] is False
+          assert result['claim_ceiling']['authority_delta'] == 0
+          assert result['claim_ceiling']['mass_effect_budget_delta'] == 0
+          print('BICAMERAL_BRIDGE=PASS')
+          print('BOTH_HEMISPHERES_AGREE_IS_TRUTH=false')
+          print('DIRECT_CROSS_HEMISPHERE_WRITE=false')
+          PY
+
       - name: Run deterministic +/+ recenter self-test
         run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
 
