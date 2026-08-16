@@ -1,0 +1,26 @@
+{
+  "schema": "janus.demihead.nexus_envelope.v1",
+  "contract": "JANUS_NEXUS_HABITAT_V1",
+  "envelope_id": "fixture-guardian-release-001",
+  "source_head": "GUARDIAN",
+  "target_head": "RELEASE_CONTROL",
+  "payload_kind": "GUARDIAN_RESULT",
+  "payload_ref": {
+    "sha256": "a506df8891d40f60220c873f244fead7cbe983c6685648f22bdfd87bc32a904e",
+    "locator": "examples/nexus_guardian_hold_result.json"
+  },
+  "trace": [
+    "HRAIN",
+    "INAIHR",
+    "BICAMERAL_BRIDGE",
+    "FUNDAMENTUM"
+  ],
+  "control": {
+    "read_only_transfer": true,
+    "direct_workspace_mutation": false,
+    "external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "ttl_hops": 6
+  }
+}
