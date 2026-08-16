@@ -1,0 +1,25 @@
+{
+  "schema": "janus.demihead.nexus_envelope.v1",
+  "contract": "JANUS_NEXUS_HABITAT_V1",
+  "envelope_id": "fixture-fundamentum-guardian-hold-001",
+  "source_head": "FUNDAMENTUM",
+  "target_head": "GUARDIAN",
+  "payload_kind": "HOLD_RECEIPT",
+  "payload_ref": {
+    "sha256": "434b78adb5a04253cbe9c5317d4c2ada1487c9a32e435b03999706be27273679",
+    "locator": "examples/nexus_fundamentum_hold_receipt.json"
+  },
+  "trace": [
+    "HRAIN",
+    "INAIHR",
+    "BICAMERAL_BRIDGE"
+  ],
+  "control": {
+    "read_only_transfer": true,
+    "direct_workspace_mutation": false,
+    "external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "ttl_hops": 5
+  }
+}
