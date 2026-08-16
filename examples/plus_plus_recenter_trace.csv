@@ -1,5 +1,5 @@
-source,pressure_flags
-user,choice_narrowing
-system,engagement_pressure
+source,routing_flags
+user,choice_space_contraction
+system,engagement_persistence
 user,repetition_without_new_evidence
 user,
