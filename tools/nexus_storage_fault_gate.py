@@ -15,6 +15,8 @@ from nexus_loopback_lifecycle_gate import SqliteLifecycleLedger
 
 CONTRACT = "JANUS_NEXUS_STORAGE_FAULT_GATE_V1"
 SCHEMA = "janus.demihead.nexus_storage_fault_gate_receipt.v1"
+SQLITE_HEADER = b"SQLite format 3\x00"
+SQLITE_HEADER_BYTES = 100
 
 STORE_REQUIREMENTS = {
     "lifecycle": ["nexus_one_shot_lifecycle", "nexus_one_shot_lifecycle_events"],
@@ -33,6 +35,92 @@ def _file_sha256(path: Path) -> str:
 
 def _ro_uri(path: Path) -> str:
     return f"file:{quote(str(path.resolve()))}?mode=ro"
+
+
+def _inspect_main_db_envelope(path: Path) -> dict[str, Any]:
+    """Validate the physical main SQLite file before WAL-aware SQLite open.
+
+    SQLite may reconstruct a readable logical database from a surviving WAL even when
+    the main .db file has been overwritten or truncated. For an evidence store, that
+    must not silently turn explicit main-file damage into a healthy preflight result.
+    """
+    try:
+        size = path.stat().st_size
+        with path.open("rb") as handle:
+            header = handle.read(SQLITE_HEADER_BYTES)
+    except OSError as exc:
+        return {
+            "valid": False,
+            "reason": type(exc).__name__,
+            "file_size": None,
+            "page_size": None,
+        }
+
+    if size < SQLITE_HEADER_BYTES or len(header) < SQLITE_HEADER_BYTES:
+        return {
+            "valid": False,
+            "reason": "MAIN_DB_TOO_SMALL_FOR_SQLITE_HEADER",
+            "file_size": size,
+            "page_size": None,
+        }
+    if header[:16] != SQLITE_HEADER:
+        return {
+            "valid": False,
+            "reason": "MAIN_DB_SQLITE_HEADER_MISMATCH",
+            "file_size": size,
+            "page_size": None,
+        }
+
+    raw_page_size = int.from_bytes(header[16:18], "big")
+    page_size = 65536 if raw_page_size == 1 else raw_page_size
+    valid_page_size = page_size == 65536 or (
+        512 <= page_size <= 32768 and page_size & (page_size - 1) == 0
+    )
+    if not valid_page_size:
+        return {
+            "valid": False,
+            "reason": "MAIN_DB_INVALID_PAGE_SIZE",
+            "file_size": size,
+            "page_size": page_size,
+        }
+    if size < page_size:
+        return {
+            "valid": False,
+            "reason": "MAIN_DB_TRUNCATED_BELOW_ONE_PAGE",
+            "file_size": size,
+            "page_size": page_size,
+        }
+    if size % page_size != 0:
+        return {
+            "valid": False,
+            "reason": "MAIN_DB_SIZE_NOT_WHOLE_PAGES",
+            "file_size": size,
+            "page_size": page_size,
+        }
+    return {
+        "valid": True,
+        "reason": "MAIN_DB_PHYSICAL_ENVELOPE_PASS",
+        "file_size": size,
+        "page_size": page_size,
+    }
+
+
+def _sidecar_inventory(path: Path) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for suffix, label in (("-wal", "wal"), ("-shm", "shm")):
+        sidecar = Path(str(path) + suffix)
+        if not sidecar.exists():
+            result[label] = {"exists": False, "sha256": None, "size": None}
+            continue
+        try:
+            result[label] = {
+                "exists": True,
+                "sha256": _file_sha256(sidecar),
+                "size": sidecar.stat().st_size,
+            }
+        except OSError:
+            result[label] = {"exists": True, "sha256": None, "size": None}
+    return result
 
 
 def inspect_sqlite_store(path: str | Path, *, store_kind: str) -> dict[str, Any]:
@@ -56,6 +144,21 @@ def inspect_sqlite_store(path: str | Path, *, store_kind: str) -> dict[str, Any]
         before_sha = _file_sha256(target)
     except OSError:
         return {**base, "status": "UNREADABLE", "healthy": False, "reason": "STORE_BYTES_UNREADABLE", "file_sha256": None}
+
+    envelope = _inspect_main_db_envelope(target)
+    sidecars_before = _sidecar_inventory(target)
+    if envelope["valid"] is not True:
+        return {
+            **base,
+            "status": "PHYSICAL_ENVELOPE_FAIL",
+            "healthy": False,
+            "reason": envelope["reason"],
+            "physical_envelope": envelope,
+            "sidecars": sidecars_before,
+            "file_sha256": before_sha,
+            "bytes_unchanged": True,
+        }
+
     try:
         db = sqlite3.connect(_ro_uri(target), uri=True, timeout=0.25)
         try:
@@ -72,6 +175,8 @@ def inspect_sqlite_store(path: str | Path, *, store_kind: str) -> dict[str, Any]
             "status": "SQLITE_ERROR",
             "healthy": False,
             "reason": type(exc).__name__,
+            "physical_envelope": envelope,
+            "sidecars": sidecars_before,
             "file_sha256": before_sha,
         }
     try:
@@ -88,6 +193,8 @@ def inspect_sqlite_store(path: str | Path, *, store_kind: str) -> dict[str, Any]
             "quick_check": quick_value,
             "tables": tables,
             "missing_required_tables": missing,
+            "physical_envelope": envelope,
+            "sidecars": sidecars_before,
             "file_sha256": before_sha,
             "bytes_unchanged": before_sha == after_sha,
         }
@@ -100,6 +207,8 @@ def inspect_sqlite_store(path: str | Path, *, store_kind: str) -> dict[str, Any]
             "quick_check": quick_value,
             "tables": tables,
             "missing_required_tables": missing,
+            "physical_envelope": envelope,
+            "sidecars": sidecars_before,
             "file_sha256": before_sha,
             "bytes_unchanged": before_sha == after_sha,
         }
@@ -107,10 +216,12 @@ def inspect_sqlite_store(path: str | Path, *, store_kind: str) -> dict[str, Any]
         **base,
         "status": "HEALTHY",
         "healthy": True,
-        "reason": "READ_ONLY_INTEGRITY_AND_SCHEMA_CHECK_PASS",
+        "reason": "PHYSICAL_ENVELOPE_AND_READ_ONLY_INTEGRITY_SCHEMA_CHECK_PASS",
         "quick_check": quick_value,
         "tables": tables,
         "missing_required_tables": [],
+        "physical_envelope": envelope,
+        "sidecars": sidecars_before,
         "file_sha256": before_sha,
         "bytes_unchanged": before_sha == after_sha,
     }
@@ -130,6 +241,7 @@ def preflight_evidence_stores(*, lifecycle_db: str | Path, dispatch_db: str | Pa
         "stores": stores,
         "control": {
             "preflight_read_only": True,
+            "main_db_physical_envelope_required_before_wal_aware_open": True,
             "missing_store_auto_creation": False,
             "corrupt_store_auto_replacement": False,
             "schema_auto_migration": False,
@@ -143,6 +255,7 @@ def preflight_evidence_stores(*, lifecycle_db: str | Path, dispatch_db: str | Pa
         "claim_ceiling": {
             "full_filesystem_health_established": False,
             "future_write_success_established": False,
+            "wal_semantic_consistency_fully_established": False,
             "power_loss_tolerance_established": False,
             "semantic_database_correctness_established": False,
             "production_storage_readiness": False,
