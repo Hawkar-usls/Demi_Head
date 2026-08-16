@@ -23,12 +23,7 @@ MAX_FUTURE_SKEW_MS = 5_000
 
 
 def canonical_json_bytes(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
 def sha256(value: Any) -> str:
@@ -43,6 +38,26 @@ def _auth_payload(frame: dict[str, Any]) -> dict[str, Any]:
 
 def _hmac_hex(key: bytes, payload: dict[str, Any]) -> str:
     return hmac.new(key, canonical_json_bytes(payload), hashlib.sha256).hexdigest()
+
+
+def _principal(principal_lookup: dict[str, dict[str, Any]], key_id: str) -> tuple[bytes, str, tuple[str, ...]]:
+    principal = principal_lookup.get(key_id)
+    if not isinstance(principal, dict):
+        raise ValueError("Unknown transport key_id")
+    if principal.get("enabled") is not True:
+        raise ValueError("Transport principal is disabled")
+    key = principal.get("key")
+    sender_id = principal.get("sender_id")
+    allowed_source_heads = principal.get("allowed_source_heads")
+    if not isinstance(key, bytes) or len(key) < 16:
+        raise ValueError("Invalid transport key material")
+    if not isinstance(sender_id, str) or not sender_id.strip():
+        raise ValueError("Transport principal sender_id is invalid")
+    if not isinstance(allowed_source_heads, (list, tuple)) or not allowed_source_heads:
+        raise ValueError("Transport principal requires allowed_source_heads")
+    if any(not isinstance(item, str) or not item for item in allowed_source_heads):
+        raise ValueError("Transport principal contains an invalid source head")
+    return key, sender_id, tuple(allowed_source_heads)
 
 
 def build_frame(
@@ -90,10 +105,7 @@ def build_frame(
     }
     if len(canonical_json_bytes(frame)) > MAX_FRAME_BYTES:
         raise ValueError("transport frame exceeds maximum size")
-    frame["auth"] = {
-        "algorithm": "HMAC-SHA256",
-        "tag": _hmac_hex(key, _auth_payload(frame)),
-    }
+    frame["auth"] = {"algorithm": "HMAC-SHA256", "tag": _hmac_hex(key, _auth_payload(frame))}
     if len(canonical_json_bytes(frame)) > MAX_FRAME_BYTES:
         raise ValueError("authenticated transport frame exceeds maximum size")
     return frame
@@ -102,7 +114,7 @@ def build_frame(
 def validate_frame(
     frame: dict[str, Any],
     *,
-    key_lookup: dict[str, bytes],
+    principal_lookup: dict[str, dict[str, Any]],
     now_ms: int | None = None,
     replay_cache: MutableSet[str] | None = None,
     queue_depth: int = 0,
@@ -116,14 +128,12 @@ def validate_frame(
         raise ValueError("Transport contract mismatch")
 
     sender_id = frame.get("sender_id")
+    key_id = frame.get("key_id")
     if not isinstance(sender_id, str) or not sender_id.strip():
         raise ValueError("Invalid sender_id")
-    key_id = frame.get("key_id")
-    if not isinstance(key_id, str) or key_id not in key_lookup:
-        raise ValueError("Unknown transport key_id")
-    key = key_lookup[key_id]
-    if not isinstance(key, bytes) or len(key) < 16:
-        raise ValueError("Invalid transport key material")
+    if not isinstance(key_id, str) or not key_id.strip():
+        raise ValueError("Invalid key_id")
+    key, bound_sender_id, allowed_source_heads = _principal(principal_lookup, key_id)
 
     auth = frame.get("auth")
     if not isinstance(auth, dict) or auth.get("algorithm") != "HMAC-SHA256":
@@ -131,14 +141,18 @@ def validate_frame(
     tag = auth.get("tag")
     if not isinstance(tag, str) or len(tag) != 64:
         raise ValueError("Invalid HMAC tag")
-    expected = _hmac_hex(key, _auth_payload(frame))
-    if not hmac.compare_digest(tag, expected):
+    if not hmac.compare_digest(tag, _hmac_hex(key, _auth_payload(frame))):
         raise ValueError("Transport HMAC verification failed")
 
     envelope = frame.get("envelope")
     validate_envelope(envelope)
     if frame.get("envelope_sha256") != sha256(envelope):
         raise ValueError("Envelope hash binding mismatch")
+    if sender_id != bound_sender_id:
+        raise ValueError("Authenticated key is not bound to claimed sender_id")
+    source_head = envelope.get("source_head")
+    if source_head not in allowed_source_heads:
+        raise ValueError("Authenticated principal is not admitted for envelope source_head")
 
     control = frame.get("transport_control")
     if not isinstance(control, dict):
@@ -183,10 +197,7 @@ def validate_frame(
             "status": "HOLD_BACKPRESSURE",
             "frame_sha256": sha256(frame),
             "replay_key": replay_key,
-            "queue": {
-                "depth": queue_depth,
-                "capacity": queue_capacity,
-            },
+            "queue": {"depth": queue_depth, "capacity": queue_capacity},
             "control": {
                 "automatic_retry_permitted": False,
                 "delivery_performed": False,
@@ -205,26 +216,42 @@ def validate_frame(
         "envelope_sha256": frame["envelope_sha256"],
         "sender_id": sender_id,
         "key_id": key_id,
+        "source_head": source_head,
         "replay_key": replay_key,
-        "freshness": {
-            "age_ms": max(0, age_ms),
-            "ttl_ms": ttl_ms,
+        "freshness": {"age_ms": max(0, age_ms), "ttl_ms": ttl_ms},
+        "authentication": {
+            "hmac_verified": True,
+            "key_bound_sender_verified": True,
+            "key_bound_source_head_verified": True,
+            "human_identity_established": False,
+            "world_effect_authorization_established": False,
         },
         "control": {
             "delivery_performed": False,
             "target_execution_performed": False,
-            "authentication_is_human_identity": False,
-            "authentication_is_authorization": False,
             "automatic_retry_permitted": False,
             "network_io_performed": False,
+            "persistent_replay_ledger_used": False,
             "authority_delta": 0,
             "mass_effect_budget_delta": 0,
         },
     }
 
 
+def _test_principals(key: bytes) -> dict[str, dict[str, Any]]:
+    return {
+        "TEST_KEY": {
+            "key": key,
+            "sender_id": "DEMIHEAD.LOCAL",
+            "allowed_source_heads": ["GUARDIAN"],
+            "enabled": True,
+        }
+    }
+
+
 def self_test() -> dict[str, Any]:
     key = b"test-only-non-production-key"
+    principals = _test_principals(key)
     envelope = {
         "schema": NEXUS_ENVELOPE_SCHEMA,
         "contract": "JANUS_NEXUS_HABITAT_V1",
@@ -254,34 +281,27 @@ def self_test() -> dict[str, Any]:
         ttl_ms=30_000,
     )
     cache: set[str] = set()
-    admitted = validate_frame(
-        frame,
-        key_lookup={"TEST_KEY": key},
-        now_ms=issued + 100,
-        replay_cache=cache,
-    )
+    admitted = validate_frame(frame, principal_lookup=principals, now_ms=issued + 100, replay_cache=cache)
     checks = {
         "authenticated_frame_admitted": admitted["status"] == "AUTHENTICATED_FRAME_ADMITTED",
+        "sender_binding_verified": admitted["authentication"]["key_bound_sender_verified"] is True,
+        "source_head_binding_verified": admitted["authentication"]["key_bound_source_head_verified"] is True,
+        "human_identity_not_claimed": admitted["authentication"]["human_identity_established"] is False,
+        "world_effect_authorization_not_claimed": admitted["authentication"]["world_effect_authorization_established"] is False,
         "delivery_not_performed": admitted["control"]["delivery_performed"] is False,
-        "auth_not_human_identity": admitted["control"]["authentication_is_human_identity"] is False,
-        "auth_not_authorization": admitted["control"]["authentication_is_authorization"] is False,
         "network_io_not_performed": admitted["control"]["network_io_performed"] is False,
+        "persistent_replay_ledger_not_claimed": admitted["control"]["persistent_replay_ledger_used"] is False,
     }
 
     try:
-        validate_frame(
-            frame,
-            key_lookup={"TEST_KEY": key},
-            now_ms=issued + 200,
-            replay_cache=cache,
-        )
+        validate_frame(frame, principal_lookup=principals, now_ms=issued + 200, replay_cache=cache)
     except ValueError:
         checks["replay_rejected"] = True
     else:
         checks["replay_rejected"] = False
 
     try:
-        validate_frame(frame, key_lookup={"TEST_KEY": key}, now_ms=issued + 31_000)
+        validate_frame(frame, principal_lookup=principals, now_ms=issued + 31_000)
     except ValueError:
         checks["stale_rejected"] = True
     else:
@@ -290,15 +310,58 @@ def self_test() -> dict[str, Any]:
     tampered = json.loads(json.dumps(frame))
     tampered["sender_id"] = "ATTACKER"
     try:
-        validate_frame(tampered, key_lookup={"TEST_KEY": key}, now_ms=issued + 100)
+        validate_frame(tampered, principal_lookup=principals, now_ms=issued + 100)
     except ValueError:
-        checks["tamper_rejected"] = True
+        checks["hmac_tamper_rejected"] = True
     else:
-        checks["tamper_rejected"] = False
+        checks["hmac_tamper_rejected"] = False
+
+    impersonating = build_frame(
+        envelope,
+        sender_id="ATTACKER",
+        key_id="TEST_KEY",
+        key=key,
+        issued_at_ms=issued,
+        nonce="11112222333344445555666677778888",
+    )
+    try:
+        validate_frame(impersonating, principal_lookup=principals, now_ms=issued + 100)
+    except ValueError:
+        checks["valid_key_sender_impersonation_rejected"] = True
+    else:
+        checks["valid_key_sender_impersonation_rejected"] = False
+
+    other_source = json.loads(json.dumps(envelope))
+    other_source["source_head"] = "FUNDAMENTUM"
+    other_source["target_head"] = "GUARDIAN"
+    other_source["payload_kind"] = "HOLD_RECEIPT"
+    source_impersonation = build_frame(
+        other_source,
+        sender_id="DEMIHEAD.LOCAL",
+        key_id="TEST_KEY",
+        key=key,
+        issued_at_ms=issued,
+        nonce="99990000111122223333444455556666",
+    )
+    try:
+        validate_frame(source_impersonation, principal_lookup=principals, now_ms=issued + 100)
+    except ValueError:
+        checks["valid_key_source_head_impersonation_rejected"] = True
+    else:
+        checks["valid_key_source_head_impersonation_rejected"] = False
+
+    disabled = json.loads(json.dumps({"enabled": False, "sender_id": "DEMIHEAD.LOCAL", "allowed_source_heads": ["GUARDIAN"]}))
+    disabled["key"] = key
+    try:
+        validate_frame(frame, principal_lookup={"TEST_KEY": disabled}, now_ms=issued + 100)
+    except ValueError:
+        checks["disabled_principal_rejected"] = True
+    else:
+        checks["disabled_principal_rejected"] = False
 
     backpressure = validate_frame(
         frame,
-        key_lookup={"TEST_KEY": key},
+        principal_lookup=principals,
         now_ms=issued + 100,
         replay_cache=set(),
         queue_depth=8,
@@ -348,14 +411,6 @@ def self_test() -> dict[str, Any]:
     }
 
 
-def load_json(path: Path) -> dict[str, Any]:
-    with path.open("r", encoding="utf-8") as handle:
-        value = json.load(handle)
-    if not isinstance(value, dict):
-        raise ValueError("Expected a top-level JSON object")
-    return value
-
-
 def write_json(value: Any, output: Path | None) -> None:
     text = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if output is None:
@@ -369,12 +424,10 @@ def main() -> int:
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-
     if args.self_test:
         result = self_test()
         write_json(result, args.output)
         return 0 if result["status"] == "PASS" else 1
-
     parser.error("Reference CLI exposes only --self-test; no socket or live transport is enabled.")
     return 2
 
