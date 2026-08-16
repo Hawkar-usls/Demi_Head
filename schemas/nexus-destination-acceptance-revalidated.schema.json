@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/nexus-destination-acceptance-revalidated.schema.json",
+  "title": "JANUS Nexus Revalidated Destination Acceptance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "contract", "status", "binding", "principal_revalidation", "acceptance", "control", "laws"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_destination_acceptance_revalidated.v1"},
+    "contract": {"const": "JANUS_NEXUS_DESTINATION_REVALIDATION_V1"},
+    "status": {"const": "DESTINATION_ACCEPTED_FOR_LOCAL_DISPATCH_REVALIDATED"},
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frame_sha256", "transport_admission_sha256", "base_acceptance_sha256", "endpoint_id", "source_head", "target_head", "payload_kind"],
+      "properties": {
+        "frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "transport_admission_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "base_acceptance_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "endpoint_id": {"type": "string", "minLength": 1},
+        "source_head": {"type": "string", "minLength": 1},
+        "target_head": {"type": "string", "minLength": 1},
+        "payload_kind": {"type": "string", "minLength": 1}
+      }
+    },
+    "principal_revalidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "key_epoch", "sender_id", "source_head", "enabled", "revoked", "valid_now", "revocation_rechecked_at_acceptance"],
+      "properties": {
+        "key_id": {"type": "string", "minLength": 1},
+        "key_epoch": {"type": "integer", "minimum": 1},
+        "sender_id": {"type": "string", "minLength": 1},
+        "source_head": {"type": "string", "minLength": 1},
+        "enabled": {"const": true},
+        "revoked": {"const": false},
+        "valid_now": {"const": true},
+        "revocation_rechecked_at_acceptance": {"const": true}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint_policy_verified", "current_revocation_state_verified", "current_epoch_verified", "delivery_performed", "target_execution_performed", "acceptance_is_truth", "acceptance_is_world_effect_authorization"],
+      "properties": {
+        "endpoint_policy_verified": {"const": true},
+        "current_revocation_state_verified": {"const": true},
+        "current_epoch_verified": {"const": true},
+        "delivery_performed": {"const": false},
+        "target_execution_performed": {"const": false},
+        "acceptance_is_truth": {"const": false},
+        "acceptance_is_world_effect_authorization": {"const": false}
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_effect_permitted", "automatic_retry_permitted", "authority_delta", "mass_effect_budget_delta"],
+      "properties": {
+        "external_effect_permitted": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      }
+    },
+    "laws": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  }
+}
