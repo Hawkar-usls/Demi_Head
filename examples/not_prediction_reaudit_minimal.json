@@ -1,0 +1,50 @@
+{
+  "artifact_id": "DEMIHEAD-NOT-PREDICTION-MINIMAL-FIXTURE",
+  "pre_snapshot_strong_omissions": [
+    {
+      "candidate_id": "NP-T001",
+      "name": "Clock presentation A",
+      "canonical_path": "fixture/a.json",
+      "raw_observation": "Observed clock 04:40.",
+      "event_time_or_anchor": "04:40",
+      "first_repository_commit": "fixture-commit-a",
+      "source_root": "ROOT_CLOCK_0440",
+      "later_interpretation": "Janus threshold symbolic reading.",
+      "shared_context": ["Janus", "threshold", "sign"],
+      "independence_state": "SINGLE_ROOT",
+      "alternative_explanation": "Same observed coordinate selected later lookup material.",
+      "claim_ceiling": "NOT_PREDICTION",
+      "snapshot_relation": "PRE_SNAPSHOT",
+      "admission_status": "STRONG_OMISSION_CANDIDATE"
+    },
+    {
+      "candidate_id": "NP-T002",
+      "name": "Clock presentation B",
+      "canonical_path": "fixture/b.json",
+      "raw_observation": "Second presentation derived from the same 04:40 observation.",
+      "event_time_or_anchor": "04:40",
+      "first_repository_commit": "fixture-commit-b",
+      "source_root": "ROOT_CLOCK_0440",
+      "later_interpretation": "Home return sign.",
+      "shared_context": ["home", "return", "sign"],
+      "independence_state": "SAME_ROOT_DERIVATIVE",
+      "alternative_explanation": "Derivative presentation rather than replication.",
+      "claim_ceiling": "NOT_PREDICTION",
+      "snapshot_relation": "PRE_SNAPSHOT",
+      "admission_status": "FAMILY_COLLAPSE_REVIEW_REQUIRED"
+    }
+  ],
+  "pre_snapshot_family_decomposition_candidates": [],
+  "post_snapshot_additions": [],
+  "counting_state": {
+    "baseline_admitted": 29,
+    "authoritative_current_total": 29
+  },
+  "final_boundary": {
+    "prediction_promoted": false,
+    "prophecy_promoted": false,
+    "precognition_promoted": false,
+    "physical_retrocausality_promoted": false,
+    "supernatural_causation_promoted": false
+  }
+}

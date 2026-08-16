@@ -1,0 +1,34 @@
+{
+  "artifact_id": "DEMIHEAD-NOT-PREDICTION-FORBIDDEN-PROMOTION-FIXTURE",
+  "pre_snapshot_strong_omissions": [
+    {
+      "candidate_id": "NP-X001",
+      "name": "Synthetic candidate",
+      "canonical_path": "fixture/x.json",
+      "raw_observation": "Synthetic observation.",
+      "event_time_or_anchor": "synthetic",
+      "first_repository_commit": "synthetic",
+      "source_root": "ROOT_X",
+      "later_interpretation": "Synthetic interpretation.",
+      "shared_context": [],
+      "independence_state": "SINGLE_ROOT",
+      "alternative_explanation": "Synthetic control.",
+      "claim_ceiling": "NOT_PREDICTION",
+      "snapshot_relation": "PRE_SNAPSHOT",
+      "admission_status": "CANDIDATE"
+    }
+  ],
+  "pre_snapshot_family_decomposition_candidates": [],
+  "post_snapshot_additions": [],
+  "counting_state": {
+    "baseline_admitted": 29,
+    "authoritative_current_total": 29
+  },
+  "final_boundary": {
+    "prediction_promoted": true,
+    "prophecy_promoted": false,
+    "precognition_promoted": false,
+    "physical_retrocausality_promoted": false,
+    "supernatural_causation_promoted": false
+  }
+}

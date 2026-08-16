@@ -1,0 +1,24 @@
+{
+  "schema": "janus.demihead.not_prediction_reaudit_result.v1",
+  "artifact_id": "DEMIHEAD-NOT-PREDICTION-MINIMAL-FIXTURE",
+  "root_collapse": {
+    "candidate_count": 2,
+    "root_count": 1,
+    "roots": [
+      {
+        "source_root": "ROOT_CLOCK_0440",
+        "candidate_ids": ["NP-T001", "NP-T002"],
+        "presentation_count": 2,
+        "snapshot_relations": ["PRE_SNAPSHOT"],
+        "independence_states": ["SAME_ROOT_DERIVATIVE", "SINGLE_ROOT"]
+      }
+    ],
+    "invariant": "PRESENTATION_COUNT != INDEPENDENT_ROOT_COUNT"
+  },
+  "authoritative_total_preserved": 29,
+  "truth_claim": "NOT_MADE",
+  "prediction_claim": "NOT_PROMOTED",
+  "requires_matched_null": true,
+  "requires_external_replication_for_strong_external_recurrence": true,
+  "release_control": "OPEN_REVIEW"
+}
