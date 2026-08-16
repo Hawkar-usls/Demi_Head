@@ -70,6 +70,24 @@ COMPARE CONSERVATIVE LABEL KEYS
 
 No output state authorizes an external effect.
 
+## Browser transport
+
+The first browser transport is intentionally narrow and read-only.
+
+- HRain publishes `demihead.html` + `demihead-bridge.js` on its own GitHub Pages origin.
+- iNaiHR publishes the same pair for its own workspace.
+- [`../examples/bicameral_console.html`](../examples/bicameral_console.html) embeds the two sidecars and sends the explicit message `JANUS_DEMIHEAD_REQUEST_PACKET_V1`.
+- A sidecar responds with `JANUS_DEMIHEAD_HEMISPHERE_PACKET_V1` only to an allowlisted requesting origin and targets the exact `event.origin`, never `*`.
+- The console keeps the returned packets only in runtime memory and never writes back to either workspace.
+
+```text
+HEMISPHERE -> DEMIHEAD = READ_ONLY_PACKET
+DEMIHEAD -> HEMISPHERE = PACKET_REQUEST_ONLY
+DEMIHEAD -> WORKSPACE_MUTATION = FORBIDDEN_IN_V1
+```
+
+This means the arrows in the visual architecture are bidirectional only at the control-message level. Graph content itself flows into DemiHead; DemiHead does not mutate either graph.
+
 ## Provenance-aware nodes
 
 The bridge requires each exported graph node to carry one of:
@@ -84,7 +102,7 @@ SYSTEM
 
 This distinction is necessary because generated material must not silently become a human-authored fact or an independent witness.
 
-Legacy nodes that predate the bridge are conservatively marked `LEGACY_UNKNOWN` unless their origin is already explicit.
+Legacy nodes that predate the bridge are conservatively marked `LEGACY_UNKNOWN` unless their origin is already explicit. For legacy iNaiHR persistence, an existing `isAI=true` marker may be preserved as `REMOTE_AI`; old non-AI nodes remain `LEGACY_UNKNOWN` because the old persisted representation does not distinguish human input from deterministic fallback.
 
 ## Hard invariants
 
@@ -95,6 +113,7 @@ RIGHT != LESS_RATIONAL
 
 BOTH_HEMISPHERES_AGREE != TRUTH
 HEMISPHERE_COUNT != AUTHORITY
+SOFTWARE_SURFACE_COUNT != INDEPENDENT_EVIDENCE_ROOT_COUNT
 ASSOCIATION != EVIDENCE
 STRUCTURE != COMMAND
 REMOTE_AI_OUTPUT != INDEPENDENT_WITNESS
@@ -133,6 +152,8 @@ Reference packets:
 
 Reference result schema: [`../schemas/bicameral-result.schema.json`](../schemas/bicameral-result.schema.json)
 
+Live-console source: [`../examples/bicameral_console.html`](../examples/bicameral_console.html)
+
 ## Run
 
 ```bash
@@ -145,6 +166,8 @@ python tools/hemisphere_bridge.py \
 ```
 
 The browser projects may export packets conforming to this contract. DemiHead can then bind them without needing provider secrets, shared mutable storage or registry write permission.
+
+For the browser console, serve the repository over HTTP rather than opening the HTML with an opaque `file://` origin. The production sidecars are intended to live under `https://hawkar-usls.github.io/...`; localhost is supported by each sidecar for development.
 
 ## Failure / degraded mode
 
