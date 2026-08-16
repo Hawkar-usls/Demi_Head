@@ -1,0 +1,29 @@
+{
+  "schema": "janus.nexus.destination_acceptance_link.v1",
+  "nexus_contract": "JANUS_NEXUS_HABITAT_V1",
+  "transport_contract": "JANUS_NEXUS_LOCAL_TRANSPORT_V1",
+  "acceptance_contract": "JANUS_NEXUS_DESTINATION_ACCEPTANCE_V1",
+  "revalidation_contract": "JANUS_NEXUS_DESTINATION_REVALIDATION_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "runtime_modules": [
+    "tools/nexus_destination_acceptance.py",
+    "tools/nexus_destination_acceptance_revalidation.py"
+  ],
+  "schemas": [
+    "schemas/nexus-endpoint-policy.schema.json",
+    "schemas/nexus-destination-acceptance.schema.json",
+    "schemas/nexus-destination-acceptance-revalidated.schema.json"
+  ],
+  "endpoint_policy_example": "configs/nexus_endpoints.example.json",
+  "revocation_rechecked_at_acceptance": true,
+  "epoch_rechecked_at_acceptance": true,
+  "acceptance_is_delivery": false,
+  "acceptance_is_execution": false,
+  "acceptance_is_truth": false,
+  "acceptance_is_world_effect_authorization": false,
+  "socket_listener_enabled": false,
+  "network_io_performed": false,
+  "authority_delta": 0,
+  "mass_effect_budget_delta": 0,
+  "status": "IMPLEMENTED_PENDING_EXACT_HEAD_CI_CONFIRMATION"
+}
