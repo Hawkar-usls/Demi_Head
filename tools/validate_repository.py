@@ -7,6 +7,7 @@ from urllib.parse import unquote
 
 from jsonschema import Draft202012Validator, FormatChecker
 
+from hemisphere_bridge import combine_packets, validate_packet
 from keto_reference import load_case, summarize_case
 
 
@@ -56,6 +57,21 @@ def validate_schemas() -> dict[str, object]:
         schemas["keto-result.schema.json"], format_checker=FormatChecker()
     ).validate(keto_result)
 
+    left_packet = load_json(ROOT / "examples" / "hemisphere_left_hrain.json")
+    right_packet = load_json(ROOT / "examples" / "hemisphere_right_inaihr.json")
+    packet_validator = Draft202012Validator(
+        schemas["hemisphere-packet.schema.json"], format_checker=FormatChecker()
+    )
+    packet_validator.validate(left_packet)
+    packet_validator.validate(right_packet)
+    validate_packet(left_packet, "LEFT_HRAIN")
+    validate_packet(right_packet, "RIGHT_INAIHR")
+
+    bicameral_result = combine_packets(left=left_packet, right=right_packet)
+    Draft202012Validator(
+        schemas["bicameral-result.schema.json"], format_checker=FormatChecker()
+    ).validate(bicameral_result)
+
     return schemas
 
 
@@ -87,6 +103,37 @@ def validate_keto_invariants() -> None:
         raise ValueError("Reference analyzer mass-effect budget must remain zero")
 
 
+def validate_hemisphere_invariants() -> None:
+    left = load_json(ROOT / "examples" / "hemisphere_left_hrain.json")
+    right = load_json(ROOT / "examples" / "hemisphere_right_inaihr.json")
+    result = combine_packets(left=left, right=right)
+
+    if result["status"] != "BICAMERAL_OVERLAP_PRESENT":
+        raise ValueError("Reference hemisphere fixture must exercise overlap")
+    if result["comparison"]["shared_semantic_keys"] != ["context", "evidence"]:
+        raise ValueError("Reference hemisphere overlap changed unexpectedly")
+    if result["comparison"]["automatic_graph_merge_performed"] is not False:
+        raise ValueError("Bicameral bridge must not automatically merge workspaces")
+    if result["routing"]["external_effect_permitted"] is not False:
+        raise ValueError("Bicameral comparison must not authorize external effects")
+    if result["routing"]["direct_cross_hemisphere_write_permitted"] is not False:
+        raise ValueError("Direct cross-hemisphere writes must remain disabled")
+    if result["claim_ceiling"]["truth_claim_made"] is not False:
+        raise ValueError("Bicameral overlap must not become a truth claim")
+    if result["claim_ceiling"]["agreement_is_truth"] is not False:
+        raise ValueError("Agreement must not be promoted to truth")
+    if result["claim_ceiling"]["hemisphere_count_is_authority"] is not False:
+        raise ValueError("Hemisphere count must not create authority")
+    if result["claim_ceiling"]["authority_delta"] != 0:
+        raise ValueError("Hemisphere bridge authority delta must remain zero")
+    if result["claim_ceiling"]["mass_effect_budget_delta"] != 0:
+        raise ValueError("Hemisphere bridge mass-effect budget delta must remain zero")
+
+    degraded = combine_packets(left=left)
+    if degraded["routing"]["mode"] != "DEGRADED_SINGLE_HEMISPHERE_HOLD":
+        raise ValueError("Single-hemisphere operation must degrade to HOLD")
+
+
 def validate_markdown_links() -> None:
     missing: list[str] = []
     for markdown in sorted(ROOT.rglob("*.md")):
@@ -113,8 +160,9 @@ def main() -> None:
     validate_json_documents()
     validate_schemas()
     validate_keto_invariants()
+    validate_hemisphere_invariants()
     validate_markdown_links()
-    print("Repository contracts, JSON mirrors, generated KETO result, invariants, and local documentation links are valid.")
+    print("Repository contracts, JSON mirrors, KETO/bicameral invariants, and local documentation links are valid.")
 
 
 if __name__ == "__main__":
