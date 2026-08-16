@@ -16,7 +16,9 @@
     "tools/nexus_guardian_ingress.py",
     "tools/nexus_registry_ingress.py",
     "tools/sysear_observer_normalizer.py",
-    "tools/nexus_local_transport.py"
+    "tools/nexus_local_transport.py",
+    "tools/nexus_transport_keyring.py",
+    "tools/nexus_replay_ledger.py"
   ],
   "transport": {
     "contract": "JANUS_NEXUS_LOCAL_TRANSPORT_V1",
@@ -30,17 +32,28 @@
       "human_identity_established": false,
       "world_effect_authorization_established": false
     },
+    "secret_loading": {
+      "policy_example": "configs/nexus_transport.principals.example.json",
+      "secret_material_source": "RUNTIME_ENVIRONMENT_REFERENCE",
+      "inline_secret_fields_rejected": true,
+      "production_key_material_committed": false,
+      "os_secret_manager_adapter": false
+    },
     "freshness_gate": true,
-    "replay_rejection": "PROCESS_LOCAL_CACHE_REFERENCE",
-    "persistent_replay_ledger": false,
+    "replay_rejection": "ATOMIC_REPLAY_GUARD_REQUIRED",
+    "replay_guards": [
+      "MEMORY",
+      "SQLITE"
+    ],
+    "local_persistent_replay_reference": true,
+    "distributed_replay_consensus": false,
     "key_rotation_persistence": false,
     "key_revocation_persistence": false,
     "backpressure_hold": true,
     "frame_size_cap_bytes": 65536,
     "socket_listener_enabled": false,
     "network_io_performed_by_reference": false,
-    "automatic_retry_permitted": false,
-    "production_key_material_committed": false
+    "automatic_retry_permitted": false
   },
   "fundamentum_lineage_repository": "Hawkar-usls/Janus-Fundamentum",
   "fundamentum_lineage_is_runtime_ownership": false,
