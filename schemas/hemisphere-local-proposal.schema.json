@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/hemisphere-local-proposal.schema.json",
+  "title": "JANUS DemiHead local hemisphere proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "proposal_id", "created_at", "target", "base_graph_sha256", "operation", "control"],
+  "properties": {
+    "schema": {"const": "janus.demihead.local_proposal.v1"},
+    "proposal_id": {"type": "string", "pattern": "^[A-Za-z0-9._:-]{8,128}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hemisphere", "repository"],
+      "properties": {
+        "hemisphere": {"enum": ["LEFT_HRAIN", "RIGHT_INAIHR"]},
+        "repository": {"enum": ["Hawkar-usls/Hrain", "Hawkar-usls/iNaiHR"]}
+      }
+    },
+    "base_graph_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "node"],
+      "properties": {
+        "type": {"const": "ADD_NODE"},
+        "node": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "label", "origin"],
+          "properties": {
+            "id": {"type": "string", "pattern": "^[A-Za-z0-9._:-]{8,128}$"},
+            "label": {"type": "string", "minLength": 1, "maxLength": 240},
+            "origin": {"const": "SYSTEM"}
+          }
+        }
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["auto_apply", "requires_explicit_local_accept", "direct_cross_hemisphere_write", "external_effect_permitted", "authority_delta", "mass_effect_budget_delta"],
+      "properties": {
+        "auto_apply": {"const": false},
+        "requires_explicit_local_accept": {"const": true},
+        "direct_cross_hemisphere_write": {"const": false},
+        "external_effect_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"target": {"properties": {"hemisphere": {"const": "LEFT_HRAIN"}}}}},
+      "then": {"properties": {"target": {"properties": {"repository": {"const": "Hawkar-usls/Hrain"}}}}}
+    },
+    {
+      "if": {"properties": {"target": {"properties": {"hemisphere": {"const": "RIGHT_INAIHR"}}}}},
+      "then": {"properties": {"target": {"properties": {"repository": {"const": "Hawkar-usls/iNaiHR"}}}}}
+    }
+  ]
+}
