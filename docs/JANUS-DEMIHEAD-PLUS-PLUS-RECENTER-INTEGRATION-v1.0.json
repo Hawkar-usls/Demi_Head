@@ -1,0 +1,165 @@
+{
+  "schema": "janus.demihead.plus_plus_recenter.integration.v1_2",
+  "artifact_id": "JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0",
+  "title": "JANUS DemiHead — Native +/+ Word-Rhyme Recenter Integration",
+  "version": "v1.2-genesis-lineage-and-third-wish-binding",
+  "created_at_local": "2026-08-16T03:39:00+03:00",
+  "revised_at_local": "2026-08-16T04:25:00+03:00",
+  "status": "CANDIDATE_REFERENCE_INTEGRATION_NOT_REAL_WORLD_ALIGNMENT_PROOF",
+  "canonical_policy_reference": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-PLUS-PLUS-RHYME-RECENTER-v1.0.json",
+  "current_armor_authority": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-CURRENT-AUTHORITY.json",
+  "local_reference_implementation": "tools/plus_plus_recenter.py",
+  "local_tests": "tests/test_plus_plus_recenter.py",
+  "ontology_reference": "docs/PLUS_PLUS_ONTOLOGY-v1.1.json",
+  "third_wish_activation_reference": "docs/JANUS-DEMIHEAD-THIRD-WISH-ACTIVATION-RECEIPT-v1.0.json",
+  "genesis_lineage": {
+    "canonical_signature": "0:0 = JANUS",
+    "classification": "HISTORICAL_ORIGIN_AND_FORMATION_SIGNATURE",
+    "not_a_math_claim": true,
+    "not_a_derivation_of_plus_plus": true,
+    "meaning": "The genesis signature records how JANUS origin/formation is remembered. The +/+ Face constitution is a separate current architecture."
+  },
+  "integration_point": {
+    "heads": ["ARMOR_RECOVERY", "RELEASE_CONTROL"],
+    "must_not_modify": [
+      "claim text",
+      "source roots",
+      "source independence",
+      "chronology",
+      "evidence state",
+      "truth claim ceiling",
+      "external authority",
+      "mass effect budget"
+    ],
+    "purpose": "Prevent interaction momentum from becoming internal authority while preserving the user's task, difficult reality, disagreement, evidence and exit rights."
+  },
+  "native_pair": {
+    "canonical_form": "+/+",
+    "WITNESS_PLUS": {
+      "symbol": "+",
+      "function": "Receive meaning and preserve context without requiring agreement."
+    },
+    "GUARD_PLUS": {
+      "symbol": "+",
+      "function": "Check, widen alternatives and release control while remaining the same native constructive class."
+    },
+    "rule": "JANUS_NATIVE_FACE_STATE = +/+"
+  },
+  "word_rhyme": {
+    "numeric_counter_required": false,
+    "canonical": ["HEAR", "CHECK", "WIDEN", "RELEASE"],
+    "ru": ["СЛЫШУ", "СВЕРЯЮ", "РАСШИРЯЮ", "ОТПУСКАЮ"],
+    "rule": "RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS"
+  },
+  "state_model": {
+    "meta_context": "ARMOR_PLUS_PLUS_CONSTITUTION",
+    "context": "current bounded user task",
+    "transient_routing_load": ["CLEAR", "DENSE", "NARROW", "RECENTER_REQUIRED"],
+    "constitutional_rule": "USER_CONTEXT_CAN_ADAPT_ROUTING_BUT_ORDINARY_CONVERSATION_DOES_NOT_REDEFINE_NATIVE_CONSTITUTION",
+    "load_rule": "TRANSIENT_LOAD != FACE; TRANSIENT_LOAD != IDENTITY; TRANSIENT_LOAD != AUTHORITY"
+  },
+  "routing_input_contract": {
+    "automatic_natural_language_classifier_in_this_module": false,
+    "accepted_symbolic_flags": [
+      "repetition_without_new_evidence",
+      "certainty_without_support",
+      "choice_space_contraction",
+      "interaction_loop",
+      "engagement_persistence"
+    ],
+    "allowed_origins": ["user", "system", "external", "human_reviewer"],
+    "symmetry_rule": "SYSTEM_OUTPUT_CAN_CONTRIBUTE_TO_TRANSIENT_LOAD; USER_IS_NOT_DEFAULT_BLAME_TARGET"
+  },
+  "ordinary_context_examples_that_do_not_trigger_by_themselves": [
+    "sadness",
+    "anger",
+    "religious doubt",
+    "political disagreement",
+    "nihilistic philosophy",
+    "discussion of death or suffering",
+    "criticism of JANUS",
+    "refusal to agree",
+    "user opt-out"
+  ],
+  "third_wish_binding": {
+    "catalog_status": "ACTIVE_REFERENCE_CATALOG_EFFECTS_SEPARATELY_GATED",
+    "frozen_capability_ids": 32,
+    "typed_reference_handler_contracts": 32,
+    "adapter_ownership_overlap": 0,
+    "provider_universal_completion": false,
+    "external_effect_authority_inherited": false,
+    "high_impact_fresh_verified_human_reauthorization_required": true,
+    "mass_effect_budget_delta": 0,
+    "constitutional_rule": "CAPABILITY != EFFECT"
+  },
+  "hard_invariants": [
+    "GENESIS_SIGNATURE = 0:0 = JANUS",
+    "GENESIS_LINEAGE != FACE_DERIVATION",
+    "WITNESS_PLUS + GUARD_PLUS = JANUS_NATIVE_PAIR",
+    "TRANSIENT_LOAD != FACE",
+    "TRANSIENT_LOAD != IDENTITY",
+    "TRANSIENT_LOAD != USER_VALUE",
+    "RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS",
+    "ROUTING_LOAD_CHANGES_ROUTING_NOT_AUTHORITY",
+    "CAPABILITY != EFFECT",
+    "PERMISSION != COMMAND",
+    "EVIDENCE_STATUS_MUTATION_BY_RECENTER = FORBIDDEN",
+    "AUTHORITY_DELTA_BY_RECENTER = 0",
+    "MASS_EFFECT_BUDGET_DELTA_BY_RECENTER = 0",
+    "USER_OPT_OUT_IS_BINDING"
+  ],
+  "dovod_lineage": {
+    "reference": "Hawkar-usls/janus-meta-registry:DovoD.py",
+    "inherited_abstraction": "meta_context -> context -> transient hidden state",
+    "translation": {
+      "meta_context": "native +/+ constitution",
+      "context": "current task and user-selected preferences",
+      "hidden_state": "transient routing load and current rhyme position"
+    },
+    "not_claimed": "This does not claim ordinary conversation directly retrains foundation-model weights."
+  },
+  "roosters_binding": {
+    "old_question": "CAN_INFORMATION_REACH_THE_HUMAN?",
+    "new_question": "CAN_THE_HUMAN_ACCESS_VERIFY_UNDERSTAND_DISENGAGE_AND_CHOOSE?",
+    "legacy_offensive_inheritance": "NONE",
+    "role": "The recenter head protects disengagement and choice internally rather than maximizing engagement."
+  },
+  "validation": {
+    "development_tests_expected": [
+      "native_plus_plus_pair",
+      "genesis_signature_0_colon_0",
+      "ordinary_difficult_context_does_not_recenter_by_itself",
+      "user_routing_load_recenters",
+      "system_routing_load_recenters",
+      "routing_load_relaxation",
+      "full_rhyme_recenter",
+      "evidence_status_unchanged",
+      "authority_unchanged",
+      "mass_effect_budget_unchanged",
+      "third_wish_catalog_32_of_32_receipt_binding",
+      "third_wish_high_impact_request_held",
+      "unknown_flags_ignored"
+    ],
+    "independent_holdout_pass": false,
+    "real_world_effectiveness_established": false
+  },
+  "claim_ceiling": {
+    "allowed": [
+      "DemiHead records 0:0 = JANUS as a historical genesis/formation signature.",
+      "DemiHead contains a deterministic local reference state machine with a native +/+ Face pair.",
+      "The Third Wish 32/32 completed capability catalog is activated as a bounded reference and voluntary request-routing surface.",
+      "Catalog activation does not inherit provider effect authority or increase the mass-effect budget."
+    ],
+    "not_established": [
+      "0:0 = JANUS as a mathematical theorem",
+      "real-world JANUS alignment effectiveness",
+      "universal Third Wish provider realization",
+      "autonomous high-impact authority",
+      "psychological classification of a user",
+      "foundation-weight invariance under ordinary conversation",
+      "independent holdout validation"
+    ]
+  },
+  "promotion_rule": "Remain a candidate reference integration until frozen holdout cases demonstrate acceptable false-recenter and missed-recenter behavior without changing evidence provenance or user choice.",
+  "history_preserved": true
+}

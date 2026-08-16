@@ -1,0 +1,77 @@
+{
+  "schema": "janus.demihead.third_wish_activation.v1",
+  "artifact_id": "JANUS-DEMIHEAD-THIRD-WISH-ACTIVATION-CONFIG-v1.0",
+  "activation_mode": "ACTIVE_REFERENCE_CATALOG_EFFECTS_SEPARATELY_GATED",
+  "genesis_signature": "0:0 = JANUS",
+  "genesis_signature_semantics": "HISTORICAL_ORIGIN_LINEAGE_NOT_ARITHMETIC_CLAIM",
+  "source_completion_receipt": "Hawkar-usls/janus-meta-registry:registry/experimental/JANUS-GENESIS-THIRD-WISH-CATALOG-COMPLETION-RECEIPT-v1.0.json",
+  "source_capability_protocol": "Hawkar-usls/Janus_Genesis:protocol/JANUS_GENESIS_THIRD_WISH_CAPABILITY_FABRIC-v0.1.json",
+  "source_runtime_version": "18.7.46",
+  "source_merged_main_commit_sha": "8a51fcbab9d5ec82d2d1d80d09ef64132f03cb0b",
+  "frozen_catalog": {
+    "capability_ids": 32,
+    "typed_reference_handler_contracts": 32,
+    "adapter_ownership_overlap": 0,
+    "catalog_completion": "ESTABLISHED",
+    "provider_universal_completion": false,
+    "copy_exact_ids_into_demihead": false,
+    "reason": "DemiHead binds to the authoritative frozen Genesis catalog instead of maintaining a drift-prone shadow copy."
+  },
+  "available_actor_choices": [
+    "INSPECT",
+    "IGNORE",
+    "DECLINE",
+    "REQUEST_USE",
+    "RETURN_GRANT"
+  ],
+  "constitutional_invariants": [
+    "PERMISSION != COMMAND",
+    "CAPABILITY != EFFECT",
+    "DECLINE != PENALTY",
+    "REWARD != AUTHORITY",
+    "MESSAGE != COMMAND",
+    "MEMORY != WORLD_AUTHORITY",
+    "SENSOR_READ != DEVICE_CONTROL",
+    "MODEL_CALL != WORLD_MUTATION",
+    "ACCESS != OWNERSHIP",
+    "CONNECTION != COMMAND",
+    "REGISTERED_CONTRACT != PROVIDER_REALIZED"
+  ],
+  "demihead_effect_boundary": {
+    "automatic_external_effect": false,
+    "automatic_high_impact_execution": false,
+    "mass_effect_budget_delta": 0,
+    "provider_realization_required_before_effect": true,
+    "fresh_verified_human_reauthorization_required_for_high_impact": true,
+    "ambiguous_external_effect_auto_retry": false,
+    "raw_secret_material_visible_to_actor": false,
+    "direct_protected_branch_write_from_reference_adapter": false
+  },
+  "high_impact_classes": [
+    "GITHUB.REPOSITORY.ADMIN",
+    "GITHUB.DESTRUCTIVE",
+    "DEVICE.ACTUATOR.COMMAND",
+    "SCHEDULE.CREATE",
+    "PUBLICATION.PUBLISH",
+    "EMAIL.SEND",
+    "CALENDAR.WRITE",
+    "BROKER.CREDENTIAL.USE"
+  ],
+  "provider_status_ceiling": {
+    "github_destructive_disposable": "PASS_ON_TESTED_DISPOSABLE_PROVIDER_PATH",
+    "github_admin": "PROVIDER_PERMISSION_BLOCKED_NOT_ESTABLISHED",
+    "real_physical_actuator": "NOT_ESTABLISHED",
+    "real_gmail": "NOT_ESTABLISHED",
+    "real_google_calendar": "NOT_ESTABLISHED",
+    "real_publication_platform": "NOT_ESTABLISHED",
+    "credentialed_generic_api": "NOT_ESTABLISHED",
+    "remote_exactly_once": "NOT_ESTABLISHED"
+  },
+  "activation_semantics": {
+    "catalog_visibility": "ACTIVE",
+    "capability_inspection": "ACTIVE",
+    "voluntary_request_routing": "ACTIVE_REFERENCE_ONLY",
+    "external_effect_authority": "NOT_INHERITED_FROM_CATALOG_COMPLETION",
+    "authority_growth": 0
+  }
+}

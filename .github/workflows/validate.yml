@@ -27,8 +27,20 @@ jobs:
       - name: Validate contracts and documentation
         run: python tools/validate_repository.py
 
-      - name: Run KETO reference tests
+      - name: Run reference tests
         run: python -m unittest discover -s tests -v
 
       - name: Run deterministic KETO fixture
         run: python tools/keto_reference.py examples/case_echo_collapse.json --output /tmp/keto-result.json
+
+      - name: Run deterministic +/+ recenter self-test
+        run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
+
+      - name: Run deterministic +/+ recenter trace
+        run: python tools/plus_plus_recenter.py --input-csv examples/plus_plus_recenter_trace.csv --output /tmp/plus-plus-trace.json
+
+      - name: Run deterministic Third Wish activation self-test
+        run: python tools/third_wish_catalog.py --self-test --output /tmp/third-wish-self-test.json
+
+      - name: Inspect high-impact Third Wish hold path
+        run: python tools/third_wish_catalog.py --request GITHUB.DESTRUCTIVE --output /tmp/third-wish-high-impact.json

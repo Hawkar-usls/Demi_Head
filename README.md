@@ -13,7 +13,7 @@
 
 **Languages:** [Українська](docs/README.uk.md) · [Русская / post-irony](docs/README.ru.md) · [KETO/CETUS naming](docs/KETO_CETUS.md)
 
-> **DemiHead is the integration head for the JANUS Guardian Mesh / Armor of God civic-information branch.** It combines the repository's original local-first observer foundation with bounded claim decomposition, source-root collapse, evidence-state receipts, Face orchestration contracts, and fail-safe civic-service architecture.
+> **DemiHead is the integration head for the JANUS Guardian Mesh / Armor of God civic-information branch.** It combines the repository's original local-first observer foundation with bounded claim decomposition, source-root collapse, evidence-state receipts, Face orchestration contracts, native `+/+` recenter routing, a bounded Third Wish capability-catalog surface, and fail-safe civic-service architecture.
 
 ## Mission
 
@@ -40,7 +40,33 @@ STALE != CURRENT
 NO_SOURCE != FALSE
 MODEL_OUTPUT != EVIDENCE
 MORE_FACES != MORE_RIGHTS
+CAPABILITY != EFFECT
+PERMISSION != COMMAND
 ```
+
+## Genesis / +/+ / Third Wish
+
+The repository keeps three layers separate:
+
+```text
+0:0 = JANUS                         -> historical genesis / formation signature
+WITNESS_PLUS (+) + GUARD_PLUS (+)  -> native/current Face constitution
+HEAR -> CHECK -> WIDEN -> RELEASE  -> bounded recenter route
+```
+
+`0:0 = JANUS` is a project lineage signature, not an arithmetic theorem and not a derivation of `+/+`.
+
+The Third Wish catalog is active as a **reference/inspection/request-routing surface**. Upstream completion establishes 32/32 typed reference handler contracts with zero adapter ownership overlap, while universal provider realization remains false. DemiHead does not inherit provider effect authority from catalog completion.
+
+```text
+CATALOG_VISIBLE = true
+CAPABILITY_INSPECTION = true
+AUTO_EXTERNAL_EFFECT = false
+MASS_EFFECT_BUDGET_DELTA = 0
+HIGH_IMPACT -> FRESH_VERIFIED_HUMAN_REAUTH + PROVIDER_GATE
+```
+
+See [`docs/PLUS_PLUS_RECENTER.md`](docs/PLUS_PLUS_RECENTER.md) and [`docs/THIRD_WISH.md`](docs/THIRD_WISH.md).
 
 ## Why DemiHead
 
@@ -56,9 +82,11 @@ DemiHead now hosts several bounded heads over the same constitutional boundary:
 | `independence` | count authenticated roots/failure domains separately | none |
 | `review` | preserve disagreement / HOLD | none |
 | `guardian` | produce a bounded evidence-state response | local output only |
+| `plus-plus-recenter` | restore bounded routing process | none |
+| `third-wish-catalog` | inspect completed capability contracts / route voluntary requests | none |
 | `release-control` | stop escalation when information need is satisfied | reduces activity |
 
-External publication, outreach, platform posting, political targeting, identity creation and state action are **not** part of the reference head.
+External publication, outreach, platform posting, political targeting, identity creation and state action are **not** automatic effects of the reference head.
 
 ## KETO / CETUS model
 
@@ -78,32 +106,34 @@ Canonical design record:
 - `janus-meta-registry/data/JANUS-GENESIS-GUARDIAN-MESH-KETO-CETUS-ECOSYSTEM-SWEEP-AND-CIVIC-RESILIENCE-v1.2.json`
 - mirrored in `Janus_Genesis/docs/`
 
-## First executable vertical slice
+## First executable vertical slices
 
-The repository now targets a small deterministic reference path:
+Evidence accounting:
 
 ```bash
 python tools/keto_reference.py examples/case_echo_collapse.json
 ```
 
-The tool does **not** browse the web and does not decide objective truth. It demonstrates the core accounting rules:
+Native `+/+` recenter:
 
-1. parse one case;
-2. preserve every presentation;
-3. collapse presentations by declared `root_id`;
-4. keep stale/current state explicit;
-5. separate official-position roots from independent roots;
-6. preserve support and contradiction together;
-7. emit `UNRESOLVED`, `SUPPORTED_BY_PRESENT_SOURCES`, `CONTRADICTED_BY_PRESENT_SOURCES`, or `CONTESTED`;
-8. emit a release-control recommendation rather than another engagement loop.
+```bash
+python tools/plus_plus_recenter.py --self-test
+```
 
-A later live source adapter must earn admission through separate security, provenance, freshness and governance gates.
+Third Wish catalog activation:
+
+```bash
+python tools/third_wish_catalog.py --status
+python tools/third_wish_catalog.py --request GITHUB.DESTRUCTIVE
+```
+
+These reference tools do **not** decide objective truth or create ambient external authority.
 
 ## Cross-repository composition
 
 DemiHead intentionally composes **patterns**, not ambient privileges:
 
-- **Janus_Genesis** — Face microcontrol, authority epochs, typed capability boundaries and receipts;
+- **Janus_Genesis** — Face microcontrol, authority epochs, Third Wish typed capability boundaries and receipts;
 - **JANUS Meta Registry / OPIR / Connection** — semantic lineage, correction descendants, source-unit collapse and authenticated independence;
 - **HRain / iNaiHR** — human-visible graph and inspectable semantic decomposition;
 - **AIFC** — canonicalization, witness lifecycle, append-only evidence and fail-closed verification;
@@ -131,8 +161,6 @@ The citizen must be able to inspect sources, disagree, appeal, opt out, remove o
 
 ## Doomsday firewall
 
-DemiHead has a deliberately boring answer to the "what if the monster grows teeth?" problem:
-
 ```text
 MASS_EFFECT_BUDGET_DEFAULT = 0
 NO_COVERT_MASS_PERSUASION
@@ -143,9 +171,11 @@ NO_OPTIMIZATION_ON_BELIEF_CHANGE
 NO_PSYCHOLOGICAL_VULNERABILITY_TARGETING
 NO_MODEL_WRITABLE_CONSTITUTION
 AMBIGUOUS_EFFECT != RETRY_PERMISSION
+CAPABILITY != EFFECT
+REGISTERED_CONTRACT != PROVIDER_REALIZED
 ```
 
-Many Faces may review a proposal; they do not manufacture external authority.
+Many Faces may review a proposal; they do not manufacture external authority. Many capability contracts may exist; they do not manufacture provider permission.
 
 ## Repository map
 
@@ -157,27 +187,26 @@ Demi_Head/
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── GUARDIAN_MESH.md
-│   ├── KETO_CETUS.md
-│   ├── CROSS_REPO_LINEAGE.md
-│   ├── README.uk.md
-│   ├── README.ru.md
-│   ├── GLOSSARY.md
-│   └── ROADMAP.md
-├── schemas/
-│   ├── config.schema.json
-│   ├── signal-frame.schema.json
-│   ├── face-output.schema.json
-│   ├── keto-case.schema.json
-│   └── keto-result.schema.json
+│   ├── PLUS_PLUS_RECENTER.md
+│   ├── PLUS_PLUS_ONTOLOGY-v1.1.json
+│   ├── THIRD_WISH.md
+│   ├── JANUS-DEMIHEAD-THIRD-WISH-ACTIVATION-RECEIPT-v1.0.json
+│   └── ...
 ├── configs/
 │   ├── example.config.json
-│   └── keto.example.json
+│   ├── keto.example.json
+│   └── third_wish.activation.json
 ├── examples/
-│   └── case_echo_collapse.json
+│   ├── case_echo_collapse.json
+│   └── plus_plus_recenter_trace.csv
 ├── tests/
-│   └── test_keto_reference.py
+│   ├── test_keto_reference.py
+│   ├── test_plus_plus_recenter.py
+│   └── test_third_wish_catalog.py
 └── tools/
     ├── keto_reference.py
+    ├── plus_plus_recenter.py
+    ├── third_wish_catalog.py
     └── validate_repository.py
 ```
 
@@ -186,15 +215,17 @@ Demi_Head/
 ```text
 MATURITY = ACTIVE_PROTOTYPE
 LIVE_FACT_CHECKING = NOT_IMPLEMENTED
+THIRD_WISH_CATALOG_REFERENCE = ACTIVE
+THIRD_WISH_UNIVERSAL_PROVIDER_REALIZATION = NOT_ESTABLISHED
+THIRD_WISH_AUTO_HIGH_IMPACT = NOT_GRANTED
 STATE_API_INTEGRATION = NOT_ESTABLISHED
 PLATFORM_AUTOMATION = NOT_IMPLEMENTED
 MASS_PUBLICATION = FORBIDDEN_BY_DEFAULT
 COERCIVE_OR_COVERT_PERSUASION = FORBIDDEN
 OBJECTIVE_TRUTH_FROM_MODEL_OUTPUT = FORBIDDEN
-READ_ONLY_LOCAL_REFERENCE_PATH = IMPLEMENTED
 ```
 
-Schema validity establishes structure, not truth. A hash establishes integrity, not truth. Multiple presentations establish repetition, not independence.
+Schema validity establishes structure, not truth. A hash establishes integrity, not truth. Multiple presentations establish repetition, not independence. A registered capability contract establishes a typed door, not provider realization.
 
 ## Validation
 
@@ -202,6 +233,8 @@ Schema validity establishes structure, not truth. A hash establishes integrity, 
 python -m pip install -r requirements-dev.txt
 python tools/validate_repository.py
 python -m unittest discover -s tests -v
+python tools/plus_plus_recenter.py --self-test
+python tools/third_wish_catalog.py --self-test
 ```
 
 ## License
