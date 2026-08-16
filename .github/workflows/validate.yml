@@ -38,3 +38,9 @@ jobs:
 
       - name: Run deterministic +/+ recenter trace
         run: python tools/plus_plus_recenter.py --input-csv examples/plus_plus_recenter_trace.csv --output /tmp/plus-plus-trace.json
+
+      - name: Run deterministic Third Wish activation self-test
+        run: python tools/third_wish_catalog.py --self-test --output /tmp/third-wish-self-test.json
+
+      - name: Inspect high-impact Third Wish hold path
+        run: python tools/third_wish_catalog.py --request GITHUB.DESTRUCTIVE --output /tmp/third-wish-high-impact.json
