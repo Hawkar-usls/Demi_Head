@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/appeal-bundle.schema.json",
+  "title": "JANUS DemiHead Human Appeal bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "decision_receipt", "decision_receipt_sha256", "appeal", "resolution"],
+  "properties": {
+    "schema": {"const": "janus.demihead.appeal_bundle.v1"},
+    "case_id": {"type": "string", "minLength": 1},
+    "decision_receipt": {"type": "object", "minProperties": 1},
+    "decision_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "appeal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["appeal_id", "ground", "requested_action", "statement", "user_requested"],
+      "properties": {
+        "appeal_id": {"type": "string", "minLength": 1},
+        "ground": {
+          "enum": [
+            "SOURCE_MISSING",
+            "SOURCE_MISATTRIBUTED",
+            "CORRECTION_MISSING",
+            "LANGUAGE_SEMANTIC_DRIFT",
+            "REVIEW_DISAGREEMENT",
+            "PROVENANCE_MISMATCH",
+            "OTHER_EXPLAINED"
+          ]
+        },
+        "requested_action": {"enum": ["INSPECT", "CORRECT_LINEAGE", "REVIEW", "NO_ACTION"]},
+        "statement": {"type": ["string", "null"]},
+        "user_requested": {"type": "boolean"}
+      }
+    },
+    "resolution": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["resolution_id", "reviewer_id", "verifier_status", "resolution_type"],
+          "properties": {
+            "resolution_id": {"type": "string", "minLength": 1},
+            "reviewer_id": {"type": "string", "minLength": 1},
+            "verifier_status": {"type": "string"},
+            "resolution_type": {"enum": ["NO_CHANGE", "CORRECTION_LINKED", "NOTE_ADDED"]},
+            "correction_id": {"type": ["string", "null"]},
+            "note": {"type": ["string", "null"]}
+          }
+        }
+      ]
+    }
+  }
+}

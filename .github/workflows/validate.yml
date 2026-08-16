@@ -63,6 +63,12 @@ jobs:
       - name: Run frozen reviewer disagreement fixture
         run: python tools/reviewer_disagreement.py examples/reviewer_collection.json --output /tmp/reviewer-result.json
 
+      - name: Run Human Appeal self-test
+        run: python tools/human_appeal.py --self-test --output /tmp/appeal-self-test.json
+
+      - name: Run frozen Human Appeal fixture
+        run: python tools/human_appeal.py examples/appeal_bundle.json --output /tmp/appeal-result.json
+
       - name: Run deterministic +/+ recenter self-test
         run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
 
