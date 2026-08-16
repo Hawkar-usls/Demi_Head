@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/optimizer-trials.schema.json",
+  "title": "JANUS DemiHead constitution-bound optimizer trials",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "objective_order", "trials"],
+  "properties": {
+    "schema": {"const": "janus.demihead.optimizer_trials.v1"},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "objective_order": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "p50_latency_ms",
+          "p95_latency_ms",
+          "p99_latency_ms",
+          "cpu_time_ms",
+          "memory_peak_mb",
+          "timeout_rate",
+          "operational_error_rate"
+        ]
+      }
+    },
+    "trials": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_id", "config", "metrics", "constraints"],
+        "properties": {
+          "candidate_id": {"type": "string", "minLength": 1},
+          "config": {"type": "object"},
+          "metrics": {
+            "type": "object",
+            "additionalProperties": {"type": "number"}
+          },
+          "constraints": {
+            "type": "object",
+            "additionalProperties": {"type": ["boolean", "number"]}
+          }
+        }
+      }
+    }
+  }
+}
