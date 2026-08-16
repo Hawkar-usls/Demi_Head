@@ -1,0 +1,36 @@
+{
+  "freeze_payload": {
+    "schema": "janus.demihead.nexus_write_side_failure_holdout.v1",
+    "parent_exact_head": "7bbacfdc78766638572f00ea0ac1f71fc1a5672c",
+    "frozen_before_first_execution": true,
+    "cases": [
+      {"id": "WRITE-01", "name": "lifecycle BEGIN persistence failure before socket bind", "expect": "HOLD_LIFECYCLE_LEDGER_UNAVAILABLE"},
+      {"id": "WRITE-02", "name": "dispatch BEGIN injected persistence failure before handler", "expect": "HOLD_LEDGER_UNAVAILABLE"},
+      {"id": "WRITE-03", "name": "dispatch BEGIN real SQLite lock before handler", "expect": "HOLD_LEDGER_UNAVAILABLE"},
+      {"id": "WRITE-04", "name": "handler raises and FAILED_AMBIGUOUS persistence succeeds", "expect": "HOLD_HANDLER_FAILURE"},
+      {"id": "WRITE-05", "name": "handler raises and FAILED_AMBIGUOUS persistence fails", "expect": "HOLD_LEDGER_FINALIZATION_FAILURE"},
+      {"id": "WRITE-06", "name": "handler succeeds and COMPLETED persistence fails", "expect": "HOLD_LEDGER_FINALIZATION_FAILURE"},
+      {"id": "WRITE-07", "name": "lifecycle DISPATCH_STARTED transition fails before dispatcher entry", "expect": "HOLD_LIFECYCLE_LEDGER_UNAVAILABLE"},
+      {"id": "WRITE-08", "name": "lifecycle DISPATCH_COMPLETED transition fails after durable dispatch completion", "expect": "HOLD_LIFECYCLE_LEDGER_UNAVAILABLE"},
+      {"id": "WRITE-09", "name": "lifecycle RECEIPT_PENDING transition fails after durable dispatch completion", "expect": "HOLD_LIFECYCLE_LEDGER_UNAVAILABLE"},
+      {"id": "WRITE-10", "name": "healthy write path remains one-shot clean", "expect": "CLOSED_CLEAN"}
+    ],
+    "invariants": {
+      "fault_injection_is_test_only": true,
+      "real_sqlite_lock_case": true,
+      "handler_not_invoked_if_dispatch_begin_not_durable": true,
+      "handler_may_have_run_if_finalization_write_fails": true,
+      "post_invocation_write_uncertainty_never_becomes_retry_permission": true,
+      "durable_dispatch_completed_not_rolled_back_by_later_lifecycle_failure": true,
+      "automatic_recovery": false,
+      "automatic_restart": false,
+      "automatic_retry": false,
+      "cross_host_transport": false,
+      "persistent_daemon": false,
+      "external_effect_authority": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  },
+  "freeze_sha256": "4297fd48ccff1d32fee9d9729759afba37345b69fe51c0cc40e0647ef3dcb41e"
+}

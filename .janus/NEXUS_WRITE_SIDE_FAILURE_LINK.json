@@ -1,0 +1,43 @@
+{
+  "schema": "janus.nexus.write_side_failure_link.v1",
+  "contract": "JANUS_NEXUS_WRITE_SIDE_FAILURE_HOLDOUT_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_storage_authority": {
+    "artifact": "registry/experimental/JANUS-NEXUS-CURRENT-STORAGE-AUTHORITY-v1.json",
+    "exact_head": "7bbacfdc78766638572f00ea0ac1f71fc1a5672c"
+  },
+  "implementation": {
+    "fault_injection_adapters": "tools/nexus_write_fault_injection.py",
+    "tests": "tests/test_nexus_write_side_failure.py",
+    "frozen_holdout": "fixtures/nexus_write_side_failure_holdout_v1.json",
+    "documentation": "docs/NEXUS_WRITE_SIDE_FAILURE_GATE.md"
+  },
+  "frozen_holdout_sha256": "4297fd48ccff1d32fee9d9729759afba37345b69fe51c0cc40e0647ef3dcb41e",
+  "properties_under_test": {
+    "dispatch_begin_failure_prevents_handler_invocation": true,
+    "real_sqlite_write_lock_prevents_handler_invocation": true,
+    "handler_failure_finalization_failure_preserves_started_state": true,
+    "handler_success_completion_write_failure_preserves_started_state": true,
+    "lifecycle_dispatch_started_write_failure_prevents_dispatch_entry": true,
+    "post_dispatch_lifecycle_write_failure_preserves_durable_completed_dispatch": true,
+    "automatic_retry_never_granted": true
+  },
+  "hard_limits": {
+    "fault_injection_runtime_feature": false,
+    "real_enospc_tested": false,
+    "real_read_only_filesystem_tested": false,
+    "wal_corruption_tested": false,
+    "power_loss_tested": false,
+    "automatic_recovery": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_WRITE_SIDE_FAILURE_CORPUS",
+  "next_gate_after_promotion": "PHYSICAL_WAL_SIDECAR_FAIL_CLOSED_HOLDOUT"
+}
