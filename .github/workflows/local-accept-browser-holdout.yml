@@ -1,0 +1,131 @@
+name: Validate local acceptance browser holdout
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium-holdout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out DemiHead
+        uses: actions/checkout@v7
+
+      - name: Check out exact merged HRain apply implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Hrain
+          ref: ceb81210c2f70b71d6c941e0b088a68969ead7b9
+          path: _browser/Hrain
+          persist-credentials: false
+
+      - name: Check out exact merged iNaiHR apply implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/iNaiHR
+          ref: b27cd8732b3137caea1036024acc1778ea02213a
+          path: _browser/iNaiHR
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify frozen browser corpus independently before Chromium
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          path=Path('holdout/local_accept_browser_v1/frozen_corpus.json')
+          corpus=json.loads(path.read_text(encoding='utf-8'))
+          raw=json.dumps(corpus['freeze_payload'],ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8')
+          actual=hashlib.sha256(raw).hexdigest()
+          expected='f44263abaf0fa23c0344f4c68719e1a695d122c251fc373e732724d7958f2c49'
+          assert actual==expected
+          assert corpus['freeze_sha256']==expected
+          assert corpus['freeze_payload']['frozen_before_first_execution'] is True
+          assert len(corpus['freeze_payload']['cases'])==17
+          assert corpus['freeze_payload']['admission']['required_pass_count']==17
+          assert corpus['freeze_payload']['browser']['live_user_data'] is False
+          assert corpus['freeze_payload']['browser']['network_external_effects'] is False
+          print('BROWSER_HOLDOUT_FROZEN_BEFORE_EXECUTION=true')
+          print('FREEZE_SHA256',actual)
+          PY
+
+      - name: Install frozen browser test dependency
+        run: npm install --no-save playwright@1.55.0
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Start isolated localhost fixture server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/janus-browser-holdout-server.log 2>&1 &
+          echo $! >/tmp/janus-browser-holdout-server.pid
+          for i in $(seq 1 50); do
+            if curl -fsS http://127.0.0.1:8765/examples/hemisphere_proposal_lab.html >/dev/null; then
+              echo 'LOCAL_FIXTURE_SERVER=READY'
+              exit 0
+            fi
+            sleep 0.1
+          done
+          cat /tmp/janus-browser-holdout-server.log
+          exit 1
+
+      - name: Run frozen real-Chromium local acceptance holdout
+        run: |
+          node tools/test-local-accept-browser-holdout.js \
+            holdout/local_accept_browser_v1/frozen_corpus.json \
+            /tmp/local-accept-browser-holdout-result.json
+
+      - name: Validate browser holdout receipt and claim ceiling
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('/tmp/local-accept-browser-holdout-result.json').read_text(encoding='utf-8'))
+          assert result['status']=='PASS'
+          assert result['freeze_sha256']=='f44263abaf0fa23c0344f4c68719e1a695d122c251fc373e732724d7958f2c49'
+          assert result['frozen_case_count']==17
+          assert result['passed']==17
+          assert result['failed']==0
+          assert len(result['cases'])==17
+          assert result['external_network_requests']==[]
+          assert result['page_errors']==[]
+          v=result['verified']
+          assert v['real_browser_localstorage_exercised'] is True
+          assert v['live_user_workspace_touched'] is False
+          assert v['proposal_lab_download_exercised'] is True
+          assert v['preview_no_mutation'] is True
+          assert v['decline_no_mutation'] is True
+          assert v['explicit_accept_mutation'] is True
+          assert v['reload_persistence'] is True
+          assert v['stale_base_recheck'] is True
+          assert v['tamper_refusal'] is True
+          assert v['shared_origin_key_isolation'] is True
+          assert v['inaihr_metadata_overlay_roundtrip'] is True
+          assert v['direct_cross_hemisphere_write'] is False
+          assert v['external_effect_permitted'] is False
+          assert v['authority_delta']==0
+          assert v['mass_effect_budget_delta']==0
+          c=result['claim_ceiling']
+          assert c['production_network_latency_measured'] is False
+          assert c['authenticated_human_identity_established'] is False
+          assert c['sha256_binding_is_signature'] is False
+          assert c['real_user_workspace_touched'] is False
+          assert c['production_readiness_established'] is False
+          print('REAL_CHROMIUM_LOCAL_ACCEPT_HOLDOUT=PASS')
+          print('LIVE_USER_WORKSPACE_TOUCHED=false')
+          print('PRODUCTION_NETWORK_LATENCY_MEASURED=false')
+          PY
+
+      - name: Stop isolated fixture server
+        if: always()
+        run: |
+          if [ -f /tmp/janus-browser-holdout-server.pid ]; then
+            kill "$(cat /tmp/janus-browser-holdout-server.pid)" || true
+          fi
