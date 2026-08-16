@@ -1,0 +1,45 @@
+{
+  "schema": "janus.nexus.physical_wal_sidecar_gate_link.v1",
+  "contract": "JANUS_NEXUS_PHYSICAL_WAL_SIDECAR_GATE_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_write_safety_authority": {
+    "artifact": "registry/experimental/JANUS-NEXUS-CURRENT-WRITE-SAFETY-AUTHORITY-v1.json",
+    "exact_head": "cd77fcb7c2819c5f5e3bafa916537ec1ed5d7dc6"
+  },
+  "implementation": {
+    "gate": "tools/nexus_wal_sidecar_gate.py",
+    "tests": "tests/test_nexus_wal_sidecar_gate.py",
+    "frozen_holdout": "fixtures/nexus_wal_sidecar_holdout_v1.json",
+    "documentation": "docs/NEXUS_WAL_SIDECAR_GATE.md"
+  },
+  "frozen_holdout_sha256": "e8b1b689525ae09ed95f631ae2aa89514d794acd4761bebb036ab98b3e07dfc3",
+  "properties_under_test": {
+    "wal_absent_permitted_as_checkpointed_state": true,
+    "real_sqlite_wal_accepted_by_physical_parser": true,
+    "wal_magic_required": true,
+    "wal_format_version_required": true,
+    "wal_page_size_required": true,
+    "wal_main_page_size_consistency_required": true,
+    "wal_frame_alignment_required": true,
+    "wal_frame_page_number_required": true,
+    "damaged_wal_blocks_guarded_recovery": true
+  },
+  "hard_limits": {
+    "wal_checksum_chain_verified": false,
+    "wal_salt_chain_verified": false,
+    "wal_repair": false,
+    "wal_delete_on_failure": false,
+    "power_loss_tested": false,
+    "automatic_recovery": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_PHYSICAL_WAL_SIDECAR_CORPUS",
+  "next_gate_after_promotion": "WAL_CHECKSUM_AND_SALT_CHAIN_FAIL_CLOSED_HOLDOUT"
+}

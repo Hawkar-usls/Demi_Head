@@ -1,0 +1,38 @@
+{
+  "freeze_payload": {
+    "schema": "janus.demihead.nexus_wal_sidecar_holdout.v1",
+    "parent_exact_head": "cd77fcb7c2819c5f5e3bafa916537ec1ed5d7dc6",
+    "frozen_before_first_execution": true,
+    "cases": [
+      {"id": "WAL-01", "name": "healthy checkpointed stores with no WAL sidecars", "expect": "WAL_STORAGE_PREFLIGHT_PASS"},
+      {"id": "WAL-02", "name": "real SQLite WAL with valid physical envelope", "expect": "WAL_SIDECAR_HEALTHY"},
+      {"id": "WAL-03", "name": "present WAL with corrupt magic", "expect": "HOLD_WAL_EVIDENCE_UNAVAILABLE"},
+      {"id": "WAL-04", "name": "present WAL truncated below header", "expect": "HOLD_WAL_EVIDENCE_UNAVAILABLE"},
+      {"id": "WAL-05", "name": "present WAL with invalid page size", "expect": "HOLD_WAL_EVIDENCE_UNAVAILABLE"},
+      {"id": "WAL-06", "name": "present WAL with incomplete frame alignment", "expect": "HOLD_WAL_EVIDENCE_UNAVAILABLE"},
+      {"id": "WAL-07", "name": "present WAL page size differs from main database", "expect": "HOLD_WAL_EVIDENCE_UNAVAILABLE"},
+      {"id": "WAL-08", "name": "damaged replay WAL blocks otherwise recoverable lifecycle mutation", "expect": "HOLD_WAL_EVIDENCE_UNAVAILABLE"}
+    ],
+    "invariants": {
+      "wal_absent_is_permitted_checkpointed_state": true,
+      "wal_present_requires_physical_envelope": true,
+      "wal_magic_checked": true,
+      "wal_format_version_checked": true,
+      "wal_page_size_checked": true,
+      "wal_main_page_size_consistency_checked": true,
+      "wal_frame_alignment_checked": true,
+      "wal_frame_page_number_checked": true,
+      "wal_repair": false,
+      "wal_delete_on_failure": false,
+      "automatic_recovery": false,
+      "automatic_restart": false,
+      "automatic_retry": false,
+      "cross_host_transport": false,
+      "persistent_daemon": false,
+      "external_effect_authority": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  },
+  "freeze_sha256": "e8b1b689525ae09ed95f631ae2aa89514d794acd4761bebb036ab98b3e07dfc3"
+}
