@@ -1,0 +1,44 @@
+{
+  "schema": "janus.demihead.observation_signal.v1",
+  "fixture_id": "SYSEAR_SANITIZED_FIXTURE_V1",
+  "fixture": true,
+  "source": {
+    "adapter": "SYSEAR",
+    "class": "LOCAL_ROUTER_TELEMETRY_SANITIZED",
+    "raw_identifiers_included": false,
+    "raw_syslog_included": false
+  },
+  "quality": {
+    "freshness": "CURRENT_FIXTURE",
+    "quality_state": "PASS",
+    "spoofability": "PRESENT_NOT_ZERO",
+    "quantum_randomness_claim": false
+  },
+  "signals": [
+    {
+      "name": "network_turbulence",
+      "value": 0.37,
+      "unit": "normalized_0_1",
+      "confidence": 0.72
+    },
+    {
+      "name": "security_pressure",
+      "value": 0.21,
+      "unit": "normalized_0_1",
+      "confidence": 0.68
+    },
+    {
+      "name": "known_presence_confidence",
+      "value": 0.88,
+      "unit": "normalized_0_1",
+      "confidence": 0.8
+    }
+  ],
+  "control": {
+    "advisory_only": true,
+    "direct_model_temperature_control": false,
+    "cryptographic_entropy_source": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  }
+}
