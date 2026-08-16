@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/nexus-transport-frame.schema.json",
+  "title": "JANUS Nexus Local Transport Frame",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract",
+    "sender_id",
+    "key_id",
+    "issued_at_ms",
+    "ttl_ms",
+    "nonce",
+    "envelope_sha256",
+    "envelope",
+    "transport_control",
+    "auth"
+  ],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_transport_frame.v1"},
+    "contract": {"const": "JANUS_NEXUS_LOCAL_TRANSPORT_V1"},
+    "sender_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "key_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "issued_at_ms": {"type": "integer"},
+    "ttl_ms": {"type": "integer", "minimum": 1, "maximum": 120000},
+    "nonce": {"type": "string", "minLength": 16, "maxLength": 256},
+    "envelope_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "envelope": {"$ref": "nexus-envelope.schema.json"},
+    "transport_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network_io_performed_by_reference",
+        "socket_listener_enabled",
+        "automatic_retry_permitted",
+        "authority_delta",
+        "mass_effect_budget_delta"
+      ],
+      "properties": {
+        "network_io_performed_by_reference": {"const": false},
+        "socket_listener_enabled": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "tag"],
+      "properties": {
+        "algorithm": {"const": "HMAC-SHA256"},
+        "tag": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}
