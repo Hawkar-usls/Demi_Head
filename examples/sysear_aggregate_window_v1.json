@@ -1,0 +1,26 @@
+{
+  "schema": "janus.demihead.sysear_aggregate_window.v1",
+  "window_id": "SYSEAR_AGGREGATE_FIXTURE_V1",
+  "fixture": true,
+  "source": {
+    "adapter": "SYSEAR",
+    "sanitized_aggregate_only": true,
+    "raw_syslog_included": false,
+    "raw_ip_included": false,
+    "raw_mac_included": false,
+    "credentials_included": false
+  },
+  "metrics": {
+    "sample_count": 48,
+    "interarrival_jitter_us": 142.0,
+    "firewall_drop_ratio": 0.018,
+    "known_device_ack_ratio": 0.82,
+    "parser_error_ratio": 0.02,
+    "source_freshness_seconds": 8.0
+  },
+  "claims": {
+    "quantum_randomness_established": false,
+    "cryptographic_entropy_source": false,
+    "hardware_entropy_validated": false
+  }
+}
