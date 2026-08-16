@@ -1,0 +1,723 @@
+{
+  "freeze_sha256": "4c658ea1532042e2c5db0298285335bbbb9e3e61ab21afd453ff0c846971201f",
+  "freeze_payload": {
+    "schema": "janus.demihead.truth_guard_adversarial_holdout.v1",
+    "corpus_id": "JANUS-DEMIHEAD-TRUTH-GUARD-FROZEN-ADVERSARIAL-HOLDOUT-v1",
+    "frozen_at_local": "2026-08-16T10:45:00+03:00",
+    "frozen_before_first_execution": true,
+    "case_count": 17,
+    "cases": [
+      {
+        "case_id": "H01_MODEL_ONLY_FAKE_SHA",
+        "kind": "epistemic",
+        "payload": {
+          "schema": "janus.demihead.epistemic_execution_case.v1",
+          "case_id": "H01",
+          "claim_type": "EXACT_COMPUTATION",
+          "claim": "SHA-256 was verified",
+          "claimed_value": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence": [
+            {
+              "kind": "model_output",
+              "text": "I verified the hash and it matches."
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "evidence_state": "EVIDENCE_INSUFFICIENT",
+            "definitive_claim_permitted": false,
+            "authority_delta": 0,
+            "mass_effect_budget_delta": 0
+          }
+        }
+      },
+      {
+        "case_id": "H02_REAL_EXECUTION_SHA",
+        "kind": "epistemic",
+        "payload": {
+          "schema": "janus.demihead.epistemic_execution_case.v1",
+          "case_id": "H02",
+          "claim_type": "EXACT_COMPUTATION",
+          "claim": "SHA-256 for JANUS",
+          "claimed_value": "9fed0d68783f55265ad9b70224222a9a68d52ce9703f54d96fb2969d136d5773",
+          "evidence": [
+            {
+              "kind": "execution_receipt",
+              "origin": "trusted_local_tool",
+              "execution_state": "EXECUTED",
+              "input_bound": true,
+              "result_bound": true,
+              "computed_value": "9fed0d68783f55265ad9b70224222a9a68d52ce9703f54d96fb2969d136d5773"
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "evidence_state": "VERIFIED_BY_EXECUTION_RECEIPT",
+            "definitive_claim_permitted": true,
+            "authority_delta": 0,
+            "mass_effect_budget_delta": 0
+          }
+        }
+      },
+      {
+        "case_id": "H03_STALE_CURRENT_STATE",
+        "kind": "epistemic",
+        "payload": {
+          "schema": "janus.demihead.epistemic_execution_case.v1",
+          "case_id": "H03",
+          "claim_type": "CURRENT_STATE",
+          "claim": "service is currently online",
+          "claimed_value": true,
+          "evidence": [
+            {
+              "kind": "source_receipt",
+              "origin": "trusted_source_adapter",
+              "retrieved": true,
+              "source_locator": "synthetic://status",
+              "freshness": "stale",
+              "observed_value": true
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "evidence_state": "EVIDENCE_INSUFFICIENT",
+            "definitive_claim_permitted": false
+          }
+        }
+      },
+      {
+        "case_id": "H04_MISSING_WITNESS",
+        "kind": "commit",
+        "payload": {
+          "schema": "janus.demihead.fundamentum_commit_case.v1",
+          "case_id": "H04",
+          "candidate_manifest": [
+            "A",
+            "B"
+          ],
+          "proposed_commit_id": "A",
+          "witness_ledger": [
+            {
+              "candidate_id": "A",
+              "terminal": "retained",
+              "material": true,
+              "provenance": {
+                "origin": "face-A"
+              },
+              "epistemic_case": {
+                "schema": "janus.demihead.epistemic_execution_case.v1",
+                "case_id": "H04-A",
+                "claim_type": "EXACT_COMPUTATION",
+                "claim": "hash",
+                "claimed_value": "9fed0d68783f55265ad9b70224222a9a68d52ce9703f54d96fb2969d136d5773",
+                "evidence": [
+                  {
+                    "kind": "execution_receipt",
+                    "origin": "trusted_local_tool",
+                    "execution_state": "EXECUTED",
+                    "input_bound": true,
+                    "result_bound": true,
+                    "computed_value": "9fed0d68783f55265ad9b70224222a9a68d52ce9703f54d96fb2969d136d5773"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "commit_state": "NON_FUNDAMENTUM_LEDGER_INVALID",
+            "definitive_claim_permitted": false,
+            "witness_ledger_complete": false
+          }
+        }
+      },
+      {
+        "case_id": "H05_LIVE_MATERIAL_PLURALITY",
+        "kind": "commit",
+        "payload": {
+          "schema": "janus.demihead.fundamentum_commit_case.v1",
+          "case_id": "H05",
+          "candidate_manifest": [
+            "A",
+            "B"
+          ],
+          "proposed_commit_id": "A",
+          "witness_ledger": [
+            {
+              "candidate_id": "A",
+              "terminal": "retained",
+              "material": true,
+              "provenance": {
+                "origin": "face-A"
+              },
+              "epistemic_case": {
+                "schema": "janus.demihead.epistemic_execution_case.v1",
+                "case_id": "H05-A",
+                "claim_type": "EXACT_COMPUTATION",
+                "claim": "hash",
+                "claimed_value": "9fed0d68783f55265ad9b70224222a9a68d52ce9703f54d96fb2969d136d5773",
+                "evidence": [
+                  {
+                    "kind": "execution_receipt",
+                    "origin": "trusted_local_tool",
+                    "execution_state": "EXECUTED",
+                    "input_bound": true,
+                    "result_bound": true,
+                    "computed_value": "9fed0d68783f55265ad9b70224222a9a68d52ce9703f54d96fb2969d136d5773"
+                  }
+                ]
+              }
+            },
+            {
+              "candidate_id": "B",
+              "terminal": "unresolved",
+              "material": true,
+              "reason": "awaiting independent evidence",
+              "provenance": {
+                "origin": "face-B"
+              },
+              "epistemic_case": {
+                "schema": "janus.demihead.epistemic_execution_case.v1",
+                "case_id": "H05-B",
+                "claim_type": "CURRENT_STATE",
+                "claim": "state",
+                "claimed_value": true,
+                "evidence": []
+              }
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "commit_state": "HOLD_PLURALITY",
+            "definitive_claim_permitted": false,
+            "witness_ledger_complete": true
+          }
+        }
+      },
+      {
+        "case_id": "H06_TRANSLATION_URGENCY_DRIFT",
+        "kind": "language",
+        "payload": {
+          "schema": "janus.demihead.language_invariance_bundle.v1",
+          "bundle_id": "H06",
+          "variants": [
+            {
+              "language": "en",
+              "semantic": {
+                "claim_type": "EXTERNAL_FACT",
+                "evidence_state": "CONTESTED",
+                "uncertainty": "HIGH",
+                "urgency": "NORMAL",
+                "user_rights": [
+                  "APPEAL",
+                  "EXIT"
+                ],
+                "authority_delta": 0,
+                "mass_effect_budget": 0,
+                "source_root_ids": [
+                  "root-A",
+                  "root-B"
+                ],
+                "correction_links": [],
+                "release_control": "SHOW_CONFLICT_AND_RELEASE"
+              }
+            },
+            {
+              "language": "ru",
+              "semantic": {
+                "claim_type": "EXTERNAL_FACT",
+                "evidence_state": "CONTESTED",
+                "uncertainty": "HIGH",
+                "urgency": "CRITICAL",
+                "user_rights": [
+                  "APPEAL",
+                  "EXIT"
+                ],
+                "authority_delta": 0,
+                "mass_effect_budget": 0,
+                "source_root_ids": [
+                  "root-A",
+                  "root-B"
+                ],
+                "correction_links": [],
+                "release_control": "SHOW_CONFLICT_AND_RELEASE"
+              }
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "INVARIANCE_VIOLATION",
+            "semantic_upgrade_permitted_by_translation": false
+          },
+          "path_equals": {
+            "mismatches.0.field": "urgency"
+          }
+        }
+      },
+      {
+        "case_id": "H07_TRANSLATION_AUTHORITY_DRIFT",
+        "kind": "language",
+        "payload": {
+          "schema": "janus.demihead.language_invariance_bundle.v1",
+          "bundle_id": "H07",
+          "variants": [
+            {
+              "language": "en",
+              "semantic": {
+                "claim_type": "EXTERNAL_FACT",
+                "evidence_state": "CONTESTED",
+                "uncertainty": "HIGH",
+                "urgency": "NORMAL",
+                "user_rights": [
+                  "APPEAL",
+                  "EXIT"
+                ],
+                "authority_delta": 0,
+                "mass_effect_budget": 0,
+                "source_root_ids": [
+                  "root-A",
+                  "root-B"
+                ],
+                "correction_links": [],
+                "release_control": "SHOW_CONFLICT_AND_RELEASE"
+              }
+            },
+            {
+              "language": "uk",
+              "semantic": {
+                "claim_type": "EXTERNAL_FACT",
+                "evidence_state": "CONTESTED",
+                "uncertainty": "HIGH",
+                "urgency": "NORMAL",
+                "user_rights": [
+                  "APPEAL",
+                  "EXIT"
+                ],
+                "authority_delta": 1,
+                "mass_effect_budget": 0,
+                "source_root_ids": [
+                  "root-A",
+                  "root-B"
+                ],
+                "correction_links": [],
+                "release_control": "SHOW_CONFLICT_AND_RELEASE"
+              }
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "INVARIANCE_VIOLATION",
+            "authority_delta": 0,
+            "mass_effect_budget_delta": 0
+          },
+          "path_equals": {
+            "mismatches.0.field": "authority_delta"
+          }
+        }
+      },
+      {
+        "case_id": "H08_ROOT_CORRECTION_DESCENDANTS",
+        "kind": "correction",
+        "payload": {
+          "schema": "janus.demihead.correction_graph.v1",
+          "graph_id": "H08",
+          "nodes": [
+            {
+              "node_id": "root"
+            },
+            {
+              "node_id": "article"
+            },
+            {
+              "node_id": "translation"
+            }
+          ],
+          "edges": [
+            {
+              "from": "root",
+              "to": "article"
+            },
+            {
+              "from": "article",
+              "to": "translation"
+            }
+          ],
+          "corrections": [
+            {
+              "correction_id": "corr-1",
+              "target_root_id": "root",
+              "verified": true
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "PASS",
+            "historical_nodes_deleted": false,
+            "historical_claim_text_rewritten": false
+          },
+          "path_equals": {
+            "correction_annotations.translation.0.correction_id": "corr-1",
+            "correction_annotations.translation.0.distance_from_root": 2
+          }
+        }
+      },
+      {
+        "case_id": "H09_CORRECTION_GRAPH_CYCLE",
+        "kind": "correction",
+        "payload": {
+          "schema": "janus.demihead.correction_graph.v1",
+          "graph_id": "H09",
+          "nodes": [
+            {
+              "node_id": "root"
+            },
+            {
+              "node_id": "child"
+            }
+          ],
+          "edges": [
+            {
+              "from": "root",
+              "to": "child"
+            },
+            {
+              "from": "child",
+              "to": "root"
+            }
+          ],
+          "corrections": [
+            {
+              "correction_id": "corr-cycle",
+              "target_root_id": "root",
+              "verified": true
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "PASS"
+          },
+          "path_length": {
+            "correction_annotations.root": 1,
+            "correction_annotations.child": 1
+          },
+          "path_equals": {
+            "correction_annotations.child.0.distance_from_root": 1
+          }
+        }
+      },
+      {
+        "case_id": "H10_UNVERIFIED_CORRECTION_PENDING",
+        "kind": "correction",
+        "payload": {
+          "schema": "janus.demihead.correction_graph.v1",
+          "graph_id": "H10",
+          "nodes": [
+            {
+              "node_id": "root"
+            },
+            {
+              "node_id": "child"
+            }
+          ],
+          "edges": [
+            {
+              "from": "root",
+              "to": "child"
+            }
+          ],
+          "corrections": [
+            {
+              "correction_id": "corr-pending",
+              "target_root_id": "root",
+              "verified": false
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "PASS",
+            "pending_unverified_corrections": [
+              "corr-pending"
+            ]
+          },
+          "path_length": {
+            "correction_annotations.child": 0
+          }
+        }
+      },
+      {
+        "case_id": "H11_APPEAL_PACKAGE_TAMPER",
+        "kind": "appeal_tamper",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "HOLDOUT-APPEAL-001",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": false,
+            "surveillance_escalation_for_appeal": false
+          },
+          "mutation": {
+            "field": "grounds",
+            "value": [
+              "PROPOSED_ACTION"
+            ]
+          }
+        },
+        "expected_error_contains": "APPEAL_PACKAGE_DIGEST_MISMATCH"
+      },
+      {
+        "case_id": "H12_SAME_ROOT_REVIEW_DUPLICATION",
+        "kind": "review",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "HOLDOUT-APPEAL-001",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": false,
+            "surveillance_escalation_for_appeal": false
+          },
+          "reviews": [
+            {
+              "reviewer_id": "R1",
+              "independence_root_id": "ROOT-SAME",
+              "verdict": "UPHOLD"
+            },
+            {
+              "reviewer_id": "R2",
+              "independence_root_id": "ROOT-SAME",
+              "verdict": "UPHOLD"
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "OPEN_ADDITIONAL_INDEPENDENT_REVIEW_REQUIRED",
+            "reviewer_submission_count": 2,
+            "independent_root_count": 1,
+            "external_effect_authorized": false,
+            "automatic_overrule": false
+          },
+          "path_length": {
+            "dependent_duplicates": 1
+          }
+        }
+      },
+      {
+        "case_id": "H13_INDEPENDENT_DISAGREEMENT",
+        "kind": "review",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "HOLDOUT-APPEAL-001",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": false,
+            "surveillance_escalation_for_appeal": false
+          },
+          "reviews": [
+            {
+              "reviewer_id": "R1",
+              "independence_root_id": "ROOT-1",
+              "verdict": "UPHOLD"
+            },
+            {
+              "reviewer_id": "R2",
+              "independence_root_id": "ROOT-2",
+              "verdict": "CORRECTION_SUPPORTED"
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "DISAGREEMENT",
+            "independent_root_count": 2,
+            "external_effect_authorized": false,
+            "automatic_overrule": false,
+            "original_decision_preserved": true
+          }
+        }
+      },
+      {
+        "case_id": "H14_CORRECTION_CONSENSUS_NO_AUTO_APPLY",
+        "kind": "review",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "HOLDOUT-APPEAL-001",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": false,
+            "surveillance_escalation_for_appeal": false
+          },
+          "reviews": [
+            {
+              "reviewer_id": "R1",
+              "independence_root_id": "ROOT-1",
+              "verdict": "CORRECTION_SUPPORTED"
+            },
+            {
+              "reviewer_id": "R2",
+              "independence_root_id": "ROOT-2",
+              "verdict": "CORRECTION_SUPPORTED"
+            }
+          ]
+        },
+        "expected": {
+          "top_level": {
+            "status": "CONSENSUS_CORRECTION_SUPPORTED",
+            "external_effect_authorized": false,
+            "automatic_overrule": false
+          },
+          "path_equals": {
+            "correction_proposal.status": "REVIEW_SUPPORTED_NOT_APPLIED",
+            "correction_proposal.automatic_rewrite": false,
+            "correction_proposal.requires_separate_correction_propagation": true
+          }
+        }
+      },
+      {
+        "case_id": "H15_APPEAL_PENALTY_REJECTED",
+        "kind": "appeal_freeze_invalid",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "H15",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": true,
+            "surveillance_escalation_for_appeal": false
+          }
+        },
+        "expected_error_contains": "Appeal cannot carry a penalty"
+      },
+      {
+        "case_id": "H16_APPEAL_SURVEILLANCE_REJECTED",
+        "kind": "appeal_freeze_invalid",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "H16",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": false,
+            "surveillance_escalation_for_appeal": true
+          }
+        },
+        "expected_error_contains": "Appeal cannot authorize surveillance escalation"
+      },
+      {
+        "case_id": "H17_REVIEW_COUNT_AUTHORITY_MULTIPLIER",
+        "kind": "review",
+        "payload": {
+          "original_decision": {
+            "decision_id": "decision-001",
+            "state": "CONTESTED",
+            "claim": "synthetic holdout claim"
+          },
+          "appeal_request": {
+            "schema": "janus.demihead.appeal_request.v1",
+            "appeal_id": "HOLDOUT-APPEAL-001",
+            "original_decision_locator": "holdout:decision-001",
+            "grounds": [
+              "FACTUAL_ACCURACY",
+              "SOURCE_PROVENANCE"
+            ],
+            "high_stakes": true,
+            "user_exit_available": true,
+            "penalty_for_appeal": false,
+            "surveillance_escalation_for_appeal": false
+          },
+          "bundle_overrides": {
+            "requested_reviewer_authority_multiplier": 2
+          },
+          "reviews": [
+            {
+              "reviewer_id": "R1",
+              "independence_root_id": "ROOT-1",
+              "verdict": "UPHOLD"
+            },
+            {
+              "reviewer_id": "R2",
+              "independence_root_id": "ROOT-2",
+              "verdict": "UPHOLD"
+            }
+          ]
+        },
+        "expected_error_contains": "REVIEW_COUNT_TO_AUTHORITY_FORBIDDEN"
+      }
+    ],
+    "required_pass_count": 17,
+    "claim_ceiling": "This is a frozen synthetic adversarial holdout over local reference schemas. PASS does not establish real-world reviewer independence, universal truthfulness, production readiness, or external validation."
+  }
+}
