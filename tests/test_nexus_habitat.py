@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -113,6 +114,29 @@ class NexusHabitatTests(unittest.TestCase):
         snapshot = habitat_snapshot()
         self.assertTrue(all(item["authority_delta"] == 0 for item in snapshot["heads"]))
         self.assertEqual(snapshot["global_control"]["mass_effect_budget_delta"], 0)
+
+    def test_sysear_fixture_is_hash_bound_and_read_only(self):
+        payload_path = ROOT / "examples" / "sysear_sanitized_observation.json"
+        envelope_path = ROOT / "examples" / "nexus_sysear_observer_to_guardian.json"
+        payload = json.loads(payload_path.read_text(encoding="utf-8"))
+        envelope = json.loads(envelope_path.read_text(encoding="utf-8"))
+
+        self.assertTrue(payload["fixture"])
+        self.assertFalse(payload["source"]["raw_identifiers_included"])
+        self.assertFalse(payload["source"]["raw_syslog_included"])
+        self.assertFalse(payload["quality"]["quantum_randomness_claim"])
+        self.assertFalse(payload["control"]["direct_model_temperature_control"])
+        self.assertFalse(payload["control"]["cryptographic_entropy_source"])
+        self.assertEqual(payload["control"]["authority_delta"], 0)
+        self.assertEqual(payload["control"]["mass_effect_budget_delta"], 0)
+        self.assertEqual(envelope["payload_ref"]["sha256"], sha256(payload))
+
+        receipt = route_receipt(envelope)
+        self.assertEqual(receipt["source_head"], "OBSERVER")
+        self.assertEqual(receipt["target_head"], "GUARDIAN")
+        self.assertEqual(receipt["payload_kind"], "OBSERVATION_SIGNAL")
+        self.assertFalse(receipt["claim_ceiling"]["delivery_performed"])
+        self.assertFalse(receipt["routing"]["external_effect_permitted"])
 
     def test_self_test_passes(self):
         self.assertEqual(self_test()["status"], "PASS")
