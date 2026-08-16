@@ -14,11 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from hemisphere_bridge import (
-    BRIDGE_CONTRACT,
-    HEMISPHERE_RULES,
-    combine_packets,
-)
+from hemisphere_bridge import BRIDGE_CONTRACT, HEMISPHERE_RULES, combine_packets
 from hemisphere_local_proposal import build_proposal, envelope
 
 
@@ -88,11 +84,12 @@ def _node(hemisphere: str, node_id: int, label: str) -> dict[str, Any]:
             "origin": _origin_for(node_id, hemisphere),
             "type": "default",
         }
+    origin = _origin_for(node_id, hemisphere)
     return {
         "id": node_id,
         "label": f"🧩 {label}",
-        "origin": _origin_for(node_id, hemisphere),
-        "is_ai": _origin_for(node_id, hemisphere) == "REMOTE_AI",
+        "origin": origin,
+        "is_ai": origin == "REMOTE_AI",
     }
 
 
@@ -242,20 +239,15 @@ def _run_cases(
     observer: bool = False,
 ) -> list[dict[str, Any]]:
     indexed = list(enumerate(cases))
-    observed: list[dict[str, Any]] = []
 
     def task(item: tuple[int, dict[str, Any]]) -> tuple[int, dict[str, Any]]:
         index, case = item
         output = execute_case(case, inner_loops)
         if observer:
-            # Intentionally bounded observer work used only to measure observer overhead.
-            observed.append(
-                {
-                    "index": index,
-                    "digest": canonical_sha256(output),
-                    "observed_ns": time.perf_counter_ns(),
-                }
-            )
+            # Bounded observer work. It is measured separately and never participates
+            # in candidate selection, truth, authority, or semantic output.
+            canonical_sha256(output)
+            time.perf_counter_ns()
         return index, output
 
     if config.executor == "sequential":
@@ -412,10 +404,11 @@ def measure_observer_overhead(
 
     ratios = [pair["on_ns"] / pair["off_ns"] for pair in pairs]
     deltas = [pair["on_ns"] - pair["off_ns"] for pair in pairs]
+    ordered_ratios = sorted(ratios)
     return {
         "paired_repeats": len(pairs),
         "alternating_order": True,
-        "p50_ratio": sorted(ratios)[len(ratios) // 2],
+        "p50_ratio": ordered_ratios[len(ordered_ratios) // 2],
         "p50_delta_ns": nearest_rank(deltas, 0.50),
         "used_for_candidate_selection": False,
         "used_for_admission": False,
@@ -449,9 +442,7 @@ def run_holdout(corpus_path: Path) -> dict[str, Any]:
     calibration_receipts: dict[str, dict[str, Any]] = {}
     for config_id in ("BASELINE_SEQ", "THREADS_2", "THREADS_4"):
         config = configs[config_id]
-        calibration_receipts[config_id] = semantic_receipt(
-            calibration_cases, config, inner_loops
-        )
+        calibration_receipts[config_id] = semantic_receipt(calibration_cases, config, inner_loops)
         calibration_metrics[config_id] = benchmark_config(
             calibration_cases,
             config,
@@ -485,10 +476,8 @@ def run_holdout(corpus_path: Path) -> dict[str, Any]:
         and baseline_hold["output_digest"] == selected_hold["output_digest"]
     )
     protected_equal = (
-        baseline_cal["protected_boundary_digest"]
-        == selected_cal["protected_boundary_digest"]
-        and baseline_hold["protected_boundary_digest"]
-        == selected_hold["protected_boundary_digest"]
+        baseline_cal["protected_boundary_digest"] == selected_cal["protected_boundary_digest"]
+        and baseline_hold["protected_boundary_digest"] == selected_hold["protected_boundary_digest"]
         and all(receipt["protected_boundaries_valid"] for receipt in calibration_receipts.values())
         and all(receipt["protected_boundaries_valid"] for receipt in holdout_receipts.values())
     )
@@ -540,7 +529,7 @@ def run_holdout(corpus_path: Path) -> dict[str, Any]:
         },
         "protocol": {
             "selection_uses_calibration_only": True,
-            "holdout_may_not_change_selection": False,
+            "holdout_may_not_change_selection": True,
             "calibration_repeats": measurement["calibration_repeats"],
             "holdout_repeats": measurement["holdout_repeats"],
             "inner_loops_per_case": inner_loops,
