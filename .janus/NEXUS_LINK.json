@@ -1,0 +1,28 @@
+{
+  "schema": "janus.nexus.runtime_link.v1",
+  "contract": "JANUS_NEXUS_HABITAT_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "mode": "LOCAL_REFERENCE_RUNTIME",
+  "heads": [
+    "OBSERVER",
+    "BICAMERAL_BRIDGE",
+    "FUNDAMENTUM",
+    "GUARDIAN",
+    "RELEASE_CONTROL"
+  ],
+  "runtime_modules": [
+    "tools/nexus_habitat.py",
+    "tools/nexus_fundamentum_adapter.py",
+    "tools/nexus_guardian_ingress.py",
+    "tools/nexus_registry_ingress.py",
+    "tools/sysear_observer_normalizer.py"
+  ],
+  "fundamentum_lineage_repository": "Hawkar-usls/Janus-Fundamentum",
+  "fundamentum_lineage_is_runtime_ownership": false,
+  "live_cross_repository_transport": false,
+  "route_receipt_is_delivery": false,
+  "external_effect_authority": false,
+  "authority_delta": 0,
+  "mass_effect_budget_delta": 0,
+  "write_back_default": "DENY"
+}
