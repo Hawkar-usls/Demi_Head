@@ -3,22 +3,30 @@
   "inline_secret_material_allowed": false,
   "principals": [
     {
-      "key_id": "DEMIHEAD_GUARDIAN_V1",
+      "key_id": "DEMIHEAD_GUARDIAN_E1",
       "sender_id": "DEMIHEAD.GUARDIAN",
       "allowed_source_heads": [
         "GUARDIAN"
       ],
-      "secret_env": "JANUS_NEXUS_GUARDIAN_KEY",
-      "enabled": true
+      "secret_env": "JANUS_NEXUS_GUARDIAN_KEY_E1",
+      "enabled": true,
+      "revoked": false,
+      "epoch": 1,
+      "not_before_ms": 1700000000000,
+      "not_after_ms": 1900000000000
     },
     {
-      "key_id": "DEMIHEAD_OBSERVER_V1",
+      "key_id": "DEMIHEAD_OBSERVER_E1",
       "sender_id": "DEMIHEAD.OBSERVER",
       "allowed_source_heads": [
         "OBSERVER"
       ],
-      "secret_env": "JANUS_NEXUS_OBSERVER_KEY",
-      "enabled": false
+      "secret_env": "JANUS_NEXUS_OBSERVER_KEY_E1",
+      "enabled": false,
+      "revoked": false,
+      "epoch": 1,
+      "not_before_ms": 1700000000000,
+      "not_after_ms": 1900000000000
     }
   ]
 }
