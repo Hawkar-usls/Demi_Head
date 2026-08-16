@@ -1,0 +1,42 @@
+{
+  "schema": "janus.demihead.nexus_one_shot_loopback_holdout.v1",
+  "contract": "JANUS_NEXUS_ONE_SHOT_LOOPBACK_EXCHANGE_V1",
+  "status": "FROZEN_CASE_DEFINITIONS",
+  "cases": [
+    {"id": "REAL_AUTHENTICATED_ROUNDTRIP", "expected": "ONE_SHOT_LOOPBACK_EXCHANGE_COMPLETED"},
+    {"id": "HMAC_TAMPER", "expected": "HOLD_TRANSPORT_REJECTED_BEFORE_DISPATCH"},
+    {"id": "STALE_FRAME", "expected": "HOLD_TRANSPORT_REJECTED_BEFORE_DISPATCH"},
+    {"id": "PERSISTENT_REPLAY", "expected": "SECOND_EXCHANGE_REJECTED_BEFORE_DISPATCH"},
+    {"id": "REPLAY_LEDGER_LOSS_DEFENSE_IN_DEPTH", "expected": "PERSISTENT_INTENT_GUARD_BLOCKS_SECOND_HANDLER_INVOCATION"},
+    {"id": "PAYLOAD_HASH_MISMATCH", "expected": "TRANSPORT_NONCE_CONSUMED_AND_DISPATCH_REJECTED_WITHOUT_HANDLER"},
+    {"id": "OVERSIZED_DECLARED_LENGTH", "expected": "HOLD_WIRE_PROTOCOL_WITHOUT_BODY_READ"},
+    {"id": "PARTIAL_BODY", "expected": "HOLD_WIRE_PROTOCOL_NO_RETRY"},
+    {"id": "MALFORMED_JSON", "expected": "HOLD_WIRE_PROTOCOL_NO_RETRY"},
+    {"id": "CLIENT_DISCONNECT", "expected": "ONE_SHOT_SERVER_TERMINATES_NO_RETRY"},
+    {"id": "NON_LOOPBACK_CLIENT_DESTINATION", "expected": "CLIENT_FAILS_CLOSED_BEFORE_CONNECT"}
+  ],
+  "wire": {
+    "framing": "UINT32_BIG_ENDIAN_LENGTH_PREFIX_PLUS_UTF8_JSON_OBJECT",
+    "max_packet_bytes": 65536,
+    "request_keys_exact": ["schema", "frame", "payload"],
+    "connections_per_listener": 1,
+    "requests_per_connection": 1,
+    "handler_output_transmitted": false
+  },
+  "claim_ceiling": {
+    "loopback_network_io": true,
+    "cross_host_transport": false,
+    "general_network_service": false,
+    "multi_request_session": false,
+    "automatic_retry": false,
+    "external_effect_authority": false
+  },
+  "laws": [
+    "WIRE_PARSE_PRECEDES_AUTHENTICATION",
+    "AUTHENTICATION_PRECEDES_DISPATCH",
+    "PAYLOAD_HASH_MISMATCH_AFTER_ADMISSION_DOES_NOT_RESTORE_NONCE",
+    "ONE_CONNECTION = ONE_REQUEST = ONE_RECEIPT",
+    "LOOPBACK_NETWORK_IO != CROSS_HOST_TRANSPORT",
+    "HANDLER_OUTPUT_STAYS_LOCAL"
+  ]
+}

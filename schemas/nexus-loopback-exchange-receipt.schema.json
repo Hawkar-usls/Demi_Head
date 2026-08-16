@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-loopback-exchange-receipt.schema.json",
+  "title": "JANUS Nexus One-Shot Loopback Exchange Receipt v1",
+  "type": "object",
+  "required": ["schema", "contract", "status", "binding", "rejection", "control", "claim_ceiling"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_loopback_exchange_receipt.v1"},
+    "contract": {"const": "JANUS_NEXUS_ONE_SHOT_LOOPBACK_EXCHANGE_V1"},
+    "status": {
+      "enum": [
+        "ONE_SHOT_LOOPBACK_EXCHANGE_COMPLETED",
+        "ONE_SHOT_LOOPBACK_EXCHANGE_HOLD",
+        "HOLD_NON_LOOPBACK_PEER",
+        "HOLD_WIRE_PROTOCOL",
+        "HOLD_TRANSPORT_REJECTED",
+        "HOLD_TRANSPORT_NOT_ADMITTED",
+        "HOLD_DISPATCH_REJECTED"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "required": [
+        "bound_host",
+        "bound_port",
+        "peer_host",
+        "request_sha256",
+        "frame_sha256",
+        "transport_status",
+        "dispatch_status",
+        "dispatch_result_sha256"
+      ],
+      "properties": {
+        "bound_host": {"enum": ["127.0.0.1", "::1"]},
+        "bound_port": {"type": "integer", "minimum": 1, "maximum": 65535},
+        "peer_host": {"type": ["string", "null"]},
+        "request_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+        "frame_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+        "transport_status": {"type": ["string", "null"]},
+        "dispatch_status": {"type": ["string", "null"]},
+        "dispatch_result_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "rejection": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["stage", "details_disclosed"],
+          "properties": {
+            "stage": {"type": "string", "minLength": 1},
+            "details_disclosed": {"const": false}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "control": {
+      "type": "object",
+      "required": [
+        "one_connection_only",
+        "one_request_only",
+        "loopback_network_io_performed",
+        "cross_host_delivery_established",
+        "handler_output_transmitted",
+        "automatic_retry_permitted",
+        "external_effect_permitted",
+        "authority_delta",
+        "mass_effect_budget_delta"
+      ],
+      "properties": {
+        "one_connection_only": {"const": true},
+        "one_request_only": {"const": true},
+        "loopback_network_io_performed": {"const": true},
+        "cross_host_delivery_established": {"const": false},
+        "handler_output_transmitted": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "external_effect_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "required": [
+        "authenticated_loopback_frame_exchange",
+        "cross_host_transport",
+        "general_network_service",
+        "multi_request_session",
+        "external_effect_authority"
+      ],
+      "properties": {
+        "authenticated_loopback_frame_exchange": {"type": "boolean"},
+        "cross_host_transport": {"const": false},
+        "general_network_service": {"const": false},
+        "multi_request_session": {"const": false},
+        "external_effect_authority": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

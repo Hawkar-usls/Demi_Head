@@ -1,0 +1,56 @@
+{
+  "schema": "janus.nexus.one_shot_loopback_exchange_link.v1",
+  "contract": "JANUS_NEXUS_ONE_SHOT_LOOPBACK_EXCHANGE_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_socket_admission_authority": {
+    "artifact": "JANUS-NEXUS-CURRENT-SOCKET-ADMISSION-AUTHORITY-v1",
+    "exact_head": "c7a951ecec6b1e9817668fa93871764d81eaa9f6"
+  },
+  "parent_dispatch_authority": {
+    "artifact": "JANUS-NEXUS-CURRENT-DISPATCH-AUTHORITY-v2",
+    "exact_head": "b4071b6a69779bc43a1cc58c9034432ab19dd539"
+  },
+  "implementation": {
+    "exchange": "tools/nexus_loopback_exchange.py",
+    "tests": "tests/test_nexus_loopback_exchange.py",
+    "request_schema": "schemas/nexus-loopback-exchange-request.schema.json",
+    "receipt_schema": "schemas/nexus-loopback-exchange-receipt.schema.json",
+    "frozen_holdout": "fixtures/nexus_one_shot_loopback_holdout_v1.json",
+    "documentation": "docs/NEXUS_ONE_SHOT_LOOPBACK_EXCHANGE.md"
+  },
+  "wire": {
+    "framing": "UINT32_BE_LENGTH_PREFIX_PLUS_UTF8_JSON",
+    "max_json_bytes": 65536,
+    "connections_per_listener": 1,
+    "requests_per_connection": 1,
+    "receipt_per_connection_max": 1
+  },
+  "security_reuse": {
+    "hmac_epoch_freshness_replay_transport": "JANUS_NEXUS_LOCAL_TRANSPORT_V1",
+    "persistent_replay_guard": true,
+    "current_principal_revalidation": true,
+    "payload_sha256_binding": true,
+    "intent_guarded_dispatch": "JANUS_NEXUS_LOOPBACK_DISPATCH_V2"
+  },
+  "current_capability": {
+    "loopback_accept": true,
+    "bounded_frame_receive": true,
+    "authenticated_frame_admission": true,
+    "intent_guarded_local_dispatch": true,
+    "compact_receipt_send": true,
+    "handler_output_transmitted": false
+  },
+  "hard_limits": {
+    "literal_loopback_only": true,
+    "cross_host_transport": false,
+    "general_network_service": false,
+    "multi_request_session": false,
+    "automatic_retry": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_REAL_AUTHENTICATED_TCP_LOOPBACK_ROUNDTRIP_AND_FROZEN_NEGATIVE_HOLDOUT",
+  "next_gate_after_promotion": "ONE_SHOT_TRANSPORT_RESPONSE_AMBIGUITY_REPLAY_STORE_FAILURE_AND_STARTUP_LIFECYCLE_ADVERSARIAL_GATE"
+}

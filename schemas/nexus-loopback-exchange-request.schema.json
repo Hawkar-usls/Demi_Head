@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-loopback-exchange-request.schema.json",
+  "title": "JANUS Nexus One-Shot Loopback Exchange Request v1",
+  "type": "object",
+  "required": ["schema", "frame", "payload"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_loopback_exchange_request.v1"},
+    "frame": {"type": "object"},
+    "payload": {"type": "object"}
+  },
+  "additionalProperties": false
+}
