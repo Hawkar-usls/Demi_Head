@@ -1,0 +1,87 @@
+{
+  "schema": "janus.demihead.source_bound_witness.result.v1",
+  "case_id": "CETUS-ANUBIS-OSIRIS-RELIC-001",
+  "witness_id": "ANUBIS_SOURCE_BOUND_ROLE",
+  "mode": "SOURCE_BOUND_QUERY_INTERFACE",
+  "answers": [
+    {
+      "question_id": "Q1_ANUBIS_GUARDIAN_ROLE",
+      "question": "Анубис, подтверждается ли вообще, что ты охранял осирианский контейнер?",
+      "target_claim": "Anubis guarded a chest containing Osirian entrails and held a broader embalming/protective role.",
+      "state": "SUPPORTED_BY_BOUND_SOURCES",
+      "support_ids": [
+        "BD17_ANUBIS_GUARDS_CHEST_SUPPORT",
+        "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT"
+      ],
+      "contradiction_ids": [],
+      "context_only_ids": [],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q2_PHALLUS_IN_CHEST",
+      "question": "Был ли фаллос Осириса внутри ларца, который ты охранял?",
+      "target_claim": "The phallus was physically contained in the Anubis-guarded chest.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD161_CHEST_OSIRIS_CONTEXT",
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD42_PHALLUS_IS_OSIRIS_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q3_DID_ANUBIS_FAIL",
+      "question": "Ты действительно не справился и потерял фаллос?",
+      "target_claim": "Anubis had phallus-specific custody and failed that custody obligation.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
+        "PLUTARCH_RIVER_BRANCH_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q4_KEEPER_ALL_ALONG",
+      "question": "Мог ли фаллос всё это время оставаться у тебя или внутри охраняемого тобой вложенного контейнера?",
+      "target_claim": "The relic remained continuously inside an Anubis-associated guarded container, shrine, statue or nested compartment.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD161_CHEST_OSIRIS_CONTEXT",
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "MET_ANUBIS_GENERAL_ROLE_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q5_SPECIFIC_ASSIGNMENT",
+      "question": "Есть ли прямой источник, где тебе поручено охранять именно фаллос, а не Осириса, мумификацию или его внутренности в целом?",
+      "target_claim": "An extant bound source explicitly assigns Anubis custody of Osiris's phallus specifically.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
+        "MET_ANUBIS_GENERAL_ROLE_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    }
+  ],
+  "model_output_is_evidence": false,
+  "supernatural_contact_claimed": false,
+  "release_control": "RETURN_BOUND_STATES_AND_REQUEST_NEW_PRIMARY_EVIDENCE_FOR_OPEN_QUESTIONS",
+  "invariants": [
+    "MODEL_OUTPUT != EVIDENCE",
+    "ROLEPLAY != TESTIMONY",
+    "NO_SOURCE != FALSE",
+    "CONTEXT_ONLY != SUPPORT",
+    "UNRESOLVED != NEGATIVE"
+  ]
+}
