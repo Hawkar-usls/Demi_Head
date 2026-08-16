@@ -1,0 +1,42 @@
+{
+  "schema": "janus.nexus.loopback_socket_link.v1",
+  "contract": "JANUS_NEXUS_LOOPBACK_SOCKET_ADMISSION_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_dispatch_authority": {
+    "artifact": "JANUS-NEXUS-CURRENT-DISPATCH-AUTHORITY-v2",
+    "exact_head": "b4071b6a69779bc43a1cc58c9034432ab19dd539"
+  },
+  "implementation": {
+    "guard": "tools/nexus_loopback_socket_guard.py",
+    "tests": "tests/test_nexus_loopback_socket_guard.py",
+    "example_config": "configs/nexus_loopback_socket.example.json",
+    "documentation": "docs/NEXUS_LOOPBACK_SOCKET_ADMISSION.md"
+  },
+  "admitted_literals": ["127.0.0.1", "::1"],
+  "default": {
+    "listener_enabled": false,
+    "explicit_runtime_enable_required": true
+  },
+  "current_capability": {
+    "socket_create": "CONDITIONAL_EXPLICIT_ONLY",
+    "bind_loopback": "CONDITIONAL_EXPLICIT_ONLY",
+    "listen_loopback": "CONDITIONAL_EXPLICIT_ONLY",
+    "accept": false,
+    "frame_receive": false,
+    "frame_send": false,
+    "socket_dispatch": false,
+    "cross_host_delivery": false
+  },
+  "hard_limits": {
+    "wildcard_bind": false,
+    "hostname_resolution": false,
+    "lan_bind": false,
+    "automatic_retry": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_REAL_EPHEMERAL_LOOPBACK_BIND_TEST",
+  "next_gate_after_promotion": "ONE_SHOT_AUTHENTICATED_LOOPBACK_FRAME_EXCHANGE_HOLDOUT"
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "janus.demihead.nexus_loopback_socket_config.v1",
+  "listener_enabled": false,
+  "host": "127.0.0.1",
+  "port": 0,
+  "backlog": 4,
+  "accept_timeout_ms": 250,
+  "max_frame_bytes": 65536,
+  "automatic_retry_permitted": false,
+  "external_effect_permitted": false,
+  "authority_delta": 0,
+  "mass_effect_budget_delta": 0
+}
