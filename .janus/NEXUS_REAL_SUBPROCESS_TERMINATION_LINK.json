@@ -1,0 +1,42 @@
+{
+  "schema": "janus.nexus.real_subprocess_termination_link.v1",
+  "contract": "JANUS_NEXUS_REAL_SUBPROCESS_TERMINATION_HOLDOUT_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_recovery_authority": {
+    "artifact": "registry/experimental/JANUS-NEXUS-CURRENT-RECOVERY-AUTHORITY-v1.json",
+    "exact_head": "971dedcea1c1d984f980f17dd52f39ddd4ed424f"
+  },
+  "implementation": {
+    "crash_probe": "tools/nexus_crash_probe.py",
+    "recovery_tool": "tools/nexus_lifecycle_recovery.py",
+    "tests": "tests/test_nexus_real_subprocess_termination.py",
+    "frozen_holdout": "fixtures/nexus_real_subprocess_termination_holdout_v1.json",
+    "documentation": "docs/NEXUS_REAL_SUBPROCESS_TERMINATION.md"
+  },
+  "frozen_holdout_sha256": "0b815e6864bedcba152add9c17861cb30115f24d772ce3a01b3613868ec9f159",
+  "platform_scope": "POSIX_UBUNTU_GITHUB_ACTIONS",
+  "properties_under_test": {
+    "real_subprocess_kill": true,
+    "persistent_lifecycle_survives_child_termination": true,
+    "persistent_dispatch_evidence_survives_child_termination_where_present": true,
+    "separate_recovery_process_reopens_evidence": true,
+    "actual_loopback_listener_released_by_os_after_child_kill": true,
+    "pre_dispatch_recovery_stays_manual": true,
+    "dispatch_started_or_completed_stays_ambiguous": true
+  },
+  "hard_limits": {
+    "power_loss_tested": false,
+    "filesystem_corruption_tested": false,
+    "automatic_recovery": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_REAL_SUBPROCESS_TERMINATION_CORPUS",
+  "next_gate_after_promotion": "STORAGE_FAULT_INJECTION_FAIL_CLOSED_HOLDOUT"
+}

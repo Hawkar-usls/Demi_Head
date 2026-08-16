@@ -1,0 +1,32 @@
+{
+  "freeze_payload": {
+    "schema": "janus.demihead.nexus_real_subprocess_termination_holdout.v1",
+    "parent_exact_head": "971dedcea1c1d984f980f17dd52f39ddd4ed424f",
+    "frozen_before_first_execution": true,
+    "platform_scope": "POSIX_UBUNTU_GITHUB_ACTIONS",
+    "cases": [
+      {"id": "KILL-01", "phase": "STARTING", "expect_recovery": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "KILL-02", "phase": "LISTENER_BOUND", "real_loopback_socket": true, "expect_recovery": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "KILL-03", "phase": "TRANSPORT_ADMITTED", "expect_recovery": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "KILL-04", "phase": "DISPATCH_STARTED", "dispatch_evidence": "STARTED", "expect_recovery": "RECOVERED_TO_CLOSED_AMBIGUOUS"},
+      {"id": "KILL-05", "phase": "DISPATCH_COMPLETED", "dispatch_evidence": "COMPLETED", "expect_recovery": "RECOVERED_TO_CLOSED_AMBIGUOUS"}
+    ],
+    "invariants": {
+      "real_subprocess_termination": true,
+      "signal_semantics": "Popen.kill_on_POSIX",
+      "second_process_reads_persistent_lifecycle": true,
+      "second_process_reads_persistent_dispatch_evidence": true,
+      "automatic_recovery": false,
+      "automatic_restart": false,
+      "automatic_retry": false,
+      "power_loss_tested": false,
+      "filesystem_corruption_tested": false,
+      "cross_host_transport": false,
+      "persistent_daemon": false,
+      "external_effect_authority": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  },
+  "freeze_sha256": "0b815e6864bedcba152add9c17861cb30115f24d772ce3a01b3613868ec9f159"
+}
