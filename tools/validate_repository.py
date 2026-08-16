@@ -8,8 +8,10 @@ from urllib.parse import unquote
 from jsonschema import Draft202012Validator, FormatChecker
 
 from constitution_optimizer import evaluate_trials, load_spec as load_optimizer_spec
+from correction_propagator import load_graph as load_correction_graph, propagate_corrections
 from flow_gate import load_trace as load_flow_trace, run_flow_gate
 from keto_reference import load_case, summarize_case
+from language_invariance import evaluate_invariance, load_bundle as load_language_bundle
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -67,6 +69,16 @@ def validate_schemas() -> dict[str, object]:
     Draft202012Validator(
         schemas["optimizer-trials.schema.json"], format_checker=FormatChecker()
     ).validate(optimizer_spec)
+
+    correction_graph = load_correction_graph(ROOT / "examples" / "correction_graph.json")
+    Draft202012Validator(
+        schemas["correction-graph.schema.json"], format_checker=FormatChecker()
+    ).validate(correction_graph)
+
+    language_bundle = load_language_bundle(ROOT / "examples" / "language_render_bundle.json")
+    Draft202012Validator(
+        schemas["language-render-bundle.schema.json"], format_checker=FormatChecker()
+    ).validate(language_bundle)
 
     return schemas
 
@@ -133,6 +145,41 @@ def validate_performance_invariants() -> None:
         raise ValueError("Optimizer escaped its constitutional boundary")
 
 
+def validate_correction_and_language_invariants() -> None:
+    correction = propagate_corrections(
+        load_correction_graph(ROOT / "examples" / "correction_graph.json")
+    )
+    by_id = {row["presentation_id"]: row for row in correction["presentations"]}
+    if by_id["post-old"]["status"] != "AFFECTED_BY_CORRECTION":
+        raise ValueError("Known old descendant was not marked as affected by correction")
+    if by_id["post-old"]["correction_chain"] != ["corr-A1", "corr-A2"]:
+        raise ValueError("Known old descendant did not preserve its explicit correction chain")
+    if by_id["post-current"]["status"] != "CURRENT":
+        raise ValueError("Current descendant was incorrectly marked by correction propagation")
+    if by_id["unbound-copy"]["status"] != "UNKNOWN_LINEAGE":
+        raise ValueError("Unknown lineage was incorrectly guessed")
+    correction_inv = correction["invariants"]
+    if correction_inv["history_deleted"] or correction_inv["source_text_rewritten"]:
+        raise ValueError("Correction propagator mutated historical evidence")
+    if correction_inv["evidence_authority_delta"] != 0 or correction_inv["mass_effect_budget_delta"] != 0:
+        raise ValueError("Correction propagation created authority or mass effect")
+
+    language = evaluate_invariance(
+        load_language_bundle(ROOT / "examples" / "language_render_bundle.json")
+    )
+    if language["status"] != "PASS":
+        raise ValueError("Frozen uk/ru/en semantic-equivalence fixture must pass")
+    if language["violations"]:
+        raise ValueError("Frozen equivalent multilingual fixture unexpectedly drifted")
+    language_inv = language["invariants"]
+    if language_inv["presentation_prose_compared_as_truth"]:
+        raise ValueError("Language gate must not use prose identity as a truth test")
+    if language_inv["language_identity_used_as_evidence_weight"]:
+        raise ValueError("Language identity must not alter evidence weight")
+    if language_inv["authority_delta"] != 0 or language_inv["mass_effect_budget_delta"] != 0:
+        raise ValueError("Language invariance gate created authority or mass effect")
+
+
 def validate_markdown_links() -> None:
     missing: list[str] = []
     for markdown in sorted(ROOT.rglob("*.md")):
@@ -160,9 +207,10 @@ def main() -> None:
     validate_schemas()
     validate_keto_invariants()
     validate_performance_invariants()
+    validate_correction_and_language_invariants()
     validate_markdown_links()
     print(
-        "Repository contracts, JSON documents, generated KETO/flow/optimizer results, "
+        "Repository contracts, JSON documents, KETO/flow/optimizer/correction/language results, "
         "constitutional invariants, and local documentation links are valid."
     )
 

@@ -1,0 +1,29 @@
+{
+  "schema": "janus.demihead.correction_graph.v1",
+  "graph_id": "CORRECTION_FIXTURE_001",
+  "roots": [
+    {"root_id": "root-news-A", "current_revision_id": "rev-3"},
+    {"root_id": "root-official-B", "current_revision_id": "rev-B1"}
+  ],
+  "corrections": [
+    {
+      "correction_id": "corr-A1",
+      "root_id": "root-news-A",
+      "superseded_revision_id": "rev-1",
+      "replacement_revision_id": "rev-2"
+    },
+    {
+      "correction_id": "corr-A2",
+      "root_id": "root-news-A",
+      "superseded_revision_id": "rev-2",
+      "replacement_revision_id": "rev-3"
+    }
+  ],
+  "presentations": [
+    {"presentation_id": "post-old", "root_id": "root-news-A", "bound_revision_id": "rev-1"},
+    {"presentation_id": "post-mid", "root_id": "root-news-A", "bound_revision_id": "rev-2"},
+    {"presentation_id": "post-current", "root_id": "root-news-A", "bound_revision_id": "rev-3"},
+    {"presentation_id": "official-current", "root_id": "root-official-B", "bound_revision_id": "rev-B1"},
+    {"presentation_id": "unbound-copy", "root_id": null, "bound_revision_id": null}
+  ]
+}

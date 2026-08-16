@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/correction-graph.schema.json",
+  "title": "JANUS DemiHead explicit correction graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "roots", "corrections", "presentations"],
+  "properties": {
+    "schema": {"const": "janus.demihead.correction_graph.v1"},
+    "graph_id": {"type": "string", "minLength": 1},
+    "roots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["root_id", "current_revision_id"],
+        "properties": {
+          "root_id": {"type": "string", "minLength": 1},
+          "current_revision_id": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "corrections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["correction_id", "root_id", "superseded_revision_id", "replacement_revision_id"],
+        "properties": {
+          "correction_id": {"type": "string", "minLength": 1},
+          "root_id": {"type": "string", "minLength": 1},
+          "superseded_revision_id": {"type": "string", "minLength": 1},
+          "replacement_revision_id": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "presentations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["presentation_id", "root_id", "bound_revision_id"],
+        "properties": {
+          "presentation_id": {"type": "string", "minLength": 1},
+          "root_id": {"type": ["string", "null"]},
+          "bound_revision_id": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}
