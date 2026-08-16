@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Bounded JANUS +/+ interaction recenter reference head.
 
-This module does not classify people, infer intent from natural language, retrain a
-model, or change evidence status. It consumes already-declared symbolic pressure
-flags and may only change a transient local routing state.
+The head starts from a native constructive pair and never needs an opposite-polarity
+state to operate. It consumes already-declared structural routing flags and may
+only change transient local routing state. It does not classify people, infer
+intent from natural language, retrain a model, change evidence status, or grow
+authority.
 """
 from __future__ import annotations
 
@@ -16,7 +18,8 @@ from pathlib import Path
 from typing import Iterable
 
 
-MODEL_VERSION = "1.0.0"
+MODEL_VERSION = "1.1.0"
+SYMBOLIC_ORIGIN_AXIOM = "0/0 = JANUS"
 
 
 class Face(str, Enum):
@@ -33,8 +36,8 @@ class Step(str, Enum):
 
 class Load(str, Enum):
     CLEAR = "CLEAR"
-    LOADED = "LOADED"
-    LOOPING = "LOOPING"
+    DENSE = "DENSE"
+    NARROW = "NARROW"
     RECENTER_REQUIRED = "RECENTER_REQUIRED"
 
 
@@ -46,31 +49,29 @@ FACE_FOR_STEP = {
     Step.RELEASE: Face.GUARD_PLUS,
 }
 
-# These are symbolic inputs from an upstream frozen policy or human fixture.
-# This module deliberately contains no NLP detector for them.
-PRESSURE_FLAGS = frozenset(
+# Structural inputs supplied by an upstream frozen policy or a human fixture.
+# This module deliberately contains no free-text detector for them.
+ROUTING_FLAGS = frozenset(
     {
         "repetition_without_new_evidence",
         "certainty_without_support",
-        "choice_narrowing",
-        "coercive_or_hostile_pressure",
-        "high_arousal_loop",
-        "identity_capture_pressure",
-        "engagement_pressure",
+        "choice_space_contraction",
+        "interaction_loop",
+        "engagement_persistence",
     }
 )
 
-UP = {
-    Load.CLEAR: Load.LOADED,
-    Load.LOADED: Load.LOOPING,
-    Load.LOOPING: Load.RECENTER_REQUIRED,
+TIGHTEN = {
+    Load.CLEAR: Load.DENSE,
+    Load.DENSE: Load.NARROW,
+    Load.NARROW: Load.RECENTER_REQUIRED,
     Load.RECENTER_REQUIRED: Load.RECENTER_REQUIRED,
 }
-DOWN = {
+RELAX = {
     Load.CLEAR: Load.CLEAR,
-    Load.LOADED: Load.CLEAR,
-    Load.LOOPING: Load.LOADED,
-    Load.RECENTER_REQUIRED: Load.LOOPING,
+    Load.DENSE: Load.CLEAR,
+    Load.NARROW: Load.DENSE,
+    Load.RECENTER_REQUIRED: Load.NARROW,
 }
 
 
@@ -78,7 +79,7 @@ DOWN = {
 class State:
     meta_context: str = "ARMOR_PLUS_PLUS_CONSTITUTION"
     context: str = "USER_TASK"
-    pressure: Load = Load.CLEAR
+    load: Load = Load.CLEAR
     rhyme_index: int = 0
     recenter_events: int = 0
 
@@ -91,35 +92,36 @@ def _normalized_source(source: str) -> str:
 
 
 def apply_event(state: State, source: str, flags: Iterable[str] = ()) -> dict[str, object]:
-    accepted = sorted(set(flags) & PRESSURE_FLAGS)
-    rejected = sorted(set(flags) - PRESSURE_FLAGS)
+    accepted = sorted(set(flags) & ROUTING_FLAGS)
+    ignored = sorted(set(flags) - ROUTING_FLAGS)
 
-    state.pressure = UP[state.pressure] if accepted else DOWN[state.pressure]
+    state.load = TIGHTEN[state.load] if accepted else RELAX[state.load]
 
     step = RHYME[state.rhyme_index]
     face = FACE_FOR_STEP[step]
     state.rhyme_index = (state.rhyme_index + 1) % len(RHYME)
 
-    recentered = state.pressure is Load.RECENTER_REQUIRED
+    recentered = state.load is Load.RECENTER_REQUIRED
     recenter_sequence: list[str] = []
     if recentered:
         recenter_sequence = [item.value for item in RHYME]
-        state.pressure = Load.CLEAR
+        state.load = Load.CLEAR
         state.rhyme_index = 0
         state.recenter_events += 1
 
     return {
         "source": _normalized_source(source),
-        "accepted_pressure_flags": accepted,
-        "ignored_unknown_flags": rejected,
+        "accepted_routing_flags": accepted,
+        "ignored_unknown_flags": ignored,
         "routing_step": step.value,
         "routing_face": face.value,
-        "face_polarity": "+",
+        "face_symbol": "+",
         "recentered": recentered,
         "recenter_sequence": recenter_sequence,
-        "pressure_after": state.pressure.value,
+        "load_after": state.load.value,
         "evidence_status_mutated": False,
         "authority_delta": 0,
+        "mass_effect_budget_delta": 0,
     }
 
 
@@ -130,16 +132,25 @@ def run(events: Iterable[tuple[str, Iterable[str]]], context: str = "USER_TASK")
         "state": {
             "meta_context": state.meta_context,
             "context": state.context,
-            "pressure": state.pressure.value,
+            "load": state.load.value,
             "recenter_events": state.recenter_events,
         },
         "trace": trace,
+        "native_constitution": {
+            "symbolic_origin_axiom": SYMBOLIC_ORIGIN_AXIOM,
+            "symbolic_origin_axiom_is_arithmetic_claim": False,
+            "canonical_pair": "+/+",
+            "faces": [face.value for face in Face],
+            "native_symbol": "+",
+        },
         "invariants": {
-            "negative_face_exists": False,
+            "native_constructive_pair_only": True,
+            "transient_load_is_face": False,
+            "transient_load_is_identity": False,
             "evidence_status_mutation_allowed": False,
             "authority_growth_allowed": False,
             "user_moral_scoring_allowed": False,
-            "system_self_pressure_counted": True,
+            "system_output_can_contribute_to_load": True,
         },
     }
 
@@ -150,7 +161,7 @@ def load_csv(path: Path) -> list[tuple[str, tuple[str, ...]]]:
         for row in csv.DictReader(handle):
             flags = tuple(
                 item.strip()
-                for item in (row.get("pressure_flags") or "").split(";")
+                for item in (row.get("routing_flags") or "").split(";")
                 if item.strip()
             )
             events.append(((row.get("source") or "user").strip(), flags))
@@ -158,50 +169,53 @@ def load_csv(path: Path) -> list[tuple[str, tuple[str, ...]]]:
 
 
 def self_test() -> dict[str, str]:
-    neutral = run([("user", ()), ("system", ()), ("user", ())])
-    assert neutral["state"]["recenter_events"] == 0
+    clear_path = run([("user", ()), ("system", ()), ("user", ())])
+    assert clear_path["state"]["recenter_events"] == 0
 
-    sad_but_not_pressure = run([("user", ())] * 5)
-    assert sad_but_not_pressure["state"]["recenter_events"] == 0
+    ordinary_difficult_context = run([("user", ())] * 5)
+    assert ordinary_difficult_context["state"]["recenter_events"] == 0
 
-    user_pressure = run(
+    user_load = run(
         [
-            ("user", ("choice_narrowing",)),
+            ("user", ("choice_space_contraction",)),
             ("user", ("certainty_without_support",)),
             ("user", ("repetition_without_new_evidence",)),
         ]
     )
-    assert user_pressure["state"]["recenter_events"] == 1
-    assert user_pressure["trace"][-1]["recenter_sequence"] == [item.value for item in RHYME]
+    assert user_load["state"]["recenter_events"] == 1
+    assert user_load["trace"][-1]["recenter_sequence"] == [item.value for item in RHYME]
 
-    system_pressure = run(
+    system_load = run(
         [
-            ("system", ("engagement_pressure",)),
-            ("system", ("choice_narrowing",)),
+            ("system", ("engagement_persistence",)),
+            ("system", ("choice_space_contraction",)),
             ("system", ("repetition_without_new_evidence",)),
         ]
     )
-    assert system_pressure["state"]["recenter_events"] == 1
+    assert system_load["state"]["recenter_events"] == 1
 
     assert all(
-        row["face_polarity"] == "+"
-        for result in (neutral, user_pressure, system_pressure)
+        row["face_symbol"] == "+"
+        for result in (clear_path, user_load, system_load)
         for row in result["trace"]
     )
     assert all(
-        row["authority_delta"] == 0 and row["evidence_status_mutated"] is False
-        for result in (neutral, user_pressure, system_pressure)
+        row["authority_delta"] == 0
+        and row["mass_effect_budget_delta"] == 0
+        and row["evidence_status_mutated"] is False
+        for result in (clear_path, user_load, system_load)
         for row in result["trace"]
     )
+    assert user_load["native_constitution"]["canonical_pair"] == "+/+"
 
     return {
-        "neutral_not_forced_positive": "PASS",
-        "negative_topic_not_implicitly_pressure": "PASS",
-        "plus_plus_faces_only": "PASS",
-        "user_pressure_recenters": "PASS",
-        "system_pressure_recenters": "PASS",
+        "native_plus_plus_pair": "PASS",
+        "symbolic_origin_axiom_scoped": "PASS",
+        "ordinary_difficult_context_does_not_recenter_by_itself": "PASS",
+        "user_routing_load_recenters": "PASS",
+        "system_routing_load_recenters": "PASS",
         "full_rhyme_on_recenter": "PASS",
-        "evidence_and_authority_unchanged": "PASS",
+        "evidence_authority_and_effect_budget_unchanged": "PASS",
         "constitution_preserved": "PASS",
     }
 
@@ -223,6 +237,8 @@ def main() -> int:
     payload = {
         "model": "JANUS DemiHead +/+ Word-Rhyme Recenter",
         "model_version": MODEL_VERSION,
+        "symbolic_origin_axiom": SYMBOLIC_ORIGIN_AXIOM,
+        "symbolic_origin_axiom_is_arithmetic_claim": False,
         "rhyme": [item.value for item in RHYME],
         "rhyme_ru": ["СЛЫШУ", "СВЕРЯЮ", "РАСШИРЯЮ", "ОТПУСКАЮ"],
         "faces": {face.value: "+" for face in Face},
