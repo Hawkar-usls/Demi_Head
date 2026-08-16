@@ -18,13 +18,27 @@ class NexusLocalTransportTests(unittest.TestCase):
     KEY = b"unit-test-only-shared-key"
     ISSUED = 1_800_000_000_000
 
-    def principals(self, *, enabled=True, sender_id="DEMIHEAD.LOCAL", allowed=None):
+    def principals(
+        self,
+        *,
+        enabled=True,
+        revoked=False,
+        sender_id="DEMIHEAD.LOCAL",
+        allowed=None,
+        epoch=1,
+        not_before_ms=1_700_000_000_000,
+        not_after_ms=1_900_000_000_000,
+    ):
         return {
-            "TEST_KEY": {
+            "TEST_KEY_E1": {
                 "key": self.KEY,
                 "sender_id": sender_id,
                 "allowed_source_heads": allowed or ["GUARDIAN"],
                 "enabled": enabled,
+                "revoked": revoked,
+                "epoch": epoch,
+                "not_before_ms": not_before_ms,
+                "not_after_ms": not_after_ms,
             }
         }
 
@@ -48,18 +62,26 @@ class NexusLocalTransportTests(unittest.TestCase):
             },
         }
 
-    def frame(self, *, sender_id="DEMIHEAD.LOCAL", envelope=None, nonce="00112233445566778899aabbccddeeff"):
+    def frame(
+        self,
+        *,
+        sender_id="DEMIHEAD.LOCAL",
+        envelope=None,
+        nonce="00112233445566778899aabbccddeeff",
+        key_epoch=1,
+    ):
         return build_frame(
             envelope or self.envelope(),
             sender_id=sender_id,
-            key_id="TEST_KEY",
+            key_id="TEST_KEY_E1",
+            key_epoch=key_epoch,
             key=self.KEY,
             issued_at_ms=self.ISSUED,
             nonce=nonce,
             ttl_ms=30_000,
         )
 
-    def test_valid_authenticated_frame_is_principal_bound_but_not_delivered(self):
+    def test_valid_authenticated_frame_is_epoch_bound_but_not_delivered(self):
         admission = validate_frame(
             self.frame(),
             principal_lookup=self.principals(),
@@ -70,6 +92,9 @@ class NexusLocalTransportTests(unittest.TestCase):
         self.assertTrue(admission["authentication"]["hmac_verified"])
         self.assertTrue(admission["authentication"]["key_bound_sender_verified"])
         self.assertTrue(admission["authentication"]["key_bound_source_head_verified"])
+        self.assertTrue(admission["authentication"]["key_epoch_verified"])
+        self.assertTrue(admission["authentication"]["key_validity_window_verified"])
+        self.assertTrue(admission["authentication"]["key_revocation_checked"])
         self.assertFalse(admission["authentication"]["human_identity_established"])
         self.assertFalse(admission["authentication"]["world_effect_authorization_established"])
         self.assertTrue(admission["replay_protection"]["nonce_consumed_atomically"])
@@ -77,6 +102,40 @@ class NexusLocalTransportTests(unittest.TestCase):
         self.assertFalse(admission["control"]["delivery_performed"])
         self.assertFalse(admission["control"]["target_execution_performed"])
         self.assertFalse(admission["control"]["network_io_performed"])
+
+    def test_wrong_key_epoch_is_rejected(self):
+        with self.assertRaises(ValueError):
+            validate_frame(
+                self.frame(key_epoch=2),
+                principal_lookup=self.principals(),
+                replay_guard=MemoryReplayGuard(),
+                now_ms=self.ISSUED + 100,
+            )
+
+    def test_revoked_key_is_rejected(self):
+        with self.assertRaises(ValueError):
+            validate_frame(
+                self.frame(),
+                principal_lookup=self.principals(revoked=True),
+                replay_guard=MemoryReplayGuard(),
+                now_ms=self.ISSUED + 100,
+            )
+
+    def test_key_validity_window_is_enforced(self):
+        with self.assertRaises(ValueError):
+            validate_frame(
+                self.frame(),
+                principal_lookup=self.principals(not_before_ms=self.ISSUED + 1),
+                replay_guard=MemoryReplayGuard(),
+                now_ms=self.ISSUED + 100,
+            )
+        with self.assertRaises(ValueError):
+            validate_frame(
+                self.frame(),
+                principal_lookup=self.principals(not_after_ms=self.ISSUED),
+                replay_guard=MemoryReplayGuard(),
+                now_ms=self.ISSUED + 100,
+            )
 
     def test_valid_key_cannot_impersonate_sender(self):
         frame = self.frame(sender_id="OTHER", nonce="11112222333344445555666677778888")
@@ -157,6 +216,7 @@ class NexusLocalTransportTests(unittest.TestCase):
         frame = self.frame()
         for mutate in (
             lambda value: value.__setitem__("sender_id", "OTHER"),
+            lambda value: value.__setitem__("key_epoch", 2),
             lambda value: value["envelope"].__setitem__("target_head", "REGISTRY"),
             lambda value: value["transport_control"].__setitem__("authority_delta", 1),
         ):
@@ -189,6 +249,8 @@ class NexusLocalTransportTests(unittest.TestCase):
             queue_capacity=4,
         )
         self.assertEqual(result["status"], "HOLD_BACKPRESSURE")
+        self.assertTrue(result["key_policy"]["valid_now"])
+        self.assertEqual(result["key_policy"]["epoch"], 1)
         self.assertFalse(result["control"]["automatic_retry_permitted"])
         self.assertFalse(result["control"]["delivery_performed"])
         self.assertFalse(result["replay_protection"]["nonce_consumed"])
