@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,12 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
-from nexus_local_transport import (  # noqa: E402
-    MAX_FRAME_BYTES,
-    build_frame,
-    self_test,
-    validate_frame,
-)
+from nexus_local_transport import MAX_FRAME_BYTES, build_frame, self_test, validate_frame  # noqa: E402
+from nexus_replay_ledger import MemoryReplayGuard, SqliteReplayGuard  # noqa: E402
 
 
 class NexusLocalTransportTests(unittest.TestCase):
@@ -66,8 +63,8 @@ class NexusLocalTransportTests(unittest.TestCase):
         admission = validate_frame(
             self.frame(),
             principal_lookup=self.principals(),
+            replay_guard=MemoryReplayGuard(),
             now_ms=self.ISSUED + 100,
-            replay_cache=set(),
         )
         self.assertEqual(admission["status"], "AUTHENTICATED_FRAME_ADMITTED")
         self.assertTrue(admission["authentication"]["hmac_verified"])
@@ -75,48 +72,72 @@ class NexusLocalTransportTests(unittest.TestCase):
         self.assertTrue(admission["authentication"]["key_bound_source_head_verified"])
         self.assertFalse(admission["authentication"]["human_identity_established"])
         self.assertFalse(admission["authentication"]["world_effect_authorization_established"])
+        self.assertTrue(admission["replay_protection"]["nonce_consumed_atomically"])
+        self.assertFalse(admission["replay_protection"]["persistent"])
         self.assertFalse(admission["control"]["delivery_performed"])
         self.assertFalse(admission["control"]["target_execution_performed"])
         self.assertFalse(admission["control"]["network_io_performed"])
-        self.assertFalse(admission["control"]["persistent_replay_ledger_used"])
 
     def test_valid_key_cannot_impersonate_sender(self):
         frame = self.frame(sender_id="OTHER", nonce="11112222333344445555666677778888")
         with self.assertRaises(ValueError):
-            validate_frame(frame, principal_lookup=self.principals(), now_ms=self.ISSUED + 100)
+            validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED + 100)
 
     def test_valid_key_cannot_impersonate_source_head(self):
         envelope = self.envelope()
-        envelope.update({
-            "source_head": "FUNDAMENTUM",
-            "target_head": "GUARDIAN",
-            "payload_kind": "HOLD_RECEIPT",
-        })
+        envelope.update({"source_head": "FUNDAMENTUM", "target_head": "GUARDIAN", "payload_kind": "HOLD_RECEIPT"})
         frame = self.frame(envelope=envelope, nonce="99990000111122223333444455556666")
         with self.assertRaises(ValueError):
-            validate_frame(frame, principal_lookup=self.principals(), now_ms=self.ISSUED + 100)
+            validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED + 100)
 
     def test_disabled_principal_is_rejected(self):
         with self.assertRaises(ValueError):
             validate_frame(
                 self.frame(),
                 principal_lookup=self.principals(enabled=False),
+                replay_guard=MemoryReplayGuard(),
                 now_ms=self.ISSUED + 100,
             )
 
-    def test_replay_is_rejected(self):
+    def test_replay_is_rejected_atomically(self):
         frame = self.frame()
-        cache = set()
-        validate_frame(frame, principal_lookup=self.principals(), now_ms=self.ISSUED + 100, replay_cache=cache)
+        guard = MemoryReplayGuard()
+        validate_frame(frame, principal_lookup=self.principals(), replay_guard=guard, now_ms=self.ISSUED + 100)
         with self.assertRaises(ValueError):
-            validate_frame(frame, principal_lookup=self.principals(), now_ms=self.ISSUED + 200, replay_cache=cache)
+            validate_frame(frame, principal_lookup=self.principals(), replay_guard=guard, now_ms=self.ISSUED + 200)
+
+    def test_sqlite_replay_guard_survives_restart(self):
+        frame = self.frame()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "replay.db"
+            first = SqliteReplayGuard(path)
+            admission = validate_frame(
+                frame,
+                principal_lookup=self.principals(),
+                replay_guard=first,
+                now_ms=self.ISSUED + 100,
+            )
+            self.assertTrue(admission["replay_protection"]["persistent"])
+            self.assertEqual(admission["replay_protection"]["guard_kind"], "SQLITE")
+            restarted = SqliteReplayGuard(path)
+            with self.assertRaises(ValueError):
+                validate_frame(
+                    frame,
+                    principal_lookup=self.principals(),
+                    replay_guard=restarted,
+                    now_ms=self.ISSUED + 200,
+                )
+
+    def test_replay_guard_is_required_for_admission(self):
+        with self.assertRaises(ValueError):
+            validate_frame(self.frame(), principal_lookup=self.principals(), replay_guard=None, now_ms=self.ISSUED + 100)
 
     def test_stale_and_future_frames_are_rejected(self):
         frame = self.frame()
         with self.assertRaises(ValueError):
-            validate_frame(frame, principal_lookup=self.principals(), now_ms=self.ISSUED + 30_001)
+            validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED + 30_001)
         with self.assertRaises(ValueError):
-            validate_frame(frame, principal_lookup=self.principals(), now_ms=self.ISSUED - 5_001)
+            validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED - 5_001)
 
     def test_authenticated_tamper_is_rejected(self):
         frame = self.frame()
@@ -128,7 +149,7 @@ class NexusLocalTransportTests(unittest.TestCase):
             tampered = copy.deepcopy(frame)
             mutate(tampered)
             with self.assertRaises(ValueError):
-                validate_frame(tampered, principal_lookup=self.principals(), now_ms=self.ISSUED + 100)
+                validate_frame(tampered, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED + 100)
 
     def test_invalid_nexus_route_cannot_be_framed(self):
         envelope = self.envelope()
@@ -142,18 +163,29 @@ class NexusLocalTransportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.frame(envelope=envelope, nonce="abcdefabcdefabcdefabcdefabcdefab")
 
-    def test_backpressure_holds_without_retry_permission(self):
+    def test_backpressure_holds_without_consuming_nonce_or_retry_permission(self):
+        guard = MemoryReplayGuard()
         result = validate_frame(
             self.frame(),
             principal_lookup=self.principals(),
+            replay_guard=guard,
             now_ms=self.ISSUED + 100,
-            replay_cache=set(),
             queue_depth=4,
             queue_capacity=4,
         )
         self.assertEqual(result["status"], "HOLD_BACKPRESSURE")
         self.assertFalse(result["control"]["automatic_retry_permitted"])
         self.assertFalse(result["control"]["delivery_performed"])
+        self.assertFalse(result["control"]["replay_nonce_consumed"])
+        admitted = validate_frame(
+            self.frame(),
+            principal_lookup=self.principals(),
+            replay_guard=guard,
+            now_ms=self.ISSUED + 200,
+            queue_depth=0,
+            queue_capacity=4,
+        )
+        self.assertEqual(admitted["status"], "AUTHENTICATED_FRAME_ADMITTED")
 
     def test_self_test_passes(self):
         self.assertEqual(self_test()["status"], "PASS")
