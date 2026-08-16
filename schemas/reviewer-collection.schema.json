@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/reviewer-collection.schema.json",
+  "title": "JANUS DemiHead reviewer collection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "frozen_package_id", "required_reviewers", "review_fields", "reviewers"],
+  "properties": {
+    "schema": {"const": "janus.demihead.reviewer_collection.v1"},
+    "case_id": {"type": "string", "minLength": 1},
+    "frozen_package_id": {"type": "string", "minLength": 1},
+    "required_reviewers": {"type": "integer", "minimum": 2},
+    "review_fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reviewer_id",
+          "attestation_id",
+          "frozen_package_id",
+          "verifier_status",
+          "declared_independent",
+          "labels_frozen_before_model_reveal",
+          "labels"
+        ],
+        "properties": {
+          "reviewer_id": {"type": "string", "minLength": 1},
+          "attestation_id": {"type": "string", "minLength": 1},
+          "frozen_package_id": {"type": "string", "minLength": 1},
+          "verifier_status": {"type": "string"},
+          "declared_independent": {"type": "boolean"},
+          "labels_frozen_before_model_reveal": {"type": "boolean"},
+          "labels": {"type": "object", "minProperties": 1}
+        }
+      }
+    }
+  }
+}
