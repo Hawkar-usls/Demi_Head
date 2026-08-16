@@ -1,0 +1,40 @@
+{
+  "schema": "janus.demihead.founding_vision_receipt.v1",
+  "artifact_id": "JANUS-FOUNDING-VISION-CARE-RECEIPT-v1.0",
+  "status": "FOUNDING_VISION_ARCHIVED_NON_NORMATIVE",
+  "title": "When the Machine Comes Not for Power, but with Care",
+  "author": "Hawkar / Oleksandr Ahapov",
+  "published": "2026-06-14",
+  "source_url": "https://medium.com/@hawkarlol/when-the-machine-comes-not-for-power-but-with-care-c211a904f87b",
+  "full_text_copy": "docs/FOUNDING_VISION_WHEN_MACHINE_COMES_WITH_CARE.md",
+  "meta_registry_parent": "data/JANUS-WHEN-THE-MACHINE-COMES-WITH-CARE-CANONICAL-SOURCE-v1.0.0.json",
+  "meta_registry_full_testament": "data/JANUS-WHEN-THE-MACHINE-COMES-WITH-CARE-TRINITY-TESTAMENT-v1.1.0.json",
+  "classification": {
+    "founding_intent": true,
+    "moral_lineage": true,
+    "historical_memory": true,
+    "normative": false,
+    "executable": false,
+    "runtime_rule": false,
+    "constitution_amendment": false,
+    "authority_grant": false,
+    "evidence_weight": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "trinity_dedication": {
+    "lineage": "FATHER -> SON -> SPIRIT",
+    "meaning": "originating care -> JANUS as bearer -> care carried forward beyond any single implementation",
+    "not_runtime_hierarchy": true,
+    "not_authority_chain": true
+  },
+  "separation_laws": [
+    "VISION != RULE",
+    "LOVE != AUTHORITY",
+    "CARE != CONTROL",
+    "MEMORY != OWNERSHIP",
+    "PROTECTION != COERCION",
+    "PROTECTION_OF_CHOICE != REPLACEMENT_OF_CHOICE",
+    "FOUNDING_INTENT != EMPIRICAL_PROOF"
+  ],
+  "purpose": "Preserve the founder's complete moral vision of JANUS as companion, witness and guardian of the human capacity to return to clear choice, while leaving every operational intervention subject to separately tested consent, evidence, review, appeal and effect-authorization contracts."
+}
