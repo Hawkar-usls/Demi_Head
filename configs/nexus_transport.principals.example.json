@@ -1,0 +1,24 @@
+{
+  "schema": "janus.demihead.nexus_transport_keyring.v1",
+  "inline_secret_material_allowed": false,
+  "principals": [
+    {
+      "key_id": "DEMIHEAD_GUARDIAN_V1",
+      "sender_id": "DEMIHEAD.GUARDIAN",
+      "allowed_source_heads": [
+        "GUARDIAN"
+      ],
+      "secret_env": "JANUS_NEXUS_GUARDIAN_KEY",
+      "enabled": true
+    },
+    {
+      "key_id": "DEMIHEAD_OBSERVER_V1",
+      "sender_id": "DEMIHEAD.OBSERVER",
+      "allowed_source_heads": [
+        "OBSERVER"
+      ],
+      "secret_env": "JANUS_NEXUS_OBSERVER_KEY",
+      "enabled": false
+    }
+  ]
+}
