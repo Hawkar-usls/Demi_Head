@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/nexus-envelope.schema.json",
+  "title": "JANUS DemiHead Nexus Habitat Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract",
+    "envelope_id",
+    "source_head",
+    "target_head",
+    "payload_kind",
+    "payload_ref",
+    "trace",
+    "control"
+  ],
+  "properties": {
+    "schema": {
+      "const": "janus.demihead.nexus_envelope.v1"
+    },
+    "contract": {
+      "const": "JANUS_NEXUS_HABITAT_V1"
+    },
+    "envelope_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "source_head": {
+      "enum": [
+        "PORTAL",
+        "OBSERVER",
+        "HRAIN",
+        "INAIHR",
+        "BICAMERAL_BRIDGE",
+        "FUNDAMENTUM",
+        "GUARDIAN",
+        "RELEASE_CONTROL",
+        "REGISTRY"
+      ]
+    },
+    "target_head": {
+      "enum": [
+        "PORTAL",
+        "OBSERVER",
+        "HRAIN",
+        "INAIHR",
+        "BICAMERAL_BRIDGE",
+        "FUNDAMENTUM",
+        "GUARDIAN",
+        "RELEASE_CONTROL",
+        "REGISTRY"
+      ]
+    },
+    "payload_kind": {
+      "enum": [
+        "ROUTE_REQUEST",
+        "ROUTE_RECEIPT",
+        "TELEMETRY_SAMPLE",
+        "OBSERVATION_SIGNAL",
+        "CONTEXT_REQUEST",
+        "HEMISPHERE_PACKET",
+        "BICAMERAL_RESULT",
+        "EVIDENCE_CANDIDATE",
+        "EVIDENCE_RECEIPT",
+        "HOLD_RECEIPT",
+        "GUARDIAN_RESULT",
+        "RELEASE_RECEIPT",
+        "REGISTRY_RECEIPT"
+      ]
+    },
+    "payload_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256"],
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "trace": {
+      "type": "array",
+      "maxItems": 7,
+      "items": {
+        "enum": [
+          "PORTAL",
+          "OBSERVER",
+          "HRAIN",
+          "INAIHR",
+          "BICAMERAL_BRIDGE",
+          "FUNDAMENTUM",
+          "GUARDIAN",
+          "RELEASE_CONTROL",
+          "REGISTRY"
+        ]
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "read_only_transfer",
+        "direct_workspace_mutation",
+        "external_effect_permitted",
+        "authority_delta",
+        "mass_effect_budget_delta",
+        "ttl_hops"
+      ],
+      "properties": {
+        "read_only_transfer": {"const": true},
+        "direct_workspace_mutation": {"const": false},
+        "external_effect_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0},
+        "ttl_hops": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        }
+      }
+    }
+  }
+}
