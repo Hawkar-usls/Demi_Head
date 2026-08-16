@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Bounded JANUS +/+ interaction recenter reference head.
 
-The head starts from a native constructive pair and never needs an opposite-polarity
-state to operate. It consumes already-declared structural routing flags and may
-only change transient local routing state. It does not classify people, infer
-intent from natural language, retrain a model, change evidence status, or grow
-authority.
+The head starts from the native constructive `+/+` pair. It consumes already-
+declared structural routing flags and may only change transient local routing
+state. It does not classify people, infer intent from natural language, retrain a
+model, change evidence status, or grow authority.
 """
 from __future__ import annotations
 
