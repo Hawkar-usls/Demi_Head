@@ -106,6 +106,20 @@ class NexusLocalTransportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_frame(frame, principal_lookup=self.principals(), replay_guard=guard, now_ms=self.ISSUED + 200)
 
+    def test_consumed_replay_is_rejected_before_backpressure(self):
+        frame = self.frame()
+        guard = MemoryReplayGuard()
+        validate_frame(frame, principal_lookup=self.principals(), replay_guard=guard, now_ms=self.ISSUED + 100)
+        with self.assertRaises(ValueError):
+            validate_frame(
+                frame,
+                principal_lookup=self.principals(),
+                replay_guard=guard,
+                now_ms=self.ISSUED + 200,
+                queue_depth=4,
+                queue_capacity=4,
+            )
+
     def test_sqlite_replay_guard_survives_restart(self):
         frame = self.frame()
         with tempfile.TemporaryDirectory() as directory:
@@ -135,7 +149,7 @@ class NexusLocalTransportTests(unittest.TestCase):
     def test_stale_and_future_frames_are_rejected(self):
         frame = self.frame()
         with self.assertRaises(ValueError):
-            validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED + 30_001)
+            validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED + 30_000)
         with self.assertRaises(ValueError):
             validate_frame(frame, principal_lookup=self.principals(), replay_guard=MemoryReplayGuard(), now_ms=self.ISSUED - 5_001)
 
@@ -165,8 +179,9 @@ class NexusLocalTransportTests(unittest.TestCase):
 
     def test_backpressure_holds_without_consuming_nonce_or_retry_permission(self):
         guard = MemoryReplayGuard()
+        frame = self.frame(nonce="abcdef00112233445566778899abcdef")
         result = validate_frame(
-            self.frame(),
+            frame,
             principal_lookup=self.principals(),
             replay_guard=guard,
             now_ms=self.ISSUED + 100,
@@ -176,9 +191,9 @@ class NexusLocalTransportTests(unittest.TestCase):
         self.assertEqual(result["status"], "HOLD_BACKPRESSURE")
         self.assertFalse(result["control"]["automatic_retry_permitted"])
         self.assertFalse(result["control"]["delivery_performed"])
-        self.assertFalse(result["control"]["replay_nonce_consumed"])
+        self.assertFalse(result["replay_protection"]["nonce_consumed"])
         admitted = validate_frame(
-            self.frame(),
+            frame,
             principal_lookup=self.principals(),
             replay_guard=guard,
             now_ms=self.ISSUED + 200,
