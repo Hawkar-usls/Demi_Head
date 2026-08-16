@@ -1,0 +1,31 @@
+{
+  "schema": "janus.demihead.fundamentum_commit_case.v1",
+  "case_id": "FUNDAMENTUM-MODEL-ONLY-WINNER",
+  "candidate_manifest": [
+    "FACE-A"
+  ],
+  "proposed_commit_id": "FACE-A",
+  "witness_ledger": [
+    {
+      "candidate_id": "FACE-A",
+      "terminal": "retained",
+      "material": true,
+      "provenance": {
+        "generator": "model"
+      },
+      "epistemic_case": {
+        "schema": "janus.demihead.epistemic_execution_case.v1",
+        "case_id": "FUNDAMENTUM-MODEL-ONLY-HASH",
+        "claim_type": "EXACT_COMPUTATION",
+        "claim": "The generated hash was actually verified",
+        "claimed_value": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "evidence": [
+          {
+            "kind": "model_output",
+            "text": "I verified the hash and it matches."
+          }
+        ]
+      }
+    }
+  ]
+}
