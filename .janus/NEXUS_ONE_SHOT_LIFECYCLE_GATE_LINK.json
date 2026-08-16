@@ -1,0 +1,41 @@
+{
+  "schema": "janus.nexus.one_shot_lifecycle_gate_link.v1",
+  "contract": "JANUS_NEXUS_ONE_SHOT_LIFECYCLE_GATE_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_exchange_authority": {
+    "artifact": "JANUS-NEXUS-CURRENT-LOOPBACK-EXCHANGE-AUTHORITY-v1",
+    "certified_exact_head": "2cc74bccae6105364dd1eab95d9cb95105c95620"
+  },
+  "implementation": {
+    "gate": "tools/nexus_loopback_lifecycle_gate.py",
+    "tests": "tests/test_nexus_loopback_lifecycle_gate.py",
+    "frozen_holdout": "fixtures/nexus_one_shot_lifecycle_holdout_v1.json",
+    "policy_schema": "schemas/nexus-one-shot-lifecycle-policy.schema.json",
+    "outcome_schema": "schemas/nexus-one-shot-lifecycle-outcome.schema.json",
+    "documentation": "docs/NEXUS_ONE_SHOT_LIFECYCLE_GATE.md"
+  },
+  "frozen_holdout_sha256": "21b49045bea3853f53112f1ec4917d40b37a9fc4a13ce63dea80a19bb09e1dd6",
+  "security_properties_under_test": {
+    "explicit_start_only": true,
+    "persistent_single_instance_lease": true,
+    "nonterminal_crash_restart_block": true,
+    "bounded_accept_read_write_timeouts": true,
+    "replay_store_failure_fail_closed": true,
+    "completed_dispatch_lost_receipt_preserved_as_ambiguous": true,
+    "manual_ack_does_not_clear_dispatch_intent_guard": true
+  },
+  "hard_limits": {
+    "automatic_start": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "general_network_service": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_LIFECYCLE_ADVERSARIAL_CORPUS",
+  "next_gate_after_promotion": "PHASE_BOUNDARY_CRASH_INJECTION_AND_OPERATOR_RECOVERY_SEMANTICS"
+}

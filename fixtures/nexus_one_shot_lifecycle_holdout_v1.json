@@ -1,0 +1,32 @@
+{
+  "freeze_payload": {
+    "cases": [
+      {"expect": "HOLD_STARTUP_DISABLED", "id": "LIFE-01", "name": "startup disabled"},
+      {"expect": "HOLD_LIFECYCLE_BUSY_OR_AMBIGUOUS", "id": "LIFE-02", "name": "concurrent startup lease collision"},
+      {"expect": "HOLD_LIFECYCLE_BUSY_OR_AMBIGUOUS", "id": "LIFE-03", "name": "crash-like nonterminal restart attempt"},
+      {"expect": "HOLD_ACCEPT_TIMEOUT", "id": "LIFE-04", "name": "accept timeout"},
+      {"expect": "HOLD_WIRE_PROTOCOL", "id": "LIFE-05", "name": "read timeout"},
+      {"expect": "HOLD_TRANSPORT_REJECTED", "id": "LIFE-06", "name": "replay store outage"},
+      {"expect": "CLOSED_AMBIGUOUS", "id": "LIFE-07", "name": "dispatch completed but receipt send failed"},
+      {"expect": "HOLD_DUPLICATE_INTENT", "id": "LIFE-08", "name": "manual ambiguity acknowledgment does not bypass intent guard"},
+      {"expect": "CLOSED_CLEAN", "id": "LIFE-09", "name": "clean authenticated roundtrip"}
+    ],
+    "frozen_before_first_execution": true,
+    "invariants": {
+      "authority_delta": 0,
+      "automatic_restart_permitted": false,
+      "automatic_retry_permitted": false,
+      "automatic_start_permitted": false,
+      "cross_host_transport": false,
+      "external_effect_authority": false,
+      "general_network_service": false,
+      "mass_effect_budget_delta": 0,
+      "max_connections": 1,
+      "max_requests_per_connection": 1,
+      "persistent_daemon": false
+    },
+    "parent_exact_head": "2cc74bccae6105364dd1eab95d9cb95105c95620",
+    "schema": "janus.demihead.nexus_one_shot_lifecycle_holdout.v1"
+  },
+  "freeze_sha256": "21b49045bea3853f53112f1ec4917d40b37a9fc4a13ce63dea80a19bb09e1dd6"
+}

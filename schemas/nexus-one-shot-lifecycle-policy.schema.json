@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-one-shot-lifecycle-policy.schema.json",
+  "title": "JANUS Nexus one-shot lifecycle policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "startup_enabled", "automatic_start_permitted", "automatic_restart_permitted", "accept_timeout_ms", "read_timeout_ms", "write_timeout_ms", "max_connections", "max_requests_per_connection", "external_effect_permitted", "authority_delta", "mass_effect_budget_delta"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_one_shot_lifecycle_policy.v1"},
+    "startup_enabled": {"type": "boolean"},
+    "automatic_start_permitted": {"const": false},
+    "automatic_restart_permitted": {"const": false},
+    "accept_timeout_ms": {"type": "integer", "minimum": 1, "maximum": 5000},
+    "read_timeout_ms": {"type": "integer", "minimum": 1, "maximum": 5000},
+    "write_timeout_ms": {"type": "integer", "minimum": 1, "maximum": 5000},
+    "max_connections": {"const": 1},
+    "max_requests_per_connection": {"const": 1},
+    "external_effect_permitted": {"const": false},
+    "authority_delta": {"const": 0},
+    "mass_effect_budget_delta": {"const": 0}
+  }
+}
