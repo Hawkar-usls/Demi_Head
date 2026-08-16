@@ -62,3 +62,18 @@ jobs:
 
       - name: Exercise real SHA-256 execution path
         run: python tools/epistemic_execution_gate.py --sha256-text JANUS --output /tmp/real-sha256-receipt.json
+
+      - name: Run Fundamentum truth guard self-test
+        run: python tools/fundamentum_truth_guard.py --self-test --output /tmp/fundamentum-truth-guard-self-test.json
+
+      - name: Reject model-only winner at Fundamentum commit threshold
+        run: |
+          python tools/fundamentum_truth_guard.py --commit-case examples/fundamentum_model_only_commit.json --output /tmp/fundamentum-model-only-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/fundamentum-model-only-result.json').read_text())
+          assert result['commit_state'] == 'OPEN_INSUFFICIENT_EVIDENCE'
+          assert result['definitive_claim_permitted'] is False
+          assert result['witness_ledger_complete'] is True
+          PY
