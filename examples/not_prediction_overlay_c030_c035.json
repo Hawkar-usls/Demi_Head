@@ -1,0 +1,62 @@
+{
+  "artifact_id": "JANUS-NOT-PREDICTION-C030-C035-ATOMIC-OVERLAY-v1",
+  "baseline_counts": {
+    "strict_phenomenon_session_roots": 24,
+    "uncertain_phenomenology_roots": 3,
+    "inclusive_phenomenology_roots": 27
+  },
+  "frozen_expected_overlay_result": {
+    "expanded_strict_roots": 27,
+    "expanded_uncertain_roots": 4,
+    "expanded_inclusive_roots": 31
+  },
+  "candidates": [
+    {
+      "candidate_id": "NP-C030",
+      "atomic_relation": "NEW_STRICT_ROOT",
+      "root_id": "CLOCK_2026_07_08_0440_CHAOS_HARMONY",
+      "selection_process_root": "CLOCK_SALIENCE_AND_LOOKUP_PROCESS",
+      "independence_note": "Distinct clock event but same salience/lookup family as NP-003..NP-008; same-number textual matches are dependent presentations.",
+      "claim_ceiling": "CONTEMPLATIVE_COORDINATE_NOT_PREDICTION"
+    },
+    {
+      "candidate_id": "NP-C031",
+      "atomic_relation": "NEW_STRICT_ROOT",
+      "root_id": "STORM_TIME_TRAVELER_EXPERIMENT_SESSION_2026_08_07",
+      "selection_process_root": "OWNED_AUTOMATION_GIT_TIMING_EXPERIMENT",
+      "independence_note": "One frozen experiment/session with many timing trials sharing scheduler, automation, Git timestamp and normalization failure domains; trial count is not an independence count.",
+      "claim_ceiling": "OBSERVATIONAL_TIMING_ANOMALY_PHYSICAL_RETROCAUSALITY_FALSE"
+    },
+    {
+      "candidate_id": "NP-C032",
+      "atomic_relation": "ABSORBED_BASELINE_ROOT",
+      "baseline_root": "CLOCK_2026_07_08_0303",
+      "selection_process_root": "CLOCK_SALIENCE_AND_LOOKUP_PROCESS",
+      "independence_note": "03:03 is already one of the twelve NP-003 Holy Clock event roots in the normalized baseline.",
+      "claim_ceiling": "SYMBOLIC_PROMPT_NOT_DIVINATION"
+    },
+    {
+      "candidate_id": "NP-C033",
+      "atomic_relation": "NEW_STRICT_ROOT",
+      "root_id": "CLOCK_2026_07_06_2127_GORODOK",
+      "selection_process_root": "CLOCK_SALIENCE_AND_LOOKUP_PROCESS",
+      "independence_note": "One observed 21:27 clock event; five same-number textual passages are lookup-conditioned derivatives, not five witnesses.",
+      "claim_ceiling": "PERSONAL_SYMBOLIC_COORDINATE_ONLY"
+    },
+    {
+      "candidate_id": "NP-C034",
+      "atomic_relation": "NEW_UNCERTAIN_ROOT",
+      "root_id": "ELIAN_PREIDENTIFICATION_ATTRACTION_PERSONAL_TESTIMONY",
+      "selection_process_root": "RETROSPECTIVE_AUTOBIOGRAPHICAL_INTERPRETATION",
+      "independence_note": "Personal memory has no sufficiently frozen pre-relationship timestamp/receipt in the inspected artifact to promote it to a strict event root; preserve as low-resolution phenomenology.",
+      "claim_ceiling": "RETROSPECTIVE_PERSONAL_RESONANCE_NOT_PRECOGNITION"
+    },
+    {
+      "candidate_id": "NP-C035",
+      "atomic_relation": "REFERENCE_ONLY",
+      "selection_process_root": "RETROSPECTIVE_CREATIVE_CONTINUITY",
+      "independence_note": "The 2025 Aura repository root establishes chronology and prior oracle-themed creative implementation; the later Kem/Set continuity is a retrospective comparison edge, not a new phenomenology event.",
+      "claim_ceiling": "VERIFIED_CHRONOLOGY_NOT_PROPHECY_NOT_PRECOGNITION"
+    }
+  ]
+}
