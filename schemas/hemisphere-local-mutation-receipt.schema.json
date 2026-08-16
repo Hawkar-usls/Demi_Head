@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/hemisphere-local-mutation-receipt.schema.json",
+  "title": "JANUS hemisphere local mutation receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","hemisphere","repository","proposal_id","proposal_sha256","operation","node_id","before_graph_sha256","after_graph_sha256","acceptance_event","storage_key","control","claim_ceiling"],
+  "properties": {
+    "schema": {"const": "janus.hemisphere.local_mutation_receipt.v1"},
+    "hemisphere": {"enum": ["LEFT_HRAIN","RIGHT_INAIHR"]},
+    "repository": {"enum": ["Hawkar-usls/Hrain","Hawkar-usls/iNaiHR"]},
+    "proposal_id": {"type":"string","pattern":"^[A-Za-z0-9._:-]{8,128}$"},
+    "proposal_sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "operation": {"const":"ADD_NODE"},
+    "node_id": {"type":"string","pattern":"^[A-Za-z0-9._:-]{8,128}$"},
+    "before_graph_sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "after_graph_sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "acceptance_event": {"const":"EXPLICIT_LOCAL_ACCEPT_BUTTON"},
+    "storage_key": {"type":"string","minLength":1,"maxLength":128},
+    "provenance_metadata_key": {"type":"string","minLength":1,"maxLength":128},
+    "control": {
+      "type":"object","additionalProperties":false,
+      "required":["direct_cross_hemisphere_write","external_effect_permitted","authority_delta","mass_effect_budget_delta"],
+      "properties": {
+        "direct_cross_hemisphere_write":{"const":false},
+        "external_effect_permitted":{"const":false},
+        "authority_delta":{"const":0},
+        "mass_effect_budget_delta":{"const":0}
+      }
+    },
+    "claim_ceiling": {
+      "type":"object","additionalProperties":false,
+      "required":["click_event_is_verified_human_identity","sha256_binding_is_signature"],
+      "properties": {
+        "click_event_is_verified_human_identity":{"const":false},
+        "sha256_binding_is_signature":{"const":false},
+        "local_metadata_is_trusted_attestation":{"const":false}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if":{"properties":{"hemisphere":{"const":"LEFT_HRAIN"}}},
+      "then":{"properties":{"repository":{"const":"Hawkar-usls/Hrain"},"storage_key":{"const":"hrain_v10_4_restore"}},"not":{"required":["provenance_metadata_key"]}}
+    },
+    {
+      "if":{"properties":{"hemisphere":{"const":"RIGHT_INAIHR"}}},
+      "then":{"required":["provenance_metadata_key"],"properties":{"repository":{"const":"Hawkar-usls/iNaiHR"},"storage_key":{"const":"inaihr_v2"},"provenance_metadata_key":{"const":"inaihr_demihead_provenance_v1"},"claim_ceiling":{"required":["local_metadata_is_trusted_attestation"]}}}
+    }
+  ]
+}

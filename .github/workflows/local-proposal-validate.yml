@@ -1,0 +1,164 @@
+name: Validate local hemisphere proposal gate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-local-proposal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out DemiHead
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Validate proposal and mutation receipt schemas
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+          for name in ('hemisphere-local-proposal.schema.json','hemisphere-local-mutation-receipt.schema.json'):
+              schema=json.loads((Path('schemas')/name).read_text(encoding='utf-8'))
+              Draft202012Validator.check_schema(schema)
+              print(name, 'SCHEMA=PASS')
+          PY
+
+      - name: Run DemiHead local proposal unit tests
+        run: python -m unittest tests.test_hemisphere_local_proposal -v
+
+      - name: Run deterministic proposal builder self-test
+        run: |
+          python tools/hemisphere_local_proposal.py --self-test --output /tmp/proposal-self-test.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/proposal-self-test.json').read_text())
+          assert x['status']=='PASS'
+          assert x['checks']['tamper_refused'] is True
+          assert x['checks']['auto_apply_refused'] is True
+          assert x['checks']['proposal_is_mutation'] is False
+          assert x['checks']['direct_cross_hemisphere_write'] is False
+          assert x['checks']['external_effect_permitted'] is False
+          assert x['checks']['authority_delta']==0
+          assert x['checks']['mass_effect_budget_delta']==0
+          assert x['claim_ceiling']['sha256_binding_is_signature'] is False
+          assert x['claim_ceiling']['ui_accept_event_is_verified_human_identity'] is False
+          print('DEMIHEAD_LOCAL_PROPOSAL_SELF_TEST=PASS')
+          PY
+
+      - name: Generate left and right proposal envelopes with Python
+        run: |
+          python tools/hemisphere_local_proposal.py \
+            --packet examples/hemisphere_left_hrain.json \
+            --proposal-id proposal-cross-left-0001 \
+            --node-id dh-node-cross-left-0001 \
+            --label 'Candidate structural context' \
+            --created-at 2026-08-16T10:10:00Z \
+            --output /tmp/left-proposal.json
+          python tools/hemisphere_local_proposal.py \
+            --packet examples/hemisphere_right_inaihr.json \
+            --proposal-id proposal-cross-right-0001 \
+            --node-id dh-node-cross-right-0001 \
+            --label 'Candidate associative context' \
+            --created-at 2026-08-16T10:10:00Z \
+            --output /tmp/right-proposal.json
+          python tools/hemisphere_local_proposal.py --validate /tmp/left-proposal.json --output /tmp/left-validated.json
+          python tools/hemisphere_local_proposal.py --validate /tmp/right-proposal.json --output /tmp/right-validated.json
+
+      - name: Check out exact merged HRain local-accept implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Hrain
+          ref: ceb81210c2f70b71d6c941e0b088a68969ead7b9
+          path: _reverse/Hrain
+          persist-credentials: false
+
+      - name: Check out exact merged iNaiHR local-accept implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/iNaiHR
+          ref: b27cd8732b3137caea1036024acc1778ea02213a
+          path: _reverse/iNaiHR
+          persist-credentials: false
+
+      - name: Re-run exact external local-accept tests
+        run: |
+          node _reverse/Hrain/tools/test-demihead-bridge.js
+          node _reverse/Hrain/tools/test-demihead-apply.js
+          node _reverse/iNaiHR/tools/test-demihead-bridge.js
+          node _reverse/iNaiHR/tools/test-demihead-apply.js
+
+      - name: Verify Python proposals in exact merged JavaScript adapters
+        run: |
+          node tools/test-cross-repo-local-proposal.js \
+            _reverse/Hrain \
+            _reverse/iNaiHR \
+            /tmp/left-proposal.json \
+            /tmp/right-proposal.json \
+            /tmp/cross-repo-proposal-result.json
+
+      - name: Validate exact external mutation receipts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator, FormatChecker
+          result=json.loads(Path('/tmp/cross-repo-proposal-result.json').read_text(encoding='utf-8'))
+          assert result['status']=='PASS'
+          assert result['checks']['python_js_canonical_hash_compatible'] is True
+          assert result['checks']['hrain_proposal_verified_and_prepared'] is True
+          assert result['checks']['inaihr_proposal_verified_and_prepared'] is True
+          assert result['checks']['system_provenance_preserved'] is True
+          assert result['checks']['real_browser_localstorage_written'] is False
+          assert result['checks']['direct_cross_hemisphere_write'] is False
+          assert result['checks']['external_effect_permitted'] is False
+          assert result['checks']['authority_delta']==0
+          assert result['checks']['mass_effect_budget_delta']==0
+          schema=json.loads(Path('schemas/hemisphere-local-mutation-receipt.schema.json').read_text(encoding='utf-8'))
+          validator=Draft202012Validator(schema,format_checker=FormatChecker())
+          assert len(result['receipts'])==2
+          for receipt in result['receipts']:
+              validator.validate(receipt)
+          assert result['claim_ceiling']['preparation_is_real_user_acceptance'] is False
+          assert result['claim_ceiling']['ci_in_memory_mutation_is_browser_workspace_effect'] is False
+          assert result['claim_ceiling']['sha256_binding_is_signature'] is False
+          assert result['claim_ceiling']['click_event_is_verified_human_identity'] is False
+          assert result['claim_ceiling']['production_readiness_established'] is False
+          print('EXACT_CROSS_REPO_LOCAL_PROPOSAL=PASS')
+          print('REAL_BROWSER_LOCALSTORAGE_WRITTEN=false')
+          print('CLICK_EVENT_VERIFIED_HUMAN_IDENTITY=false')
+          PY
+
+      - name: Verify DemiHead itself has no local apply path
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          targets=[
+              Path('tools/hemisphere_local_proposal.py'),
+              Path('tools/test-cross-repo-local-proposal.js'),
+              Path('docs/LOCAL_HEMISPHERE_PROPOSAL_GATE.md'),
+          ]
+          text='\n'.join(p.read_text(encoding='utf-8') for p in targets)
+          assert 'localStorage.setItem' not in text
+          assert 'postMessage APPLY' not in text
+          assert 'AUTO_APPLY = false' in text
+          assert 'NO_ACCEPT_EVENT => NO_MUTATION' in text
+          assert 'SHA256_BINDING != SIGNATURE' in text
+          assert 'CLICK_EVENT != VERIFIED_HUMAN_IDENTITY' in text
+          assert 'GITHUB_PAGES_PROJECT_PATH != ORIGIN_ISOLATION' in text
+          print('DEMIHEAD_DIRECT_LOCAL_WRITE_PATH=false')
+          print('NETWORK_APPLY=false')
+          PY

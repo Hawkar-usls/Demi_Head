@@ -1,0 +1,23 @@
+name: Verify proposal lab parity
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Generate canonical Python proposals
+        run: |
+          python tools/hemisphere_local_proposal.py --packet examples/hemisphere_left_hrain.json --proposal-id proposal-cross-left-0001 --node-id dh-node-cross-left-0001 --label 'Candidate structural context' --created-at 2026-08-16T10:10:00Z --output /tmp/left-proposal.json
+          python tools/hemisphere_local_proposal.py --packet examples/hemisphere_right_inaihr.json --proposal-id proposal-cross-right-0001 --node-id dh-node-cross-right-0001 --label 'Candidate associative context' --created-at 2026-08-16T10:10:00Z --output /tmp/right-proposal.json
+      - name: Compare browser JavaScript builder against Python
+        run: node tools/test-proposal-lab.js
