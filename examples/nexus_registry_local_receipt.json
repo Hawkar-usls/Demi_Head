@@ -1,0 +1,36 @@
+{
+  "schema": "janus.demihead.nexus_registry_receipt.v1",
+  "contract": "JANUS_NEXUS_REGISTRY_INGRESS_V1",
+  "status": "LOCAL_PROVENANCE_RECEIPT_READY",
+  "input": {
+    "payload_kind": "RELEASE_RECEIPT",
+    "sha256": "8ff708608e9aef8224b2c43dcbf9e447f667a23d4af05df5225e75efc8b5679b",
+    "schema": "janus.demihead.nexus_release_receipt.v1"
+  },
+  "archive_candidate": {
+    "content_address": "sha256:8ff708608e9aef8224b2c43dcbf9e447f667a23d4af05df5225e75efc8b5679b",
+    "preserve_input_unchanged": true,
+    "append_only_recommended": true,
+    "correction_by_descendant_record": true
+  },
+  "effect_boundary": {
+    "meta_registry_write_performed": false,
+    "git_commit_performed": false,
+    "network_delivery_performed": false,
+    "external_publication_performed": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "claim_ceiling": {
+    "receipt_proves_payload_hash_binding": true,
+    "receipt_proves_payload_truth": false,
+    "receipt_proves_delivery": false,
+    "receipt_is_archive_commit": false
+  },
+  "laws": [
+    "HASH != TRUTH",
+    "REGISTRY_RECEIPT != GIT_COMMIT",
+    "ARCHIVE_CANDIDATE != PUBLICATION",
+    "CORRECTION != DELETION"
+  ]
+}
