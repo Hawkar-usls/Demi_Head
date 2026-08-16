@@ -1,0 +1,30 @@
+{
+  "schema": "janus.demihead.nexus_guardian_result.v1",
+  "contract": "JANUS_NEXUS_GUARDIAN_INGRESS_V1",
+  "status": "HOLD_PRESERVED",
+  "input": {
+    "payload_kind": "HOLD_RECEIPT",
+    "sha256": "434b78adb5a04253cbe9c5317d4c2ada1487c9a32e435b03999706be27273679"
+  },
+  "bounded_result": {
+    "evidence_state": "CONTEXT_ONLY_NOT_EVIDENCE",
+    "next_requirement": "SEPARATELY_PROVENANCE_BOUND_EVIDENCE_OR_WITNESS_LEDGER_CASE",
+    "human_review_required": true,
+    "definitive_claim_permitted": false,
+    "automatic_escalation_permitted": false
+  },
+  "control": {
+    "read_only": true,
+    "external_effect_permitted": false,
+    "automatic_retry_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "release_control_required": true
+  },
+  "claim_ceiling": {
+    "guardian_result_is_truth": false,
+    "guardian_result_is_command": false,
+    "hold_is_failure": false,
+    "observation_is_evidence": false
+  }
+}
