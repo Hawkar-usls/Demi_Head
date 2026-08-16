@@ -6,20 +6,21 @@
 <meta name="theme-color" content="#080a0d">
 <title>JANUS DemiHead · Bicameral Console</title>
 <style>
-:root{color-scheme:dark;--bg:#080a0d;--panel:#10141a;--line:#29313a;--left:#00ffa3;--right:#d300ff;--muted:#8d9aa7;--warn:#ffc107}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#121821,var(--bg) 52%);color:#edf2f7;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:100vh}.wrap{max-width:1280px;margin:auto;padding:22px}.title{text-align:center}.title h1{margin:.2em 0;font-size:clamp(1.4rem,4vw,2.5rem)}.title p{color:var(--muted)}.laws{white-space:pre-wrap;text-align:center;color:#bac4cf}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0}.btn{border:1px solid #4a5663;background:#161d25;color:#fff;padding:10px 14px;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}.btn.primary{border-color:#91a1b2}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(16,20,26,.92);border:1px solid var(--line);border-radius:14px;overflow:hidden}.panel h2{font-size:1rem;margin:0;padding:12px 14px;border-bottom:1px solid var(--line)}.left h2{color:var(--left)}.right h2{color:var(--right)}iframe{display:block;width:100%;height:430px;border:0;background:#05070a}.status{padding:10px 14px;color:var(--muted);border-top:1px solid var(--line);min-height:42px}.result{margin-top:16px;padding:16px}.result strong{color:#fff}.hold{color:var(--warn)}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#c8d2dc}.downloads{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}@media(max-width:900px){.grid{grid-template-columns:1fr}iframe{height:380px}}
+:root{color-scheme:dark;--bg:#080a0d;--panel:#10141a;--line:#29313a;--left:#00ffa3;--right:#d300ff;--muted:#8d9aa7;--warn:#ffc107;--danger:#ff5470}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#121821,var(--bg) 52%);color:#edf2f7;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:100vh}.wrap{max-width:1280px;margin:auto;padding:22px}.title{text-align:center}.title h1{margin:.2em 0;font-size:clamp(1.4rem,4vw,2.5rem)}.title p{color:var(--muted)}.laws{white-space:pre-wrap;text-align:center;color:#bac4cf}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0}.btn{border:1px solid #4a5663;background:#161d25;color:#fff;padding:10px 14px;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}.btn.primary{border-color:#91a1b2}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(16,20,26,.92);border:1px solid var(--line);border-radius:14px;overflow:hidden}.panel h2{font-size:1rem;margin:0;padding:12px 14px;border-bottom:1px solid var(--line)}.left h2{color:var(--left)}.right h2{color:var(--right)}iframe{display:block;width:100%;height:430px;border:0;background:#05070a}.status{padding:10px 14px;color:var(--muted);border-top:1px solid var(--line);min-height:42px}.result{margin-top:16px;padding:16px}.result strong{color:#fff}.hold{color:var(--warn)}.refused{color:var(--danger)}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#c8d2dc}.downloads{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}@media(max-width:900px){.grid{grid-template-columns:1fr}iframe{height:380px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="title">
-    <div>JANUS DEMIHEAD · BICAMERAL BRIDGE V1</div>
+    <div>JANUS DEMIHEAD · BICAMERAL TRANSPORT V1.1</div>
     <h1>HRain LEFT · DemiHead · iNaiHR RIGHT</h1>
-    <p>Software-role metaphor only. No biological hemisphere claim.</p>
+    <p>Software-role metaphor only. Request binding is freshness protection, not authentication.</p>
   </div>
   <div class="panel laws">BOTH_HEMISPHERES_AGREE != TRUTH
 HEMISPHERE_COUNT != AUTHORITY
 ASSOCIATION != EVIDENCE
 STRUCTURE != COMMAND
+REQUEST_ID_ECHO != AUTHENTICATION
 DIRECT_CROSS_HEMISPHERE_WRITE = false
 EXTERNAL_EFFECT = false</div>
   <div class="actions">
@@ -30,31 +31,30 @@ EXTERNAL_EFFECT = false</div>
     <section class="panel left">
       <h2>LEFT_HRAIN · STRUCTURAL_CONTEXT</h2>
       <iframe id="leftFrame" src="https://hawkar-usls.github.io/Hrain/demihead.html" title="HRain left hemisphere sidecar"></iframe>
-      <div class="status" id="leftStatus">Awaiting packet.</div>
+      <div class="status" id="leftStatus">Awaiting request.</div>
     </section>
     <section class="panel right">
       <h2>RIGHT_INAIHR · ASSOCIATIVE_CONTEXT</h2>
       <iframe id="rightFrame" src="https://hawkar-usls.github.io/iNaiHR/demihead.html" title="iNaiHR right hemisphere sidecar"></iframe>
-      <div class="status" id="rightStatus">Awaiting packet.</div>
+      <div class="status" id="rightStatus">Awaiting request.</div>
     </section>
   </div>
   <section class="panel result">
-    <strong>DemiHead comparison preview</strong>
-    <pre id="result">No packets yet.</pre>
+    <strong>DemiHead transport/comparison receipt</strong>
+    <pre id="result">No active request.</pre>
     <div class="downloads">
       <button class="btn" id="downloadLeft" disabled>DOWNLOAD LEFT</button>
       <button class="btn" id="downloadRight" disabled>DOWNLOAD RIGHT</button>
     </div>
   </section>
 </div>
+<script src="./bicameral-transport.js"></script>
 <script>
 (() => {
   'use strict';
-  const PAGES_ORIGIN = 'https://hawkar-usls.github.io';
-  const REQUEST = 'JANUS_DEMIHEAD_REQUEST_PACKET_V1';
-  const RESPONSE = 'JANUS_DEMIHEAD_HEMISPHERE_PACKET_V1';
-  let left = null;
-  let right = null;
+  const transport = window.JANUSDemiHeadBicameralTransport;
+  let state = null;
+  let timeoutHandle = null;
 
   const leftFrame = document.getElementById('leftFrame');
   const rightFrame = document.getElementById('rightFrame');
@@ -64,84 +64,81 @@ EXTERNAL_EFFECT = false</div>
   const downloadLeft = document.getElementById('downloadLeft');
   const downloadRight = document.getElementById('downloadRight');
 
-  function semanticKey(label) {
-    const text = String(label || '').trim().replace(/\s+/g, ' ');
-    const match = text.match(/[\p{L}\p{N}].*$/u);
-    return (match ? match[0] : text).toLocaleLowerCase();
+  function newRequestId() {
+    if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
+      return `req-${globalThis.crypto.randomUUID()}`;
+    }
+    if (globalThis.crypto && typeof globalThis.crypto.getRandomValues === 'function') {
+      const bytes = new Uint8Array(16);
+      globalThis.crypto.getRandomValues(bytes);
+      return `req-${Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('')}`;
+    }
+    throw new Error('secure request-id generator unavailable');
   }
 
-  function packetKeys(packet) {
-    return new Set((packet.graph.nodes || []).map(n => semanticKey(n.label)).filter(Boolean));
-  }
-
-  function validatePacket(packet) {
-    if (!packet || packet.schema !== 'janus.demihead.hemisphere_packet.v1') throw new Error('unexpected schema');
-    if (!['LEFT_HRAIN','RIGHT_INAIHR'].includes(packet.hemisphere)) throw new Error('unexpected hemisphere');
-    if (!packet.control || packet.control.read_only_transfer !== true) throw new Error('packet is not explicitly read-only');
-    if (packet.control.direct_cross_hemisphere_mutation !== false) throw new Error('direct mutation requested');
-    if (packet.control.authority_delta !== 0 || packet.control.mass_effect_budget_delta !== 0) throw new Error('authority/mass-effect delta is non-zero');
-    if (!packet.graph || !Array.isArray(packet.graph.nodes) || !Array.isArray(packet.graph.links)) throw new Error('invalid graph');
+  function sourceKind(event) {
+    if (event.source === leftFrame.contentWindow) return 'LEFT_FRAME';
+    if (event.source === rightFrame.contentWindow) return 'RIGHT_FRAME';
+    return 'UNKNOWN_FRAME';
   }
 
   function render() {
-    downloadLeft.disabled = !left;
-    downloadRight.disabled = !right;
-    if (!left && !right) {
-      result.textContent = 'No packets yet.';
+    downloadLeft.disabled = !state || !state.left;
+    downloadRight.disabled = !state || !state.right;
+    if (!state) {
+      result.textContent = 'No active request.';
       return;
     }
-    if (!left || !right) {
-      result.innerHTML = '<span class="hold">DEGRADED_SINGLE_HEMISPHERE_HOLD</span>\nONE_HEMISPHERE_AVAILABLE != WHOLE_HEAD_CONFIDENCE\nEXTERNAL_EFFECT=false';
-      return;
-    }
-    const lk = packetKeys(left), rk = packetKeys(right);
-    const shared = [...lk].filter(x => rk.has(x)).sort();
-    const leftOnly = [...lk].filter(x => !rk.has(x)).sort();
-    const rightOnly = [...rk].filter(x => !lk.has(x)).sort();
-    const state = shared.length ? 'BICAMERAL_OVERLAP_PRESENT' : 'BICAMERAL_DIVERGENCE_PRESERVED';
+    const receipt = transport.evaluate(state, performance.now());
     result.textContent = JSON.stringify({
-      state,
-      shared_semantic_keys: shared,
-      left_only_semantic_keys: leftOnly,
-      right_only_semantic_keys: rightOnly,
-      automatic_graph_merge_performed: false,
-      direct_cross_hemisphere_write_permitted: false,
-      external_effect_permitted: false,
-      truth_claim_made: false,
-      agreement_is_truth: false,
-      authority_delta: 0,
-      mass_effect_budget_delta: 0
+      status: receipt.status,
+      mode: receipt.mode,
+      request_id: receipt.request_id,
+      deadline_elapsed: receipt.deadline_elapsed,
+      hemispheres_present: receipt.hemispheres_present,
+      latency_ms: receipt.latency_ms,
+      comparison: receipt.comparison,
+      routing: receipt.routing,
+      claim_ceiling: receipt.claim_ceiling,
+      event_ledger: state.event_ledger
     }, null, 2);
   }
 
   function requestBoth() {
-    left = null; right = null;
-    leftStatus.textContent = 'Requested…';
-    rightStatus.textContent = 'Requested…';
+    if (timeoutHandle) clearTimeout(timeoutHandle);
+    let requestId;
+    try { requestId = newRequestId(); }
+    catch (error) {
+      result.innerHTML = `<span class="refused">REQUEST REFUSED: ${error.message}</span>`;
+      return;
+    }
+    const startedAt = performance.now();
+    state = transport.beginRequest(requestId, startedAt, transport.DEFAULT_TIMEOUT_MS);
+    const request = transport.buildRequest(requestId);
+    leftStatus.textContent = `Requested · ${requestId}`;
+    rightStatus.textContent = `Requested · ${requestId}`;
     render();
-    if (leftFrame.contentWindow) leftFrame.contentWindow.postMessage({type: REQUEST}, PAGES_ORIGIN);
-    if (rightFrame.contentWindow) rightFrame.contentWindow.postMessage({type: REQUEST}, PAGES_ORIGIN);
+    if (leftFrame.contentWindow) leftFrame.contentWindow.postMessage(request, transport.PAGES_ORIGIN);
+    if (rightFrame.contentWindow) rightFrame.contentWindow.postMessage(request, transport.PAGES_ORIGIN);
+    timeoutHandle = setTimeout(render, transport.DEFAULT_TIMEOUT_MS + 1);
   }
 
   window.addEventListener('message', (event) => {
-    if (event.origin !== PAGES_ORIGIN) return;
-    if (!event.data || event.data.type !== RESPONSE) return;
-    try {
-      const packet = event.data.packet;
-      validatePacket(packet);
-      if (packet.hemisphere === 'LEFT_HRAIN' && event.source === leftFrame.contentWindow) {
-        left = packet;
-        leftStatus.textContent = `${packet.graph.nodes.length} nodes · ${packet.graph.links.length} links · packet received read-only`;
-      } else if (packet.hemisphere === 'RIGHT_INAIHR' && event.source === rightFrame.contentWindow) {
-        right = packet;
-        rightStatus.textContent = `${packet.graph.nodes.length} nodes · ${packet.graph.links.length} links · packet received read-only`;
-      } else {
-        return;
-      }
-      render();
-    } catch (err) {
-      result.textContent = `REFUSED PACKET: ${err.message}`;
+    if (!state) return;
+    const disposition = transport.ingestEnvelope(state, {
+      origin: event.origin,
+      source_kind: sourceKind(event),
+      received_at_ms: performance.now(),
+      data: event.data
+    });
+    if (disposition.accepted) {
+      const slot = disposition.hemisphere === 'LEFT_HRAIN' ? state.left : state.right;
+      const target = disposition.hemisphere === 'LEFT_HRAIN' ? leftStatus : rightStatus;
+      target.textContent = `${slot.graph.nodes.length} nodes · ${slot.graph.links.length} links · accepted ${disposition.latency_ms.toFixed(1)} ms · request-bound`;
+    } else if (disposition.disposition === 'REFUSED') {
+      result.innerHTML = `<span class="refused">REFUSED ${disposition.reason}</span>`;
     }
+    render();
   });
 
   function downloadPacket(packet, name) {
@@ -153,13 +150,15 @@ EXTERNAL_EFFECT = false</div>
 
   document.getElementById('request').onclick = requestBoth;
   document.getElementById('clear').onclick = () => {
-    left = null; right = null;
-    leftStatus.textContent = 'Awaiting packet.';
-    rightStatus.textContent = 'Awaiting packet.';
+    if (timeoutHandle) clearTimeout(timeoutHandle);
+    timeoutHandle = null;
+    state = null;
+    leftStatus.textContent = 'Awaiting request.';
+    rightStatus.textContent = 'Awaiting request.';
     render();
   };
-  downloadLeft.onclick = () => downloadPacket(left, 'janus_demihead_left_hrain.json');
-  downloadRight.onclick = () => downloadPacket(right, 'janus_demihead_right_inaihr.json');
+  downloadLeft.onclick = () => downloadPacket(state && state.left, 'janus_demihead_left_hrain.json');
+  downloadRight.onclick = () => downloadPacket(state && state.right, 'janus_demihead_right_inaihr.json');
 })();
 </script>
 </body>

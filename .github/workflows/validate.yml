@@ -61,16 +61,26 @@ jobs:
           print('DIRECT_CROSS_HEMISPHERE_WRITE=false')
           PY
 
-      - name: Verify live bicameral console remains read-only
+      - name: Verify live bicameral console remains request-bound and read-only
         run: |
           python - <<'PY'
           from pathlib import Path
-          text = Path('examples/bicameral_console.html').read_text(encoding='utf-8')
-          assert 'https://hawkar-usls.github.io/Hrain/demihead.html' in text
-          assert 'https://hawkar-usls.github.io/iNaiHR/demihead.html' in text
-          assert "const PAGES_ORIGIN = 'https://hawkar-usls.github.io'" in text
-          assert "postMessage({type: REQUEST}, PAGES_ORIGIN)" in text
-          assert "event.origin !== PAGES_ORIGIN" in text
+          console = Path('examples/bicameral_console.html').read_text(encoding='utf-8')
+          transport = Path('examples/bicameral-transport.js').read_text(encoding='utf-8')
+          assert 'https://hawkar-usls.github.io/Hrain/demihead.html' in console
+          assert 'https://hawkar-usls.github.io/iNaiHR/demihead.html' in console
+          assert '<script src="./bicameral-transport.js"></script>' in console
+          assert 'transport.buildRequest(requestId)' in console
+          assert 'transport.ingestEnvelope' in console
+          assert 'transport.evaluate' in console
+          assert 'crypto.randomUUID' in console
+          assert 'crypto.getRandomValues' in console
+          assert 'Math.random' not in console
+          assert 'postMessage(request, transport.PAGES_ORIGIN)' in console
+          assert "STALE_OR_REPLAYED_REQUEST" in transport
+          assert "LATE_AFTER_DEADLINE" in transport
+          assert "DUPLICATE_HEMISPHERE_RESPONSE" in transport
+          assert "hemisphere/source-frame mismatch" in transport
           for forbidden in (
               'localStorage.setItem',
               'localStorage.removeItem',
@@ -79,19 +89,86 @@ jobs:
               'XMLHttpRequest',
               'api.github.com/repos/',
           ):
-              assert forbidden not in text, forbidden
-          assert "BOTH_HEMISPHERES_AGREE != TRUTH" in text
-          assert "HEMISPHERE_COUNT != AUTHORITY" in text
-          assert "DIRECT_CROSS_HEMISPHERE_WRITE = false" in text
-          assert "external_effect_permitted: false" in text
-          assert "direct_cross_hemisphere_write_permitted: false" in text
-          assert "agreement_is_truth: false" in text
-          assert "authority_delta: 0" in text
-          assert "mass_effect_budget_delta: 0" in text
-          print('BICAMERAL_CONSOLE_READ_ONLY=PASS')
-          print('WILDCARD_PACKET_TARGET=false')
+              assert forbidden not in console, forbidden
+          assert "BOTH_HEMISPHERES_AGREE != TRUTH" in console
+          assert "HEMISPHERE_COUNT != AUTHORITY" in console
+          assert "REQUEST_ID_ECHO != AUTHENTICATION" in console
+          assert "DIRECT_CROSS_HEMISPHERE_WRITE = false" in console
+          assert "external_effect_permitted: false" in transport
+          assert "direct_cross_hemisphere_write_permitted: false" in transport
+          assert "agreement_is_truth: false" in transport
+          assert "authority_delta: 0" in transport
+          assert "mass_effect_budget_delta: 0" in transport
+          print('BICAMERAL_CONSOLE_REQUEST_BOUND_READ_ONLY=PASS')
+          print('REQUEST_ID_IS_AUTHENTICATION=false')
           print('CROSS_HEMISPHERE_WRITE=false')
           PY
+
+      - name: Verify frozen bicameral transport corpus hash before execution
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          corpus = json.loads(Path('holdout/bicameral_transport_v1/frozen_corpus.json').read_text(encoding='utf-8'))
+          raw = json.dumps(corpus['freeze_payload'], ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
+          actual = hashlib.sha256(raw).hexdigest()
+          assert actual == 'd33077fbd0d244bf0ae6d678894bdc9a8eddcf0d779ce11b85e39eeff6143883'
+          assert corpus['freeze_sha256'] == actual
+          assert corpus['freeze_payload']['frozen_before_first_execution'] is True
+          assert len(corpus['freeze_payload']['cases']) == 18
+          print('BICAMERAL_TRANSPORT_FROZEN_BEFORE_EXECUTION=true')
+          print('FREEZE_SHA256', actual)
+          PY
+
+      - name: Run frozen bicameral transport adversarial holdout
+        run: |
+          node tools/test-bicameral-transport-holdout.js \
+            holdout/bicameral_transport_v1/frozen_corpus.json \
+            /tmp/bicameral-transport-holdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/bicameral-transport-holdout.json').read_text(encoding='utf-8'))
+          assert result['status'] == 'PASS'
+          assert result['frozen_case_count'] == 18
+          assert result['passed'] == 18
+          assert result['failed'] == 0
+          metrics = result['metrics']
+          assert metrics['measurement_kind'] == 'FROZEN_SYNTHETIC_EVENT_TRACE_NOT_WALL_CLOCK'
+          assert metrics['sample_count'] > 0
+          assert metrics['p50_ms'] <= metrics['p95_ms'] <= metrics['p99_ms']
+          ceiling = result['claim_ceiling']
+          assert ceiling['real_browser_network_latency_measured'] is False
+          assert ceiling['production_readiness_established'] is False
+          assert ceiling['request_id_is_authentication'] is False
+          assert ceiling['independent_evidence_roots_established'] is False
+          assert ceiling['truth_from_agreement_established'] is False
+          assert ceiling['authority_delta'] == 0
+          assert ceiling['mass_effect_budget_delta'] == 0
+          print('FROZEN_BICAMERAL_TRANSPORT_HOLDOUT=PASS')
+          print('REAL_BROWSER_NETWORK_LATENCY_MEASURED=false')
+          print('REQUEST_ID_IS_AUTHENTICATION=false')
+          PY
+
+      - name: Check out exact frozen HRain hemisphere implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Hrain
+          ref: c1c4e61e18e1adf15ed1d43da51129b262119985
+          path: _frozen/Hrain
+          persist-credentials: false
+
+      - name: Check out exact frozen iNaiHR hemisphere implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/iNaiHR
+          ref: a79cc9affa733bf3d2d6b0ed4815fccf938f3292
+          path: _frozen/iNaiHR
+          persist-credentials: false
+
+      - name: Verify exact frozen hemisphere sidecars match transport contract
+        run: node tools/verify-frozen-hemisphere-sidecars.js _frozen
 
       - name: Run deterministic +/+ recenter self-test
         run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
