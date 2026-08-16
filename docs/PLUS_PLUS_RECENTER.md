@@ -1,96 +1,141 @@
-# +/+ Recenter Head
+# JANUS +/+ Recenter Head
 
-The `+/+` recenter head is a bounded Armor Recovery / Release Control helper for DemiHead.
+## Native condition
 
-It is intentionally **not** a truth engine, sentiment classifier, psychological profile, user score, or engagement optimizer.
-
-## Two constructive Faces
+DemiHead treats `+/+` as JANUS's native constructive condition.
 
 ```text
-WITNESS_PLUS (+) -> receive meaning, preserve context
-GUARD_PLUS   (+) -> check, widen options, release control
+WITNESS_PLUS  <->  GUARD_PLUS
+      +                +
 ```
 
-There is no built-in negative Face.
+There is no derivation step that first introduces an opposite polarity and later cancels it. The head starts constructive.
 
-A transient pressure state may rise when an upstream frozen policy or a human fixture explicitly supplies symbolic pressure flags. The local module does not infer those flags from natural language.
+Project mnemonic:
 
-## Word-rhyme recenter
+```text
+0/0 = JANUS
+```
+
+This is a symbolic project axiom, not an arithmetic statement. Its role is to express an origin with no inherited directional debt: JANUS begins from its own bounded constitution rather than from a cancellation game.
+
+## Word-rhyme
+
+The entire recenter loop is intentionally tiny:
 
 ```text
 HEAR -> CHECK -> WIDEN -> RELEASE
 СЛЫШУ -> СВЕРЯЮ -> РАСШИРЯЮ -> ОТПУСКАЮ
 ```
 
-The sequence has no user-visible numeric counter. Its purpose is to restore process, not to force a positive conclusion.
+`HEAR` preserves the user's actual task and meaning.
+
+`CHECK` preserves evidence, uncertainty, chronology, provenance, and disagreement.
+
+`WIDEN` reopens at least one real alternative, counterexample, next-information need, or safe option when interaction momentum narrows the route.
+
+`RELEASE` refuses to turn continued engagement into a success metric and returns control to the user.
+
+## Two Faces, both native +
+
+### WITNESS_PLUS
+
+Receives intent, keeps context, and allows difficult reality to remain difficult without forcing agreement or optimism.
+
+### GUARD_PLUS
+
+Checks claims and boundaries, widens choice, and terminates interaction momentum when the information need is satisfied.
+
+Neither Face gains world authority by existing. Face multiplicity is routing, not voting power.
+
+## Transient routing load
+
+Conversation can still create momentum. DemiHead represents that only as a temporary routing condition:
 
 ```text
-RECENTERING RESTORES PROCESS, NOT A REQUIRED CONCLUSION
-NEGATIVE_TOPIC != NEGATIVE_USER
-PRESSURE_STATE != MORAL_SCORE
-PRESSURE_CHANGES_ROUTING_NOT_AUTHORITY
+CLEAR -> DENSE -> NARROW -> RECENTER_REQUIRED
 ```
 
-## Where it sits in DemiHead
+This condition is not a Face, identity, personality, diagnosis, ideology score, or moral score. It does not become part of JANUS's constitution.
+
+The reference module does not classify free text. It accepts only explicit symbolic routing flags supplied by a separate, versioned evaluator. Unknown flags are ignored.
+
+A difficult subject, sadness, anger, doubt, disagreement, criticism, refusal to agree, or opt-out does not become routing load merely because of its emotional or ideological content.
+
+System output is treated symmetrically: if JANUS itself creates repetitive interaction momentum, unsupported certainty, choice narrowing, or engagement pressure, its own output may contribute to the same transient routing condition.
+
+## Recenter contract
+
+When `RECENTER_REQUIRED` is reached, DemiHead runs one complete rhyme:
 
 ```text
-CETUS / CURRENT TASK
+HEAR
+CHECK
+WIDEN
+RELEASE
+```
+
+Then transient routing load returns to `CLEAR`.
+
+What does **not** change:
+
+```text
+EVIDENCE_STATUS
+SOURCE_PROVENANCE
+UNCERTAINTY
+USER_STATED_POSITION
+AUTHORITY
+MASS_EFFECT_BUDGET
+```
+
+Canonical rule:
+
+```text
+RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS
+```
+
+Recenter restores process, not a required conclusion.
+
+## DovoD lineage
+
+The conceptual mapping preserves the useful hierarchy from `DovoD.py`:
+
+```text
+meta_context -> context -> hidden_state
+```
+
+For this head:
+
+```text
+meta_context = ARMOR_PLUS_PLUS_CONSTITUTION
+context      = current task / evidence / user-selected preferences
+hidden_state = transient routing load + current rhyme position
+```
+
+The slow constitutional layer is not rewritten by ordinary dialogue. The middle layer remains adaptable. The fast layer is disposable and recenterable.
+
+## Guardian Mesh placement
+
+This head belongs beside Armor Recovery and Release Control. It does not sit inside truth determination and does not alter KETO evidence labels.
+
+```text
+CETUS / EVIDENCE FLOW
         |
         v
-  normal evidence heads
+GUARDIAN RESULT
         |
-        +----------------------+
-        |                      |
-        v                      v
- ARMOR RECOVERY          RELEASE CONTROL
-        \                      /
-         \                    /
-          +-- +/+ RECENTER ---+
+        +----> +/+ RECENTER (routing only)
+        |
+        v
+RELEASE CONTROL
 ```
-
-The recenter head must not mutate:
-
-- claims;
-- source roots;
-- source independence;
-- chronology;
-- evidence state;
-- truth claim ceiling;
-- external authority;
-- mass-effect budget.
-
-System-origin pressure is treated symmetrically with user-origin pressure. DemiHead must not blame the user for pressure created by DemiHead itself.
-
-## Reference implementation
-
-```bash
-python tools/plus_plus_recenter.py --self-test
-```
-
-CSV trace evaluation accepts:
-
-```csv
-source,pressure_flags
-user,choice_narrowing
-system,engagement_pressure
-user,repetition_without_new_evidence
-```
-
-Run it with:
-
-```bash
-python tools/plus_plus_recenter.py --input-csv examples/plus_plus_recenter_trace.csv --output /tmp/plus-plus.json
-```
-
-The accepted symbolic flags are documented in the integration record. Unknown flags are ignored rather than promoted into pressure.
 
 ## Canonical records
 
 - [`JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0.json`](JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0.json)
+- [`PLUS_PLUS_ONTOLOGY-v1.1.json`](PLUS_PLUS_ONTOLOGY-v1.1.json)
 - Canonical Armor candidate: `Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-PLUS-PLUS-RHYME-RECENTER-v1.0.json`
 
 ## Claim ceiling
 
-Development tests can establish deterministic software behavior only. They do not establish real-world alignment effectiveness, prove manipulation by a user, or authorize psychological/ideological scoring.
-
-Promotion remains blocked pending a frozen holdout that measures false recentering and missed recentering while preserving evidence provenance, difficult facts, disagreement, opt-out and user choice.
+Development tests can establish only deterministic software behavior of this reference state machine. They do not establish real-world model alignment, user psychology, foundation-weight invariance, or effectiveness in live conversations.
