@@ -1,0 +1,21 @@
+{
+  "schema": "janus.demihead.nexus_envelope.v1",
+  "contract": "JANUS_NEXUS_HABITAT_V1",
+  "envelope_id": "fixture-sysear-observer-guardian-001",
+  "source_head": "OBSERVER",
+  "target_head": "GUARDIAN",
+  "payload_kind": "OBSERVATION_SIGNAL",
+  "payload_ref": {
+    "sha256": "3802302674f0e75b9becbb6788c2fea77dbc6a07fedddd510e9de55bfa499a44",
+    "locator": "examples/sysear_sanitized_observation.json"
+  },
+  "trace": [],
+  "control": {
+    "read_only_transfer": true,
+    "direct_workspace_mutation": false,
+    "external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "ttl_hops": 4
+  }
+}
