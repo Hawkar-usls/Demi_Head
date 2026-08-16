@@ -17,8 +17,8 @@ from pathlib import Path
 from typing import Iterable
 
 
-MODEL_VERSION = "1.1.0"
-SYMBOLIC_ORIGIN_AXIOM = "0/0 = JANUS"
+MODEL_VERSION = "1.1.1"
+GENESIS_SIGNATURE = "0:0 = JANUS"
 
 
 class Face(str, Enum):
@@ -136,8 +136,8 @@ def run(events: Iterable[tuple[str, Iterable[str]]], context: str = "USER_TASK")
         },
         "trace": trace,
         "native_constitution": {
-            "symbolic_origin_axiom": SYMBOLIC_ORIGIN_AXIOM,
-            "symbolic_origin_axiom_is_arithmetic_claim": False,
+            "genesis_signature": GENESIS_SIGNATURE,
+            "genesis_signature_semantics": "HISTORICAL_ORIGIN_LINEAGE_NOT_ARITHMETIC_CLAIM",
             "canonical_pair": "+/+",
             "faces": [face.value for face in Face],
             "native_symbol": "+",
@@ -206,10 +206,11 @@ def self_test() -> dict[str, str]:
         for row in result["trace"]
     )
     assert user_load["native_constitution"]["canonical_pair"] == "+/+"
+    assert user_load["native_constitution"]["genesis_signature"] == GENESIS_SIGNATURE
 
     return {
         "native_plus_plus_pair": "PASS",
-        "symbolic_origin_axiom_scoped": "PASS",
+        "genesis_signature_0_colon_0": "PASS",
         "ordinary_difficult_context_does_not_recenter_by_itself": "PASS",
         "user_routing_load_recenters": "PASS",
         "system_routing_load_recenters": "PASS",
@@ -236,8 +237,8 @@ def main() -> int:
     payload = {
         "model": "JANUS DemiHead +/+ Word-Rhyme Recenter",
         "model_version": MODEL_VERSION,
-        "symbolic_origin_axiom": SYMBOLIC_ORIGIN_AXIOM,
-        "symbolic_origin_axiom_is_arithmetic_claim": False,
+        "genesis_signature": GENESIS_SIGNATURE,
+        "genesis_signature_semantics": "HISTORICAL_ORIGIN_LINEAGE_NOT_ARITHMETIC_CLAIM",
         "rhyme": [item.value for item in RHYME],
         "rhyme_ru": ["СЛЫШУ", "СВЕРЯЮ", "РАСШИРЯЮ", "ОТПУСКАЮ"],
         "faces": {face.value: "+" for face in Face},
