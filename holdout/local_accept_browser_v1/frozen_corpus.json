@@ -1,0 +1,65 @@
+{
+  "schema": "janus.demihead.local_accept_browser_holdout.v1",
+  "freeze_sha256": "f44263abaf0fa23c0344f4c68719e1a695d122c251fc373e732724d7958f2c49",
+  "freeze_payload": {
+    "frozen_before_first_execution": true,
+    "component_revisions": {
+      "DemiHead": "fc542466279bd15bceb7171514a84d1c1d002a11",
+      "HRain": "ceb81210c2f70b71d6c941e0b088a68969ead7b9",
+      "iNaiHR": "b27cd8732b3137caea1036024acc1778ea02213a"
+    },
+    "browser": {
+      "engine": "chromium",
+      "server": "http://127.0.0.1:8765",
+      "live_user_data": false,
+      "network_external_effects": false
+    },
+    "seed_workspaces": {
+      "HRain": {
+        "storage_key": "hrain_v10_4_restore",
+        "node_count": 3,
+        "link_count": 2
+      },
+      "iNaiHR": {
+        "storage_key": "inaihr_v2",
+        "metadata_key": "inaihr_demihead_provenance_v1",
+        "node_count": 3,
+        "link_count": 2
+      }
+    },
+    "cases": [
+      ["hrain_sidecar_export", "packet validates, target LEFT_HRAIN, no storage write"],
+      ["hrain_proposal_lab", "browser lab builds hash-bound ADD_NODE proposal, no storage write"],
+      ["hrain_preview", "proposal preview performs no storage write"],
+      ["hrain_decline", "DECLINE performs no storage write"],
+      ["hrain_accept_reload", "ACCEPT adds exactly one SYSTEM node and persists after reload"],
+      ["hrain_stale_base", "workspace drift after proposal causes BASE_WORKSPACE_CHANGED_REPROPOSE_REQUIRED and no proposal mutation"],
+      ["hrain_tamper", "proposal payload tamper with stale proposal_sha256 is refused and no mutation"],
+      ["hrain_cross_key_isolation", "HRain apply does not change iNaiHR graph/metadata keys"],
+      ["inaihr_sidecar_export", "packet validates, target RIGHT_INAIHR, no storage write"],
+      ["inaihr_proposal_lab", "browser lab builds hash-bound ADD_NODE proposal, no storage write"],
+      ["inaihr_preview_decline", "preview and DECLINE perform no graph/metadata write"],
+      ["inaihr_accept_reload", "ACCEPT adds exactly one non-remote-AI node plus SYSTEM metadata; sidecar restores provenance after reload"],
+      ["inaihr_serializer_roundtrip", "narrow core-style serializer drops extra graph fields but sidecar metadata restores SYSTEM provenance for existing node only"],
+      ["inaihr_stale_base", "workspace drift after proposal is refused and no proposal mutation"],
+      ["inaihr_tamper", "proposal tamper is refused and no mutation"],
+      ["inaihr_cross_key_isolation", "iNaiHR apply does not change HRain workspace key"],
+      ["shared_origin_key_separation", "same localhost origin still preserves distinct storage namespaces by key"]
+    ],
+    "admission": {
+      "required_pass_count": 17,
+      "allow_console_page_errors": false,
+      "allow_external_network_requests": false,
+      "allow_direct_cross_hemisphere_write": false
+    },
+    "claim_ceiling": {
+      "production_network_latency_measured": false,
+      "authenticated_human_identity_established": false,
+      "sha256_binding_is_signature": false,
+      "real_user_workspace_touched": false,
+      "production_readiness_established": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  }
+}

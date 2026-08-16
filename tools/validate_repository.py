@@ -15,6 +15,7 @@ from keto_reference import load_case, summarize_case
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 BICAMERAL_TRANSPORT_FREEZE = "d33077fbd0d244bf0ae6d678894bdc9a8eddcf0d779ce11b85e39eeff6143883"
+LOCAL_ACCEPT_BROWSER_FREEZE = "f44263abaf0fa23c0344f4c68719e1a695d122c251fc373e732724d7958f2c49"
 
 
 def load_json(path: Path) -> object:
@@ -180,6 +181,48 @@ def validate_bicameral_transport_freeze() -> None:
         raise ValueError("Transport holdout cannot change authority or mass-effect budget")
 
 
+def validate_local_accept_browser_freeze() -> None:
+    path = ROOT / "holdout" / "local_accept_browser_v1" / "frozen_corpus.json"
+    corpus = load_json(path)
+    if not isinstance(corpus, dict):
+        raise ValueError("Local-accept browser corpus must be an object")
+    if corpus.get("schema") != "janus.demihead.local_accept_browser_holdout.v1":
+        raise ValueError("Unexpected local-accept browser holdout schema")
+    if corpus.get("freeze_sha256") != LOCAL_ACCEPT_BROWSER_FREEZE:
+        raise ValueError("Local-accept browser declared freeze SHA drifted")
+    payload = corpus.get("freeze_payload")
+    if canonical_sha256(payload) != LOCAL_ACCEPT_BROWSER_FREEZE:
+        raise ValueError("Local-accept browser canonical freeze payload hash mismatch")
+    if not isinstance(payload, dict) or payload.get("frozen_before_first_execution") is not True:
+        raise ValueError("Local-accept browser corpus must be frozen before first execution")
+    if len(payload.get("cases", [])) != 17:
+        raise ValueError("Local-accept browser holdout must keep exactly 17 preregistered cases")
+    if payload.get("admission", {}).get("required_pass_count") != 17:
+        raise ValueError("Local-accept browser admission count drifted")
+    browser = payload.get("browser", {})
+    if browser.get("engine") != "chromium":
+        raise ValueError("Local-accept browser engine preregistration drifted")
+    if browser.get("server") != "http://127.0.0.1:8765":
+        raise ValueError("Local-accept browser isolated server preregistration drifted")
+    if browser.get("live_user_data") is not False:
+        raise ValueError("Browser holdout may not use live user data")
+    if browser.get("network_external_effects") is not False:
+        raise ValueError("Browser holdout may not permit external network effects")
+    ceiling = payload.get("claim_ceiling", {})
+    if ceiling.get("production_network_latency_measured") is not False:
+        raise ValueError("Localhost functional holdout cannot claim production network latency")
+    if ceiling.get("authenticated_human_identity_established") is not False:
+        raise ValueError("Browser click cannot become authenticated human identity")
+    if ceiling.get("sha256_binding_is_signature") is not False:
+        raise ValueError("SHA-256 content binding cannot become a digital signature")
+    if ceiling.get("real_user_workspace_touched") is not False:
+        raise ValueError("Browser holdout must not touch real user workspaces")
+    if ceiling.get("production_readiness_established") is not False:
+        raise ValueError("Browser holdout cannot establish production readiness")
+    if ceiling.get("authority_delta") != 0 or ceiling.get("mass_effect_budget_delta") != 0:
+        raise ValueError("Browser holdout cannot change authority or mass-effect budget")
+
+
 def validate_markdown_links() -> None:
     missing: list[str] = []
     for markdown in sorted(ROOT.rglob("*.md")):
@@ -208,8 +251,9 @@ def main() -> None:
     validate_keto_invariants()
     validate_hemisphere_invariants()
     validate_bicameral_transport_freeze()
+    validate_local_accept_browser_freeze()
     validate_markdown_links()
-    print("Repository contracts, JSON mirrors, KETO/bicameral invariants, frozen transport corpus, and local documentation links are valid.")
+    print("Repository contracts, JSON mirrors, KETO/bicameral invariants, frozen transport/browser corpora, and local documentation links are valid.")
 
 
 if __name__ == "__main__":
