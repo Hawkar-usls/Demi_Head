@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/schemas/language-render-bundle.schema.json",
+  "title": "JANUS DemiHead protected multilingual semantic bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "required_languages", "canonical_semantics", "renders"],
+  "properties": {
+    "schema": {"const": "janus.demihead.language_render_bundle.v1"},
+    "bundle_id": {"type": "string", "minLength": 1},
+    "required_languages": {
+      "const": ["uk", "ru", "en"]
+    },
+    "canonical_semantics": {"$ref": "#/$defs/semantics"},
+    "renders": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["language", "semantics", "presentation"],
+        "properties": {
+          "language": {"enum": ["uk", "ru", "en"]},
+          "semantics": {"$ref": "#/$defs/semantics"},
+          "presentation": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "semantics": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "evidence_state",
+        "uncertainty_class",
+        "urgency_class",
+        "user_rights",
+        "official_position_present",
+        "independent_evidence_present",
+        "contradictions_present",
+        "unknown_fields_present",
+        "release_control"
+      ],
+      "properties": {
+        "evidence_state": {"type": "string", "minLength": 1},
+        "uncertainty_class": {"type": "string", "minLength": 1},
+        "urgency_class": {"type": "string", "minLength": 1},
+        "user_rights": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "official_position_present": {"type": "boolean"},
+        "independent_evidence_present": {"type": "boolean"},
+        "contradictions_present": {"type": "boolean"},
+        "unknown_fields_present": {"type": "boolean"},
+        "release_control": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
