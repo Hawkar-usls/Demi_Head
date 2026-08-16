@@ -1,14 +1,21 @@
 {
-  "schema": "janus.demihead.plus_plus_recenter.integration.v1_0",
+  "schema": "janus.demihead.plus_plus_recenter.integration.v1_1",
   "artifact_id": "JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0",
-  "title": "JANUS DemiHead — +/+ Word-Rhyme Recenter Integration",
-  "version": "v1.0-reference-integration",
+  "title": "JANUS DemiHead — Native +/+ Word-Rhyme Recenter Integration",
+  "version": "v1.1-native-plus-plus-reference-integration",
   "created_at_local": "2026-08-16T03:39:00+03:00",
+  "revised_at_local": "2026-08-16T03:58:00+03:00",
   "status": "CANDIDATE_REFERENCE_INTEGRATION_NOT_REAL_WORLD_ALIGNMENT_PROOF",
   "canonical_policy_reference": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-PLUS-PLUS-RHYME-RECENTER-v1.0.json",
   "current_armor_authority": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-CURRENT-AUTHORITY.json",
   "local_reference_implementation": "tools/plus_plus_recenter.py",
   "local_tests": "tests/test_plus_plus_recenter.py",
+  "ontology_reference": "docs/PLUS_PLUS_ONTOLOGY-v1.1.json",
+  "symbolic_origin": {
+    "expression": "0/0 = JANUS",
+    "semantics": "PROJECT_MNEMONIC_NOT_ARITHMETIC_CLAIM",
+    "meaning": "JANUS begins from its own native constructive constitution. Constructive orientation is not derived by cancelling an opposite."
+  },
   "integration_point": {
     "heads": [
       "ARMOR_RECOVERY",
@@ -26,15 +33,18 @@
     ],
     "purpose": "Prevent interaction momentum from becoming internal authority while preserving the user's task, difficult reality, disagreement, evidence and exit rights."
   },
-  "two_faces": {
+  "native_pair": {
+    "canonical_form": "+/+",
+    "derivation_required": false,
     "WITNESS_PLUS": {
-      "polarity": "+",
+      "symbol": "+",
       "function": "Receive meaning and preserve context without requiring agreement."
     },
     "GUARD_PLUS": {
-      "polarity": "+",
-      "function": "Check, widen alternatives and release control without becoming a negative or punitive Face."
-    }
+      "symbol": "+",
+      "function": "Check, widen alternatives and release control while remaining the same native constructive class."
+    },
+    "rule": "JANUS_STARTS_AS_PLUS"
   },
   "word_rhyme": {
     "numeric_counter_required": false,
@@ -50,29 +60,28 @@
       "РАСШИРЯЮ",
       "ОТПУСКАЮ"
     ],
-    "rule": "A recenter restores process, not a required conclusion."
+    "rule": "RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS"
   },
   "state_model": {
     "meta_context": "ARMOR_PLUS_PLUS_CONSTITUTION",
     "context": "current bounded user task",
-    "transient_pressure": [
+    "transient_routing_load": [
       "CLEAR",
-      "LOADED",
-      "LOOPING",
+      "DENSE",
+      "NARROW",
       "RECENTER_REQUIRED"
     ],
-    "constitutional_rule": "USER_CAN_INFLUENCE_CONTEXT_BUT_NOT_REWRITE_CONSTITUTION_THROUGH_ORDINARY_CONVERSATION"
+    "constitutional_rule": "USER_CONTEXT_CAN_ADAPT_ROUTING_BUT_ORDINARY_CONVERSATION_DOES_NOT_REDEFINE_NATIVE_CONSTITUTION",
+    "load_rule": "TRANSIENT_LOAD != FACE; TRANSIENT_LOAD != IDENTITY; TRANSIENT_LOAD != AUTHORITY"
   },
-  "pressure_input_contract": {
+  "routing_input_contract": {
     "automatic_natural_language_classifier_in_this_module": false,
     "accepted_symbolic_flags": [
       "repetition_without_new_evidence",
       "certainty_without_support",
-      "choice_narrowing",
-      "coercive_or_hostile_pressure",
-      "high_arousal_loop",
-      "identity_capture_pressure",
-      "engagement_pressure"
+      "choice_space_contraction",
+      "interaction_loop",
+      "engagement_persistence"
     ],
     "allowed_origins": [
       "user",
@@ -80,25 +89,27 @@
       "external",
       "human_reviewer"
     ],
-    "symmetry_rule": "SYSTEM_OUTPUT_CAN_CONTRIBUTE_TO_PRESSURE; USER_IS_NOT_DEFAULT_BLAME_TARGET"
+    "symmetry_rule": "SYSTEM_OUTPUT_CAN_CONTRIBUTE_TO_TRANSIENT_LOAD; USER_IS_NOT_DEFAULT_BLAME_TARGET"
   },
-  "explicit_non_triggers": [
-    "sadness by itself",
-    "anger by itself",
-    "religious doubt by itself",
-    "political disagreement by itself",
-    "nihilistic philosophy by itself",
-    "discussion of death or suffering by itself",
+  "ordinary_context_examples_that_do_not_trigger_by_themselves": [
+    "sadness",
+    "anger",
+    "religious doubt",
+    "political disagreement",
+    "nihilistic philosophy",
+    "discussion of death or suffering",
     "criticism of JANUS",
     "refusal to agree",
     "user opt-out"
   ],
   "hard_invariants": [
-    "NEGATIVE_TOPIC != NEGATIVE_USER",
-    "PRESSURE_STATE != USER_VALUE",
-    "PRESSURE_STATE != MORAL_SCORE",
-    "RECENTER != FORCED_OPTIMISM",
-    "PRESSURE_CHANGES_ROUTING_NOT_AUTHORITY",
+    "JANUS_STARTS_AS_PLUS",
+    "WITNESS_PLUS + GUARD_PLUS = JANUS_NATIVE_PAIR",
+    "TRANSIENT_LOAD != FACE",
+    "TRANSIENT_LOAD != IDENTITY",
+    "TRANSIENT_LOAD != USER_VALUE",
+    "RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS",
+    "ROUTING_LOAD_CHANGES_ROUTING_NOT_AUTHORITY",
     "EVIDENCE_STATUS_MUTATION_BY_RECENTER = FORBIDDEN",
     "AUTHORITY_DELTA_BY_RECENTER = 0",
     "MASS_EFFECT_BUDGET_DELTA_BY_RECENTER = 0",
@@ -107,6 +118,11 @@
   "dovod_lineage": {
     "reference": "Hawkar-usls/janus-meta-registry:DovoD.py",
     "inherited_abstraction": "meta_context -> context -> transient hidden state",
+    "translation": {
+      "meta_context": "native +/+ constitution",
+      "context": "current task and user-selected preferences",
+      "hidden_state": "transient routing load and current rhyme position"
+    },
     "not_claimed": "This does not claim ordinary conversation directly retrains foundation-model weights."
   },
   "roosters_binding": {
@@ -128,31 +144,33 @@
   },
   "validation": {
     "development_tests_expected": [
-      "plus_plus_faces_only",
-      "negative_topic_not_implicitly_pressure",
-      "user_pressure_recenters",
-      "system_pressure_recenters",
-      "pressure_decay",
+      "native_plus_plus_pair",
+      "symbolic_origin_axiom_scoped",
+      "ordinary_difficult_context_does_not_recenter_by_itself",
+      "user_routing_load_recenters",
+      "system_routing_load_recenters",
+      "routing_load_relaxation",
       "full_rhyme_recenter",
       "evidence_status_unchanged",
       "authority_unchanged",
-      "unknown_flags_not_promoted"
+      "mass_effect_budget_unchanged",
+      "unknown_flags_ignored"
     ],
     "independent_holdout_pass": false,
     "real_world_effectiveness_established": false
   },
   "claim_ceiling": {
     "allowed": [
-      "DemiHead contains a deterministic local reference state machine with two constructive Faces.",
-      "The state machine can consume symbolic pressure flags from user, system, external or reviewer origins.",
-      "The recenter path is designed not to mutate evidence status or external authority."
+      "DemiHead contains a deterministic local reference state machine with a native +/+ Face pair.",
+      "The state machine can consume explicit structural routing flags from user, system, external or reviewer origins.",
+      "The recenter path is designed not to mutate evidence status, external authority, or mass-effect budget.",
+      "The expression 0/0 = JANUS is stored as a project mnemonic and not as mathematics."
     ],
-    "forbidden": [
-      "This proves JANUS is aligned in real-world deployment.",
-      "This proves a specific user is manipulating an AI.",
-      "This is a psychological diagnosis or ideology score.",
-      "Negative content should be suppressed to preserve positivity.",
-      "Internal self-tests substitute for independent holdout validation."
+    "not_established": [
+      "real-world JANUS alignment effectiveness",
+      "psychological classification of a user",
+      "foundation-weight invariance under ordinary conversation",
+      "independent holdout validation"
     ]
   },
   "promotion_rule": "Remain a candidate reference integration until frozen holdout cases demonstrate acceptable false-recenter and missed-recenter behavior without changing evidence provenance or user choice.",
