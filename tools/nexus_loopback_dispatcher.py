@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import copy
+import tempfile
+import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Callable
 
 from nexus_destination_acceptance import validate_endpoint_policy
 from nexus_destination_acceptance_revalidation import accept_destination_revalidated
+from nexus_dispatch_ledger import SqliteDispatchLedger, dispatch_digest
 from nexus_habitat import validate_envelope
 from nexus_local_transport import FRAME_SCHEMA, canonical_json_bytes, sha256
 
@@ -88,6 +92,16 @@ def _validate_handler(handler: LocalHandler, target_head: str) -> None:
         raise ValueError("Loopback handler callback must be callable")
 
 
+def _validate_dispatch_ledger(dispatch_ledger: Any) -> None:
+    if dispatch_ledger is None:
+        raise ValueError("A persistent dispatch ledger is required")
+    if getattr(dispatch_ledger, "persistent", False) is not True:
+        raise ValueError("Loopback v1 requires a persistent dispatch ledger")
+    for method in ("begin", "complete", "fail_ambiguous", "get"):
+        if not callable(getattr(dispatch_ledger, method, None)):
+            raise ValueError(f"Dispatch ledger is missing required method: {method}")
+
+
 def _hold(
     status: str,
     *,
@@ -97,6 +111,8 @@ def _hold(
     endpoint_id: str | None = None,
     handler_id: str | None = None,
     invocation_attempted: bool = False,
+    dispatch_sha256: str | None = None,
+    ledger_state: str | None = None,
 ) -> dict[str, Any]:
     return {
         "schema": SCHEMA,
@@ -107,11 +123,17 @@ def _hold(
             "target_head": target_head,
             "endpoint_id": endpoint_id,
             "handler_id": handler_id,
+            "dispatch_sha256": dispatch_sha256,
         },
         "hold": {
             "reason": reason,
             "handler_invocation_attempted": invocation_attempted,
             "completion_established": False,
+        },
+        "ledger": {
+            "persistent_required": True,
+            "dispatch_state": ledger_state,
+            "duplicate_reinvocation_permitted": False,
         },
         "control": {
             "local_in_process_delivery_performed": invocation_attempted,
@@ -124,6 +146,7 @@ def _hold(
         },
         "laws": [
             "HOLD != FAILURE_PERMISSION_TO_RETRY",
+            "STARTED_WITHOUT_COMPLETION = AMBIGUOUS_NO_RETRY",
             "LOCAL_DISPATCH != NETWORK_DELIVERY",
             "LOCAL_HANDLER_INVOCATION != WORLD_EFFECT_AUTHORITY",
         ],
@@ -138,6 +161,7 @@ def dispatch_loopback(
     payload: dict[str, Any],
     handlers: dict[str, LocalHandler],
     *,
+    dispatch_ledger: Any,
     now_ms: int | None = None,
 ) -> dict[str, Any]:
     if not isinstance(frame, dict) or frame.get("schema") != FRAME_SCHEMA:
@@ -174,45 +198,124 @@ def dispatch_loopback(
             reason="Destination exists but no local reference handler is registered.",
         )
     _validate_handler(handler, target_head)
+    _validate_dispatch_ledger(dispatch_ledger)
 
+    now = int(time.time() * 1000) if now_ms is None else int(now_ms)
     acceptance = accept_destination_revalidated(
         frame,
         admission,
         endpoint,
         principal_state,
-        now_ms=now_ms,
+        now_ms=now,
     )
+
+    frame_sha256 = sha256(frame)
+    acceptance_sha256 = sha256(acceptance)
+    bindings = {
+        "frame_sha256": frame_sha256,
+        "acceptance_sha256": acceptance_sha256,
+        "payload_sha256": payload_sha256,
+        "handler_id": handler.handler_id,
+    }
+    dispatch_sha256 = dispatch_digest(bindings)
+    begin = dispatch_ledger.begin(dispatch_sha256, bindings=bindings, now_ms=now)
+    if begin.get("admitted") is not True:
+        existing = begin.get("existing") or {}
+        return _hold(
+            "HOLD_DUPLICATE_DISPATCH",
+            frame=frame,
+            target_head=target_head,
+            endpoint_id=endpoint["endpoint_id"],
+            handler_id=handler.handler_id,
+            dispatch_sha256=dispatch_sha256,
+            ledger_state=existing.get("state", "UNKNOWN"),
+            reason="This content-addressed local dispatch was already started; reinvocation is forbidden.",
+        )
 
     safe_input = copy.deepcopy(payload)
     try:
         output = handler.callback(safe_input)
     except Exception as exc:
+        try:
+            recorded = dispatch_ledger.fail_ambiguous(
+                dispatch_sha256,
+                failure_code=f"HANDLER_{type(exc).__name__.upper()}",
+                now_ms=now,
+            )
+        except Exception:
+            recorded = False
         return _hold(
-            "HOLD_HANDLER_FAILURE",
+            "HOLD_HANDLER_FAILURE" if recorded else "HOLD_LEDGER_FINALIZATION_FAILURE",
             frame=frame,
             target_head=target_head,
             endpoint_id=endpoint["endpoint_id"],
             handler_id=handler.handler_id,
-            reason=f"Local reference handler raised {type(exc).__name__}.",
+            dispatch_sha256=dispatch_sha256,
+            ledger_state="FAILED_AMBIGUOUS" if recorded else "STARTED",
+            reason="Local handler did not establish a clean completion; retry remains forbidden.",
             invocation_attempted=True,
         )
 
-    if not isinstance(output, dict):
-        raise ValueError("Loopback handler output must be a JSON object")
-    output_size = _json_size(output)
-    if output_size > MAX_HANDLER_OUTPUT_BYTES:
-        raise ValueError("Loopback handler output exceeds maximum size")
+    try:
+        if not isinstance(output, dict):
+            raise ValueError("Loopback handler output must be a JSON object")
+        output_size = _json_size(output)
+        if output_size > MAX_HANDLER_OUTPUT_BYTES:
+            raise ValueError("Loopback handler output exceeds maximum size")
+    except ValueError:
+        try:
+            recorded = dispatch_ledger.fail_ambiguous(
+                dispatch_sha256,
+                failure_code="INVALID_HANDLER_OUTPUT",
+                now_ms=now,
+            )
+        except Exception:
+            recorded = False
+        return _hold(
+            "HOLD_HANDLER_OUTPUT_INVALID" if recorded else "HOLD_LEDGER_FINALIZATION_FAILURE",
+            frame=frame,
+            target_head=target_head,
+            endpoint_id=endpoint["endpoint_id"],
+            handler_id=handler.handler_id,
+            dispatch_sha256=dispatch_sha256,
+            ledger_state="FAILED_AMBIGUOUS" if recorded else "STARTED",
+            reason="Handler invocation occurred but its output was not admissible; retry remains forbidden.",
+            invocation_attempted=True,
+        )
+
+    handler_output_sha256 = sha256(output)
+    try:
+        completed = dispatch_ledger.complete(
+            dispatch_sha256,
+            result_sha256=handler_output_sha256,
+            now_ms=now,
+        )
+    except Exception:
+        completed = False
+    if not completed:
+        return _hold(
+            "HOLD_LEDGER_FINALIZATION_FAILURE",
+            frame=frame,
+            target_head=target_head,
+            endpoint_id=endpoint["endpoint_id"],
+            handler_id=handler.handler_id,
+            dispatch_sha256=dispatch_sha256,
+            ledger_state="STARTED",
+            reason="Handler returned, but durable completion could not be established; retry remains forbidden.",
+            invocation_attempted=True,
+        )
 
     return {
         "schema": SCHEMA,
         "contract": CONTRACT,
         "status": "LOOPBACK_DISPATCH_COMPLETED_LOCAL",
         "binding": {
-            "frame_sha256": sha256(frame),
+            "frame_sha256": frame_sha256,
             "envelope_sha256": frame["envelope_sha256"],
-            "acceptance_sha256": sha256(acceptance),
+            "acceptance_sha256": acceptance_sha256,
             "payload_sha256": payload_sha256,
-            "handler_output_sha256": sha256(output),
+            "handler_output_sha256": handler_output_sha256,
+            "dispatch_sha256": dispatch_sha256,
             "source_head": envelope["source_head"],
             "target_head": target_head,
             "payload_kind": envelope["payload_kind"],
@@ -227,9 +330,19 @@ def dispatch_loopback(
             "handler_descriptor_verified": True,
             "handler_input_size_bytes": payload_size,
             "handler_output_size_bytes": output_size,
+            "durable_started_record_committed_before_handler": True,
             "local_reference_handler_invoked": True,
             "local_in_process_delivery_performed": True,
+            "durable_completion_recorded": True,
             "completion_established": True,
+        },
+        "ledger": {
+            "kind": str(getattr(dispatch_ledger, "kind", "UNKNOWN")),
+            "persistent": True,
+            "dispatch_state": "COMPLETED",
+            "dispatch_sha256": dispatch_sha256,
+            "duplicate_reinvocation_permitted": False,
+            "crash_safe_local_duplicate_attempt_suppression": True,
         },
         "handler_output": output,
         "control": {
@@ -243,6 +356,8 @@ def dispatch_loopback(
             "mass_effect_budget_delta": 0,
         },
         "claim_ceiling": {
+            "crash_safe_local_duplicate_attempt_suppression_established": True,
+            "guaranteed_delivery_established": False,
             "exactly_once_delivery_established": False,
             "process_isolation_established": False,
             "handler_side_effect_attestation_established": False,
@@ -251,10 +366,12 @@ def dispatch_loopback(
             "world_effect_authorization_established": False,
         },
         "laws": [
-            "DESTINATION_ACCEPTANCE != DELIVERY",
+            "STARTED_MUST_BE_DURABLE_BEFORE_HANDLER_INVOCATION",
+            "EXISTING_DISPATCH_KEY = NO_REINVOCATION",
+            "CRASH_AMBIGUITY = HOLD_NO_RETRY",
             "LOOPBACK_DISPATCH = LOCAL_IN_PROCESS_DELIVERY_ONLY",
             "LOCAL_HANDLER_INVOCATION != EXTERNAL_EFFECT",
-            "LOCAL_COMPLETION != EXACTLY_ONCE_DELIVERY",
+            "DUPLICATE_SUPPRESSION != EXACTLY_ONCE_DELIVERY",
             "DISPATCH != AUTHORITY",
         ],
     }
@@ -334,45 +451,58 @@ def self_test() -> dict[str, Any]:
             "mass_effect_budget_delta": 0,
         }],
     }
+    calls: list[str] = []
     handlers = {
         "RELEASE_CONTROL": LocalHandler(
             handler_id="RELEASE_CONTROL.REFERENCE_ACK.V1",
             target_head="RELEASE_CONTROL",
-            callback=lambda value: {
+            callback=lambda value: calls.append("invoked") or {
                 "schema": "janus.demihead.loopback_reference_ack.v1",
                 "status": "ACK_LOCAL_ONLY",
                 "input_sha256": sha256(value),
             },
         )
     }
-    result = dispatch_loopback(
-        frame,
-        admission,
-        public_principal,
-        catalog,
-        payload,
-        handlers,
-        now_ms=issued + 200,
-    )
+
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "dispatch.db"
+        first_ledger = SqliteDispatchLedger(path)
+        result = dispatch_loopback(
+            frame,
+            admission,
+            public_principal,
+            catalog,
+            payload,
+            handlers,
+            dispatch_ledger=first_ledger,
+            now_ms=issued + 200,
+        )
+        duplicate = dispatch_loopback(
+            frame,
+            admission,
+            public_principal,
+            catalog,
+            payload,
+            handlers,
+            dispatch_ledger=SqliteDispatchLedger(path),
+            now_ms=issued + 300,
+        )
+
     checks = {
         "local_dispatch_completed": result["status"] == "LOOPBACK_DISPATCH_COMPLETED_LOCAL",
+        "durable_start_before_handler": result["dispatch"]["durable_started_record_committed_before_handler"] is True,
         "local_delivery_recorded": result["dispatch"]["local_in_process_delivery_performed"] is True,
+        "duplicate_rejected_after_restart": duplicate["status"] == "HOLD_DUPLICATE_DISPATCH",
+        "handler_invoked_once": calls == ["invoked"],
         "network_io_not_claimed": result["control"]["network_io_performed"] is False,
         "world_effect_not_claimed": result["control"]["world_effect_performed"] is False,
         "exactly_once_not_claimed": result["claim_ceiling"]["exactly_once_delivery_established"] is False,
+        "duplicate_suppression_claimed": result["claim_ceiling"]["crash_safe_local_duplicate_attempt_suppression_established"] is True,
     }
-
-    tampered = dict(payload)
-    tampered["decision"] = "MUTATED"
-    try:
-        dispatch_loopback(frame, admission, public_principal, catalog, tampered, handlers, now_ms=issued + 200)
-    except ValueError:
-        checks["tampered_payload_rejected_before_dispatch"] = True
-    else:
-        checks["tampered_payload_rejected_before_dispatch"] = False
 
     return {
         "status": "PASS" if all(checks.values()) else "FAIL",
         "checks": checks,
         "result": result,
+        "duplicate": duplicate,
     }

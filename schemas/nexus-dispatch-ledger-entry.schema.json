@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-dispatch-ledger-entry.schema.json",
+  "title": "JANUS Nexus Dispatch Ledger Entry v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "dispatch_sha256",
+    "state",
+    "bindings",
+    "started_at_ms",
+    "updated_at_ms",
+    "result_sha256",
+    "failure_code",
+    "control"
+  ],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_dispatch_ledger_entry.v1"},
+    "dispatch_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "state": {"enum": ["STARTED", "COMPLETED", "FAILED_AMBIGUOUS"]},
+    "bindings": {
+      "type": "object",
+      "required": ["frame_sha256", "acceptance_sha256", "payload_sha256", "handler_id"],
+      "properties": {
+        "frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "acceptance_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "handler_id": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "started_at_ms": {"type": "integer", "minimum": 0},
+    "updated_at_ms": {"type": "integer", "minimum": 0},
+    "result_sha256": {
+      "anyOf": [
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "failure_code": {"type": ["string", "null"]},
+    "control": {
+      "type": "object",
+      "required": ["persistent", "automatic_retry_permitted", "authority_delta", "mass_effect_budget_delta"],
+      "properties": {
+        "persistent": {"const": true},
+        "automatic_retry_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

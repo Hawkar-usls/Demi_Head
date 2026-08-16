@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import tempfile
 import sys
 import unittest
 from pathlib import Path
@@ -8,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
+from nexus_dispatch_ledger import SqliteDispatchLedger  # noqa: E402
 from nexus_local_transport import build_frame, sha256, validate_frame  # noqa: E402
 from nexus_loopback_dispatcher import LocalHandler, dispatch_loopback, self_test  # noqa: E402
 from nexus_replay_ledger import MemoryReplayGuard  # noqa: E402
@@ -17,17 +19,27 @@ class NexusLoopbackDispatcherTests(unittest.TestCase):
     KEY = b"unit-loopback-dispatch-key"
     ISSUED = 1_800_000_000_000
 
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.ledger_path = Path(self.temp.name) / "dispatch.db"
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def ledger(self):
+        return SqliteDispatchLedger(self.ledger_path)
+
     def payload(self):
         return {"decision": "WAIT_FOR_NEW_EVIDENCE", "authority_delta": 0}
 
-    def envelope(self, payload=None, *, target_head="RELEASE_CONTROL"):
+    def envelope(self, payload=None):
         payload = payload or self.payload()
         return {
             "schema": "janus.demihead.nexus_envelope.v1",
             "contract": "JANUS_NEXUS_HABITAT_V1",
             "envelope_id": "loopback-unit-001",
             "source_head": "GUARDIAN",
-            "target_head": target_head,
+            "target_head": "RELEASE_CONTROL",
             "payload_kind": "GUARDIAN_RESULT",
             "payload_ref": {"sha256": sha256(payload)},
             "trace": [],
@@ -112,130 +124,165 @@ class NexusLoopbackDispatcherTests(unittest.TestCase):
             **kwargs,
         )
 
-    def test_valid_dispatch_performs_only_local_in_process_delivery(self):
-        payload = self.payload()
-        frame, admission, public = self.frame_and_admission(payload)
-        result = dispatch_loopback(
+    def dispatch(self, *, payload=None, public=None, catalog=None, handlers=None, now_offset=200, ledger=None):
+        payload = payload or self.payload()
+        frame, admission, default_public = self.frame_and_admission(payload)
+        return dispatch_loopback(
             frame,
             admission,
-            public,
-            self.catalog(),
+            public or default_public,
+            catalog or self.catalog(),
             payload,
-            {"RELEASE_CONTROL": self.handler()},
-            now_ms=self.ISSUED + 200,
+            handlers or {"RELEASE_CONTROL": self.handler()},
+            dispatch_ledger=ledger or self.ledger(),
+            now_ms=self.ISSUED + now_offset,
         )
+
+    def test_valid_dispatch_commits_started_before_handler_and_completion_after(self):
+        result = self.dispatch()
         self.assertEqual(result["status"], "LOOPBACK_DISPATCH_COMPLETED_LOCAL")
-        self.assertTrue(result["dispatch"]["local_reference_handler_invoked"])
-        self.assertTrue(result["dispatch"]["local_in_process_delivery_performed"])
+        self.assertTrue(result["dispatch"]["durable_started_record_committed_before_handler"])
+        self.assertTrue(result["dispatch"]["durable_completion_recorded"])
+        self.assertTrue(result["ledger"]["persistent"])
+        self.assertEqual(result["ledger"]["dispatch_state"], "COMPLETED")
         self.assertFalse(result["control"]["network_io_performed"])
         self.assertFalse(result["control"]["external_delivery_performed"])
         self.assertFalse(result["control"]["world_effect_performed"])
         self.assertFalse(result["claim_ceiling"]["exactly_once_delivery_established"])
+        self.assertTrue(result["claim_ceiling"]["crash_safe_local_duplicate_attempt_suppression_established"])
 
-    def test_payload_hash_tamper_is_rejected_before_handler(self):
+    def test_same_admission_cannot_invoke_handler_twice_after_ledger_restart(self):
         payload = self.payload()
         frame, admission, public = self.frame_and_admission(payload)
         calls = []
-        handler = self.handler(lambda value: calls.append(value) or {"status": "SHOULD_NOT_RUN"})
+        handler = self.handler(lambda value: calls.append(value) or {"status": "ACK"})
+        first = dispatch_loopback(
+            frame, admission, public, self.catalog(), payload,
+            {"RELEASE_CONTROL": handler}, dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+        )
+        second = dispatch_loopback(
+            frame, admission, public, self.catalog(), payload,
+            {"RELEASE_CONTROL": handler}, dispatch_ledger=SqliteDispatchLedger(self.ledger_path), now_ms=self.ISSUED + 300,
+        )
+        self.assertEqual(first["status"], "LOOPBACK_DISPATCH_COMPLETED_LOCAL")
+        self.assertEqual(second["status"], "HOLD_DUPLICATE_DISPATCH")
+        self.assertEqual(second["ledger"]["dispatch_state"], "COMPLETED")
+        self.assertEqual(len(calls), 1)
+        self.assertFalse(second["control"]["automatic_retry_permitted"])
+
+    def test_handler_exception_becomes_persistent_ambiguous_hold_and_never_retries(self):
+        payload = self.payload()
+        frame, admission, public = self.frame_and_admission(payload)
+        calls = []
+
+        def explode(_payload):
+            calls.append("attempt")
+            raise RuntimeError("synthetic")
+
+        handler = self.handler(explode)
+        first = dispatch_loopback(
+            frame, admission, public, self.catalog(), payload,
+            {"RELEASE_CONTROL": handler}, dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+        )
+        second = dispatch_loopback(
+            frame, admission, public, self.catalog(), payload,
+            {"RELEASE_CONTROL": handler}, dispatch_ledger=SqliteDispatchLedger(self.ledger_path), now_ms=self.ISSUED + 300,
+        )
+        self.assertEqual(first["status"], "HOLD_HANDLER_FAILURE")
+        self.assertEqual(first["ledger"]["dispatch_state"], "FAILED_AMBIGUOUS")
+        self.assertEqual(second["status"], "HOLD_DUPLICATE_DISPATCH")
+        self.assertEqual(second["ledger"]["dispatch_state"], "FAILED_AMBIGUOUS")
+        self.assertEqual(calls, ["attempt"])
+
+    def test_invalid_handler_output_is_persistent_ambiguous_hold(self):
+        payload = self.payload()
+        frame, admission, public = self.frame_and_admission(payload)
+        result = dispatch_loopback(
+            frame, admission, public, self.catalog(), payload,
+            {"RELEASE_CONTROL": self.handler(lambda _value: "not-json-object")},
+            dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+        )
+        self.assertEqual(result["status"], "HOLD_HANDLER_OUTPUT_INVALID")
+        self.assertEqual(result["ledger"]["dispatch_state"], "FAILED_AMBIGUOUS")
+        self.assertFalse(result["control"]["automatic_retry_permitted"])
+
+    def test_payload_hash_tamper_rejected_before_handler_and_ledger(self):
+        payload = self.payload()
+        frame, admission, public = self.frame_and_admission(payload)
+        calls = []
         tampered = dict(payload)
         tampered["decision"] = "MUTATED"
         with self.assertRaises(ValueError):
             dispatch_loopback(
                 frame, admission, public, self.catalog(), tampered,
-                {"RELEASE_CONTROL": handler}, now_ms=self.ISSUED + 200,
+                {"RELEASE_CONTROL": self.handler(lambda value: calls.append(value) or {"status": "ACK"})},
+                dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
             )
         self.assertEqual(calls, [])
+        self.assertEqual(self.ledger().count(), 0)
 
-    def test_missing_endpoint_holds_without_invocation(self):
-        payload = self.payload()
-        frame, admission, public = self.frame_and_admission(payload)
-        calls = []
-        handler = self.handler(lambda value: calls.append(value) or {"status": "ACK"})
-        result = dispatch_loopback(
-            frame, admission, public, self.catalog(enabled=False), payload,
-            {"RELEASE_CONTROL": handler}, now_ms=self.ISSUED + 200,
-        )
-        self.assertEqual(result["status"], "HOLD_NO_LOCAL_ENDPOINT")
-        self.assertFalse(result["control"]["automatic_retry_permitted"])
-        self.assertEqual(calls, [])
-
-    def test_missing_handler_holds(self):
-        payload = self.payload()
-        frame, admission, public = self.frame_and_admission(payload)
-        result = dispatch_loopback(
-            frame, admission, public, self.catalog(), payload, {},
-            now_ms=self.ISSUED + 200,
-        )
-        self.assertEqual(result["status"], "HOLD_NO_LOCAL_HANDLER")
-        self.assertFalse(result["control"]["local_in_process_delivery_performed"])
-
-    def test_ambiguous_enabled_endpoints_fail_closed(self):
-        payload = self.payload()
-        frame, admission, public = self.frame_and_admission(payload)
-        catalog = self.catalog()
-        second = dict(catalog["endpoints"][0])
-        second["endpoint_id"] = "DEMIHEAD.RELEASE_CONTROL.LOCAL.2"
-        catalog["endpoints"].append(second)
-        with self.assertRaises(ValueError):
-            dispatch_loopback(
-                frame, admission, public, catalog, payload,
-                {"RELEASE_CONTROL": self.handler()}, now_ms=self.ISSUED + 200,
-            )
-
-    def test_live_network_catalog_fails_closed(self):
-        payload = self.payload()
-        frame, admission, public = self.frame_and_admission(payload)
-        catalog = self.catalog()
-        catalog["live_network_endpoints"] = True
-        with self.assertRaises(ValueError):
-            dispatch_loopback(
-                frame, admission, public, catalog, payload,
-                {"RELEASE_CONTROL": self.handler()}, now_ms=self.ISSUED + 200,
-            )
-
-    def test_handler_requesting_network_io_is_rejected_before_invocation(self):
-        payload = self.payload()
-        frame, admission, public = self.frame_and_admission(payload)
-        calls = []
-        handler = self.handler(
-            lambda value: calls.append(value) or {"status": "ACK"},
-            network_io_permitted=True,
-        )
-        with self.assertRaises(ValueError):
-            dispatch_loopback(
-                frame, admission, public, self.catalog(), payload,
-                {"RELEASE_CONTROL": handler}, now_ms=self.ISSUED + 200,
-            )
-        self.assertEqual(calls, [])
-
-    def test_revoked_principal_fails_before_handler(self):
+    def test_revoked_principal_fails_before_handler_and_ledger(self):
         payload = self.payload()
         frame, admission, public = self.frame_and_admission(payload)
         public["revoked"] = True
         calls = []
-        handler = self.handler(lambda value: calls.append(value) or {"status": "ACK"})
         with self.assertRaises(ValueError):
             dispatch_loopback(
                 frame, admission, public, self.catalog(), payload,
-                {"RELEASE_CONTROL": handler}, now_ms=self.ISSUED + 200,
+                {"RELEASE_CONTROL": self.handler(lambda value: calls.append(value) or {"status": "ACK"})},
+                dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
             )
         self.assertEqual(calls, [])
+        self.assertEqual(self.ledger().count(), 0)
 
-    def test_handler_exception_holds_and_forbids_automatic_retry(self):
+    def test_missing_endpoint_and_handler_hold_without_ledger_entry(self):
         payload = self.payload()
         frame, admission, public = self.frame_and_admission(payload)
-
-        def explode(_payload):
-            raise RuntimeError("synthetic")
-
-        result = dispatch_loopback(
-            frame, admission, public, self.catalog(), payload,
-            {"RELEASE_CONTROL": self.handler(explode)}, now_ms=self.ISSUED + 200,
+        no_endpoint = dispatch_loopback(
+            frame, admission, public, self.catalog(enabled=False), payload,
+            {"RELEASE_CONTROL": self.handler()}, dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
         )
-        self.assertEqual(result["status"], "HOLD_HANDLER_FAILURE")
-        self.assertTrue(result["hold"]["handler_invocation_attempted"])
-        self.assertFalse(result["hold"]["completion_established"])
-        self.assertFalse(result["control"]["automatic_retry_permitted"])
+        self.assertEqual(no_endpoint["status"], "HOLD_NO_LOCAL_ENDPOINT")
+        self.assertEqual(self.ledger().count(), 0)
+
+        no_handler = dispatch_loopback(
+            frame, admission, public, self.catalog(), payload, {},
+            dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+        )
+        self.assertEqual(no_handler["status"], "HOLD_NO_LOCAL_HANDLER")
+        self.assertEqual(self.ledger().count(), 0)
+
+    def test_ambiguous_or_network_endpoint_catalog_fails_closed(self):
+        payload = self.payload()
+        frame, admission, public = self.frame_and_admission(payload)
+        ambiguous = self.catalog()
+        second = dict(ambiguous["endpoints"][0])
+        second["endpoint_id"] = "DEMIHEAD.RELEASE_CONTROL.LOCAL.2"
+        ambiguous["endpoints"].append(second)
+        with self.assertRaises(ValueError):
+            dispatch_loopback(
+                frame, admission, public, ambiguous, payload,
+                {"RELEASE_CONTROL": self.handler()}, dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+            )
+
+        networked = self.catalog()
+        networked["live_network_endpoints"] = True
+        with self.assertRaises(ValueError):
+            dispatch_loopback(
+                frame, admission, public, networked, payload,
+                {"RELEASE_CONTROL": self.handler()}, dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+            )
+
+    def test_handler_requesting_network_io_is_rejected_before_ledger(self):
+        payload = self.payload()
+        frame, admission, public = self.frame_and_admission(payload)
+        with self.assertRaises(ValueError):
+            dispatch_loopback(
+                frame, admission, public, self.catalog(), payload,
+                {"RELEASE_CONTROL": self.handler(network_io_permitted=True)},
+                dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
+            )
+        self.assertEqual(self.ledger().count(), 0)
 
     def test_handler_input_is_deep_copy(self):
         payload = self.payload()
@@ -247,9 +294,22 @@ class NexusLoopbackDispatcherTests(unittest.TestCase):
 
         dispatch_loopback(
             frame, admission, public, self.catalog(), payload,
-            {"RELEASE_CONTROL": self.handler(mutate)}, now_ms=self.ISSUED + 200,
+            {"RELEASE_CONTROL": self.handler(mutate)}, dispatch_ledger=self.ledger(), now_ms=self.ISSUED + 200,
         )
         self.assertEqual(payload["decision"], "WAIT_FOR_NEW_EVIDENCE")
+
+    def test_persistent_ledger_is_mandatory(self):
+        payload = self.payload()
+        frame, admission, public = self.frame_and_admission(payload)
+
+        class MemoryLikeLedger:
+            persistent = False
+
+        with self.assertRaises(ValueError):
+            dispatch_loopback(
+                frame, admission, public, self.catalog(), payload,
+                {"RELEASE_CONTROL": self.handler()}, dispatch_ledger=MemoryLikeLedger(), now_ms=self.ISSUED + 200,
+            )
 
     def test_self_test_passes(self):
         self.assertEqual(self_test()["status"], "PASS")

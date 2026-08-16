@@ -3,7 +3,7 @@
   "$id": "https://janus.local/schemas/nexus-loopback-dispatch-result.schema.json",
   "title": "JANUS Nexus Loopback Dispatch Result v1",
   "type": "object",
-  "required": ["schema", "contract", "status", "binding", "control"],
+  "required": ["schema", "contract", "status", "binding", "ledger", "control", "laws"],
   "properties": {
     "schema": {"const": "janus.demihead.nexus_loopback_dispatch_result.v1"},
     "contract": {"const": "JANUS_NEXUS_LOOPBACK_DISPATCH_V1"},
@@ -12,18 +12,27 @@
         "LOOPBACK_DISPATCH_COMPLETED_LOCAL",
         "HOLD_NO_LOCAL_ENDPOINT",
         "HOLD_NO_LOCAL_HANDLER",
-        "HOLD_HANDLER_FAILURE"
+        "HOLD_DUPLICATE_DISPATCH",
+        "HOLD_HANDLER_FAILURE",
+        "HOLD_HANDLER_OUTPUT_INVALID",
+        "HOLD_LEDGER_FINALIZATION_FAILURE"
       ]
     },
     "binding": {
       "type": "object",
-      "required": ["frame_sha256", "target_head"],
+      "required": ["frame_sha256", "target_head", "endpoint_id", "handler_id", "dispatch_sha256"],
       "properties": {
         "frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "envelope_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "acceptance_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "handler_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "dispatch_sha256": {
+          "anyOf": [
+            {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            {"type": "null"}
+          ]
+        },
         "source_head": {"type": "string"},
         "target_head": {"type": "string", "minLength": 1},
         "payload_kind": {"type": "string"},
@@ -34,6 +43,20 @@
     },
     "dispatch": {
       "type": "object",
+      "required": [
+        "endpoint_selected_uniquely",
+        "payload_hash_verified",
+        "current_principal_revalidated",
+        "destination_acceptance_verified",
+        "handler_descriptor_verified",
+        "handler_input_size_bytes",
+        "handler_output_size_bytes",
+        "durable_started_record_committed_before_handler",
+        "local_reference_handler_invoked",
+        "local_in_process_delivery_performed",
+        "durable_completion_recorded",
+        "completion_established"
+      ],
       "properties": {
         "endpoint_selected_uniquely": {"const": true},
         "payload_hash_verified": {"const": true},
@@ -42,8 +65,10 @@
         "handler_descriptor_verified": {"const": true},
         "handler_input_size_bytes": {"type": "integer", "minimum": 0, "maximum": 65536},
         "handler_output_size_bytes": {"type": "integer", "minimum": 0, "maximum": 65536},
+        "durable_started_record_committed_before_handler": {"const": true},
         "local_reference_handler_invoked": {"const": true},
         "local_in_process_delivery_performed": {"const": true},
+        "durable_completion_recorded": {"const": true},
         "completion_established": {"const": true}
       },
       "additionalProperties": false
@@ -56,6 +81,19 @@
         "reason": {"type": "string", "minLength": 1},
         "handler_invocation_attempted": {"type": "boolean"},
         "completion_established": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "ledger": {
+      "type": "object",
+      "properties": {
+        "kind": {"type": "string"},
+        "persistent": {"const": true},
+        "persistent_required": {"const": true},
+        "dispatch_state": {"type": ["string", "null"]},
+        "dispatch_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "duplicate_reinvocation_permitted": {"const": false},
+        "crash_safe_local_duplicate_attempt_suppression": {"const": true}
       },
       "additionalProperties": false
     },
@@ -85,6 +123,8 @@
     "claim_ceiling": {
       "type": "object",
       "properties": {
+        "crash_safe_local_duplicate_attempt_suppression_established": {"const": true},
+        "guaranteed_delivery_established": {"const": false},
         "exactly_once_delivery_established": {"const": false},
         "process_isolation_established": {"const": false},
         "handler_side_effect_attestation_established": {"const": false},
@@ -99,17 +139,24 @@
   "allOf": [
     {
       "if": {"properties": {"status": {"const": "LOOPBACK_DISPATCH_COMPLETED_LOCAL"}}},
-      "then": {"required": ["dispatch", "handler_output", "claim_ceiling", "laws"]}
+      "then": {"required": ["dispatch", "handler_output", "claim_ceiling"]}
     },
     {
       "if": {
         "properties": {
           "status": {
-            "enum": ["HOLD_NO_LOCAL_ENDPOINT", "HOLD_NO_LOCAL_HANDLER", "HOLD_HANDLER_FAILURE"]
+            "enum": [
+              "HOLD_NO_LOCAL_ENDPOINT",
+              "HOLD_NO_LOCAL_HANDLER",
+              "HOLD_DUPLICATE_DISPATCH",
+              "HOLD_HANDLER_FAILURE",
+              "HOLD_HANDLER_OUTPUT_INVALID",
+              "HOLD_LEDGER_FINALIZATION_FAILURE"
+            ]
           }
         }
       },
-      "then": {"required": ["hold", "laws"]}
+      "then": {"required": ["hold"]}
     }
   ],
   "additionalProperties": false

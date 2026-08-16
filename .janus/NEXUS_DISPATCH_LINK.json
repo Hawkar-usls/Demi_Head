@@ -2,16 +2,19 @@
   "schema": "janus.nexus.loopback_dispatch_link.v1",
   "contract": "JANUS_NEXUS_LOOPBACK_DISPATCH_V1",
   "repository": "Hawkar-usls/Demi_Head",
-  "status": "IMPLEMENTED_PENDING_EXACT_HEAD_CI",
+  "status": "PERSISTENT_LEDGER_HARDENING_PENDING_EXACT_HEAD_CI",
   "depends_on": {
     "transport_authority": "JANUS-NEXUS-CURRENT-TRANSPORT-AUTHORITY-v2",
     "transport_exact_head": "9ffde6cde4d5bd6260123e6a9f3f33b71fdc10ff",
     "destination_revalidation": "JANUS_NEXUS_DESTINATION_REVALIDATION_V1"
   },
   "implementation": {
-    "tool": "tools/nexus_loopback_dispatcher.py",
-    "tests": "tests/test_nexus_loopback_dispatcher.py",
-    "schema": "schemas/nexus-loopback-dispatch-result.schema.json",
+    "dispatcher": "tools/nexus_loopback_dispatcher.py",
+    "dispatch_ledger": "tools/nexus_dispatch_ledger.py",
+    "dispatcher_tests": "tests/test_nexus_loopback_dispatcher.py",
+    "ledger_tests": "tests/test_nexus_dispatch_ledger.py",
+    "dispatch_schema": "schemas/nexus-loopback-dispatch-result.schema.json",
+    "ledger_schema": "schemas/nexus-dispatch-ledger-entry.schema.json",
     "documentation": "docs/NEXUS_LOOPBACK_DISPATCHER.md"
   },
   "capabilities": {
@@ -19,6 +22,9 @@
     "unique_local_endpoint_selection": true,
     "current_principal_revalidation": true,
     "deep_copy_handler_input": true,
+    "durable_started_before_handler": true,
+    "persistent_duplicate_attempt_suppression": true,
+    "durable_completed_or_failed_ambiguous_state": true,
     "local_in_process_delivery": true,
     "content_addressed_handler_result": true
   },
@@ -28,11 +34,20 @@
     "cross_repository_delivery": false,
     "external_effect_permitted": false,
     "automatic_retry_permitted": false,
+    "guaranteed_delivery_established": false,
     "exactly_once_delivery_established": false,
     "process_isolation_established": false,
     "handler_side_effect_attestation_established": false,
     "authority_delta": 0,
     "mass_effect_budget_delta": 0
   },
-  "next_gate": "PERSISTENT_LOCAL_DISPATCH_LEDGER_BEFORE_LOOPBACK_SOCKET"
+  "laws": [
+    "STARTED_MUST_BE_DURABLE_BEFORE_HANDLER_INVOCATION",
+    "EXISTING_DISPATCH_KEY = NO_REINVOCATION",
+    "CRASH_AMBIGUITY = HOLD_NO_RETRY",
+    "DUPLICATE_SUPPRESSION != GUARANTEED_DELIVERY",
+    "DUPLICATE_SUPPRESSION != EXACTLY_ONCE",
+    "DISPATCH != AUTHORITY"
+  ],
+  "next_gate": "PERSISTENT_LEDGER_RESTART_CONCURRENCY_AND_CORRUPTION_HOLDOUT_BEFORE_LOOPBACK_SOCKET"
 }
