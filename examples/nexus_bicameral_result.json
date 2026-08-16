@@ -1,0 +1,66 @@
+{
+  "schema": "janus.demihead.bicameral_result.v1",
+  "status": "BICAMERAL_OVERLAP_PRESENT",
+  "hemispheres_present": [
+    "LEFT_HRAIN",
+    "RIGHT_INAIHR"
+  ],
+  "packet_receipts": {
+    "LEFT_HRAIN": {
+      "packet_id": "example-left-hrain-001",
+      "sha256": "874e22e98a3a9ad9a32ea5bf8bc5d54e0f7084398662f8243d9757338539ff8b",
+      "repository": "Hawkar-usls/Hrain",
+      "node_count": 3,
+      "link_count": 2,
+      "origin_counts": {
+        "USER": 2,
+        "REMOTE_AI": 0,
+        "LOCAL_FALLBACK": 0,
+        "LEGACY_UNKNOWN": 0,
+        "SYSTEM": 1
+      }
+    },
+    "RIGHT_INAIHR": {
+      "packet_id": "example-right-inaihr-001",
+      "sha256": "423049ba9e3d3982242ff01dfa6e3537c668afc73c56a1fcb6309aca3b5acf13",
+      "repository": "Hawkar-usls/iNaiHR",
+      "node_count": 3,
+      "link_count": 2,
+      "origin_counts": {
+        "USER": 0,
+        "REMOTE_AI": 1,
+        "LOCAL_FALLBACK": 1,
+        "LEGACY_UNKNOWN": 0,
+        "SYSTEM": 1
+      }
+    }
+  },
+  "comparison": {
+    "shared_semantic_keys": [
+      "context",
+      "evidence"
+    ],
+    "left_only_semantic_keys": [
+      "release"
+    ],
+    "right_only_semantic_keys": [
+      "association"
+    ],
+    "automatic_graph_merge_performed": false
+  },
+  "routing": {
+    "mode": "BICAMERAL_REVIEW",
+    "external_effect_permitted": false,
+    "direct_cross_hemisphere_write_permitted": false,
+    "disagreement_preserved": true
+  },
+  "claim_ceiling": {
+    "truth_claim_made": false,
+    "agreement_is_truth": false,
+    "hemisphere_count_is_authority": false,
+    "association_is_evidence": false,
+    "structure_is_command": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  }
+}
