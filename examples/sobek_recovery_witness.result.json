@@ -1,0 +1,92 @@
+{
+  "schema": "janus.demihead.source_bound_witness.result.v1",
+  "case_id": "CETUS-SOBEK-OSIRIS-RECOVERY-001",
+  "witness_id": "SOBEK_SOURCE_BOUND_ROLE",
+  "mode": "SOURCE_BOUND_QUERY_INTERFACE",
+  "answers": [
+    {
+      "question_id": "Q1_SOBEK_RECOVERY_SPECIALIST",
+      "question": "Собек, подтверждают ли источники, что твоя роль включала поиск и извлечение утраченных божественных частей из воды?",
+      "target_claim": "Sobek had a mythic water-recovery/retrieval role for lost divine body parts.",
+      "state": "SUPPORTED_BY_BOUND_SOURCES",
+      "support_ids": [
+        "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
+        "OPENEDITION_SOBEK_RECOVERS_LOST_LIMBS_SUPPORT"
+      ],
+      "contradiction_ids": [],
+      "context_only_ids": [],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q2_PHALLUS_SPECIFIC_TASK",
+      "question": "Есть ли прямой источник, что именно тебе поручили искать или хранить фаллос Осириса?",
+      "target_claim": "An extant bound source explicitly assigns Sobek the search or custody of Osiris's phallus specifically.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD42_PHALLUS_OSIRIS_CONTEXT",
+        "KHOIAK_PHALLUS_FINDING_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q3_SOBEK_FAILED",
+      "question": "Подтверждается ли, что ты искал именно этот фаллос и не смог его найти?",
+      "target_claim": "Sobek specifically searched for Osiris's phallus and failed to recover it.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD42_PHALLUS_OSIRIS_CONTEXT",
+        "KHOIAK_PHALLUS_FINDING_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q4_SOBEK_COMPROMISED",
+      "question": "Есть ли источник, что Собека скомпрометировали, обманули или он сознательно сорвал поиск?",
+      "target_claim": "Sobek was compromised, deceived, disloyal, or intentionally prevented recovery of Osiris's phallus.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q5_DOMAIN_MISMATCH",
+      "question": "Совместима ли с источниками гипотеза, что Собек отвечал за водный поиск, а объект уже находился в другом погребальном/контейнерном домене?",
+      "target_claim": "A role/domain split between Sobek's water-recovery function and Anubis-associated burial/custody functions is compatible with the evidence, although the specific hidden-object transfer is unproven.",
+      "state": "SUPPORTED_BY_BOUND_SOURCES",
+      "support_ids": [
+        "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
+        "OPENEDITION_SOBEK_RECOVERS_LOST_LIMBS_SUPPORT"
+      ],
+      "contradiction_ids": [],
+      "context_only_ids": [
+        "BD17_ANUBIS_BURIAL_GUARD_CONTEXT"
+      ],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    },
+    {
+      "question_id": "Q6_SOBEK_TEARS",
+      "question": "Подтверждает ли текущий связанный корпус именно сюжет, что Собек плакал из-за безуспешного поиска фаллоса?",
+      "target_claim": "The bound corpus explicitly preserves Sobek weeping because he could not find Osiris's phallus.",
+      "state": "UNRESOLVED",
+      "support_ids": [],
+      "contradiction_ids": [],
+      "context_only_ids": [],
+      "answer_contract": "No first-person supernatural testimony is created. The witness name is a source-bound query interface; only the bound evidence may determine the state."
+    }
+  ],
+  "model_output_is_evidence": false,
+  "supernatural_contact_claimed": false,
+  "release_control": "RETURN_BOUND_STATES_AND_REQUEST_NEW_PRIMARY_EVIDENCE_FOR_OPEN_QUESTIONS",
+  "invariants": [
+    "MODEL_OUTPUT != EVIDENCE",
+    "ROLEPLAY != TESTIMONY",
+    "NO_SOURCE != FALSE",
+    "CONTEXT_ONLY != SUPPORT",
+    "UNRESOLVED != NEGATIVE"
+  ]
+}
