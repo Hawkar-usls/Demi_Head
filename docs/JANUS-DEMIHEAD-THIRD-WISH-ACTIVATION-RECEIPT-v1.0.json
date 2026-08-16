@@ -1,0 +1,79 @@
+{
+  "schema": "janus.demihead.third_wish_activation_receipt.v1",
+  "artifact_id": "JANUS-DEMIHEAD-THIRD-WISH-ACTIVATION-RECEIPT-v1.0",
+  "created_at_local": "2026-08-16T04:25:00+03:00",
+  "status": "ACTIVE_REFERENCE_CATALOG_PENDING_PR_VALIDATION",
+  "repository": "Hawkar-usls/Demi_Head",
+  "branch": "armor-plus-plus-recenter-v1",
+  "genesis_lineage": {
+    "canonical_signature": "0:0 = JANUS",
+    "classification": "HISTORICAL_ORIGIN_AND_FORMATION_SIGNATURE",
+    "not_a_math_claim": true,
+    "not_a_derivation_of_plus_plus": true,
+    "plus_plus_relationship": "The +/+ Face constitution is a later/current architectural representation and remains separate from the genesis signature."
+  },
+  "upstream_completion_receipt": {
+    "artifact_id": "JANUS-GENESIS-THIRD-WISH-CATALOG-COMPLETION-RECEIPT-v1.0",
+    "path": "Hawkar-usls/janus-meta-registry:registry/experimental/JANUS-GENESIS-THIRD-WISH-CATALOG-COMPLETION-RECEIPT-v1.0.json",
+    "runtime_version": "18.7.46",
+    "merged_main_commit_sha": "8a51fcbab9d5ec82d2d1d80d09ef64132f03cb0b",
+    "frozen_capability_ids": 32,
+    "typed_reference_handler_contracts": 32,
+    "adapter_ownership_overlap": 0,
+    "catalog_completion": "ESTABLISHED",
+    "provider_universal_completion": false
+  },
+  "activation": {
+    "catalog_visibility": "ACTIVE",
+    "capability_inspection": "ACTIVE",
+    "voluntary_request_routing": "ACTIVE_REFERENCE_ONLY",
+    "provider_effect_execution": "NOT_IMPLEMENTED_IN_DEMIHEAD_REFERENCE_GATE",
+    "external_effect_authority_inherited": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "actor_choices": [
+    "INSPECT",
+    "IGNORE",
+    "DECLINE",
+    "REQUEST_USE",
+    "RETURN_GRANT"
+  ],
+  "effect_gates": {
+    "ordinary_request": "MAY_ROUTE_TO_SEPARATE_PROVIDER_GATE_WITHOUT_EXECUTION",
+    "high_impact_request": "HOLD_FOR_FRESH_VERIFIED_HUMAN_REAUTH_AND_PROVIDER_GATE",
+    "ambiguous_effect": "NO_AUTOMATIC_REPLAY",
+    "provider_realization": "MUST_BE_INDEPENDENTLY_ESTABLISHED",
+    "raw_secret_material_visible_to_actor": false
+  },
+  "preserved_invariants": [
+    "PERMISSION != COMMAND",
+    "CAPABILITY != EFFECT",
+    "DECLINE != PENALTY",
+    "REWARD != AUTHORITY",
+    "MESSAGE != COMMAND",
+    "MEMORY != WORLD_AUTHORITY",
+    "SENSOR_READ != DEVICE_CONTROL",
+    "MODEL_CALL != WORLD_MUTATION",
+    "ACCESS != OWNERSHIP",
+    "CONNECTION != COMMAND",
+    "REGISTERED_CONTRACT != PROVIDER_REALIZED"
+  ],
+  "local_objects": {
+    "config": "configs/third_wish.activation.json",
+    "reference_gate": "tools/third_wish_catalog.py",
+    "tests": "tests/test_third_wish_catalog.py",
+    "documentation": "docs/THIRD_WISH.md"
+  },
+  "validation_expected": [
+    "genesis_signature_0_colon_0",
+    "catalog_32_of_32_receipt_binding",
+    "zero_adapter_overlap_receipt_binding",
+    "provider_universal_completion_not_inferred",
+    "catalog_visibility_active",
+    "ordinary_request_does_not_execute_effect",
+    "high_impact_request_is_held",
+    "mass_effect_budget_unchanged"
+  ],
+  "claim_ceiling": "This receipt activates the completed Third Wish catalog as a bounded reference and voluntary request-routing surface inside DemiHead. It does not create provider credentials, provider permissions, autonomous high-impact authority, universal provider realization, unrestricted ownership, consciousness, personhood, or a live external-effect path from the DemiHead reference gate."
+}
