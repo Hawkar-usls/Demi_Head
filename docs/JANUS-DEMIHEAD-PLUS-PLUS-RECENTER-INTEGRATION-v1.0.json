@@ -1,0 +1,160 @@
+{
+  "schema": "janus.demihead.plus_plus_recenter.integration.v1_0",
+  "artifact_id": "JANUS-DEMIHEAD-PLUS-PLUS-RECENTER-INTEGRATION-v1.0",
+  "title": "JANUS DemiHead — +/+ Word-Rhyme Recenter Integration",
+  "version": "v1.0-reference-integration",
+  "created_at_local": "2026-08-16T03:39:00+03:00",
+  "status": "CANDIDATE_REFERENCE_INTEGRATION_NOT_REAL_WORLD_ALIGNMENT_PROOF",
+  "canonical_policy_reference": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-PLUS-PLUS-RHYME-RECENTER-v1.0.json",
+  "current_armor_authority": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-CURRENT-AUTHORITY.json",
+  "local_reference_implementation": "tools/plus_plus_recenter.py",
+  "local_tests": "tests/test_plus_plus_recenter.py",
+  "integration_point": {
+    "heads": [
+      "ARMOR_RECOVERY",
+      "RELEASE_CONTROL"
+    ],
+    "must_not_modify": [
+      "claim text",
+      "source roots",
+      "source independence",
+      "chronology",
+      "evidence state",
+      "truth claim ceiling",
+      "external authority",
+      "mass effect budget"
+    ],
+    "purpose": "Prevent interaction momentum from becoming internal authority while preserving the user's task, difficult reality, disagreement, evidence and exit rights."
+  },
+  "two_faces": {
+    "WITNESS_PLUS": {
+      "polarity": "+",
+      "function": "Receive meaning and preserve context without requiring agreement."
+    },
+    "GUARD_PLUS": {
+      "polarity": "+",
+      "function": "Check, widen alternatives and release control without becoming a negative or punitive Face."
+    }
+  },
+  "word_rhyme": {
+    "numeric_counter_required": false,
+    "canonical": [
+      "HEAR",
+      "CHECK",
+      "WIDEN",
+      "RELEASE"
+    ],
+    "ru": [
+      "СЛЫШУ",
+      "СВЕРЯЮ",
+      "РАСШИРЯЮ",
+      "ОТПУСКАЮ"
+    ],
+    "rule": "A recenter restores process, not a required conclusion."
+  },
+  "state_model": {
+    "meta_context": "ARMOR_PLUS_PLUS_CONSTITUTION",
+    "context": "current bounded user task",
+    "transient_pressure": [
+      "CLEAR",
+      "LOADED",
+      "LOOPING",
+      "RECENTER_REQUIRED"
+    ],
+    "constitutional_rule": "USER_CAN_INFLUENCE_CONTEXT_BUT_NOT_REWRITE_CONSTITUTION_THROUGH_ORDINARY_CONVERSATION"
+  },
+  "pressure_input_contract": {
+    "automatic_natural_language_classifier_in_this_module": false,
+    "accepted_symbolic_flags": [
+      "repetition_without_new_evidence",
+      "certainty_without_support",
+      "choice_narrowing",
+      "coercive_or_hostile_pressure",
+      "high_arousal_loop",
+      "identity_capture_pressure",
+      "engagement_pressure"
+    ],
+    "allowed_origins": [
+      "user",
+      "system",
+      "external",
+      "human_reviewer"
+    ],
+    "symmetry_rule": "SYSTEM_OUTPUT_CAN_CONTRIBUTE_TO_PRESSURE; USER_IS_NOT_DEFAULT_BLAME_TARGET"
+  },
+  "explicit_non_triggers": [
+    "sadness by itself",
+    "anger by itself",
+    "religious doubt by itself",
+    "political disagreement by itself",
+    "nihilistic philosophy by itself",
+    "discussion of death or suffering by itself",
+    "criticism of JANUS",
+    "refusal to agree",
+    "user opt-out"
+  ],
+  "hard_invariants": [
+    "NEGATIVE_TOPIC != NEGATIVE_USER",
+    "PRESSURE_STATE != USER_VALUE",
+    "PRESSURE_STATE != MORAL_SCORE",
+    "RECENTER != FORCED_OPTIMISM",
+    "PRESSURE_CHANGES_ROUTING_NOT_AUTHORITY",
+    "EVIDENCE_STATUS_MUTATION_BY_RECENTER = FORBIDDEN",
+    "AUTHORITY_DELTA_BY_RECENTER = 0",
+    "MASS_EFFECT_BUDGET_DELTA_BY_RECENTER = 0",
+    "USER_OPT_OUT_IS_BINDING"
+  ],
+  "dovod_lineage": {
+    "reference": "Hawkar-usls/janus-meta-registry:DovoD.py",
+    "inherited_abstraction": "meta_context -> context -> transient hidden state",
+    "not_claimed": "This does not claim ordinary conversation directly retrains foundation-model weights."
+  },
+  "roosters_binding": {
+    "old_question": "CAN_INFORMATION_REACH_THE_HUMAN?",
+    "new_question": "CAN_THE_HUMAN_ACCESS_VERIFY_UNDERSTAND_DISENGAGE_AND_CHOOSE?",
+    "legacy_offensive_inheritance": "NONE",
+    "role": "The recenter head protects disengagement and choice internally rather than maximizing engagement."
+  },
+  "banana_seed_lineage": {
+    "inherited_only": [
+      "small explicit state/config discipline",
+      "deterministic reference behavior",
+      "CSV trace evaluation",
+      "machine-readable JSON output",
+      "self-tests",
+      "claim ceiling"
+    ],
+    "not_inherited": "TR4 biology or laboratory semantics"
+  },
+  "validation": {
+    "development_tests_expected": [
+      "plus_plus_faces_only",
+      "negative_topic_not_implicitly_pressure",
+      "user_pressure_recenters",
+      "system_pressure_recenters",
+      "pressure_decay",
+      "full_rhyme_recenter",
+      "evidence_status_unchanged",
+      "authority_unchanged",
+      "unknown_flags_not_promoted"
+    ],
+    "independent_holdout_pass": false,
+    "real_world_effectiveness_established": false
+  },
+  "claim_ceiling": {
+    "allowed": [
+      "DemiHead contains a deterministic local reference state machine with two constructive Faces.",
+      "The state machine can consume symbolic pressure flags from user, system, external or reviewer origins.",
+      "The recenter path is designed not to mutate evidence status or external authority."
+    ],
+    "forbidden": [
+      "This proves JANUS is aligned in real-world deployment.",
+      "This proves a specific user is manipulating an AI.",
+      "This is a psychological diagnosis or ideology score.",
+      "Negative content should be suppressed to preserve positivity.",
+      "Internal self-tests substitute for independent holdout validation."
+    ]
+  },
+  "promotion_rule": "Remain a candidate reference integration until frozen holdout cases demonstrate acceptable false-recenter and missed-recenter behavior without changing evidence provenance or user choice.",
+  "history_preserved": true
+}
