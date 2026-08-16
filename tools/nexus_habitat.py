@@ -20,6 +20,7 @@ class HeadRule:
     repository: str
     accepts: tuple[str, ...]
     emits: tuple[str, ...]
+    lineage_repository: str | None = None
 
 
 HEADS: dict[str, HeadRule] = {
@@ -54,10 +55,11 @@ HEADS: dict[str, HeadRule] = {
         emits=("BICAMERAL_RESULT",),
     ),
     "FUNDAMENTUM": HeadRule(
-        role="WITNESS_LEDGER_TRUTH_GUARD",
-        repository="Hawkar-usls/Janus-Fundamentum",
+        role="FUNDAMENTUM_GUARD",
+        repository="Hawkar-usls/Demi_Head",
         accepts=("EVIDENCE_CANDIDATE", "BICAMERAL_RESULT"),
         emits=("EVIDENCE_RECEIPT", "HOLD_RECEIPT"),
+        lineage_repository="Hawkar-usls/Janus-Fundamentum",
     ),
     "GUARDIAN": HeadRule(
         role="BOUNDED_EVIDENCE_STATE",
@@ -185,6 +187,19 @@ def validate_envelope(envelope: dict[str, Any]) -> None:
             raise ValueError(f"Unknown trace head: {hop!r}")
 
 
+def _head_descriptor(head_id: str) -> dict[str, Any]:
+    rule = HEADS[head_id]
+    descriptor = {
+        "head_id": head_id,
+        "role": rule.role,
+        "repository": rule.repository,
+    }
+    if rule.lineage_repository is not None:
+        descriptor["lineage_repository"] = rule.lineage_repository
+        descriptor["lineage_is_runtime_ownership"] = False
+    return descriptor
+
+
 def route_receipt(envelope: dict[str, Any]) -> dict[str, Any]:
     validate_envelope(envelope)
     source = envelope["source_head"]
@@ -200,6 +215,8 @@ def route_receipt(envelope: dict[str, Any]) -> dict[str, Any]:
         "payload_kind": envelope["payload_kind"],
         "source_repository": HEADS[source].repository,
         "target_repository": HEADS[target].repository,
+        "source_descriptor": _head_descriptor(source),
+        "target_descriptor": _head_descriptor(target),
         "routing": {
             "authority_delta": 0,
             "mass_effect_budget_delta": 0,
@@ -213,6 +230,7 @@ def route_receipt(envelope: dict[str, Any]) -> dict[str, Any]:
             "target_acceptance_established": False,
             "truth_claim_made": False,
             "route_is_authority": False,
+            "lineage_is_runtime_ownership": False,
         },
     }
 
@@ -220,19 +238,13 @@ def route_receipt(envelope: dict[str, Any]) -> dict[str, Any]:
 def habitat_snapshot(availability: dict[str, str] | None = None) -> dict[str, Any]:
     availability = availability or {}
     heads = []
-    for head_id, rule in sorted(HEADS.items()):
+    for head_id in sorted(HEADS):
         state = availability.get(head_id, "UNKNOWN")
         if state not in {"READY", "DEGRADED", "HOLD", "OFFLINE", "UNKNOWN"}:
             raise ValueError(f"Invalid availability state for {head_id}: {state}")
-        heads.append(
-            {
-                "head_id": head_id,
-                "role": rule.role,
-                "repository": rule.repository,
-                "availability": state,
-                "authority_delta": 0,
-            }
-        )
+        descriptor = _head_descriptor(head_id)
+        descriptor.update({"availability": state, "authority_delta": 0})
+        heads.append(descriptor)
     return {
         "schema": SNAPSHOT_SCHEMA,
         "contract": CONTRACT,
@@ -244,6 +256,7 @@ def habitat_snapshot(availability: dict[str, str] | None = None) -> dict[str, An
             "external_effect_authority": False,
             "missing_head_means_success": False,
             "degraded_head_may_be_silently_replaced": False,
+            "lineage_repository_may_impersonate_runtime_head": False,
         },
     }
 
@@ -276,13 +289,18 @@ def _example_envelope() -> dict[str, Any]:
 def self_test() -> dict[str, Any]:
     envelope = _example_envelope()
     receipt = route_receipt(envelope)
+    snapshot = habitat_snapshot()
+    fundamentum = next(item for item in snapshot["heads"] if item["head_id"] == "FUNDAMENTUM")
     checks: dict[str, bool] = {
         "admitted_route_yields_receipt": receipt["status"] == "ROUTE_ADMITTED_READ_ONLY",
         "route_does_not_deliver": receipt["claim_ceiling"]["delivery_performed"] is False,
         "route_does_not_grant_authority": receipt["routing"]["authority_delta"] == 0,
         "route_does_not_grant_mass_effect": receipt["routing"]["mass_effect_budget_delta"] == 0,
         "route_does_not_authorize_external_effect": receipt["routing"]["external_effect_permitted"] is False,
-        "habitat_lists_all_heads": len(habitat_snapshot()["heads"]) == len(HEADS),
+        "habitat_lists_all_heads": len(snapshot["heads"]) == len(HEADS),
+        "fundamentum_runtime_owned_by_demihead": fundamentum["repository"] == "Hawkar-usls/Demi_Head",
+        "fundamentum_lineage_preserved": fundamentum["lineage_repository"] == "Hawkar-usls/Janus-Fundamentum",
+        "lineage_does_not_impersonate_runtime": fundamentum["lineage_is_runtime_ownership"] is False,
     }
 
     bad_route = json.loads(json.dumps(envelope))
