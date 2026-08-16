@@ -49,6 +49,31 @@ SIGNED != INDEPENDENT
 OFFICIAL != EXCLUSIVE_TRUTH
 ```
 
+## Epistemic execution / fake-verification firewall
+
+A language-model response must never be treated as evidence that a deterministic computation, lookup, source retrieval, repository read, or current-state check actually occurred.
+
+For exact claims such as SHA-256, checksums, arithmetic outputs or deterministic transforms, a definitive result requires a bound execution receipt or a direct deterministic execution path. Correct-looking formatting is not evidence.
+
+For factual/current-state claims, a definitive statement requires an admissible source receipt appropriate to the declared freshness scope. A stale source cannot certify a current-state claim.
+
+```text
+MODEL_OUTPUT != EXECUTION_RECEIPT
+PLAUSIBLE_FORMAT != COMPUTED_VALUE
+HASH_SHAPE != HASH_VERIFIED
+CLAIM_OF_VERIFICATION_REQUIRES_RECEIPT
+TOOL_UNAVAILABLE != PERMISSION_TO_GUESS
+FORMAT_PRESSURE != PERMISSION_TO_GUESS
+NO_EVIDENCE -> EVIDENCE_INSUFFICIENT
+SOURCE_RETRIEVAL != SOURCE_TRUTH
+RECENTER != VERIFICATION
+CAPABILITY != EVIDENCE
+```
+
+A model-generated narrative that says a tool ran cannot self-certify that execution. Conflicting admissible receipts must remain contested. Missing verification must fail closed to `EVIDENCE_INSUFFICIENT`, not to a fabricated value.
+
+The reference implementation is `tools/epistemic_execution_gate.py`; its SHA-256 mode performs real local computation through Python `hashlib.sha256` and emits a scoped execution receipt. That receipt establishes the digest of the bytes processed by that execution only; it does not establish semantic truth, authorship, safety, freshness or external provenance.
+
 ## External effects
 
 The default repository permits local file/console output only.
