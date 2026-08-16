@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -13,11 +14,22 @@ from keto_reference import load_case, summarize_case
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+BICAMERAL_TRANSPORT_FREEZE = "d33077fbd0d244bf0ae6d678894bdc9a8eddcf0d779ce11b85e39eeff6143883"
 
 
 def load_json(path: Path) -> object:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def canonical_sha256(value: object) -> str:
+    raw = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def validate_json_documents() -> None:
@@ -26,6 +38,7 @@ def validate_json_documents() -> None:
     paths.extend(sorted((ROOT / "schemas").glob("*.json")))
     paths.extend(sorted((ROOT / "examples").glob("*.json")))
     paths.extend(sorted((ROOT / "docs").glob("*.json")))
+    paths.extend(sorted((ROOT / "holdout").rglob("*.json")))
     for path in paths:
         load_json(path)
 
@@ -134,6 +147,39 @@ def validate_hemisphere_invariants() -> None:
         raise ValueError("Single-hemisphere operation must degrade to HOLD")
 
 
+def validate_bicameral_transport_freeze() -> None:
+    path = ROOT / "holdout" / "bicameral_transport_v1" / "frozen_corpus.json"
+    corpus = load_json(path)
+    if not isinstance(corpus, dict):
+        raise ValueError("Bicameral transport corpus must be an object")
+    if corpus.get("schema") != "janus.demihead.bicameral_transport_holdout.v1":
+        raise ValueError("Unexpected bicameral transport holdout schema")
+    if corpus.get("freeze_sha256") != BICAMERAL_TRANSPORT_FREEZE:
+        raise ValueError("Bicameral transport declared freeze SHA drifted")
+    payload = corpus.get("freeze_payload")
+    if canonical_sha256(payload) != BICAMERAL_TRANSPORT_FREEZE:
+        raise ValueError("Bicameral transport canonical freeze payload hash mismatch")
+    if not isinstance(payload, dict) or payload.get("frozen_before_first_execution") is not True:
+        raise ValueError("Bicameral transport corpus must be frozen before first execution")
+    if len(payload.get("cases", [])) != 18:
+        raise ValueError("Bicameral transport holdout must keep exactly 18 preregistered cases")
+    if payload.get("timeout_ms") != 2000:
+        raise ValueError("Bicameral transport timeout preregistration drifted")
+    if payload.get("latency_quantile_method") != "nearest_rank":
+        raise ValueError("Bicameral transport quantile method drifted")
+    if payload.get("latency_semantics") != "frozen_synthetic_event_trace_not_wall_clock":
+        raise ValueError("Synthetic latency claim ceiling drifted")
+    ceiling = payload.get("claim_ceiling", {})
+    if ceiling.get("real_browser_network_latency_measured") is not False:
+        raise ValueError("Synthetic holdout cannot claim real browser/network latency")
+    if ceiling.get("production_readiness_established") is not False:
+        raise ValueError("Synthetic holdout cannot establish production readiness")
+    if ceiling.get("request_id_is_authentication") is not False:
+        raise ValueError("Request-id freshness binding cannot become authentication")
+    if ceiling.get("authority_delta") != 0 or ceiling.get("mass_effect_budget_delta") != 0:
+        raise ValueError("Transport holdout cannot change authority or mass-effect budget")
+
+
 def validate_markdown_links() -> None:
     missing: list[str] = []
     for markdown in sorted(ROOT.rglob("*.md")):
@@ -161,8 +207,9 @@ def main() -> None:
     validate_schemas()
     validate_keto_invariants()
     validate_hemisphere_invariants()
+    validate_bicameral_transport_freeze()
     validate_markdown_links()
-    print("Repository contracts, JSON mirrors, KETO/bicameral invariants, and local documentation links are valid.")
+    print("Repository contracts, JSON mirrors, KETO/bicameral invariants, frozen transport corpus, and local documentation links are valid.")
 
 
 if __name__ == "__main__":
