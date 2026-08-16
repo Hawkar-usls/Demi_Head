@@ -77,3 +77,19 @@ jobs:
           assert result['definitive_claim_permitted'] is False
           assert result['witness_ledger_complete'] is True
           PY
+
+      - name: Run human appeal and independent reviewer self-test
+        run: python tools/reviewer_appeal_gate.py --self-test --output /tmp/reviewer-appeal-self-test.json
+
+      - name: Verify appeal never creates automatic effect authority
+        run: |
+          python - <<'PY'
+          from tools.reviewer_appeal_gate import self_test
+          result = self_test()
+          assert result['status'] == 'PASS'
+          assert result['checks']['consensus_correction_is_not_auto_applied'] is True
+          assert result['checks']['independent_disagreement_is_preserved'] is True
+          assert result['checks']['same_root_does_not_count_twice'] is True
+          print('APPEAL_REVIEWER_LEDGER=PASS')
+          print('AUTOMATIC_WORLD_EFFECT=false')
+          PY
