@@ -1,0 +1,27 @@
+{
+  "schema": "janus.demihead.nexus_envelope.v1",
+  "contract": "JANUS_NEXUS_HABITAT_V1",
+  "envelope_id": "fixture-release-registry-001",
+  "source_head": "RELEASE_CONTROL",
+  "target_head": "REGISTRY",
+  "payload_kind": "RELEASE_RECEIPT",
+  "payload_ref": {
+    "sha256": "8ff708608e9aef8224b2c43dcbf9e447f667a23d4af05df5225e75efc8b5679b",
+    "locator": "examples/nexus_release_wait_receipt.json"
+  },
+  "trace": [
+    "HRAIN",
+    "INAIHR",
+    "BICAMERAL_BRIDGE",
+    "FUNDAMENTUM",
+    "GUARDIAN"
+  ],
+  "control": {
+    "read_only_transfer": true,
+    "direct_workspace_mutation": false,
+    "external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "ttl_hops": 7
+  }
+}
