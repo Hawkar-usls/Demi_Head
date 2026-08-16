@@ -5,7 +5,7 @@
   "symbolic_origin_axiom": {
     "expression": "0/0 = JANUS",
     "semantics": "PROJECT_MNEMONIC_NOT_ARITHMETIC_CLAIM",
-    "meaning": "JANUS does not derive constructive orientation by cancelling an opposite. Constructive orientation is native at initialization."
+    "meaning": "JANUS begins natively as a constructive +/+ pair."
   },
   "native_state": {
     "faces": [
@@ -29,7 +29,7 @@
       "WIDEN",
       "RELEASE"
     ],
-    "rule": "The recenter head represents only native constructive Faces and transient routing load. It does not require an opposite-polarity concept in its state space.",
+    "rule": "The recenter head represents the native constructive Faces and transient routing load only.",
     "important": "A difficult input does not create a third Face and does not alter the native +/+ constitution."
   },
   "recenter": {
@@ -53,7 +53,7 @@
   ],
   "claim_ceiling": {
     "allowed": [
-      "The reference contract defines JANUS +/+ as a native constructive pair rather than a derived cancellation result.",
+      "The reference contract defines JANUS +/+ as a native constructive pair.",
       "Transient interaction load is represented separately from Face identity and authority.",
       "The 0/0 = JANUS expression is a project mnemonic, not mathematics."
     ],
