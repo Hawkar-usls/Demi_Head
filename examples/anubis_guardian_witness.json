@@ -36,6 +36,13 @@
       "claim": "The Met identifies Anubis as overseeing embalming and as protector of the necropolis."
     },
     {
+      "evidence_id": "MET_ANUBIS_GENERAL_ROLE_CONTEXT",
+      "relation": "context_only",
+      "source_class": "museum_primary_record",
+      "source_ref": "https://www.metmuseum.org/art/collection/search/548208",
+      "claim": "Anubis has a general embalming/protective role; this does not establish custody of the specific phallus relic."
+    },
+    {
       "evidence_id": "PLUTARCH_RIVER_BRANCH_CONTEXT",
       "relation": "context_only",
       "source_class": "late_classical_witness",
@@ -87,7 +94,7 @@
       "evidence_ids": [
         "BD17_CHEST_FOR_PHALLUS_CONTEXT",
         "BD161_CHEST_OSIRIS_CONTEXT",
-        "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT"
+        "MET_ANUBIS_GENERAL_ROLE_CONTEXT"
       ]
     },
     {
@@ -97,7 +104,7 @@
       "evidence_ids": [
         "BD17_CHEST_FOR_PHALLUS_CONTEXT",
         "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
-        "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT"
+        "MET_ANUBIS_GENERAL_ROLE_CONTEXT"
       ]
     }
   ],
