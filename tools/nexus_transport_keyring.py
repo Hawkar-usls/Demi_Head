@@ -28,6 +28,21 @@ def _decode_secret(raw: str) -> bytes:
     return raw.encode("utf-8")
 
 
+def _validate_epoch_fields(principal: dict[str, Any], key_id: str) -> None:
+    epoch = principal.get("epoch")
+    not_before_ms = principal.get("not_before_ms")
+    not_after_ms = principal.get("not_after_ms")
+    revoked = principal.get("revoked")
+    if isinstance(epoch, bool) or not isinstance(epoch, int) or epoch < 1:
+        raise ValueError(f"{key_id}: epoch must be an integer >= 1")
+    if isinstance(not_before_ms, bool) or not isinstance(not_before_ms, int) or not_before_ms < 0:
+        raise ValueError(f"{key_id}: not_before_ms must be an integer >= 0")
+    if isinstance(not_after_ms, bool) or not isinstance(not_after_ms, int) or not_after_ms <= not_before_ms:
+        raise ValueError(f"{key_id}: not_after_ms must be greater than not_before_ms")
+    if not isinstance(revoked, bool):
+        raise ValueError(f"{key_id}: revoked must be boolean")
+
+
 def validate_config(config: dict[str, Any]) -> None:
     if not isinstance(config, dict) or config.get("schema") != CONFIG_SCHEMA:
         raise ValueError("Unexpected transport keyring config schema")
@@ -37,7 +52,8 @@ def validate_config(config: dict[str, Any]) -> None:
     if not isinstance(principals, list) or not principals:
         raise ValueError("principals must be a non-empty array")
 
-    seen: set[str] = set()
+    seen_ids: set[str] = set()
+    seen_sender_epoch: set[tuple[str, int]] = set()
     for principal in principals:
         if not isinstance(principal, dict):
             raise ValueError("Every principal must be an object")
@@ -51,9 +67,9 @@ def validate_config(config: dict[str, Any]) -> None:
         enabled = principal.get("enabled")
         if not isinstance(key_id, str) or not key_id.strip():
             raise ValueError("principal.key_id must be a non-empty string")
-        if key_id in seen:
+        if key_id in seen_ids:
             raise ValueError(f"Duplicate key_id: {key_id}")
-        seen.add(key_id)
+        seen_ids.add(key_id)
         if not isinstance(sender_id, str) or not sender_id.strip():
             raise ValueError(f"{key_id}: sender_id must be non-empty")
         if not isinstance(secret_env, str) or not secret_env.strip():
@@ -62,6 +78,11 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError(f"{key_id}: allowed_source_heads must be a non-empty string array")
         if not isinstance(enabled, bool):
             raise ValueError(f"{key_id}: enabled must be boolean")
+        _validate_epoch_fields(principal, key_id)
+        sender_epoch = (sender_id, principal["epoch"])
+        if sender_epoch in seen_sender_epoch:
+            raise ValueError(f"Duplicate sender/epoch binding: {sender_id} epoch {principal['epoch']}")
+        seen_sender_epoch.add(sender_epoch)
 
 
 def load_principal_lookup(
@@ -75,28 +96,27 @@ def load_principal_lookup(
 
     for principal in config["principals"]:
         key_id = principal["key_id"]
-        secret_env = principal["secret_env"]
-        enabled = principal["enabled"]
-        if not enabled:
-            result[key_id] = {
-                "key": b"disabled-principal-placeholder",
-                "sender_id": principal["sender_id"],
-                "allowed_source_heads": list(principal["allowed_source_heads"]),
-                "enabled": False,
-            }
+        active = principal["enabled"] and not principal["revoked"]
+        base = {
+            "sender_id": principal["sender_id"],
+            "allowed_source_heads": list(principal["allowed_source_heads"]),
+            "enabled": principal["enabled"],
+            "revoked": principal["revoked"],
+            "epoch": principal["epoch"],
+            "not_before_ms": principal["not_before_ms"],
+            "not_after_ms": principal["not_after_ms"],
+        }
+        if not active:
+            result[key_id] = {"key": b"inactive-principal-placeholder", **base}
             continue
+        secret_env = principal["secret_env"]
         raw_secret = env.get(secret_env)
         if raw_secret is None:
             raise ValueError(f"Missing required transport secret environment variable: {secret_env}")
         key = _decode_secret(raw_secret)
         if len(key) < 16:
             raise ValueError(f"{key_id}: decoded transport secret must be at least 16 bytes")
-        result[key_id] = {
-            "key": key,
-            "sender_id": principal["sender_id"],
-            "allowed_source_heads": list(principal["allowed_source_heads"]),
-            "enabled": True,
-        }
+        result[key_id] = {"key": key, **base}
     return result
 
 
@@ -119,6 +139,10 @@ def public_summary(config: dict[str, Any]) -> dict[str, Any]:
                 "sender_id": row["sender_id"],
                 "allowed_source_heads": list(row["allowed_source_heads"]),
                 "enabled": row["enabled"],
+                "revoked": row["revoked"],
+                "epoch": row["epoch"],
+                "not_before_ms": row["not_before_ms"],
+                "not_after_ms": row["not_after_ms"],
                 "secret_source": "ENVIRONMENT_REFERENCE_ONLY",
             }
             for row in config["principals"]
@@ -133,19 +157,26 @@ def self_test() -> dict[str, Any]:
         "inline_secret_material_allowed": False,
         "principals": [
             {
-                "key_id": "GUARDIAN_TEST",
+                "key_id": "GUARDIAN_TEST_E1",
                 "sender_id": "DEMIHEAD.GUARDIAN",
                 "allowed_source_heads": ["GUARDIAN"],
                 "secret_env": "JANUS_TEST_KEY",
                 "enabled": True,
+                "revoked": False,
+                "epoch": 1,
+                "not_before_ms": 1_700_000_000_000,
+                "not_after_ms": 1_900_000_000_000,
             }
         ],
     }
     lookup = load_principal_lookup(config, environ={"JANUS_TEST_KEY": "hex:" + "11" * 32})
+    principal = lookup["GUARDIAN_TEST_E1"]
     checks = {
-        "principal_loaded": lookup["GUARDIAN_TEST"]["sender_id"] == "DEMIHEAD.GUARDIAN",
-        "secret_decoded": lookup["GUARDIAN_TEST"]["key"] == bytes.fromhex("11" * 32),
-        "source_allowlist_preserved": lookup["GUARDIAN_TEST"]["allowed_source_heads"] == ["GUARDIAN"],
+        "principal_loaded": principal["sender_id"] == "DEMIHEAD.GUARDIAN",
+        "secret_decoded": principal["key"] == bytes.fromhex("11" * 32),
+        "source_allowlist_preserved": principal["allowed_source_heads"] == ["GUARDIAN"],
+        "epoch_preserved": principal["epoch"] == 1,
+        "revocation_preserved": principal["revoked"] is False,
         "public_summary_has_no_secret": "key" not in public_summary(config)["principals"][0],
     }
 
@@ -164,6 +195,11 @@ def self_test() -> dict[str, Any]:
         checks["inline_secret_field_rejected"] = True
     else:
         checks["inline_secret_field_rejected"] = False
+
+    revoked = json.loads(json.dumps(config))
+    revoked["principals"][0]["revoked"] = True
+    revoked_lookup = load_principal_lookup(revoked, environ={})
+    checks["revoked_principal_requires_no_secret_load"] = revoked_lookup["GUARDIAN_TEST_E1"]["revoked"] is True
 
     return {
         "status": "PASS" if all(checks.values()) else "FAIL",
