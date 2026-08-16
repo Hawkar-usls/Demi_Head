@@ -1,0 +1,123 @@
+{
+  "schema": "janus.demihead.calamar_audit.v1",
+  "artifact_id": "JANUS-DEMIHEAD-CALAMAR-AUDIT-v1.0",
+  "created_at_local": "2026-08-16T04:50:00+03:00",
+  "status": "IMPLEMENTATION_BRANCH_AUDIT_PENDING_EXACT_HEAD_CI",
+  "audit_start_main_sha": "f9c87ef48e333169a8cceac4bc9ec376be871c11",
+  "branch": "keto-calamar-flow-optimizer-v1",
+  "mode": {
+    "canonical_parent": "KETO_CETUS",
+    "operator_alias": "CALAMAR_MODE",
+    "surfaces": ["runtime", "schemas", "tests", "CI", "documentation", "registry", "claim_ceiling"]
+  },
+  "source_bindings": {
+    "janus_io_public": "1b53c367d480598398f2d91427ce4669b8aa7c62",
+    "janus_demiurge": "e837431bb788a873b07d672667d8a8506baabcdc",
+    "fast_cat_shaitan": "d316b2508371e8c407d9439a31f2797691039778",
+    "meta_registry_record": "data/JANUS-DEMIHEAD-KETO-CALAMAR-PERFORMANCE-OPTIMIZATION-AND-SHAITAN-TRACE-v1.0.json"
+  },
+  "findings": [
+    {
+      "id": "CAL-001",
+      "severity": "HIGH",
+      "finding": "DemiHead documented janus-io proof-of-observation lineage but lacked an executable bounded admission/drain gate for controlling work overshoot.",
+      "action": "ADD_KETO_FLOW_GATE_REFERENCE",
+      "branch_status": "IMPLEMENTED_PENDING_CI"
+    },
+    {
+      "id": "CAL-002",
+      "severity": "HIGH",
+      "finding": "DemiHead had MEASURE_BEFORE_OPTIMIZING in lineage but no optimizer-specific constitutional admission boundary.",
+      "action": "ADD_CONSTITUTION_BOUND_OPTIMIZER_ADMISSION",
+      "branch_status": "IMPLEMENTED_PENDING_CI"
+    },
+    {
+      "id": "CAL-003",
+      "severity": "MEDIUM_HIGH",
+      "finding": "Fast-CAT human-review/disagreement methodology is documented as lineage, but no dedicated reviewer-bundle ingestion/disagreement-ledger executable head exists in DemiHead.",
+      "action": "NEXT_GATE_REVIEW_INGESTION",
+      "branch_status": "OPEN"
+    },
+    {
+      "id": "CAL-004",
+      "severity": "MEDIUM_HIGH",
+      "finding": "PROJECT_STATUS next_gate still described the pre-merge +/+ and Third Wish CI gate even though main already contains that merged activation.",
+      "action": "REFRESH_PROJECT_STATUS",
+      "branch_status": "IMPLEMENTED_PENDING_CI"
+    },
+    {
+      "id": "CAL-005",
+      "severity": "MEDIUM",
+      "finding": "Several KETO v1.2 architectural components remain non-executable local contracts: correction propagation, language invariance, human appeal, dedicated observation receipt, and edge-safe-harbor behavior.",
+      "action": "PRESERVE_AS_EXPLICIT_BACKLOG_NOT_FAKE_COMPLETION",
+      "branch_status": "OPEN"
+    }
+  ],
+  "implemented_in_branch": {
+    "flow_gate": {
+      "tool": "tools/flow_gate.py",
+      "schema": "schemas/flow-gate-trace.schema.json",
+      "fixture": "examples/flow_gate_trace.json",
+      "tests": "tests/test_flow_gate.py",
+      "source_pattern": "janus-io-public A18.42 admission/drain segmentation pattern",
+      "source_domain_claims_transferred": false,
+      "runtime_sleep_or_wall_clock_benchmark": false
+    },
+    "constitution_optimizer": {
+      "tool": "tools/constitution_optimizer.py",
+      "schema": "schemas/optimizer-trials.schema.json",
+      "fixture": "examples/optimizer_trials.json",
+      "tests": "tests/test_constitution_optimizer.py",
+      "source_pattern": "Janus-Demiurge ordinary operational optimization/history pattern",
+      "gp_ei_proposer_implemented": false,
+      "tachyonic_or_filter_37_transferred": false,
+      "forbidden_objectives_fail_closed": true
+    }
+  },
+  "hard_invariants": [
+    "FLOW_CONTROL != EVIDENCE_CONTROL",
+    "QUEUE_PRIORITY != TRUTH_PRIORITY",
+    "FASTER != TRUER",
+    "DEFERRED != FALSE",
+    "MISSING_LATENCY != ZERO",
+    "MEASURE_BEFORE_OPTIMIZING",
+    "OPTIMIZE_OPERATION != OPTIMIZE_BELIEF",
+    "OPTIMIZER_PROPOSAL != CONSTITUTIONAL_MUTATION",
+    "BEST_SCORE != TRUTH",
+    "PERFORMANCE_TUNING_MUST_NOT_CHANGE_EVIDENCE_SEMANTICS",
+    "AUTHORITY_DELTA_ALWAYS_ZERO",
+    "MASS_EFFECT_BUDGET_DELTA_ALWAYS_ZERO"
+  ],
+  "shaitan_trace": {
+    "tribute": true,
+    "source_repo": "Hawkar-usls/Fast-CAT-SHAiTan",
+    "runtime_effect": "NONE",
+    "authority_delta": 0,
+    "evidence_weight_delta": 0,
+    "motto": "THE_CAT_MAY_PURR; THE_RECEIPT_STILL_HAS_TO_VERIFY"
+  },
+  "open_priority_order": [
+    "Pass exact-head CI for this branch.",
+    "Freeze an independent latency/resource benchmark before any speed claim.",
+    "Implement reviewer-bundle ingestion and DISAGREEMENT ledger as a separate bounded PR.",
+    "Extract correction propagation and language-invariance gates into executable local contracts.",
+    "Add a visible human appeal receipt/workflow before any high-stakes civic deployment experiment."
+  ],
+  "claim_ceiling": {
+    "established_after_code_review_only": [
+      "The branch contains deterministic local contracts for bounded flow admission and constitution-bound trial admission/ranking."
+    ],
+    "requires_ci_before_claim": [
+      "Repository-wide exact-head compatibility of the new contracts."
+    ],
+    "requires_frozen_holdout": [
+      "Any statement that DemiHead became faster, cheaper or more resource-efficient."
+    ],
+    "not_claimed": [
+      "production readiness",
+      "real-world civic effectiveness",
+      "Bayesian optimizer superiority",
+      "truth improvement from performance tuning"
+    ]
+  }
+}

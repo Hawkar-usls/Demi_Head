@@ -33,6 +33,18 @@ jobs:
       - name: Run deterministic KETO fixture
         run: python tools/keto_reference.py examples/case_echo_collapse.json --output /tmp/keto-result.json
 
+      - name: Run deterministic flow-gate self-test
+        run: python tools/flow_gate.py --self-test --output /tmp/flow-gate-self-test.json
+
+      - name: Run deterministic flow-gate fixture
+        run: python tools/flow_gate.py examples/flow_gate_trace.json --output /tmp/flow-gate-result.json
+
+      - name: Run constitution-bound optimizer self-test
+        run: python tools/constitution_optimizer.py --self-test --output /tmp/optimizer-self-test.json
+
+      - name: Run frozen operational optimizer fixture
+        run: python tools/constitution_optimizer.py examples/optimizer_trials.json --output /tmp/optimizer-result.json
+
       - name: Run deterministic +/+ recenter self-test
         run: python tools/plus_plus_recenter.py --self-test --output /tmp/plus-plus-self-test.json
 

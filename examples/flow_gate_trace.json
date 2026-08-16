@@ -1,0 +1,16 @@
+{
+  "schema": "janus.demihead.flow_gate_trace.v1",
+  "trace_id": "CALAMAR_FLOW_FIXTURE_001",
+  "config": {
+    "quota": 2,
+    "max_waves": 2
+  },
+  "work": [
+    {"work_id": "claim-root-collapse", "observed_outcome": "completed"},
+    {"work_id": "freshness-check", "observed_outcome": "completed"},
+    {"work_id": "independence-check", "observed_outcome": "unknown"},
+    {"work_id": "correction-check", "observed_outcome": "failed"},
+    {"work_id": "optional-extra-source", "observed_outcome": "completed"},
+    {"work_id": "optional-extra-render", "observed_outcome": "completed"}
+  ]
+}

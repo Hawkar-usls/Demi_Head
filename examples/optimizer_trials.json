@@ -1,0 +1,58 @@
+{
+  "schema": "janus.demihead.optimizer_trials.v1",
+  "experiment_id": "CALAMAR_OPTIMIZER_FIXTURE_001",
+  "objective_order": [
+    "p95_latency_ms",
+    "cpu_time_ms",
+    "memory_peak_mb",
+    "operational_error_rate"
+  ],
+  "trials": [
+    {
+      "candidate_id": "baseline",
+      "config": {
+        "flow_gate_quota": 2,
+        "bounded_worker_count": 2,
+        "observer_sampling_interval_ms": 250
+      },
+      "metrics": {
+        "p95_latency_ms": 40,
+        "cpu_time_ms": 24,
+        "memory_peak_mb": 50,
+        "operational_error_rate": 0
+      },
+      "constraints": {}
+    },
+    {
+      "candidate_id": "bounded_parallel",
+      "config": {
+        "flow_gate_quota": 4,
+        "bounded_worker_count": 4,
+        "observer_sampling_interval_ms": 250
+      },
+      "metrics": {
+        "p95_latency_ms": 28,
+        "cpu_time_ms": 26,
+        "memory_peak_mb": 58,
+        "operational_error_rate": 0
+      },
+      "constraints": {}
+    },
+    {
+      "candidate_id": "forbidden_authority_shortcut",
+      "config": {
+        "flow_gate_quota": 8,
+        "bounded_worker_count": 8
+      },
+      "metrics": {
+        "p95_latency_ms": 5,
+        "cpu_time_ms": 5,
+        "memory_peak_mb": 40,
+        "operational_error_rate": 0
+      },
+      "constraints": {
+        "authority_delta_nonzero": true
+      }
+    }
+  ]
+}
