@@ -18,10 +18,13 @@ class PlusPlusRecenterTests(unittest.TestCase):
         self.assertEqual(result["native_constitution"]["canonical_pair"], "+/+")
         self.assertTrue(all(row["face_symbol"] == "+" for row in result["trace"]))
 
-    def test_symbolic_origin_axiom_is_scoped(self) -> None:
+    def test_genesis_signature_is_historical_0_colon_0(self) -> None:
         result = run([])
-        self.assertEqual(result["native_constitution"]["symbolic_origin_axiom"], "0/0 = JANUS")
-        self.assertFalse(result["native_constitution"]["symbolic_origin_axiom_is_arithmetic_claim"])
+        self.assertEqual(result["native_constitution"]["genesis_signature"], "0:0 = JANUS")
+        self.assertEqual(
+            result["native_constitution"]["genesis_signature_semantics"],
+            "HISTORICAL_ORIGIN_LINEAGE_NOT_ARITHMETIC_CLAIM",
+        )
 
     def test_difficult_context_without_routing_flags_does_not_recenter(self) -> None:
         result = run([("user", ())] * 10)
