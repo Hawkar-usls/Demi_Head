@@ -1,0 +1,44 @@
+{
+  "schema": "janus.nexus.storage_fault_gate_link.v1",
+  "contract": "JANUS_NEXUS_STORAGE_FAULT_GATE_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_durability_authority": {
+    "artifact": "registry/experimental/JANUS-NEXUS-CURRENT-DURABILITY-AUTHORITY-v1.json",
+    "exact_head": "3b7d9e2e1b65c9217e05e9281f2447164d18e659"
+  },
+  "implementation": {
+    "gate": "tools/nexus_storage_fault_gate.py",
+    "tests": "tests/test_nexus_storage_fault_gate.py",
+    "frozen_holdout": "fixtures/nexus_storage_fault_holdout_v1.json",
+    "receipt_schema": "schemas/nexus-storage-fault-gate-receipt.schema.json",
+    "documentation": "docs/NEXUS_STORAGE_FAULT_GATE.md"
+  },
+  "frozen_holdout_sha256": "1e7939a1572d7b91fc9711041153b1ad1f32be496f92015287d979ef44662046",
+  "properties_under_test": {
+    "read_only_sqlite_preflight": true,
+    "quick_check_required": true,
+    "required_schema_tables_checked": true,
+    "missing_store_no_auto_create": true,
+    "corrupt_store_no_auto_replace": true,
+    "truncated_store_no_auto_replace": true,
+    "wrong_schema_no_auto_migrate": true,
+    "replay_store_health_required_before_guarded_recovery": true,
+    "storage_failure_blocks_lifecycle_mutation": true
+  },
+  "hard_limits": {
+    "storage_repair": false,
+    "power_loss_tested": false,
+    "write_failure_tested": false,
+    "automatic_recovery": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_STORAGE_FAULT_CORPUS",
+  "next_gate_after_promotion": "WRITE_SIDE_STORAGE_FAILURE_AND_WAL_FAULT_HOLDOUT"
+}

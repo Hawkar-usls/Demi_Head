@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-storage-fault-gate-receipt.schema.json",
+  "title": "JANUS Nexus storage fault gate receipt",
+  "type": "object",
+  "required": ["schema", "contract", "status", "stores", "control", "claim_ceiling"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_storage_fault_gate_receipt.v1"},
+    "contract": {"const": "JANUS_NEXUS_STORAGE_FAULT_GATE_V1"},
+    "status": {"type": "string", "minLength": 1},
+    "stores": {
+      "type": "object",
+      "required": ["lifecycle", "dispatch", "replay"],
+      "properties": {
+        "lifecycle": {"type": "object"},
+        "dispatch": {"type": "object"},
+        "replay": {"type": "object"}
+      }
+    },
+    "control": {
+      "type": "object",
+      "required": ["preflight_read_only", "missing_store_auto_creation", "corrupt_store_auto_replacement", "schema_auto_migration", "automatic_recovery_permitted", "automatic_restart_permitted", "automatic_retry_permitted", "external_effect_permitted", "authority_delta", "mass_effect_budget_delta"],
+      "properties": {
+        "preflight_read_only": {"const": true},
+        "missing_store_auto_creation": {"const": false},
+        "corrupt_store_auto_replacement": {"const": false},
+        "schema_auto_migration": {"const": false},
+        "automatic_recovery_permitted": {"const": false},
+        "automatic_restart_permitted": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "external_effect_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      }
+    },
+    "claim_ceiling": {"type": "object"},
+    "recovery": {"type": ["object", "null"]},
+    "storage_gate_blocked_recovery_mutation": {"type": "boolean"},
+    "post_preflight_open_failure": {"type": "string"}
+  }
+}
