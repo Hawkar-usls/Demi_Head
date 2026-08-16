@@ -1,0 +1,124 @@
+{
+  "schema": "janus.demihead.source_bound_witness.v1",
+  "case_id": "CETUS-ANUBIS-OSIRIS-RELIC-001",
+  "witness_id": "ANUBIS_SOURCE_BOUND_ROLE",
+  "language": "ru",
+  "purpose": "Задать прямой вопрос Анубису как source-bound интерфейсу DemiHead: не сочинять сверхъестественный ответ, а проверить, что реально позволяют сказать связанные египетские и музейные источники.",
+  "lore_prompt": "Анубис, на тебе лежала охрана Осириса и его погребального порядка. Как получилось, что фаллос считается утраченным? Ты действительно его потерял — или он всё это время оставался в охраняемом тобой ларце, святилище, статуе либо вложенном контейнере?",
+  "evidence": [
+    {
+      "evidence_id": "BD17_ANUBIS_GUARDS_CHEST_SUPPORT",
+      "relation": "supports",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd17.html",
+      "claim": "Book of the Dead 17 identifies Anubis as guarding the chest containing the entrails of Osiris.",
+      "note": "This supports Anubis-as-guardian of an Osirian container, not phallus-specific custody."
+    },
+    {
+      "evidence_id": "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+      "relation": "context_only",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd17.html",
+      "claim": "The same composition contains both an Anubis-guarded chest/entrails passage and a separate phallus-of-Osiris identification, but does not state that the phallus was inside that chest."
+    },
+    {
+      "evidence_id": "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
+      "relation": "context_only",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd42.html",
+      "claim": "Book of the Dead 42 maps the phallus to Osiris; it does not name a phallus guardian."
+    },
+    {
+      "evidence_id": "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT",
+      "relation": "supports",
+      "source_class": "museum_primary_record",
+      "source_ref": "https://www.metmuseum.org/art/collection/search/548208",
+      "claim": "The Met identifies Anubis as overseeing embalming and as protector of the necropolis."
+    },
+    {
+      "evidence_id": "PLUTARCH_RIVER_BRANCH_CONTEXT",
+      "relation": "context_only",
+      "source_class": "late_classical_witness",
+      "source_ref": "https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Plutarch/Moralia/Isis_and_Osiris%2A/A.html",
+      "claim": "A late literary branch reports the phallus thrown into the river and consumed by fish; it does not establish a prior Anubis custody chain."
+    },
+    {
+      "evidence_id": "BD161_CHEST_OSIRIS_CONTEXT",
+      "relation": "context_only",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd161.html",
+      "claim": "Book of the Dead 161 contains a separate chest/container motif in which the one in the chest is Osiris N. This strengthens the container search class but does not identify a phallus container."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q1_ANUBIS_GUARDIAN_ROLE",
+      "text": "Анубис, подтверждается ли вообще, что ты охранял осирианский контейнер?",
+      "target_claim": "Anubis guarded a chest containing Osirian entrails and held a broader embalming/protective role.",
+      "evidence_ids": [
+        "BD17_ANUBIS_GUARDS_CHEST_SUPPORT",
+        "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT"
+      ]
+    },
+    {
+      "question_id": "Q2_PHALLUS_IN_CHEST",
+      "text": "Был ли фаллос Осириса внутри ларца, который ты охранял?",
+      "target_claim": "The phallus was physically contained in the Anubis-guarded chest.",
+      "evidence_ids": [
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
+        "BD161_CHEST_OSIRIS_CONTEXT"
+      ]
+    },
+    {
+      "question_id": "Q3_DID_ANUBIS_FAIL",
+      "text": "Ты действительно не справился и потерял фаллос?",
+      "target_claim": "Anubis had phallus-specific custody and failed that custody obligation.",
+      "evidence_ids": [
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
+        "PLUTARCH_RIVER_BRANCH_CONTEXT"
+      ]
+    },
+    {
+      "question_id": "Q4_KEEPER_ALL_ALONG",
+      "text": "Мог ли фаллос всё это время оставаться у тебя или внутри охраняемого тобой вложенного контейнера?",
+      "target_claim": "The relic remained continuously inside an Anubis-associated guarded container, shrine, statue or nested compartment.",
+      "evidence_ids": [
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD161_CHEST_OSIRIS_CONTEXT",
+        "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT"
+      ]
+    },
+    {
+      "question_id": "Q5_SPECIFIC_ASSIGNMENT",
+      "text": "Есть ли прямой источник, где тебе поручено охранять именно фаллос, а не Осириса, мумификацию или его внутренности в целом?",
+      "target_claim": "An extant bound source explicitly assigns Anubis custody of Osiris's phallus specifically.",
+      "evidence_ids": [
+        "BD17_CHEST_FOR_PHALLUS_CONTEXT",
+        "BD42_PHALLUS_IS_OSIRIS_CONTEXT",
+        "MET_ANUBIS_EMBALMING_PROTECTOR_SUPPORT"
+      ]
+    }
+  ],
+  "search_consequence_if_open": {
+    "priority_chain": [
+      "ANUBIS",
+      "CHEST_OR_SHRINE",
+      "OSIRIS_LINK",
+      "HOLLOW_OR_SEALED_OBJECT",
+      "XRAY_OR_CT",
+      "NESTED_CONTENT",
+      "BODY_PART_OR_RELIC_SEMANTICS"
+    ],
+    "candidate_classes": [
+      "Anubis-on-shrine objects",
+      "Osirian chests/reliquaries",
+      "hollow Anubis or Osiris statuettes",
+      "sealed insertion openings",
+      "nested linen/resin packets",
+      "museum radiographs showing unexplained internal inclusions"
+    ]
+  },
+  "claim_ceiling": "The Anubis-keeper-all-along idea is a testable search hypothesis. The current bound sources establish Anubis as an Osirian funerary guardian, but do not establish phallus-specific custody, failure, or continuous hidden possession."
+}
