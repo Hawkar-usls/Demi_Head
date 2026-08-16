@@ -1,0 +1,110 @@
+{
+  "schema": "janus.demihead.source_bound_witness.v1",
+  "case_id": "CETUS-SOBEK-OSIRIS-RECOVERY-001",
+  "witness_id": "SOBEK_SOURCE_BOUND_ROLE",
+  "language": "ru",
+  "purpose": "Проверить через source-bound интерфейс, был ли Собек ответственным хранителем фаллоса Осириса, действительно ли он его безуспешно искал, и какие механизмы могли бы объяснить NO_FIND без обвинения Собека в некомпетентности или предательстве.",
+  "evidence": [
+    {
+      "evidence_id": "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
+      "relation": "supports",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd113.html",
+      "claim": "Book of the Dead 113 preserves Sobek searching for Horus's severed hands at the water's edge and recovering them with a snare/net.",
+      "note": "This establishes a water-recovery role and adaptive retrieval method, not phallus-specific custody."
+    },
+    {
+      "evidence_id": "OPENEDITION_SOBEK_RECOVERS_LOST_LIMBS_SUPPORT",
+      "relation": "supports",
+      "source_class": "academic_synthesis",
+      "source_ref": "https://books.openedition.org/irht/1189",
+      "claim": "Academic synthesis states that Sobek helped recover lost limbs of Osiris and Horus in Egyptian mythology.",
+      "note": "Supports recovery/rescue semantics; does not prove one unique phallus-search episode."
+    },
+    {
+      "evidence_id": "BD17_ANUBIS_BURIAL_GUARD_CONTEXT",
+      "relation": "context_only",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd17.html",
+      "claim": "Book of the Dead 17 places Anubis on guard for the burial/purification of Osiris and preserves Osirian chest/entrails context.",
+      "note": "Supports a distinct burial/custody domain from Sobek's water-recovery role."
+    },
+    {
+      "evidence_id": "BD42_PHALLUS_OSIRIS_CONTEXT",
+      "relation": "context_only",
+      "source_class": "Egyptian_funerary_text",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd42.html",
+      "claim": "Book of the Dead 42 identifies the phallus with Osiris but names no specific guardian or recovery agent for that body part."
+    },
+    {
+      "evidence_id": "KHOIAK_PHALLUS_FINDING_CONTEXT",
+      "relation": "context_only",
+      "source_class": "Egyptian_ritual_schedule",
+      "source_ref": "https://www.ucl.ac.uk/museums-static/digitalegypt/ideology/khoiak.html",
+      "claim": "Khoiak schedules preserve ritual finding of the phallus of Osiris in variant day sequences.",
+      "note": "Shows a finding/reconstitution branch independent of a simple permanent-loss story."
+    },
+    {
+      "evidence_id": "FAIYUM_SOBEK_OSIRIS_LANDSCAPE_CONTEXT",
+      "relation": "context_only",
+      "source_class": "museum_manuscript_record",
+      "source_ref": "https://art.thewalters.org/object/W.738/",
+      "claim": "The Book of the Faiyum maps a ceremonial landscape centered on Sobek-Re, Osiris and regeneration in the Faiyum.",
+      "note": "Useful geographic/ritual context, not evidence that Sobek held or lost the phallus."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q1_SOBEK_RECOVERY_SPECIALIST",
+      "text": "Собек, подтверждают ли источники, что твоя роль включала поиск и извлечение утраченных божественных частей из воды?",
+      "target_claim": "Sobek had a mythic water-recovery/retrieval role for lost divine body parts.",
+      "evidence_ids": [
+        "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
+        "OPENEDITION_SOBEK_RECOVERS_LOST_LIMBS_SUPPORT"
+      ]
+    },
+    {
+      "question_id": "Q2_PHALLUS_SPECIFIC_TASK",
+      "text": "Есть ли прямой источник, что именно тебе поручили искать или хранить фаллос Осириса?",
+      "target_claim": "An extant bound source explicitly assigns Sobek the search or custody of Osiris's phallus specifically.",
+      "evidence_ids": [
+        "BD42_PHALLUS_OSIRIS_CONTEXT",
+        "KHOIAK_PHALLUS_FINDING_CONTEXT",
+        "BD113_SOBEK_WATER_RECOVERY_SUPPORT"
+      ]
+    },
+    {
+      "question_id": "Q3_SOBEK_FAILED",
+      "text": "Подтверждается ли, что ты искал именно этот фаллос и не смог его найти?",
+      "target_claim": "Sobek specifically searched for Osiris's phallus and failed to recover it.",
+      "evidence_ids": [
+        "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
+        "BD42_PHALLUS_OSIRIS_CONTEXT",
+        "KHOIAK_PHALLUS_FINDING_CONTEXT"
+      ]
+    },
+    {
+      "question_id": "Q4_SOBEK_COMPROMISED",
+      "text": "Есть ли источник, что Собека скомпрометировали, обманули или он сознательно сорвал поиск?",
+      "target_claim": "Sobek was compromised, deceived, disloyal, or intentionally prevented recovery of Osiris's phallus.",
+      "evidence_ids": []
+    },
+    {
+      "question_id": "Q5_DOMAIN_MISMATCH",
+      "text": "Совместима ли с источниками гипотеза, что Собек отвечал за водный поиск, а объект уже находился в другом погребальном/контейнерном домене?",
+      "target_claim": "A role/domain split between Sobek's water-recovery function and Anubis-associated burial/custody functions is compatible with the evidence, although the specific hidden-object transfer is unproven.",
+      "evidence_ids": [
+        "BD113_SOBEK_WATER_RECOVERY_SUPPORT",
+        "OPENEDITION_SOBEK_RECOVERS_LOST_LIMBS_SUPPORT",
+        "BD17_ANUBIS_BURIAL_GUARD_CONTEXT"
+      ]
+    },
+    {
+      "question_id": "Q6_SOBEK_TEARS",
+      "text": "Подтверждает ли текущий связанный корпус именно сюжет, что Собек плакал из-за безуспешного поиска фаллоса?",
+      "target_claim": "The bound corpus explicitly preserves Sobek weeping because he could not find Osiris's phallus.",
+      "evidence_ids": []
+    }
+  ],
+  "claim_ceiling": "The current bound sources support Sobek as a capable divine recovery figure, especially in water contexts. They do not establish a phallus-specific assignment, a failed phallus search, compromise, disloyalty, or the weeping episode as currently formulated. Those remain lore/search hypotheses unless a primary or strong academic source is bound."
+}
