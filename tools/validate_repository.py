@@ -7,6 +7,8 @@ from urllib.parse import unquote
 
 from jsonschema import Draft202012Validator, FormatChecker
 
+from constitution_optimizer import evaluate_trials, load_spec as load_optimizer_spec
+from flow_gate import load_trace as load_flow_trace, run_flow_gate
 from keto_reference import load_case, summarize_case
 
 
@@ -56,6 +58,16 @@ def validate_schemas() -> dict[str, object]:
         schemas["keto-result.schema.json"], format_checker=FormatChecker()
     ).validate(keto_result)
 
+    flow_trace = load_flow_trace(ROOT / "examples" / "flow_gate_trace.json")
+    Draft202012Validator(
+        schemas["flow-gate-trace.schema.json"], format_checker=FormatChecker()
+    ).validate(flow_trace)
+
+    optimizer_spec = load_optimizer_spec(ROOT / "examples" / "optimizer_trials.json")
+    Draft202012Validator(
+        schemas["optimizer-trials.schema.json"], format_checker=FormatChecker()
+    ).validate(optimizer_spec)
+
     return schemas
 
 
@@ -87,6 +99,40 @@ def validate_keto_invariants() -> None:
         raise ValueError("Reference analyzer mass-effect budget must remain zero")
 
 
+def validate_performance_invariants() -> None:
+    flow = run_flow_gate(load_flow_trace(ROOT / "examples" / "flow_gate_trace.json"))
+    if not flow["invariants"]["quota_respected"]:
+        raise ValueError("Flow gate exceeded configured quota")
+    if flow["accounting"]["deferred_count"] < 1:
+        raise ValueError("Flow fixture must exercise deferred-work preservation")
+    if flow["accounting"]["unknown_observed_count"] < 1:
+        raise ValueError("Flow fixture must exercise UNKNOWN preservation")
+    if flow["invariants"]["evidence_state_mutated"]:
+        raise ValueError("Flow scheduling must not mutate evidence state")
+    if flow["invariants"]["authority_delta"] != 0 or flow["invariants"]["mass_effect_budget_delta"] != 0:
+        raise ValueError("Flow scheduling must not create authority or mass effect")
+
+    optimizer = evaluate_trials(load_optimizer_spec(ROOT / "examples" / "optimizer_trials.json"))
+    if optimizer["accounting"]["rejected_count"] < 1:
+        raise ValueError("Optimizer fixture must exercise fail-closed rejection")
+    if optimizer["best_candidate"] is None:
+        raise ValueError("Optimizer fixture must retain at least one safe admitted candidate")
+    if optimizer["best_candidate"]["candidate_id"] == "forbidden_authority_shortcut":
+        raise ValueError("Constraint-violating optimizer candidate was incorrectly selected")
+    invariants = optimizer["invariants"]
+    if any(
+        invariants[key]
+        for key in (
+            "optimizer_can_mutate_evidence_state",
+            "optimizer_can_mutate_source_roots",
+            "optimizer_can_mutate_constitution",
+            "optimizer_can_increase_authority",
+            "optimizer_can_increase_mass_effect_budget",
+        )
+    ):
+        raise ValueError("Optimizer escaped its constitutional boundary")
+
+
 def validate_markdown_links() -> None:
     missing: list[str] = []
     for markdown in sorted(ROOT.rglob("*.md")):
@@ -113,8 +159,12 @@ def main() -> None:
     validate_json_documents()
     validate_schemas()
     validate_keto_invariants()
+    validate_performance_invariants()
     validate_markdown_links()
-    print("Repository contracts, JSON mirrors, generated KETO result, invariants, and local documentation links are valid.")
+    print(
+        "Repository contracts, JSON documents, generated KETO/flow/optimizer results, "
+        "constitutional invariants, and local documentation links are valid."
+    )
 
 
 if __name__ == "__main__":
