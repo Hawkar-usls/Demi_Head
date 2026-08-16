@@ -1,0 +1,54 @@
+{
+  "schema": "janus.demihead.nexus_dispatch_adversarial_manifest.v1",
+  "contract": "JANUS_NEXUS_LOOPBACK_DISPATCH_V2",
+  "status": "FROZEN_CASE_DEFINITIONS",
+  "cases": [
+    {
+      "id": "CONCURRENT_SAME_INTENT",
+      "expected": "EXACTLY_ONE_LOCAL_HANDLER_INVOCATION_AND_ALL_OTHER_CALLERS_HOLD_DUPLICATE_INTENT"
+    },
+    {
+      "id": "STARTED_SURVIVES_RESTART",
+      "expected": "RESTART_CANNOT_REINVOKE_HANDLER"
+    },
+    {
+      "id": "HANDLER_VERSION_CHANGE",
+      "expected": "SAME_INTENT_CANNOT_BYPASS_GUARD_WITH_DIFFERENT_HANDLER_ID"
+    },
+    {
+      "id": "COMPLETION_WRITE_FAILURE",
+      "expected": "HOLD_LEDGER_FINALIZATION_FAILURE_AND_STARTED_REMAINS_DUPLICATE_BARRIER"
+    },
+    {
+      "id": "SQLITE_LOCK_CONTENTION",
+      "expected": "HOLD_LEDGER_UNAVAILABLE_BEFORE_HANDLER"
+    },
+    {
+      "id": "CORRUPT_DATABASE",
+      "expected": "LEDGER_INITIALIZATION_FAILS_CLOSED"
+    },
+    {
+      "id": "UNAVAILABLE_STORAGE",
+      "expected": "LEDGER_INITIALIZATION_FAILS_CLOSED"
+    },
+    {
+      "id": "HANDLER_EXCEPTION_AFTER_POSSIBLE_PARTIAL_WORK",
+      "expected": "FAILED_AMBIGUOUS_AND_NO_AUTOMATIC_REINVOCATION"
+    }
+  ],
+  "claim_ceiling": {
+    "socket_listener": false,
+    "network_delivery": false,
+    "guaranteed_delivery": false,
+    "exactly_once_delivery": false,
+    "distributed_consensus": false,
+    "external_effect_authority": false
+  },
+  "laws": [
+    "INTENT_IDENTITY_MUST_NOT_DEPEND_ON_HANDLER_VERSION",
+    "LOCK_CONTENTION != BYPASS_PERMISSION",
+    "CORRUPT_STORAGE != IN_MEMORY_FALLBACK_PERMISSION",
+    "AMBIGUOUS_COMPLETION != RETRY_PERMISSION",
+    "DUPLICATE_INTENT_SUPPRESSION != EXACTLY_ONCE_DELIVERY"
+  ]
+}

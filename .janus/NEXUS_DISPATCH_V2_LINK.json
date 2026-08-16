@@ -1,0 +1,38 @@
+{
+  "schema": "janus.nexus.loopback_dispatch_link.v2",
+  "contract": "JANUS_NEXUS_LOOPBACK_DISPATCH_V2",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "ADVERSARIAL_HOLDOUT_CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_certified_dispatch": {
+    "artifact": "JANUS-NEXUS-CURRENT-DISPATCH-AUTHORITY-v1",
+    "exact_head": "62a9d0cf7fd63a000bf7611e80f8342e40fe8da6"
+  },
+  "implementation": {
+    "dispatcher": "tools/nexus_loopback_dispatcher_v2.py",
+    "intent_guarded_ledger": "tools/nexus_dispatch_ledger_v2.py",
+    "adversarial_tests": "tests/test_nexus_dispatch_adversarial_holdout.py",
+    "frozen_case_manifest": "fixtures/nexus_dispatch_adversarial_holdout_v1.json",
+    "documentation": "docs/NEXUS_DISPATCH_V2_ADVERSARIAL_GATE.md"
+  },
+  "new_in_v2": {
+    "intent_sha256_independent_of_handler_id": true,
+    "unique_intent_constraint": true,
+    "handler_version_cannot_bypass_existing_intent": true,
+    "real_lock_contention_holdout": true,
+    "corrupt_storage_holdout": true,
+    "concurrent_duplicate_holdout": true
+  },
+  "hard_limits": {
+    "socket_listener_enabled": false,
+    "network_io_performed": false,
+    "cross_repository_delivery": false,
+    "automatic_retry_permitted": false,
+    "guaranteed_delivery": false,
+    "exactly_once_delivery": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_ADVERSARIAL_HOLDOUT",
+  "next_gate_after_promotion": "SEPARATE_LOCALHOST_ONLY_SOCKET_CANDIDATE_WITH_LISTENER_DISABLED_BY_DEFAULT"
+}
