@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hawkar-usls.github.io/Demi_Head/schemas/bicameral-result.schema.json",
+  "title": "JANUS DemiHead bicameral result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "hemispheres_present",
+    "packet_receipts",
+    "comparison",
+    "routing",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {"const": "janus.demihead.bicameral_result.v1"},
+    "status": {"enum": ["BICAMERAL_OVERLAP_PRESENT", "BICAMERAL_DIVERGENCE_PRESERVED", "DEGRADED_SINGLE_HEMISPHERE"]},
+    "hemispheres_present": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["LEFT_HRAIN", "RIGHT_INAIHR"]},
+      "minItems": 1,
+      "maxItems": 2
+    },
+    "packet_receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "LEFT_HRAIN": {"$ref": "#/$defs/receipt"},
+        "RIGHT_INAIHR": {"$ref": "#/$defs/receipt"}
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shared_semantic_keys", "left_only_semantic_keys", "right_only_semantic_keys", "automatic_graph_merge_performed"],
+      "properties": {
+        "shared_semantic_keys": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "left_only_semantic_keys": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "right_only_semantic_keys": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "automatic_graph_merge_performed": {"const": false}
+      }
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "external_effect_permitted", "direct_cross_hemisphere_write_permitted", "disagreement_preserved"],
+      "properties": {
+        "mode": {"enum": ["BICAMERAL_REVIEW", "DEGRADED_SINGLE_HEMISPHERE_HOLD"]},
+        "external_effect_permitted": {"const": false},
+        "direct_cross_hemisphere_write_permitted": {"const": false},
+        "disagreement_preserved": {"const": true}
+      }
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "truth_claim_made",
+        "agreement_is_truth",
+        "hemisphere_count_is_authority",
+        "association_is_evidence",
+        "structure_is_command",
+        "authority_delta",
+        "mass_effect_budget_delta"
+      ],
+      "properties": {
+        "truth_claim_made": {"const": false},
+        "agreement_is_truth": {"const": false},
+        "hemisphere_count_is_authority": {"const": false},
+        "association_is_evidence": {"const": false},
+        "structure_is_command": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      }
+    }
+  },
+  "$defs": {
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_id", "sha256", "repository", "node_count", "link_count", "origin_counts"],
+      "properties": {
+        "packet_id": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "repository": {"type": "string", "minLength": 1},
+        "node_count": {"type": "integer", "minimum": 0},
+        "link_count": {"type": "integer", "minimum": 0},
+        "origin_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["USER", "REMOTE_AI", "LOCAL_FALLBACK", "LEGACY_UNKNOWN", "SYSTEM"],
+          "properties": {
+            "USER": {"type": "integer", "minimum": 0},
+            "REMOTE_AI": {"type": "integer", "minimum": 0},
+            "LOCAL_FALLBACK": {"type": "integer", "minimum": 0},
+            "LEGACY_UNKNOWN": {"type": "integer", "minimum": 0},
+            "SYSTEM": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}
