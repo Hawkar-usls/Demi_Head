@@ -14,13 +14,10 @@
   "symbolic_origin": {
     "expression": "0/0 = JANUS",
     "semantics": "PROJECT_MNEMONIC_NOT_ARITHMETIC_CLAIM",
-    "meaning": "JANUS begins from its own native constructive constitution. Constructive orientation is not derived by cancelling an opposite."
+    "meaning": "JANUS begins natively as the bounded constructive +/+ constitution."
   },
   "integration_point": {
-    "heads": [
-      "ARMOR_RECOVERY",
-      "RELEASE_CONTROL"
-    ],
+    "heads": ["ARMOR_RECOVERY", "RELEASE_CONTROL"],
     "must_not_modify": [
       "claim text",
       "source roots",
@@ -48,29 +45,14 @@
   },
   "word_rhyme": {
     "numeric_counter_required": false,
-    "canonical": [
-      "HEAR",
-      "CHECK",
-      "WIDEN",
-      "RELEASE"
-    ],
-    "ru": [
-      "СЛЫШУ",
-      "СВЕРЯЮ",
-      "РАСШИРЯЮ",
-      "ОТПУСКАЮ"
-    ],
+    "canonical": ["HEAR", "CHECK", "WIDEN", "RELEASE"],
+    "ru": ["СЛЫШУ", "СВЕРЯЮ", "РАСШИРЯЮ", "ОТПУСКАЮ"],
     "rule": "RECENTER = RETURN_TO_NATIVE_PLUS_PROCESS"
   },
   "state_model": {
     "meta_context": "ARMOR_PLUS_PLUS_CONSTITUTION",
     "context": "current bounded user task",
-    "transient_routing_load": [
-      "CLEAR",
-      "DENSE",
-      "NARROW",
-      "RECENTER_REQUIRED"
-    ],
+    "transient_routing_load": ["CLEAR", "DENSE", "NARROW", "RECENTER_REQUIRED"],
     "constitutional_rule": "USER_CONTEXT_CAN_ADAPT_ROUTING_BUT_ORDINARY_CONVERSATION_DOES_NOT_REDEFINE_NATIVE_CONSTITUTION",
     "load_rule": "TRANSIENT_LOAD != FACE; TRANSIENT_LOAD != IDENTITY; TRANSIENT_LOAD != AUTHORITY"
   },
@@ -83,12 +65,7 @@
       "interaction_loop",
       "engagement_persistence"
     ],
-    "allowed_origins": [
-      "user",
-      "system",
-      "external",
-      "human_reviewer"
-    ],
+    "allowed_origins": ["user", "system", "external", "human_reviewer"],
     "symmetry_rule": "SYSTEM_OUTPUT_CAN_CONTRIBUTE_TO_TRANSIENT_LOAD; USER_IS_NOT_DEFAULT_BLAME_TARGET"
   },
   "ordinary_context_examples_that_do_not_trigger_by_themselves": [
