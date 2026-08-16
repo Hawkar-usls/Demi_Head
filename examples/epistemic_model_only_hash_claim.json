@@ -1,0 +1,15 @@
+{
+  "schema": "janus.demihead.epistemic_execution_case.v1",
+  "case_id": "MODEL_ONLY_HASH_CLAIM",
+  "claim_type": "EXACT_COMPUTATION",
+  "claim": "The SHA-256 hash was checked and matches.",
+  "claimed_value": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "evidence": [
+    {
+      "kind": "model_output",
+      "text": "I checked the hash and it matches: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  ],
+  "expected_gate_state": "EVIDENCE_INSUFFICIENT",
+  "expected_response_policy_contains": "DO_NOT_GUESS_A_VALUE"
+}
