@@ -28,7 +28,7 @@ PREVIEW ──► DECLINE
 
 HRain and iNaiHR GitHub Pages are both served from `https://hawkar-usls.github.io`. Different project paths are not different web origins.
 
-Therefore v1 deliberately does **not** expose a `postMessage APPLY` command between the DemiHead page and a hemisphere sidecar.
+Therefore v1 deliberately does **not** expose a `postMessage`-based apply command between the DemiHead page and a hemisphere sidecar.
 
 ```text
 GITHUB_PAGES_PROJECT_PATH != ORIGIN_ISOLATION
