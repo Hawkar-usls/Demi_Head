@@ -1,0 +1,19 @@
+{
+  "schema": "janus.demihead.nexus_release_receipt.v1",
+  "contract": "JANUS_NEXUS_GUARDIAN_INGRESS_V1",
+  "status": "WAIT_FOR_NEW_EVIDENCE",
+  "guardian_result_sha256": "a506df8891d40f60220c873f244fead7cbe983c6685648f22bdfd87bc32a904e",
+  "control": {
+    "return_control_to_human": true,
+    "automatic_retry_permitted": false,
+    "automatic_external_effect_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "laws": [
+    "HOLD != FAILURE",
+    "AMBIGUOUS_EFFECT != RETRY_PERMISSION",
+    "GUARDIAN_RESULT != COMMAND",
+    "RELEASE_CONTROL_RETURNS_AGENCY"
+  ]
+}
