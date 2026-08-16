@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-phase-boundary-recovery-receipt.schema.json",
+  "title": "JANUS Nexus phase-boundary recovery receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "contract", "status", "binding", "recovery", "dispatch_evidence", "control", "claim_ceiling"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_phase_boundary_recovery_receipt.v1"},
+    "contract": {"const": "JANUS_NEXUS_PHASE_BOUNDARY_RECOVERY_V1"},
+    "status": {"type": "string", "minLength": 1},
+    "binding": {
+      "type": "object",
+      "required": ["service_id", "expected_instance_id", "observed_phase", "final_phase"],
+      "properties": {
+        "service_id": {"type": "string", "minLength": 1},
+        "expected_instance_id": {"type": "string", "minLength": 1},
+        "observed_phase": {"type": ["string", "null"]},
+        "final_phase": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "recovery": {
+      "type": "object",
+      "required": ["mutation_performed", "reason", "manual_ack_required", "automatic_recovery_permitted", "process_dead_attestation_is_operator_claim_not_independent_proof"],
+      "properties": {
+        "mutation_performed": {"type": "boolean"},
+        "reason": {"type": "string", "minLength": 1},
+        "manual_ack_required": {"type": "boolean"},
+        "automatic_recovery_permitted": {"const": false},
+        "process_dead_attestation_is_operator_claim_not_independent_proof": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "dispatch_evidence": {"type": ["object", "null"]},
+    "control": {
+      "type": "object",
+      "required": ["dispatch_ledger_deleted_or_reset", "replay_ledger_deleted_or_reset", "automatic_restart_permitted", "automatic_retry_permitted", "external_effect_permitted", "authority_delta", "mass_effect_budget_delta"],
+      "properties": {
+        "dispatch_ledger_deleted_or_reset": {"const": false},
+        "replay_ledger_deleted_or_reset": {"const": false},
+        "automatic_restart_permitted": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "external_effect_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "claim_ceiling": {"type": "object"}
+  }
+}

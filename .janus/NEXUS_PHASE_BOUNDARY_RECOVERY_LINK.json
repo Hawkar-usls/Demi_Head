@@ -1,0 +1,42 @@
+{
+  "schema": "janus.nexus.phase_boundary_recovery_link.v1",
+  "contract": "JANUS_NEXUS_PHASE_BOUNDARY_RECOVERY_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_lifecycle_authority": {
+    "artifact": "registry/experimental/JANUS-NEXUS-CURRENT-LIFECYCLE-AUTHORITY-v1.json",
+    "exact_head": "21f2e21129971abf45ab76833fd31a61a202ba03"
+  },
+  "implementation": {
+    "recovery_tool": "tools/nexus_lifecycle_recovery.py",
+    "tests": "tests/test_nexus_phase_boundary_recovery.py",
+    "frozen_holdout": "fixtures/nexus_phase_boundary_crash_recovery_holdout_v1.json",
+    "receipt_schema": "schemas/nexus-phase-boundary-recovery-receipt.schema.json",
+    "documentation": "docs/NEXUS_PHASE_BOUNDARY_RECOVERY.md"
+  },
+  "frozen_holdout_sha256": "e3946b4f95262598203f46c46ca2998ffffaa26a9124b52a877424acc963452d",
+  "recovery_policy_under_test": {
+    "operator_ack_required": true,
+    "process_dead_attestation_required": true,
+    "process_dead_attestation_is_independent_os_proof": false,
+    "pre_dispatch_zero_dispatch_evidence_required": true,
+    "unexpected_pre_dispatch_evidence_fails_closed": true,
+    "post_dispatch_or_execution_uncertain_becomes_ambiguous": true,
+    "dispatch_evidence_unavailable_fails_closed": true,
+    "unknown_phase_fails_closed": true,
+    "dispatch_ledger_reset_permitted": false,
+    "replay_ledger_reset_permitted": false
+  },
+  "hard_limits": {
+    "automatic_recovery": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_PHASE_BOUNDARY_RECOVERY_CORPUS",
+  "next_gate_after_promotion": "REAL_SUBPROCESS_TERMINATION_PRE_DISPATCH_DURABILITY_HOLDOUT"
+}

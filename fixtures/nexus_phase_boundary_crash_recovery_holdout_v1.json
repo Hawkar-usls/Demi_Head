@@ -1,0 +1,39 @@
+{
+  "freeze_payload": {
+    "schema": "janus.demihead.nexus_phase_boundary_crash_recovery_holdout.v1",
+    "parent_exact_head": "21f2e21129971abf45ab76833fd31a61a202ba03",
+    "frozen_before_first_execution": true,
+    "cases": [
+      {"id": "REC-01", "name": "STARTING stale pre-dispatch recovery", "expect": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "REC-02", "name": "LISTENER_BOUND stale pre-dispatch recovery", "expect": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "REC-03", "name": "REQUEST_RECEIVED stale pre-dispatch recovery", "expect": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "REC-04", "name": "TRANSPORT_ADMITTED stale pre-dispatch recovery", "expect": "RECOVERED_PRE_DISPATCH_CLOSED_CLEAN"},
+      {"id": "REC-05", "name": "DISPATCH_STARTED without ledger evidence remains ambiguous", "expect": "RECOVERED_TO_CLOSED_AMBIGUOUS"},
+      {"id": "REC-06", "name": "DISPATCH_STARTED with STARTED ledger evidence remains ambiguous", "expect": "RECOVERED_TO_CLOSED_AMBIGUOUS"},
+      {"id": "REC-07", "name": "DISPATCH_COMPLETED with COMPLETED ledger evidence remains ambiguous", "expect": "RECOVERED_TO_CLOSED_AMBIGUOUS"},
+      {"id": "REC-08", "name": "RECEIPT_PENDING with COMPLETED ledger evidence remains ambiguous", "expect": "RECOVERED_TO_CLOSED_AMBIGUOUS"},
+      {"id": "REC-09", "name": "unexpected dispatch evidence during pre-dispatch phase", "expect": "HOLD_UNEXPECTED_DISPATCH_EVIDENCE"},
+      {"id": "REC-10", "name": "missing operator process-death attestation", "expect": "HOLD_OPERATOR_ATTESTATION_REQUIRED"},
+      {"id": "REC-11", "name": "wrong lifecycle instance identity", "expect": "HOLD_INSTANCE_MISMATCH"},
+      {"id": "REC-12", "name": "dispatch evidence store unavailable", "expect": "HOLD_DISPATCH_EVIDENCE_UNAVAILABLE"},
+      {"id": "REC-13", "name": "unknown lifecycle phase", "expect": "HOLD_UNKNOWN_PHASE_NO_MUTATION"}
+    ],
+    "invariants": {
+      "automatic_recovery": false,
+      "automatic_restart": false,
+      "automatic_retry": false,
+      "operator_ack_required": true,
+      "process_dead_attestation_required": true,
+      "pre_dispatch_recovery_requires_zero_dispatch_evidence": true,
+      "post_dispatch_or_unknown_execution_never_recovered_clean": true,
+      "dispatch_ledger_never_deleted_or_reset": true,
+      "replay_ledger_never_deleted_or_reset": true,
+      "cross_host_transport": false,
+      "persistent_daemon": false,
+      "external_effect_authority": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  },
+  "freeze_sha256": "e3946b4f95262598203f46c46ca2998ffffaa26a9124b52a877424acc963452d"
+}
