@@ -1,0 +1,62 @@
+name: DemiHead NOHAND Habitat Peer v1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7 * * * *'
+  push:
+    branches:
+      - feature/nohand-habitat-peer-v1
+    paths:
+      - 'habitat/nohand/inbox/**'
+      - 'habitat/nohand/outcomes/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demihead-nohand-habitat-peer-v1
+  cancel-in-progress: false
+
+jobs:
+  peer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/nohand-habitat-peer-v1
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile
+        run: python -m py_compile tools/goldprompt_handshake.py tools/nohand_habitat_peer.py
+
+      - name: Self-test
+        env:
+          JANUS_PEER_SOURCE_REVISION: ${{ github.sha }}
+        run: python tools/nohand_habitat_peer.py --self-test
+
+      - name: Process peer exchange
+        env:
+          JANUS_PEER_SOURCE_REVISION: ${{ github.sha }}
+        run: python tools/nohand_habitat_peer.py --root .
+
+      - name: Commit create-only peer artifacts
+        shell: bash
+        run: |
+          if git diff --quiet -- habitat/nohand; then
+            echo 'No peer artifacts to commit.'
+            exit 0
+          fi
+          git config user.name 'janus-demihead-peer'
+          git config user.email 'janus-demihead-peer@users.noreply.github.com'
+          git add habitat/nohand/outbox habitat/nohand/settled habitat/nohand/state || true
+          if git diff --cached --quiet; then
+            echo 'No allowed generated artifacts.'
+            exit 0
+          fi
+          git commit -m 'janus(demihead): process NOHAND peer exchange'
+          git push origin HEAD:feature/nohand-habitat-peer-v1
