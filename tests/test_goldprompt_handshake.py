@@ -16,7 +16,7 @@ from goldprompt_handshake import (  # noqa: E402
     contract_digest,
     verify_receipt,
 )
-from hemisphere_bridge import combine_packets, self_test  # noqa: E402
+from hemisphere_bridge import self_test  # noqa: E402
 
 
 class GoldPromptHandshakeTests(unittest.TestCase):
@@ -50,10 +50,6 @@ class GoldPromptHandshakeTests(unittest.TestCase):
         self.assertTrue(verify_receipt(result["goldprompt_receipt"]))
         self.assertFalse(result["claim_ceiling"]["agreement_is_truth"])
         self.assertEqual(result["claim_ceiling"]["authority_delta"], 0)
-
-    def test_missing_face_does_not_create_more_authority(self):
-        result = combine_packets(left=self_test()["result"]["packet_receipts"] if False else None)
-        self.assertIsNone(result)  # unreachable guard; combine_packets already covered by bridge tests
 
 
 if __name__ == "__main__":
