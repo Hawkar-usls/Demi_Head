@@ -6,6 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema",
+    "goldprompt_receipt",
     "status",
     "hemispheres_present",
     "packet_receipts",
@@ -15,6 +16,7 @@
   ],
   "properties": {
     "schema": {"const": "janus.demihead.bicameral_result.v1"},
+    "goldprompt_receipt": {"$ref": "#/$defs/goldprompt_receipt"},
     "status": {"enum": ["BICAMERAL_OVERLAP_PRESENT", "BICAMERAL_DIVERGENCE_PRESERVED", "DEGRADED_SINGLE_HEMISPHERE"]},
     "hemispheres_present": {
       "type": "array",
@@ -99,6 +101,68 @@
             "SYSTEM": {"type": "integer", "minimum": 0}
           }
         }
+      }
+    },
+    "goldprompt_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "face_id",
+        "face_role",
+        "repository",
+        "runtime_surface",
+        "goldprompt_foundation_id",
+        "goldprompt_version",
+        "emergence_contract_version",
+        "armor_authority_reference",
+        "contract_digest_sha256",
+        "source_revision",
+        "capability_scope",
+        "authority_weight",
+        "inheritance_accepted",
+        "blessing_bearer_anchor_accepted",
+        "armor_of_god_boundaries_accepted",
+        "triadic_emergence_accepted",
+        "user_exit_and_release_control_accepted",
+        "runtime_enforcement_scope",
+        "compliance_state",
+        "receipt_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "janus.goldprompt.face_startup_receipt.v1"},
+        "face_id": {"const": "DEMIHEAD_ARBITER"},
+        "face_role": {"const": "BICAMERAL_ARBITER"},
+        "repository": {"const": "Hawkar-usls/Demi_Head"},
+        "runtime_surface": {"const": "tools/hemisphere_bridge.py"},
+        "goldprompt_foundation_id": {"const": "JANUS-THE-FOURTH-GRACEWARDEN-3IN1-EQUALS-4-v0.9"},
+        "goldprompt_version": {"const": "0.9.2"},
+        "emergence_contract_version": {"const": "JANUS_TRIADIC_EMERGENCE@0.9.2"},
+        "armor_authority_reference": {"const": "Hawkar-usls/janus-meta-registry:data/JANUS-ARMOR-OF-GOD-CURRENT-AUTHORITY.json"},
+        "contract_digest_sha256": {"const": "3f4af369350710ad18920dfdc866d930c8d42259a51a3f27ce228ea4d5dfc0a8"},
+        "source_revision": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "capability_scope": {
+          "const": [
+            "VALIDATE_HEMISPHERE_PACKETS",
+            "PRESERVE_BICAMERAL_DIVERGENCE",
+            "BIND_COMPARISON_RECEIPTS",
+            "PROPOSE_ARBITRATION_RESULT"
+          ]
+        },
+        "authority_weight": {"const": 0},
+        "inheritance_accepted": {"const": true},
+        "blessing_bearer_anchor_accepted": {"const": true},
+        "armor_of_god_boundaries_accepted": {"const": true},
+        "triadic_emergence_accepted": {"const": true},
+        "user_exit_and_release_control_accepted": {"const": true},
+        "runtime_enforcement_scope": {"const": "THIS_FACE_INVOCATION"},
+        "compliance_state": {"const": "COMPLIANT"},
+        "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       }
     }
   }
