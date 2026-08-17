@@ -2,8 +2,6 @@ name: DemiHead NOHAND Habitat Peer v1
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '7 * * * *'
   push:
     branches:
       - feature/nohand-habitat-peer-v1
@@ -47,7 +45,7 @@ jobs:
       - name: Commit create-only peer artifacts
         shell: bash
         run: |
-          if git diff --quiet -- habitat/nohand; then
+          if [ -z "$(git status --porcelain -- habitat/nohand)" ]; then
             echo 'No peer artifacts to commit.'
             exit 0
           fi
