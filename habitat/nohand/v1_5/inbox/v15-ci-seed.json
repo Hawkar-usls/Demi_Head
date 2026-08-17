@@ -1,0 +1,28 @@
+{
+  "action": "STARTUP_HANDSHAKE",
+  "authority_requested": false,
+  "context_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "expected_demihead_parent_main_revision": "f2074ca833692f4c2a9f1cb1f5cf723c873d3211",
+  "git_sha256": null,
+  "goldprompt_contract_digest": "3f4af369350710ad18920dfdc866d930c8d42259a51a3f27ce228ea4d5dfc0a8",
+  "goldprompt_version": "0.9.2",
+  "goldprompt_working_faces_bundle_v1_1": "6a8a63d3bebf0b8611df2682d2c38dd6472818190da5e367fbc22467c5717d17",
+  "guard": {
+    "guardian_of_guardian_ok": true,
+    "no_delete": true,
+    "no_move": true,
+    "no_rename": true,
+    "preservation_baseline_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "preservation_sentinel_ok": true,
+    "safety_contract_sha256": "542ee72aea113c02f724d32a2c599d1da72db7073cd7dfcc7538ecdb10b4ac7e",
+    "verified_preimage_backup_required": false
+  },
+  "local_sha256": "cf8f08fa565c0f0f7cc8691216095d122a0a29a7d3ba6210ea9c580f58534c12",
+  "path_sha256": null,
+  "predictor_forecast_receipt_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "request_id": "v15-ci-seed",
+  "request_sha256": "7e75afbd6ac1ade3ace1bbaabe114039bca98044ba8153ba767c04aff7f157f4",
+  "schema": "janus.habitat.nohand.demihead_request.v1",
+  "secret_like": false,
+  "terminal_script_sha256": "cf8f08fa565c0f0f7cc8691216095d122a0a29a7d3ba6210ea9c580f58534c12"
+}
