@@ -6,9 +6,11 @@
   'use strict';
 
   const PACKET_SCHEMA = 'janus.demihead.hemisphere_packet.v2';
+  const UNATTESTED_PACKET_SCHEMA = 'janus.demihead.hemisphere_packet.v1';
   const PROPOSAL_SCHEMA = 'janus.demihead.local_proposal.v1';
   const ENVELOPE_TYPE = 'JANUS_DEMIHEAD_LOCAL_PROPOSAL_V1';
   const BRIDGE_CONTRACT = 'JANUS_DEMIHEAD_BICAMERAL_BRIDGE_V2';
+  const UNATTESTED_BRIDGE_CONTRACT = 'JANUS_DEMIHEAD_BICAMERAL_BRIDGE_V1';
   const RECEIPT_SCHEMA = 'janus.goldprompt.face_startup_receipt.v1_1';
   const MANIFEST_DIGEST = '4bd935ae033c80f090b91a6a5009a51abeb06b99defdc8836763bd9506023a86';
   const SAFE_ID = /^[A-Za-z0-9._:-]{8,128}$/;
@@ -51,13 +53,29 @@
     return value;
   }
 
-  function validatePacket(packet) {
-    if (!packet || typeof packet !== 'object' || Array.isArray(packet)) throw new Error('hemisphere packet must be an object');
-    if (packet.schema !== PACKET_SCHEMA) throw new Error('unexpected hemisphere packet schema');
-    const rule = TARGETS[packet.hemisphere];
-    if (!rule) throw new Error('unsupported hemisphere');
+  function validateSharedPacketBoundaries(packet, rule) {
     if (packet.role !== rule.role) throw new Error('hemisphere role mismatch');
     if (!packet.source || packet.source.repository !== rule.repository) throw new Error('hemisphere repository mismatch');
+    if (!packet.graph || !Array.isArray(packet.graph.nodes) || !Array.isArray(packet.graph.links)) throw new Error('normalized graph missing');
+    if (!packet.control || packet.control.read_only_transfer !== true) throw new Error('source packet must be read-only');
+    if (packet.control.direct_cross_hemisphere_mutation !== false) throw new Error('source packet requests direct mutation');
+    if (packet.control.authority_delta !== 0 || packet.control.mass_effect_budget_delta !== 0) throw new Error('source packet authority boundary drifted');
+  }
+
+  function validatePacket(packet) {
+    if (!packet || typeof packet !== 'object' || Array.isArray(packet)) throw new Error('hemisphere packet must be an object');
+    const rule = TARGETS[packet.hemisphere];
+    if (!rule) throw new Error('unsupported hemisphere');
+    validateSharedPacketBoundaries(packet, rule);
+
+    if (packet.schema === UNATTESTED_PACKET_SCHEMA) {
+      if (packet.source.bridge_contract !== UNATTESTED_BRIDGE_CONTRACT) throw new Error('unattested hemisphere bridge contract mismatch');
+      if (packet.source.source_revision !== null && packet.source.source_revision !== undefined) throw new Error('unattested browser packet must not invent trusted source revision');
+      if (Object.prototype.hasOwnProperty.call(packet, 'goldprompt_receipt')) throw new Error('unattested browser packet must not carry GoldPrompt receipt');
+      return {...rule, proof_state:'UNATTESTED_LOCAL_CONTEXT'};
+    }
+
+    if (packet.schema !== PACKET_SCHEMA) throw new Error('unexpected hemisphere packet schema');
     if (packet.source.bridge_contract !== BRIDGE_CONTRACT) throw new Error('hemisphere bridge contract mismatch');
     if (typeof packet.source.source_revision !== 'string' || !GIT_REV.test(packet.source.source_revision)) throw new Error('trusted source revision required');
     if (typeof packet.source.goldprompt_receipt_sha256 !== 'string' || !SHA256.test(packet.source.goldprompt_receipt_sha256)) throw new Error('packet receipt SHA binding required');
@@ -71,11 +89,7 @@
     if (receipt.receipt_sha256 !== packet.source.goldprompt_receipt_sha256) throw new Error('embedded GoldPrompt receipt SHA mismatch');
     if (receipt.dependency_manifest_digest_sha256 !== MANIFEST_DIGEST) throw new Error('embedded GoldPrompt dependency manifest mismatch');
     if (receipt.compliance_state !== 'COMPLIANT' || receipt.authority_weight !== 0) throw new Error('embedded GoldPrompt receipt policy mismatch');
-    if (!packet.graph || !Array.isArray(packet.graph.nodes) || !Array.isArray(packet.graph.links)) throw new Error('normalized graph missing');
-    if (!packet.control || packet.control.read_only_transfer !== true) throw new Error('source packet must be read-only');
-    if (packet.control.direct_cross_hemisphere_mutation !== false) throw new Error('source packet requests direct mutation');
-    if (packet.control.authority_delta !== 0 || packet.control.mass_effect_budget_delta !== 0) throw new Error('source packet authority boundary drifted');
-    return rule;
+    return {...rule, proof_state:'GOLDPROMPT_RECEIPT_BOUND_CONTEXT'};
   }
 
   async function buildEnvelope(packet, params) {
@@ -103,5 +117,15 @@
     return {type:ENVELOPE_TYPE, proposal_sha256:await sha256Json(proposal), proposal};
   }
 
-  return {PACKET_SCHEMA,PROPOSAL_SCHEMA,ENVELOPE_TYPE,TARGETS,canonicalJson,sha256Json,validatePacket,buildEnvelope};
+  return {
+    PACKET_SCHEMA,
+    UNATTESTED_PACKET_SCHEMA,
+    PROPOSAL_SCHEMA,
+    ENVELOPE_TYPE,
+    TARGETS,
+    canonicalJson,
+    sha256Json,
+    validatePacket,
+    buildEnvelope
+  };
 });
