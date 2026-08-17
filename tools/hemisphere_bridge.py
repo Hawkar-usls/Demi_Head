@@ -10,6 +10,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from goldprompt_handshake import build_receipt as build_goldprompt_receipt, verify_receipt as verify_goldprompt_receipt
+
 
 PACKET_SCHEMA = "janus.demihead.hemisphere_packet.v1"
 RESULT_SCHEMA = "janus.demihead.bicameral_result.v1"
@@ -214,8 +216,13 @@ def combine_packets(
         status = "DEGRADED_SINGLE_HEMISPHERE"
         mode = "DEGRADED_SINGLE_HEMISPHERE_HOLD"
 
+    goldprompt_receipt = build_goldprompt_receipt()
+    if not verify_goldprompt_receipt(goldprompt_receipt):
+        raise ValueError("DEMIHEAD_GOLDPROMPT_RECEIPT_SELF_VERIFY_FAILED")
+
     return {
         "schema": RESULT_SCHEMA,
+        "goldprompt_receipt": goldprompt_receipt,
         "status": status,
         "hemispheres_present": hemispheres_present,
         "packet_receipts": receipts,
@@ -292,6 +299,7 @@ def self_test() -> dict[str, Any]:
 
     checks: dict[str, bool] = {
         "shared_context_detected_without_semantic_model": result["comparison"]["shared_semantic_keys"] == ["context"],
+        "goldprompt_startup_receipt_self_verifies": verify_goldprompt_receipt(result["goldprompt_receipt"]),
         "agreement_does_not_become_truth": result["claim_ceiling"]["agreement_is_truth"] is False,
         "two_hemispheres_do_not_gain_authority": result["claim_ceiling"]["authority_delta"] == 0,
         "automatic_graph_merge_is_disabled": result["comparison"]["automatic_graph_merge_performed"] is False,
