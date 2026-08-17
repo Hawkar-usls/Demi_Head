@@ -33,36 +33,17 @@ REQUIRED_TRUE_FIELDS = (
     "triadic_emergence_accepted",
     "user_exit_and_release_control_accepted",
 )
-RECEIPT_KEYS = frozenset(
-    {
-        "schema",
-        "face_id",
-        "face_role",
-        "repository",
-        "runtime_surface",
-        "goldprompt_foundation_id",
-        "goldprompt_version",
-        "emergence_contract_version",
-        "armor_authority_reference",
-        "contract_digest_sha256",
-        "source_revision",
-        "capability_scope",
-        "authority_weight",
-        *REQUIRED_TRUE_FIELDS,
-        "runtime_enforcement_scope",
-        "compliance_state",
-        "receipt_sha256",
-    }
-)
+RECEIPT_KEYS = frozenset({
+    "schema", "face_id", "face_role", "repository", "runtime_surface",
+    "goldprompt_foundation_id", "goldprompt_version", "emergence_contract_version",
+    "armor_authority_reference", "contract_digest_sha256", "source_revision",
+    "capability_scope", "authority_weight", *REQUIRED_TRUE_FIELDS,
+    "runtime_enforcement_scope", "compliance_state", "receipt_sha256",
+})
 
 
 def _canonical_json_bytes(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
 def _sha256(value: Any) -> str:
@@ -135,15 +116,15 @@ def resolve_runtime_source_revision(env: Mapping[str, str] | None = None) -> str
     raise ValueError("GOLDPROMPT_TRUSTED_SOURCE_REVISION_REQUIRED")
 
 
-def build_receipt(source_revision: str) -> dict[str, Any]:
-    """Build a deterministic checksum-bound receipt for a supplied revision.
+def build_receipt(source_revision: str | None = None) -> dict[str, Any]:
+    """Build a checksum-bound receipt; runtime calls with no argument use trusted env.
 
-    The caller is responsible for revision provenance.  receipt_sha256 protects
-    content integrity; it is not a signature or origin authentication primitive.
-    Runtime code should call build_runtime_receipt().
+    An explicitly supplied revision is useful for deterministic tests but does not
+    authenticate its origin. receipt_sha256 is an integrity checksum, not a signature.
     """
-
     digest = assert_contract_integrity()
+    if source_revision is None:
+        source_revision = resolve_runtime_source_revision()
     normalized_revision = normalize_source_revision(source_revision)
     if normalized_revision is None:
         raise ValueError("GOLDPROMPT_SOURCE_REVISION_REQUIRED")
@@ -178,9 +159,7 @@ def build_runtime_receipt(env: Mapping[str, str] | None = None) -> dict[str, Any
 
 
 def verify_receipt(receipt: Mapping[str, Any]) -> bool:
-    if not isinstance(receipt, Mapping):
-        return False
-    if frozenset(receipt.keys()) != RECEIPT_KEYS:
+    if not isinstance(receipt, Mapping) or frozenset(receipt.keys()) != RECEIPT_KEYS:
         return False
     required = {
         "schema": RECEIPT_SCHEMA,
