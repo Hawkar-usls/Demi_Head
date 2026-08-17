@@ -9,8 +9,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
+from goldprompt_handshake import verify_receipt as verify_goldprompt_receipt  # noqa: E402
 from hemisphere_bridge import combine_packets  # noqa: E402
-from nexus_fundamentum_adapter import assess_bicameral_context  # noqa: E402
+from nexus_fundamentum_adapter import assess_bicameral_context, bicameral_semantic_payload  # noqa: E402
 from nexus_guardian_ingress import guardian_ingest, release_control  # noqa: E402
 from nexus_habitat import route_receipt, sha256  # noqa: E402
 
@@ -24,14 +25,17 @@ class NexusGuardianChainTests(unittest.TestCase):
         right = self.load("examples/hemisphere_right_inaihr.json")
 
         bicameral = combine_packets(left=left, right=right)
-        self.assertEqual(bicameral, self.load("examples/nexus_bicameral_result.json"))
+        self.assertIn("goldprompt_receipt", bicameral)
+        self.assertTrue(verify_goldprompt_receipt(bicameral["goldprompt_receipt"]))
+        semantic_bicameral = bicameral_semantic_payload(bicameral)
+        self.assertEqual(semantic_bicameral, self.load("examples/nexus_bicameral_result.json"))
         self.assertEqual(
-            sha256(bicameral),
+            sha256(semantic_bicameral),
             "527483db3e5970ea9cfe3fba69a80a70a757b00e9a060cdea1dac023f78f5566",
         )
 
         bridge_route = self.load("examples/nexus_bicameral_to_fundamentum.json")
-        self.assertEqual(bridge_route["payload_ref"]["sha256"], sha256(bicameral))
+        self.assertEqual(bridge_route["payload_ref"]["sha256"], sha256(semantic_bicameral))
         bridge_route_receipt = route_receipt(bridge_route)
         self.assertFalse(bridge_route_receipt["claim_ceiling"]["delivery_performed"])
 
