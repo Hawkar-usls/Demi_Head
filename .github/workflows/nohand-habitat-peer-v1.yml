@@ -32,12 +32,11 @@ jobs:
       - name: Compile
         run: python -m py_compile tools/goldprompt_handshake.py tools/nohand_habitat_peer.py
 
-      - name: Self-test
-        env:
-          JANUS_PEER_SOURCE_REVISION: ${{ github.sha }}
-        run: python tools/nohand_habitat_peer.py --self-test
+      - name: Self-test in synthetic non-Actions provenance context
+        shell: bash
+        run: env -u GITHUB_ACTIONS -u GITHUB_SHA -u JANUS_PEER_SOURCE_REVISION python tools/nohand_habitat_peer.py --self-test
 
-      - name: Process peer exchange
+      - name: Process peer exchange with real Actions provenance
         env:
           JANUS_PEER_SOURCE_REVISION: ${{ github.sha }}
         run: python tools/nohand_habitat_peer.py --root .
