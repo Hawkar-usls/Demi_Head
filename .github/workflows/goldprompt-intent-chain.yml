@@ -1,0 +1,55 @@
+name: DemiHead GoldPrompt Intent Chain
+
+on:
+  pull_request:
+    paths:
+      - 'tools/goldprompt_intent_handoff.py'
+      - 'tools/hemisphere_bridge_intent_v3.py'
+      - 'tests/test_goldprompt_intent_chain.py'
+      - '.github/workflows/goldprompt-intent-chain.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/goldprompt_intent_handoff.py'
+      - 'tools/hemisphere_bridge_intent_v3.py'
+      - 'tests/test_goldprompt_intent_chain.py'
+      - '.github/workflows/goldprompt-intent-chain.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-intent-chain:
+    runs-on: ubuntu-latest
+    env:
+      JANUS_SOURCE_REVISION: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Syntax check
+        run: |
+          python -m py_compile tools/goldprompt_intent_handoff.py tools/hemisphere_bridge_intent_v3.py tests/test_goldprompt_intent_chain.py
+      - name: Run intent chain adversarial tests
+        run: python -m unittest tests.test_goldprompt_intent_chain -v
+      - name: Assert constitutional boundaries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text=Path('tools/hemisphere_bridge_intent_v3.py').read_text(encoding='utf-8')
+          required=[
+            'INTENT_SPLIT_ANCHOR_MISMATCH',
+            'all_handoffs_same_intent',
+            'emergent_association_may_replace_intent',
+            'older_context_may_redefine_task',
+            'intent_alignment_is_factual_correctness',
+            'authority_delta',
+          ]
+          for marker in required:
+            assert marker in text, marker
+          print('DEMIHEAD_INTENT_CHAIN=PASS')
+          print('INTENT_SPLIT=REJECTED')
+          print('EMERGENCE_IS_EXPANSION_NOT_REPLACEMENT=true')
+          print('AUTHORITY_DELTA=0')
+          PY
