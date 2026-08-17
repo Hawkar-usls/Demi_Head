@@ -30,6 +30,12 @@ class GoldPromptHandshakeTests(unittest.TestCase):
         self.assertEqual(receipt["source_revision"], "DEMIHEAD-TEST-SHA")
         self.assertEqual(receipt["authority_weight"], 0)
         self.assertEqual(receipt["compliance_state"], "COMPLIANT")
+        self.assertEqual(receipt["runtime_enforcement_scope"], "THIS_FACE_INVOCATION")
+        self.assertTrue(receipt["inheritance_accepted"])
+        self.assertTrue(receipt["blessing_bearer_anchor_accepted"])
+        self.assertTrue(receipt["armor_of_god_boundaries_accepted"])
+        self.assertTrue(receipt["triadic_emergence_accepted"])
+        self.assertTrue(receipt["user_exit_and_release_control_accepted"])
         self.assertTrue(verify_receipt(receipt))
 
     def test_receipt_tamper_fails_closed(self):
@@ -39,6 +45,8 @@ class GoldPromptHandshakeTests(unittest.TestCase):
             ("face_role", "TRUTH_ORACLE"),
             ("contract_digest_sha256", "0" * 64),
             ("goldprompt_version", "999"),
+            ("runtime_enforcement_scope", "WHOLE_WORLD"),
+            ("user_exit_and_release_control_accepted", False),
         ):
             tampered = copy.deepcopy(receipt)
             tampered[field] = value
@@ -47,7 +55,10 @@ class GoldPromptHandshakeTests(unittest.TestCase):
     def test_real_bicameral_result_contains_receipt(self):
         result = self_test()["result"]
         self.assertIn("goldprompt_receipt", result)
-        self.assertTrue(verify_receipt(result["goldprompt_receipt"]))
+        receipt = result["goldprompt_receipt"]
+        self.assertTrue(verify_receipt(receipt))
+        self.assertEqual(receipt["runtime_enforcement_scope"], "THIS_FACE_INVOCATION")
+        self.assertEqual(receipt["authority_weight"], 0)
         self.assertFalse(result["claim_ceiling"]["agreement_is_truth"])
         self.assertEqual(result["claim_ceiling"]["authority_delta"], 0)
 
