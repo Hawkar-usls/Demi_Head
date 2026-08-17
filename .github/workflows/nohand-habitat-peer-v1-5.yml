@@ -1,0 +1,68 @@
+name: DemiHead NOHAND Habitat Peer v1.5
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/nohand-habitat-peer-v1
+    paths:
+      - 'habitat/nohand/v1_5/inbox/**'
+      - 'habitat/nohand/v1_5/outcomes/**'
+      - 'tools/nohand_habitat_peer_v1_5.py'
+      - '.github/workflows/nohand-habitat-peer-v1-5.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demihead-nohand-habitat-peer-v1-5
+  cancel-in-progress: false
+
+jobs:
+  peer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/nohand-habitat-peer-v1
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile core and v1.5 external guard
+        run: python -m py_compile tools/goldprompt_handshake.py tools/nohand_habitat_peer.py tools/nohand_habitat_peer_v1_5.py
+
+      - name: Core self-test in synthetic non-Actions provenance context
+        shell: bash
+        run: env -u GITHUB_ACTIONS -u GITHUB_SHA -u JANUS_PEER_SOURCE_REVISION python tools/nohand_habitat_peer.py --self-test
+
+      - name: Externally pinned v1.5 guard self-test
+        run: python tools/nohand_habitat_peer_v1_5.py --self-test
+
+      - name: Process v1.5 peer exchange with real Actions provenance
+        env:
+          JANUS_PEER_SOURCE_REVISION: ${{ github.sha }}
+        run: python tools/nohand_habitat_peer_v1_5.py --root .
+
+      - name: Commit create-only v1.5 peer artifacts
+        shell: bash
+        run: |
+          if [ -z "$(git status --porcelain -- habitat/nohand/v1_5)" ]; then
+            echo 'No v1.5 peer artifacts to commit.'
+            exit 0
+          fi
+          git config user.name 'janus-demihead-peer'
+          git config user.email 'janus-demihead-peer@users.noreply.github.com'
+          for path in habitat/nohand/v1_5/outbox habitat/nohand/v1_5/settled habitat/nohand/v1_5/state; do
+            if [ -e "$path" ]; then
+              git add -- "$path"
+            fi
+          done
+          if git diff --cached --quiet; then
+            echo 'No allowed v1.5 generated artifacts.'
+            exit 0
+          fi
+          git commit -m 'janus(demihead): process pinned NOHAND v1.5 exchange'
+          git push origin HEAD:feature/nohand-habitat-peer-v1
