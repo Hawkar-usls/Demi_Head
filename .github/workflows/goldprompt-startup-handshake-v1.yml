@@ -1,4 +1,4 @@
-name: DemiHead GoldPrompt Startup Handshake v1
+name: DemiHead GoldPrompt Receipt Chain v2
 
 on:
   pull_request:
@@ -7,6 +7,8 @@ on:
       - 'tools/hemisphere_bridge.py'
       - 'tests/test_goldprompt_handshake.py'
       - 'tests/test_hemisphere_bridge.py'
+      - 'schemas/hemisphere-packet.schema.json'
+      - 'schemas/bicameral-result.schema.json'
       - '.github/workflows/goldprompt-startup-handshake-v1.yml'
   push:
     branches: [main]
@@ -15,41 +17,98 @@ on:
       - 'tools/hemisphere_bridge.py'
       - 'tests/test_goldprompt_handshake.py'
       - 'tests/test_hemisphere_bridge.py'
+      - 'schemas/hemisphere-packet.schema.json'
+      - 'schemas/bicameral-result.schema.json'
       - '.github/workflows/goldprompt-startup-handshake-v1.yml'
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+  artifact-metadata: write
+
 jobs:
-  validate:
+  verify-and-attest:
     runs-on: ubuntu-latest
+    env:
+      JANUS_SOURCE_REVISION: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Compile and test GoldPrompt-bound arbiter
-        env:
-          JANUS_SOURCE_REVISION: ${{ github.sha }}
+          python-version: '3.11'
+      - name: Compile and test receipt chain
         run: |
           python -m py_compile tools/goldprompt_handshake.py tools/hemisphere_bridge.py
           python -m unittest tests.test_goldprompt_handshake tests.test_hemisphere_bridge -v
-          python tools/hemisphere_bridge.py --self-test --output demihead-goldprompt-selftest.json
+      - name: Emit DemiHead receipt and deterministic chained result
+        run: |
+          python tools/goldprompt_handshake.py > demihead-goldprompt-startup-receipt.json
+          python tools/hemisphere_bridge.py --self-test --output demihead-goldprompt-receipt-chain-selftest.json
           python - <<'PY'
-          import json, os, sys
-          sys.path.insert(0,'tools')
-          from goldprompt_handshake import verify_receipt, EXPECTED_CONTRACT_DIGEST
-          v=json.load(open('demihead-goldprompt-selftest.json',encoding='utf-8'))
-          assert v['status']=='PASS',v
-          r=v['result']['goldprompt_receipt']
-          assert verify_receipt(r)
-          assert r['source_revision']==os.environ['JANUS_SOURCE_REVISION']
-          assert r['contract_digest_sha256']==EXPECTED_CONTRACT_DIGEST
-          assert r['authority_weight']==0
-          json.dump(r,open('demihead-goldprompt-startup-receipt.json','w',encoding='utf-8'),ensure_ascii=False,indent=2,sort_keys=True)
-          print('DEMIHEAD_GOLDPROMPT_STARTUP_RECEIPT=PASS')
+          import json
+          from pathlib import Path
+          report=json.loads(Path('demihead-goldprompt-receipt-chain-selftest.json').read_text())
+          if report['status']!='PASS': raise SystemExit('self-test failed')
+          chain=report['result']['receipt_chain']
+          if chain['end_to_end_receipt_binding_established'] is not True: raise SystemExit('receipt chain incomplete')
+          if chain['origin_authentication_established'] is not False: raise SystemExit('origin authentication overclaimed')
+          if chain['live_process_identity_established'] is not False: raise SystemExit('live identity overclaimed')
+          Path('demihead-goldprompt-bicameral-result.json').write_text(json.dumps(report['result'],ensure_ascii=False,indent=2,sort_keys=True)+'\n')
+          print('DEMIHEAD_END_TO_END_RECEIPT_BINDING=PASS')
+          print('DEMIHEAD_ORIGIN_AUTHENTICATION_ESTABLISHED=false')
+          PY
+      - name: Attest DemiHead receipt and chained result
+        id: attest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            demihead-goldprompt-startup-receipt.json
+            demihead-goldprompt-bicameral-result.json
+      - name: Record DemiHead origin attestation reference
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          ATTESTATION_ID: ${{ steps.attest.outputs.attestation-id }}
+          ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          files=['demihead-goldprompt-startup-receipt.json','demihead-goldprompt-bicameral-result.json']
+          ref={
+            'schema':'janus.goldprompt.origin_attestation_ref.v1',
+            'provider':'GITHUB_ACTIONS_OIDC_SIGSTORE',
+            'repository':os.environ['GITHUB_REPOSITORY'],
+            'workflow_run_id':int(os.environ['GITHUB_RUN_ID']),
+            'source_revision':os.environ['GITHUB_SHA'].lower(),
+            'attestation_id':os.environ.get('ATTESTATION_ID',''),
+            'attestation_url':os.environ.get('ATTESTATION_URL',''),
+            'subjects':{p:'sha256:'+hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in files},
+            'authority_delta':0,
+            'live_process_identity_established':False
+          }
+          Path('demihead-goldprompt-origin-attestation-ref.json').write_text(json.dumps(ref,indent=2,sort_keys=True)+'\n')
           PY
       - name: Upload DemiHead startup receipt
         uses: actions/upload-artifact@v4
         with:
-          name: demihead-goldprompt-startup-receipt
+          name: demihead-goldprompt-startup-receipt-v1.1
           path: demihead-goldprompt-startup-receipt.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload DemiHead chained result
+        uses: actions/upload-artifact@v4
+        with:
+          name: demihead-goldprompt-bicameral-result-v2
+          path: demihead-goldprompt-bicameral-result.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload DemiHead origin attestation reference
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: demihead-goldprompt-origin-attestation-ref
+          path: demihead-goldprompt-origin-attestation-ref.json
           if-no-files-found: error
           retention-days: 30
