@@ -1,0 +1,55 @@
+name: DemiHead GoldPrompt Startup Handshake v1
+
+on:
+  pull_request:
+    paths:
+      - 'tools/goldprompt_handshake.py'
+      - 'tools/hemisphere_bridge.py'
+      - 'tests/test_goldprompt_handshake.py'
+      - 'tests/test_hemisphere_bridge.py'
+      - '.github/workflows/goldprompt-startup-handshake-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/goldprompt_handshake.py'
+      - 'tools/hemisphere_bridge.py'
+      - 'tests/test_goldprompt_handshake.py'
+      - 'tests/test_hemisphere_bridge.py'
+      - '.github/workflows/goldprompt-startup-handshake-v1.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and test GoldPrompt-bound arbiter
+        env:
+          JANUS_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          python -m py_compile tools/goldprompt_handshake.py tools/hemisphere_bridge.py
+          python -m unittest tests.test_goldprompt_handshake tests.test_hemisphere_bridge -v
+          python tools/hemisphere_bridge.py --self-test --output demihead-goldprompt-selftest.json
+          python - <<'PY'
+          import json, os, sys
+          sys.path.insert(0,'tools')
+          from goldprompt_handshake import verify_receipt, EXPECTED_CONTRACT_DIGEST
+          v=json.load(open('demihead-goldprompt-selftest.json',encoding='utf-8'))
+          assert v['status']=='PASS',v
+          r=v['result']['goldprompt_receipt']
+          assert verify_receipt(r)
+          assert r['source_revision']==os.environ['JANUS_SOURCE_REVISION']
+          assert r['contract_digest_sha256']==EXPECTED_CONTRACT_DIGEST
+          assert r['authority_weight']==0
+          json.dump(r,open('demihead-goldprompt-startup-receipt.json','w',encoding='utf-8'),ensure_ascii=False,indent=2,sort_keys=True)
+          print('DEMIHEAD_GOLDPROMPT_STARTUP_RECEIPT=PASS')
+          PY
+      - name: Upload DemiHead startup receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: demihead-goldprompt-startup-receipt
+          path: demihead-goldprompt-startup-receipt.json
+          if-no-files-found: error
+          retention-days: 30
