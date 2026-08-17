@@ -1,0 +1,63 @@
+name: NOHAND Git Channel v1
+
+on:
+  push:
+    branches:
+      - nohand/channel-v1
+    paths:
+      - 'nohand/channel/nas_to_demihead/*.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nohand-channel-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout channel branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: nohand/channel-v1
+
+      - name: Safety regressions
+        env:
+          PYTHONPATH: tools
+        run: |
+          python -m unittest tests/test_nohand_pair_protocol.py tests/test_demihead_nohand_agent.py
+
+      - name: Process new NAS messages
+        env:
+          PYTHONPATH: tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          before='${{ github.event.before }}'
+          after='${{ github.sha }}'
+          if [[ "$before" =~ ^0+$ ]]; then
+            files=$(git show --pretty='' --name-only "$after" -- 'nohand/channel/nas_to_demihead/*.json')
+          else
+            files=$(git diff --name-only "$before" "$after" -- 'nohand/channel/nas_to_demihead/*.json')
+          fi
+          for file in $files; do
+            test -f "$file"
+            python tools/demihead_nohand_git_bridge.py "$file" --source-revision "$after"
+          done
+
+      - name: Commit append-only DemiHead responses
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- nohand/channel/demihead_to_nas; then
+            echo 'No response changes.'
+            exit 0
+          fi
+          git config user.name 'JANUS DemiHead NOHAND'
+          git config user.email 'janus-nohand@users.noreply.github.com'
+          git add nohand/channel/demihead_to_nas
+          git commit -m 'nohand(channel): append DemiHead response'
+          git push origin HEAD:nohand/channel-v1
