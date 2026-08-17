@@ -1,0 +1,57 @@
+name: Patch DemiHead GoldPrompt runtime binding
+
+on:
+  push:
+    branches: [feature/goldprompt-startup-handshake-v1]
+    paths:
+      - '.github/workflows/patch-goldprompt-handshake-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/goldprompt-startup-handshake-v1
+      - name: Patch real bicameral runtime
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tools/hemisphere_bridge.py')
+          s=p.read_text(encoding='utf-8')
+          anchor='from typing import Any\n'
+          inject='from typing import Any\n\nfrom goldprompt_handshake import build_receipt as build_goldprompt_receipt, verify_receipt as verify_goldprompt_receipt\n'
+          if 'from goldprompt_handshake import build_receipt as build_goldprompt_receipt' not in s:
+              if anchor not in s: raise SystemExit('IMPORT_ANCHOR_NOT_FOUND')
+              s=s.replace(anchor, inject, 1)
+          ret='    return {\n        "schema": RESULT_SCHEMA,'
+          repl='    goldprompt_receipt = build_goldprompt_receipt()\n    if not verify_goldprompt_receipt(goldprompt_receipt):\n        raise ValueError("DEMIHEAD_GOLDPROMPT_RECEIPT_SELF_VERIFY_FAILED")\n\n    return {\n        "schema": RESULT_SCHEMA,\n        "goldprompt_receipt": goldprompt_receipt,'
+          if '"goldprompt_receipt": goldprompt_receipt' not in s:
+              if ret not in s: raise SystemExit('RETURN_ANCHOR_NOT_FOUND')
+              s=s.replace(ret, repl, 1)
+          check='        "shared_context_detected_without_semantic_model": result["comparison"]["shared_semantic_keys"] == ["context"],\n'
+          check_repl=check+'        "goldprompt_startup_receipt_self_verifies": verify_goldprompt_receipt(result["goldprompt_receipt"]),\n'
+          if '"goldprompt_startup_receipt_self_verifies"' not in s:
+              if check not in s: raise SystemExit('SELFTEST_ANCHOR_NOT_FOUND')
+              s=s.replace(check, check_repl, 1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          python -m py_compile tools/goldprompt_handshake.py tools/hemisphere_bridge.py
+          JANUS_SOURCE_REVISION="$GITHUB_SHA" python tools/hemisphere_bridge.py --self-test >/tmp/demihead-selftest.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/demihead-selftest.json',encoding='utf-8'))
+          assert d['status']=='PASS', d
+          assert d['result']['goldprompt_receipt']['compliance_state']=='COMPLIANT'
+          print('DEMIHEAD_GOLDPROMPT_RUNTIME_PATCH=PASS')
+          PY
+      - name: Commit runtime binding
+        run: |
+          git config user.name 'janus-registry-bot'
+          git config user.email 'janus-registry-bot@users.noreply.github.com'
+          git add tools/hemisphere_bridge.py
+          git commit -m 'Bind DemiHead arbiter runtime to GoldPrompt startup handshake'
+          git push
