@@ -12,6 +12,7 @@ import nohand_habitat_peer_v1_5_1 as guard
 
 VERSION = "1.5.1-ORPHAN-OUTCOME-RESILIENT"
 ORPHAN_HOLD_SCHEMA = "janus.habitat.nohand.demihead_outcome_hold.v1"
+# Trigger marker: process preserved orphan evidence without deleting or moving it.
 
 
 def _hold_receipt(outcome: dict[str, Any]) -> dict[str, Any]:
