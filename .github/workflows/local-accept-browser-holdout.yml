@@ -10,6 +10,7 @@ permissions:
 jobs:
   chromium-holdout:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out DemiHead
         uses: actions/checkout@v7
@@ -78,7 +79,7 @@ jobs:
 
       - name: Run frozen real-Chromium local acceptance holdout
         run: |
-          node tools/test-local-accept-browser-holdout.js \
+          timeout 480s node tools/test-local-accept-browser-holdout.js \
             holdout/local_accept_browser_v1/frozen_corpus.json \
             /tmp/local-accept-browser-holdout-result.json
 
