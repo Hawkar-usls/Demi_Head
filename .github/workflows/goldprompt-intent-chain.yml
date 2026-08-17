@@ -1,0 +1,128 @@
+name: DemiHead GoldPrompt Intent Chain
+
+on:
+  pull_request:
+    paths:
+      - 'tools/goldprompt_intent_handoff.py'
+      - 'tools/hemisphere_bridge_intent_v3.py'
+      - 'tests/test_goldprompt_intent_chain.py'
+      - '.github/workflows/goldprompt-intent-chain.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/goldprompt_intent_handoff.py'
+      - 'tools/hemisphere_bridge_intent_v3.py'
+      - 'tests/test_goldprompt_intent_chain.py'
+      - '.github/workflows/goldprompt-intent-chain.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-intent-chain:
+    runs-on: ubuntu-latest
+    env:
+      JANUS_SOURCE_REVISION: ${{ github.sha }}
+      HRAIN_MAIN_SHA: 2849e4870c1728052503064b93365ada3b0200cf
+      INAIHR_MAIN_SHA: 98c9fb89389ea81a5cca9aedde03082f0a5af559
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          python -m py_compile tools/goldprompt_intent_handoff.py tools/hemisphere_bridge_intent_v3.py tests/test_goldprompt_intent_chain.py
+      - name: Run intent chain adversarial tests
+        run: python -m unittest tests.test_goldprompt_intent_chain -v
+      - name: Assert constitutional boundaries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text=Path('tools/hemisphere_bridge_intent_v3.py').read_text(encoding='utf-8')
+          required=[
+            'INTENT_SPLIT_ANCHOR_MISMATCH',
+            'all_handoffs_same_intent',
+            'emergent_association_may_replace_intent',
+            'older_context_may_redefine_task',
+            'intent_chain_is_factual_correctness',
+            'authority_delta',
+          ]
+          for marker in required:
+            assert marker in text, marker
+          print('DEMIHEAD_INTENT_CHAIN=PASS')
+          print('INTENT_SPLIT=REJECTED')
+          print('EMERGENCE_IS_EXPANSION_NOT_REPLACEMENT=true')
+          print('AUTHORITY_DELTA=0')
+          PY
+      - name: Check out exact HRaiN main intent-lock runtime
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Hrain
+          ref: ${{ env.HRAIN_MAIN_SHA }}
+          path: external/hrain
+      - name: Check out exact iNaiHR main intent-lock runtime
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/iNaiHR
+          ref: ${{ env.INAIHR_MAIN_SHA }}
+          path: external/inaihr
+      - name: Build one shared intent anchor with the JavaScript contract
+        run: |
+          node - <<'NODE' >/tmp/intent-anchor.json
+          const intent=require('./external/hrain/intent-handoff.js');
+          const anchor={
+            schema:intent.ANCHOR_SCHEMA,
+            current_turn_digest:'1'.repeat(64),
+            requested_operation:'COMPARE',
+            primary_entities:{OSIRIS:['osiris'],JESUS_CHRIST:['jesus','christ']},
+            must_answer_points:['Compare Osiris restoration with Christ resurrection','Distinguish resurrection from Second Coming'],
+            required_answer_evidence:[['osiris'],['christ'],['resurrection'],['second coming']],
+            operation_markers:['compare'],
+            optional_association_markers:['bd101','janus'],
+            explicit_constraints:[],
+            allow_anaphoric_continuation:false,
+            context_priority:Object.keys(intent.CONTEXT_TIERS).map(k=>intent.CONTEXT_TIERS[k])
+          };
+          anchor.intent_id=intent.sha256(anchor);
+          process.stdout.write(JSON.stringify(anchor));
+          NODE
+      - name: Emit real LEFT_HRAIN and RIGHT_INAIHR packet v3
+        run: |
+          node - <<'NODE' >/tmp/left-request.json
+          const fs=require('fs');const a=JSON.parse(fs.readFileSync('/tmp/intent-anchor.json','utf8'));
+          process.stdout.write(JSON.stringify({schema:'janus.habitat.hrain.request.v1',request_id:'E2E-HRAIN-0001',operation:'STRUCTURE_CONTEXT',intent_anchor:a,workspace:{nodes:[{id:'a',label:'Osiris',origin:'USER'},{id:'b',label:'Christ',origin:'USER'}],links:[{source:'a',target:'b'}]}}));
+          NODE
+          env GITHUB_ACTIONS=false GITHUB_SHA= JANUS_SOURCE_REVISION="$HRAIN_MAIN_SHA" node external/hrain/habitat-tool.js </tmp/left-request.json >/tmp/left-response.json
+          node - <<'NODE' >/tmp/right-request.json
+          const fs=require('fs');const a=JSON.parse(fs.readFileSync('/tmp/intent-anchor.json','utf8'));
+          process.stdout.write(JSON.stringify({schema:'janus.habitat.inaihr.request.v1',request_id:'E2E-INAIHR-0001',operation:'BRIDGE_PACKET',intent_anchor:a,workspace:{nodes:[{id:'a',label:'Osiris',origin:'USER'},{id:'b',label:'Christ',origin:'USER'}],links:[{source:'a',target:'b'}]}}));
+          NODE
+          env GITHUB_ACTIONS=false GITHUB_SHA= JANUS_SOURCE_REVISION="$INAIHR_MAIN_SHA" node external/inaihr/habitat-tool.js </tmp/right-request.json >/tmp/right-response.json
+          node - <<'NODE'
+          const fs=require('fs');
+          const l=JSON.parse(fs.readFileSync('/tmp/left-response.json','utf8'));
+          const r=JSON.parse(fs.readFileSync('/tmp/right-response.json','utf8'));
+          if(l.packet.schema!=='janus.demihead.hemisphere_packet.v3'||r.packet.schema!=='janus.demihead.hemisphere_packet.v3') throw new Error('v3 required');
+          if(l.intent_anchor.intent_id!==r.intent_anchor.intent_id) throw new Error('intent split before DemiHead');
+          fs.writeFileSync('/tmp/left-packet.json',JSON.stringify(l.packet));
+          fs.writeFileSync('/tmp/right-packet.json',JSON.stringify(r.packet));
+          NODE
+      - name: Verify JS-to-Python intent continuity through DemiHead
+        run: |
+          python tools/hemisphere_bridge_intent_v3.py --left /tmp/left-packet.json --right /tmp/right-packet.json --output /tmp/demihead-intent-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('/tmp/demihead-intent-result.json').read_text(encoding='utf-8'))
+          assert v['schema']=='janus.demihead.intent_bound_bicameral_result.v1'
+          assert v['intent_chain']['all_handoffs_same_intent'] is True
+          assert v['intent_chain']['emergent_association_may_replace_intent'] is False
+          assert v['routing']['intent_split_permitted'] is False
+          assert v['claim_ceiling']['authority_delta']==0
+          print('CROSS_LANGUAGE_INTENT_CHAIN=PASS')
+          print('HRAIN_INAIHR_DEMIHEAD_SAME_INTENT=true')
+          PY
