@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "janus.nohand.pair.message.v1",
+  "title": "JANUS NOHAND Pair Message v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "contract",
+    "message_id",
+    "sender",
+    "target",
+    "kind",
+    "source_revision",
+    "goldprompt",
+    "guard",
+    "control",
+    "message_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "janus.nohand.pair.message.v1"},
+    "contract": {"const": "JANUS_NOHAND_PAIR_V1"},
+    "sender": {"enum": ["NAS_NOHAND", "DEMIHEAD_NOHAND"]},
+    "target": {"enum": ["NAS_NOHAND", "DEMIHEAD_NOHAND"]},
+    "kind": {"enum": ["OFFER", "REQUEST", "DECISION", "RECEIPT", "HOLD", "LEARNING_OBSERVATION"]},
+    "message_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}
