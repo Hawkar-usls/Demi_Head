@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import os
 import sys
 import unittest
 from pathlib import Path
@@ -20,8 +21,21 @@ from hemisphere_bridge import (  # noqa: E402
     validate_packet,
 )
 
+TEST_RUNTIME_SHA = "e" * 40
+
 
 class HemisphereBridgeTests(unittest.TestCase):
+    def setUp(self):
+        self.previous_revision = os.environ.get("JANUS_SOURCE_REVISION")
+        if not os.environ.get("GITHUB_SHA"):
+            os.environ["JANUS_SOURCE_REVISION"] = TEST_RUNTIME_SHA
+
+    def tearDown(self):
+        if self.previous_revision is None:
+            os.environ.pop("JANUS_SOURCE_REVISION", None)
+        else:
+            os.environ["JANUS_SOURCE_REVISION"] = self.previous_revision
+
     def packet(self, hemisphere: str, labels: list[tuple[str, str]]):
         rules = HEMISPHERE_RULES[hemisphere]
         nodes = [
@@ -65,6 +79,7 @@ class HemisphereBridgeTests(unittest.TestCase):
         self.assertFalse(result["claim_ceiling"]["agreement_is_truth"])
         self.assertEqual(result["claim_ceiling"]["authority_delta"], 0)
         self.assertEqual(result["claim_ceiling"]["mass_effect_budget_delta"], 0)
+        self.assertRegex(result["goldprompt_receipt"]["source_revision"], r"^[0-9a-f]{40}$")
 
     def test_bicameral_divergence_is_preserved(self):
         left = self.packet("LEFT_HRAIN", [("Chronology", "USER")])
