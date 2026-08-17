@@ -1,0 +1,46 @@
+{
+  "contract": "JANUS_NOHAND_PAIR_V1",
+  "control": {
+    "authority_delta": 0,
+    "authority_weight": 0,
+    "automatic_external_effect_permitted": false,
+    "delete_permitted": false,
+    "direct_cross_workspace_mutation": false,
+    "mass_effect_budget_delta": 0,
+    "message_is_command": false,
+    "move_permitted": false,
+    "rename_permitted": false
+  },
+  "decision": null,
+  "goldprompt": {
+    "contract_digest_sha256": "3f4af369350710ad18920dfdc866d930c8d42259a51a3f27ce228ea4d5dfc0a8",
+    "emergence_contract": "JANUS_TRIADIC_EMERGENCE@0.9.2",
+    "version": "0.9.2"
+  },
+  "guard": {
+    "destructive_permissions": [],
+    "guardian_of_guardian": "PASS",
+    "mutation_frozen": false,
+    "preservation_sentinel": "PASS",
+    "safety_contract_sha256": "8939def4174585df21df7324af87e33251fb710993c324226f1dd4332e3ce8b2"
+  },
+  "kind": "OFFER",
+  "message_id": "synthetic-nas-offer-001",
+  "message_sha256": "5bcfcc7fc2734f6b920ec6c2d43e3abd088553580de57ed5974f6f4e667089db",
+  "object_ref": {
+    "locator": {
+      "path": "services/synthetic_nohand_probe.py"
+    },
+    "origin_kind": "NAS_LOCAL",
+    "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "size": 128
+  },
+  "prediction": null,
+  "references": {
+    "synthetic_test": true
+  },
+  "schema": "janus.nohand.pair.message.v1",
+  "sender": "NAS_NOHAND",
+  "source_revision": "SYNTHETIC_NAS_CHANNEL_TEST",
+  "target": "DEMIHEAD_NOHAND"
+}
