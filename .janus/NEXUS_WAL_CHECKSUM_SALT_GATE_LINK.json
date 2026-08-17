@@ -1,0 +1,49 @@
+{
+  "schema": "janus.nexus.wal_checksum_salt_gate_link.v1",
+  "contract": "JANUS_NEXUS_WAL_CHECKSUM_SALT_GATE_V1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "status": "CANDIDATE_PENDING_EXACT_HEAD_CI",
+  "parent_wal_sidecar_authority": {
+    "artifact": "registry/experimental/JANUS-NEXUS-CURRENT-WAL-SIDECAR-AUTHORITY-v1.json",
+    "exact_head": "bbb2d88af6d3ffcaf1a0182f39539f80e513bdfe"
+  },
+  "implementation": {
+    "gate": "tools/nexus_wal_checksum_gate.py",
+    "tests": "tests/test_nexus_wal_checksum_gate.py",
+    "frozen_holdout": "fixtures/nexus_wal_checksum_salt_holdout_v1.json",
+    "receipt_schema": "schemas/nexus-wal-checksum-salt-gate-receipt.schema.json",
+    "documentation": "docs/NEXUS_WAL_CHECKSUM_SALT_GATE.md"
+  },
+  "frozen_holdout_sha256": "a5928133096948447895e0001fb5705d6a4225f5413ea5438f4a333382236b39",
+  "algorithm_source": {
+    "authority": "SQLite official file format documentation",
+    "header_checksum_input": "WAL bytes 0..23",
+    "frame_checksum_input": "frame header first 8 bytes plus page body",
+    "cumulative_chain": true,
+    "frame_salts_match_wal_header": true,
+    "magic_0x377f0683_input_words": "big-endian",
+    "magic_0x377f0682_input_words": "little-endian",
+    "stored_checksum_words": "big-endian"
+  },
+  "strict_janus_policy": {
+    "every_physically_present_frame_must_verify": true,
+    "accept_valid_prefix_then_ignore_bad_tail": false,
+    "wal_repair": false,
+    "wal_truncate_to_valid_prefix": false
+  },
+  "hard_limits": {
+    "cryptographic_authenticity": false,
+    "semantic_page_correctness": false,
+    "power_loss_recovery": false,
+    "automatic_recovery": false,
+    "automatic_restart": false,
+    "automatic_retry": false,
+    "cross_host_transport": false,
+    "persistent_daemon": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "promotion_requires": "EXACT_HEAD_CI_PASS_WITH_FROZEN_WAL_CHECKSUM_AND_SALT_CHAIN_CORPUS",
+  "next_gate_after_promotion": "WAL_VALID_PREFIX_AND_CHECKPOINT_REUSE_TAIL_CLASSIFICATION_HOLDOUT"
+}

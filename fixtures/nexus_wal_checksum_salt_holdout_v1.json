@@ -1,0 +1,39 @@
+{
+  "freeze_payload": {
+    "schema": "janus.demihead.nexus_wal_checksum_salt_holdout.v1",
+    "parent_exact_head": "bbb2d88af6d3ffcaf1a0182f39539f80e513bdfe",
+    "frozen_before_first_execution": true,
+    "cases": [
+      {"id": "WALC-01", "name": "real SQLite WAL passes header checksum, frame checksum chain and salts", "expect": "WAL_CHECKSUM_SALT_CHAIN_HEALTHY"},
+      {"id": "WALC-02", "name": "corrupt WAL header checksum", "expect": "HOLD_WAL_INTEGRITY_UNAVAILABLE"},
+      {"id": "WALC-03", "name": "frame salt mismatch", "expect": "HOLD_WAL_INTEGRITY_UNAVAILABLE"},
+      {"id": "WALC-04", "name": "stored frame checksum mismatch", "expect": "HOLD_WAL_INTEGRITY_UNAVAILABLE"},
+      {"id": "WALC-05", "name": "page body byte corruption breaks cumulative checksum", "expect": "HOLD_WAL_INTEGRITY_UNAVAILABLE"},
+      {"id": "WALC-06", "name": "synthetic alternate checksum byte order vector", "expect": "WAL_CHECKSUM_SALT_CHAIN_HEALTHY"},
+      {"id": "WALC-07", "name": "second frame cumulative checksum chain corruption", "expect": "HOLD_WAL_INTEGRITY_UNAVAILABLE"},
+      {"id": "WALC-08", "name": "damaged replay WAL checksum blocks otherwise recoverable lifecycle mutation", "expect": "HOLD_WAL_INTEGRITY_UNAVAILABLE"}
+    ],
+    "invariants": {
+      "header_checksum_verified": true,
+      "frame_salts_match_wal_header": true,
+      "frame_checksum_is_cumulative": true,
+      "checksum_input_excludes_frame_salt_and_stored_checksum_fields": true,
+      "checksum_words_big_endian_for_magic_0x377f0683": true,
+      "checksum_words_little_endian_for_magic_0x377f0682": true,
+      "stored_checksums_big_endian": true,
+      "checksum_arithmetic_wraps_mod_2_32": true,
+      "every_physically_present_frame_must_verify_for_janus_evidence_admission": true,
+      "wal_repair": false,
+      "wal_delete_on_failure": false,
+      "automatic_recovery": false,
+      "automatic_restart": false,
+      "automatic_retry": false,
+      "cross_host_transport": false,
+      "persistent_daemon": false,
+      "external_effect_authority": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  },
+  "freeze_sha256": "a5928133096948447895e0001fb5705d6a4225f5413ea5438f4a333382236b39"
+}

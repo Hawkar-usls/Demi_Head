@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://janus.local/schemas/nexus-wal-checksum-salt-gate-receipt.schema.json",
+  "title": "JANUS Nexus WAL checksum and salt-chain gate receipt",
+  "type": "object",
+  "required": ["schema", "contract", "status", "control"],
+  "properties": {
+    "schema": {"const": "janus.demihead.nexus_wal_checksum_salt_gate_receipt.v1"},
+    "contract": {"const": "JANUS_NEXUS_WAL_CHECKSUM_SALT_GATE_V1"},
+    "status": {"type": "string", "minLength": 1},
+    "wal_integrity": {"type": "object"},
+    "parent_wal_storage_preflight": {"type": ["object", "null"]},
+    "control": {
+      "type": "object",
+      "required": ["read_only", "wal_repair", "wal_delete_on_failure", "automatic_recovery_permitted", "automatic_restart_permitted", "automatic_retry_permitted", "authority_delta", "mass_effect_budget_delta"],
+      "properties": {
+        "read_only": {"const": true},
+        "wal_repair": {"const": false},
+        "wal_delete_on_failure": {"const": false},
+        "automatic_recovery_permitted": {"const": false},
+        "automatic_restart_permitted": {"const": false},
+        "automatic_retry_permitted": {"const": false},
+        "authority_delta": {"const": 0},
+        "mass_effect_budget_delta": {"const": 0}
+      }
+    },
+    "recovery": {"type": ["object", "null"]},
+    "wal_integrity_gate_blocked_recovery_mutation": {"type": "boolean"}
+  }
+}
