@@ -9,8 +9,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
+from goldprompt_handshake import verify_receipt as verify_goldprompt_receipt  # noqa: E402
 from hemisphere_bridge import combine_packets  # noqa: E402
-from nexus_fundamentum_adapter import assess_bicameral_context  # noqa: E402
+from nexus_fundamentum_adapter import assess_bicameral_context, bicameral_semantic_payload  # noqa: E402
 from nexus_habitat import HEADS, route_receipt, sha256  # noqa: E402
 
 
@@ -23,9 +24,12 @@ class NexusFundamentumAdapterTests(unittest.TestCase):
         right = self.load("examples/hemisphere_right_inaihr.json")
         expected = self.load("examples/nexus_bicameral_result.json")
         observed = combine_packets(left=left, right=right)
-        self.assertEqual(observed, expected)
+        self.assertIn("goldprompt_receipt", observed)
+        self.assertTrue(verify_goldprompt_receipt(observed["goldprompt_receipt"]))
+        semantic_observed = bicameral_semantic_payload(observed)
+        self.assertEqual(semantic_observed, expected)
         self.assertEqual(
-            sha256(expected),
+            sha256(semantic_observed),
             "527483db3e5970ea9cfe3fba69a80a70a757b00e9a060cdea1dac023f78f5566",
         )
 
@@ -41,6 +45,16 @@ class NexusFundamentumAdapterTests(unittest.TestCase):
         self.assertEqual(
             sha256(expected),
             "434b78adb5a04253cbe9c5317d4c2ada1487c9a32e435b03999706be27273679",
+        )
+
+    def test_runtime_goldprompt_envelope_does_not_change_frozen_epistemic_hold(self):
+        left = self.load("examples/hemisphere_left_hrain.json")
+        right = self.load("examples/hemisphere_right_inaihr.json")
+        runtime_bicameral = combine_packets(left=left, right=right)
+        historical_bicameral = self.load("examples/nexus_bicameral_result.json")
+        self.assertEqual(
+            assess_bicameral_context(runtime_bicameral),
+            assess_bicameral_context(historical_bicameral),
         )
 
     def test_bicameral_to_fundamentum_nexus_route_is_hash_bound(self):
@@ -80,6 +94,14 @@ class NexusFundamentumAdapterTests(unittest.TestCase):
         bicameral = self.load("examples/nexus_bicameral_result.json")
         bicameral["claim_ceiling"]["association_is_evidence"] = True
         with self.assertRaises(ValueError):
+            assess_bicameral_context(bicameral)
+
+    def test_forged_goldprompt_runtime_receipt_is_rejected(self):
+        left = self.load("examples/hemisphere_left_hrain.json")
+        right = self.load("examples/hemisphere_right_inaihr.json")
+        bicameral = combine_packets(left=left, right=right)
+        bicameral["goldprompt_receipt"]["authority_weight"] = 1
+        with self.assertRaisesRegex(ValueError, "GoldPrompt"):
             assess_bicameral_context(bicameral)
 
 
