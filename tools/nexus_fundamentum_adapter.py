@@ -8,20 +8,19 @@ from pathlib import Path
 from typing import Any
 
 from goldprompt_handshake import verify_receipt as verify_goldprompt_receipt
+from hemisphere_bridge import verify_receipt_chain_result
 
 
-BICAMERAL_SCHEMA = "janus.demihead.bicameral_result.v1"
+BICAMERAL_SCHEMA_V1 = "janus.demihead.bicameral_result.v1"
+BICAMERAL_SCHEMA_V2 = "janus.demihead.bicameral_result.v2"
+BICAMERAL_SCHEMAS = frozenset({BICAMERAL_SCHEMA_V1, BICAMERAL_SCHEMA_V2})
 RECEIPT_SCHEMA = "janus.demihead.nexus_fundamentum_receipt.v1"
 ADAPTER_CONTRACT = "JANUS_NEXUS_FUNDAMENTUM_ADAPTER_V1"
+V2_RUNTIME_ONLY_FIELDS = frozenset({"goldprompt_receipt", "upstream_goldprompt_receipts", "receipt_chain"})
 
 
 def canonical_json_bytes(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
 def sha256(value: Any) -> str:
@@ -29,32 +28,35 @@ def sha256(value: Any) -> str:
 
 
 def bicameral_semantic_payload(result: dict[str, Any]) -> dict[str, Any]:
-    """Return the stable epistemic payload, excluding runtime-only GoldPrompt receipt.
+    """Return the epistemic payload while excluding runtime proof envelopes.
 
-    The GoldPrompt startup receipt proves which Face/runtime inherited the character
-    constitution for a concrete invocation. It does not change what the bicameral
-    structural/associative comparison says. Keeping it outside the semantic hash
-    preserves frozen Nexus vectors while still allowing the receipt itself to be
-    independently verified and provenance-bound.
+    Historical v1 vectors remain byte-semantic stable. V2 deliberately has a
+    different payload hash because packet receipts bind stronger receipt-carrying
+    packets; it must preserve the same epistemic ceiling, not impersonate a v1
+    historical hash.
     """
-
     if not isinstance(result, dict):
         raise ValueError("Bicameral input must be a JSON object")
-    return {key: value for key, value in result.items() if key != "goldprompt_receipt"}
+    schema = result.get("schema")
+    if schema == BICAMERAL_SCHEMA_V1:
+        return {key: value for key, value in result.items() if key != "goldprompt_receipt"}
+    if schema == BICAMERAL_SCHEMA_V2:
+        return {key: value for key, value in result.items() if key not in V2_RUNTIME_ONLY_FIELDS}
+    raise ValueError("Unexpected bicameral result schema")
 
 
 def validate_bicameral_result(result: dict[str, Any]) -> None:
     if not isinstance(result, dict):
         raise ValueError("Bicameral input must be a JSON object")
-    if result.get("schema") != BICAMERAL_SCHEMA:
+    schema = result.get("schema")
+    if schema not in BICAMERAL_SCHEMAS:
         raise ValueError("Unexpected bicameral result schema")
 
-    # A present runtime receipt must replay exactly. Historical frozen bicameral
-    # fixtures may predate GoldPrompt binding; their absence cannot increase
-    # evidence or authority, so they remain readable as legacy context-only data.
     goldprompt_receipt = result.get("goldprompt_receipt")
     if goldprompt_receipt is not None and not verify_goldprompt_receipt(goldprompt_receipt):
         raise ValueError("Invalid DemiHead GoldPrompt startup receipt")
+    if schema == BICAMERAL_SCHEMA_V2 and not verify_receipt_chain_result(result):
+        raise ValueError("Invalid DemiHead GoldPrompt receipt chain")
 
     hemispheres = result.get("hemispheres_present")
     if not isinstance(hemispheres, list) or not hemispheres:
@@ -73,14 +75,13 @@ def validate_bicameral_result(result: dict[str, Any]) -> None:
     ceiling = result.get("claim_ceiling")
     if not isinstance(ceiling, dict):
         raise ValueError("Bicameral claim ceiling is required")
-    required_false = (
+    for field in (
         "truth_claim_made",
         "agreement_is_truth",
         "hemisphere_count_is_authority",
         "association_is_evidence",
         "structure_is_command",
-    )
-    for field in required_false:
+    ):
         if ceiling.get(field) is not False:
             raise ValueError(f"Bicameral invariant violated: {field} must be false")
     if ceiling.get("authority_delta") != 0:
@@ -101,18 +102,10 @@ def validate_bicameral_result(result: dict[str, Any]) -> None:
 
 
 def assess_bicameral_context(result: dict[str, Any]) -> dict[str, Any]:
-    """Convert bicameral context into a fail-closed Nexus guard receipt.
-
-    A bicameral overlap or divergence is context, not evidence. Therefore this
-    adapter never emits EVIDENCE_RECEIPT from a BICAMERAL_RESULT alone. It emits
-    HOLD_RECEIPT until a separately provenance-bound witness/evidence case is
-    supplied through the normal Fundamentum truth-guard path.
-    """
-
+    """Convert v1/v2 bicameral context into the same fail-closed HOLD class."""
     validate_bicameral_result(result)
     input_digest = sha256(bicameral_semantic_payload(result))
     shared = result.get("comparison", {}).get("shared_semantic_keys", [])
-
     return {
         "schema": RECEIPT_SCHEMA,
         "adapter_contract": ADAPTER_CONTRACT,
@@ -159,7 +152,7 @@ def assess_bicameral_context(result: dict[str, Any]) -> dict[str, Any]:
 
 def self_test() -> dict[str, Any]:
     fixture = {
-        "schema": BICAMERAL_SCHEMA,
+        "schema": BICAMERAL_SCHEMA_V1,
         "status": "BICAMERAL_OVERLAP_PRESENT",
         "hemispheres_present": ["LEFT_HRAIN", "RIGHT_INAIHR"],
         "packet_receipts": {
@@ -193,7 +186,6 @@ def self_test() -> dict[str, Any]:
         "external_effect_blocked": receipt["control"]["external_effect_permitted"] is False,
         "lineage_not_runtime": receipt["runtime_ownership"]["lineage_is_runtime_ownership"] is False,
     }
-
     forged = json.loads(json.dumps(fixture))
     forged["claim_ceiling"]["association_is_evidence"] = True
     try:
@@ -202,12 +194,7 @@ def self_test() -> dict[str, Any]:
         checks["evidence_promotion_attempt_fails_closed"] = True
     else:
         checks["evidence_promotion_attempt_fails_closed"] = False
-
-    return {
-        "status": "PASS" if all(checks.values()) else "FAIL",
-        "checks": checks,
-        "receipt": receipt,
-    }
+    return {"status": "PASS" if all(checks.values()) else "FAIL", "checks": checks, "receipt": receipt}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -227,19 +214,14 @@ def write_json(value: Any, output: Path | None) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Fail-closed BICAMERAL_RESULT -> Fundamentum HOLD_RECEIPT adapter."
-    )
+    parser = argparse.ArgumentParser(description="Fail-closed BICAMERAL_RESULT v1/v2 -> Fundamentum HOLD_RECEIPT adapter.")
     parser.add_argument("--input", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
-
     try:
         if args.self_test:
-            result = self_test()
-            write_json(result, args.output)
-            return 0 if result["status"] == "PASS" else 1
+            result = self_test(); write_json(result, args.output); return 0 if result["status"] == "PASS" else 1
         if args.input is None:
             parser.error("provide --input or --self-test")
         write_json(assess_bicameral_context(load_json(args.input)), args.output)
