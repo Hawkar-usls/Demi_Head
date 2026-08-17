@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from goldprompt_handshake import verify_receipt as verify_goldprompt_receipt
+
 
 BICAMERAL_SCHEMA = "janus.demihead.bicameral_result.v1"
 RECEIPT_SCHEMA = "janus.demihead.nexus_fundamentum_receipt.v1"
@@ -26,11 +28,33 @@ def sha256(value: Any) -> str:
     return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
 
 
+def bicameral_semantic_payload(result: dict[str, Any]) -> dict[str, Any]:
+    """Return the stable epistemic payload, excluding runtime-only GoldPrompt receipt.
+
+    The GoldPrompt startup receipt proves which Face/runtime inherited the character
+    constitution for a concrete invocation. It does not change what the bicameral
+    structural/associative comparison says. Keeping it outside the semantic hash
+    preserves frozen Nexus vectors while still allowing the receipt itself to be
+    independently verified and provenance-bound.
+    """
+
+    if not isinstance(result, dict):
+        raise ValueError("Bicameral input must be a JSON object")
+    return {key: value for key, value in result.items() if key != "goldprompt_receipt"}
+
+
 def validate_bicameral_result(result: dict[str, Any]) -> None:
     if not isinstance(result, dict):
         raise ValueError("Bicameral input must be a JSON object")
     if result.get("schema") != BICAMERAL_SCHEMA:
         raise ValueError("Unexpected bicameral result schema")
+
+    # A present runtime receipt must replay exactly. Historical frozen bicameral
+    # fixtures may predate GoldPrompt binding; their absence cannot increase
+    # evidence or authority, so they remain readable as legacy context-only data.
+    goldprompt_receipt = result.get("goldprompt_receipt")
+    if goldprompt_receipt is not None and not verify_goldprompt_receipt(goldprompt_receipt):
+        raise ValueError("Invalid DemiHead GoldPrompt startup receipt")
 
     hemispheres = result.get("hemispheres_present")
     if not isinstance(hemispheres, list) or not hemispheres:
@@ -86,7 +110,7 @@ def assess_bicameral_context(result: dict[str, Any]) -> dict[str, Any]:
     """
 
     validate_bicameral_result(result)
-    input_digest = sha256(result)
+    input_digest = sha256(bicameral_semantic_payload(result))
     shared = result.get("comparison", {}).get("shared_semantic_keys", [])
 
     return {
