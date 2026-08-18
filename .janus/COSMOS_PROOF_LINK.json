@@ -1,0 +1,23 @@
+{
+  "schema": "janus.demihead.cosmos_proof_link.v1",
+  "role": "SPECIALIZED_PROOF_PROVIDER_NOT_TRUTH_ARBITER",
+  "provider_repository": "Hawkar-usls/Janus-Cosmos",
+  "provider_sha": "c77f920d764229efb6932bc4ea522a4ec0342c64",
+  "canonical_gate": "S𓂸ḥ/2",
+  "supported_operation": "VERIFY_CANONICAL_GATE",
+  "intent_binding": "janus.goldprompt.intent_anchor.v1",
+  "request_schema": "schemas/cosmos-proof-request.schema.json",
+  "receipt_schema": "schemas/cosmos-proof-receipt.schema.json",
+  "adapter": "tools/cosmos_proof_adapter.py",
+  "laws": [
+    "SAME_INTENT_REQUIRED_ACROSS_DEMIHEAD_AND_COSMOS",
+    "COSMOS_PASS != WORLD_TRUTH",
+    "COSMOS_PASS != P_EQUALS_NP",
+    "COSMOS_PASS != AUTHORITY",
+    "P_VS_NP = OPEN",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0"
+  ],
+  "write_back": "DENY",
+  "automatic_external_effects": false
+}
