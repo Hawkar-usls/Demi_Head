@@ -1,0 +1,130 @@
+name: DemiHead Cosmos Proof Gate
+
+on:
+  pull_request:
+    paths:
+      - 'tools/cosmos_proof_adapter.py'
+      - 'tests/test_cosmos_proof_adapter.py'
+      - 'schemas/cosmos-proof-*.schema.json'
+      - '.janus/COSMOS_PROOF_LINK.json'
+      - 'docs/COSMOS_PROOF_GATE.md'
+      - 'docs/CROSS_REPO_LINEAGE.md'
+      - 'PROJECT_STATUS.json'
+      - '.github/workflows/cosmos-proof-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/cosmos_proof_adapter.py'
+      - 'tests/test_cosmos_proof_adapter.py'
+      - 'schemas/cosmos-proof-*.schema.json'
+      - '.janus/COSMOS_PROOF_LINK.json'
+      - 'docs/COSMOS_PROOF_GATE.md'
+      - 'docs/CROSS_REPO_LINEAGE.md'
+      - 'PROJECT_STATUS.json'
+      - '.github/workflows/cosmos-proof-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  cosmos-proof:
+    runs-on: ubuntu-latest
+    env:
+      COSMOS_SHA: c77f920d764229efb6932bc4ea522a4ec0342c64
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run local adversarial adapter tests
+        run: python -m unittest tests.test_cosmos_proof_adapter -v
+
+      - name: Parse bridge schemas and link
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in [
+              'schemas/cosmos-proof-request.schema.json',
+              'schemas/cosmos-proof-receipt.schema.json',
+              '.janus/COSMOS_PROOF_LINK.json',
+          ]:
+              json.loads(Path(p).read_text(encoding='utf-8'))
+          print('COSMOS_BRIDGE_SCHEMA_PARSE=PASS')
+          PY
+
+      - name: Checkout exact Janus-Cosmos provider with submodules
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Cosmos
+          ref: ${{ env.COSMOS_SHA }}
+          path: external/cosmos
+          submodules: recursive
+
+      - name: Verify exact provider revision
+        run: |
+          test "$(git -C external/cosmos rev-parse HEAD)" = "$COSMOS_SHA"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('external/cosmos/PROJECT_STATUS.json').read_text(encoding='utf-8'))
+          assert s['canonical_gate']=='S𓂸ḥ/2'
+          assert s['P_VS_NP']=='OPEN'
+          print('COSMOS_EXACT_PROVIDER_PIN=PASS')
+          PY
+
+      - name: Execute frozen Cosmos canonical gate
+        run: python external/cosmos/run_osiris.py --output /tmp/cosmos-result.json >/tmp/cosmos-stdout.json
+
+      - name: Build one intent-bound Cosmos request
+        run: |
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'tools')
+          from cosmos_proof_adapter import build_request
+          from goldprompt_intent_handoff import CONTEXT_TIERS, sha256
+          a={
+            'schema':'janus.goldprompt.intent_anchor.v1',
+            'current_turn_digest':'1'*64,
+            'requested_operation':'VERIFY_OSIRIS_CANONICAL_GATE',
+            'primary_entities':{'OSIRIS':['osiris'],'S_PHALLUS_H':['s𓂸ḥ','s-phallus-h']},
+            'must_answer_points':['Verify the exact frozen S𓂸ḥ/2 gate on the pinned Cosmos provider revision'],
+            'required_answer_evidence':[['execution receipt'],['provider sha'],['P_VS_NP OPEN']],
+            'operation_markers':['verify','execute'],
+            'optional_association_markers':['janus','cosmos'],
+            'explicit_constraints':['no P=NP promotion','authority delta remains zero'],
+            'allow_anaphoric_continuation':False,
+            'context_priority':[CONTEXT_TIERS[i] for i in sorted(CONTEXT_TIERS)],
+          }
+          a['intent_id']=sha256(a)
+          req=build_request(a,'COSMOS-E2E-CI-0001')
+          Path('/tmp/cosmos-request.json').write_text(json.dumps(req,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+
+      - name: Bind Cosmos execution to DemiHead receipt
+        run: |
+          python tools/cosmos_proof_adapter.py --request /tmp/cosmos-request.json --cosmos-result /tmp/cosmos-result.json --output /tmp/cosmos-receipt.json
+          python tools/cosmos_proof_adapter.py --request /tmp/cosmos-request.json --cosmos-result /tmp/cosmos-result.json --verify-receipt /tmp/cosmos-receipt.json
+
+      - name: Enforce constitutional boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/cosmos-receipt.json').read_text(encoding='utf-8'))
+          assert r['provider_sha']=='c77f920d764229efb6932bc4ea522a4ec0342c64'
+          assert r['canonical_gate']=='S𓂸ḥ/2'
+          assert r['P_VS_NP']=='OPEN'
+          assert r['P_EQUALS_NP']=='NOT_ESTABLISHED'
+          assert r['P_NOT_EQUALS_NP']=='NOT_ESTABLISHED'
+          assert r['authority_delta']==0
+          assert r['mass_effect_budget_delta']==0
+          print('DEMIHEAD_COSMOS_PROOF_GATE=PASS')
+          print('P_VS_NP=OPEN')
+          print('AUTHORITY_DELTA=0')
+          PY
