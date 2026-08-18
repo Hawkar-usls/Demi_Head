@@ -11,6 +11,21 @@ METHOD_REUSE != AUTHORITY_TRANSFER
 DOMAIN_EVIDENCE != CROSS_DOMAIN_EVIDENCE
 ```
 
+## Current Janus-Cosmos transition
+
+`Janus-Cosmos` was repurposed on 2026-08-19 from its earlier astronomy/blind-replication workspace into the dedicated **OSIRIS / S𓂸ḥ proof-carrying SAT/complexity superproject**. DemiHead therefore no longer treats its current `main` merely as an astronomy anti-pseudoreplication reference.
+
+Current exact integration pin:
+
+```text
+Hawkar-usls/Janus-Cosmos@c77f920d764229efb6932bc4ea522a4ec0342c64
+canonical gate = S𓂸ḥ/2
+P_VS_NP = OPEN
+role = SPECIALIZED_PROOF_PROVIDER_NOT_TRUTH_ARBITER
+```
+
+The pre-OSIRIS astronomy tree remains relevant as historical lineage on the Cosmos legacy branch, but the executable DemiHead bridge targets the exact current OSIRIS revision above.
+
 ## Direct design sources
 
 | Repository | Guardian Mesh role | Reused mechanism | Boundary retained |
@@ -24,8 +39,8 @@ DOMAIN_EVIDENCE != CROSS_DOMAIN_EVIDENCE
 | `Janus-Fundamentum` | falsification/claim ceiling | attack hypotheses, preserve negative results, survival != proof | mathematical evidence status does not transfer |
 | `janus-io-public` | proof-of-observation | missing measurement remains unknown; hash integrity != source truth | PoW/mining claims do not transfer |
 | `janus-io` | counterfactual incident audit | event -> context -> counterfactual probe -> repeatability -> verdict | traversal/mining semantics do not transfer |
-| `Janus-Cosmos` | anti-pseudoreplication | source manifest, blind gate, underpowered fail-closed, seed != replication | astronomical claims do not transfer |
-| `janus-distributed-ai-swarm` | edge/degraded mode | local survival, stale visibility, no fake sensors, semantic identity | embedded/mining semantics do not transfer |
+| `Janus-Cosmos` | specialized proof provider / bounded mathematical execution | OSIRIS SAT mechanics, PR192 quotient lineage, S𓂸ḥ bounded-K decomposition gates, exact execution receipts and claim ceilings | `COSMOS_PASS != WORLD_TRUTH`; `COSMOS_PASS != P_EQUALS_NP`; `P_VS_NP=OPEN`; authority delta remains zero |
+| `janus-distributed-ai-swarm` | stale visibility, local degraded mode | local survival, stale visibility, no fake sensors, semantic identity | embedded/mining semantics do not transfer |
 | `Janus` | model/provider gateway pattern | local/cloud provider routing and metadata hub | historical monolith is not a civic production architecture |
 | `janus-first-followers-club-` | consent semantics | reading/linking/ignoring != consent or membership | symbolic protocol is not governance authority |
 
@@ -89,15 +104,7 @@ DISCOVER
 -> ADMIT OR REJECT
 ```
 
-A useful example is the swarm rule "no fake sensors." In DemiHead it becomes a civic information invariant:
-
-```text
-NO SOURCE != FALSE
-STALE SOURCE != CURRENT SOURCE
-CENTRAL BACKEND DOWN != INVENT AN ANSWER
-```
-
-The original firmware code does not need to be copied for that invariant to be useful.
+The current Cosmos integration is an example of that rule: a concrete provider revision, local schemas, an intent-bound adapter, negative tests and an end-to-end CI gate are required before its result becomes an admissible DemiHead computational witness.
 
 ## Patterns intentionally excluded
 
@@ -124,4 +131,4 @@ Future code reuse requires a separate record naming:
 - tests added for DemiHead's boundary;
 - why reuse is preferable to a fresh small implementation.
 
-Until such a record exists, sibling repositories are methodological references only.
+Until such a record exists, sibling repositories are methodological references only. The Cosmos proof bridge is an explicit exception only for the exact pin and narrow operation documented in `docs/COSMOS_PROOF_GATE.md`; it transfers proof evidence, not ambient authority.
