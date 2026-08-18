@@ -63,7 +63,12 @@ class SqliteReplayGuard:
         return connection
 
     def _initialize(self) -> None:
-        with self._connect() as db:
+        # sqlite3.Connection as a context manager commits/rolls back but does not
+        # close the connection.  Initialization must close explicitly so a late
+        # GC finalizer cannot checkpoint/remove a WAL sidecar after a later
+        # evidence snapshot has already been created.
+        db = self._connect()
+        try:
             db.execute(
                 """
                 CREATE TABLE IF NOT EXISTS nexus_replay_ledger (
@@ -76,16 +81,21 @@ class SqliteReplayGuard:
             db.execute(
                 "CREATE INDEX IF NOT EXISTS idx_nexus_replay_expiry ON nexus_replay_ledger(expires_at_ms)"
             )
+        finally:
+            db.close()
 
     def seen(self, replay_key: str, *, now_ms: int) -> bool:
         digest = replay_digest(replay_key)
-        with self._connect() as db:
+        db = self._connect()
+        try:
             db.execute("DELETE FROM nexus_replay_ledger WHERE expires_at_ms <= ?", (now_ms,))
             row = db.execute(
                 "SELECT 1 FROM nexus_replay_ledger WHERE replay_sha256 = ?",
                 (digest,),
             ).fetchone()
             return row is not None
+        finally:
+            db.close()
 
     def consume(self, replay_key: str, *, expires_at_ms: int, now_ms: int) -> bool:
         if expires_at_ms <= now_ms:
@@ -118,10 +128,13 @@ class SqliteReplayGuard:
             db.close()
 
     def count_active(self, *, now_ms: int) -> int:
-        with self._connect() as db:
+        db = self._connect()
+        try:
             db.execute("DELETE FROM nexus_replay_ledger WHERE expires_at_ms <= ?", (now_ms,))
             row = db.execute("SELECT COUNT(*) FROM nexus_replay_ledger").fetchone()
             return int(row[0]) if row else 0
+        finally:
+            db.close()
 
 
 def self_test() -> dict[str, Any]:
