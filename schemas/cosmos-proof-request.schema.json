@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "janus.demihead.cosmos_proof_request.v1",
+  "title": "DemiHead intent-bound Janus-Cosmos proof request",
+  "type": "object",
+  "required": [
+    "schema",
+    "request_id",
+    "operation",
+    "intent_anchor",
+    "intent_handoff",
+    "provider_repository",
+    "provider_sha",
+    "canonical_gate",
+    "input_payload",
+    "input_sha256",
+    "request_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "janus.demihead.cosmos_proof_request.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "operation": {"const": "VERIFY_CANONICAL_GATE"},
+    "intent_anchor": {"type": "object"},
+    "intent_handoff": {"type": "object"},
+    "provider_repository": {"const": "Hawkar-usls/Janus-Cosmos"},
+    "provider_sha": {"const": "c77f920d764229efb6932bc4ea522a4ec0342c64"},
+    "canonical_gate": {"const": "S𓂸ḥ/2"},
+    "input_payload": {"type": "object"},
+    "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
