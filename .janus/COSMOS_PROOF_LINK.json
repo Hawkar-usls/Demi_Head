@@ -1,19 +1,42 @@
 {
-  "schema": "janus.demihead.cosmos_proof_link.v1",
-  "role": "SPECIALIZED_PROOF_PROVIDER_NOT_TRUTH_ARBITER",
+  "schema": "janus.demihead.cosmos_link.v2",
+  "role": "SPECIALIZED_COMPUTE_PROVIDER_NOT_TRUTH_ARBITER",
   "provider_repository": "Hawkar-usls/Janus-Cosmos",
-  "provider_sha": "c77f920d764229efb6932bc4ea522a4ec0342c64",
-  "canonical_gate": "S𓂸ḥ/2",
-  "supported_operation": "VERIFY_CANONICAL_GATE",
-  "intent_binding": "janus.goldprompt.intent_anchor.v1",
-  "request_schema": "schemas/cosmos-proof-request.schema.json",
-  "receipt_schema": "schemas/cosmos-proof-receipt.schema.json",
-  "adapter": "tools/cosmos_proof_adapter.py",
+  "legacy_proof_gate": {
+    "status": "PRESERVED_UNCHANGED_HISTORICAL_PROOF_PATH",
+    "provider_sha": "c77f920d764229efb6932bc4ea522a4ec0342c64",
+    "canonical_gate": "S𓂸ḥ/2",
+    "supported_operation": "VERIFY_CANONICAL_GATE",
+    "request_schema": "schemas/cosmos-proof-request.schema.json",
+    "receipt_schema": "schemas/cosmos-proof-receipt.schema.json",
+    "adapter": "tools/cosmos_proof_adapter.py",
+    "frozen_contract": "contracts/NEXUS_V2_COSMOS_TYPED_PROOF_EDGE_FROZEN_CONTRACT.json",
+    "rewritten": false
+  },
+  "current_origin_prime_provider": {
+    "provider_sha": "07e35fdbd42621f9ed02b39b71f3b2ee4876ce95",
+    "canonical_gate": "OSIRIS_V3_ORIGIN_PRIME_SPIRAL_COMPUTE",
+    "packet_schema": "janus.cosmos.origin_prime_voice_packet.v1",
+    "mediator": "tools/cosmos_voice_pyramid_bridge_v2_8.py",
+    "nexus": "tools/nexus_habitat_v2_8.py",
+    "body_link": ".janus/COSMOS_ORIGIN_PRIME_PYRAMID_BODY_LINK.json",
+    "direct_voice_or_physical_body_authority": false
+  },
+  "voice_runtime_inheritance": {
+    "contract": "NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT",
+    "link": ".janus/NEXUS_VOICE_RUNTIME_LINK.json",
+    "preserved": true
+  },
+  "intent_binding": "DEMIHEAD_SUPPLIED_HEX64_INTENT_REQUIRED_FOR_BODY_ROUTE",
   "laws": [
-    "SAME_INTENT_REQUIRED_ACROSS_DEMIHEAD_AND_COSMOS",
+    "COSMOS_CANNOT_SUPPLY_OR_REPLACE_USER_INTENT",
+    "SAME_INTENT_REQUIRED_ACROSS_DEMIHEAD_AND_VOICE_REQUEST",
     "COSMOS_PASS != WORLD_TRUTH",
     "COSMOS_PASS != P_EQUALS_NP",
     "COSMOS_PASS != AUTHORITY",
+    "ORIGIN_PRIME_STATE != AUDIO",
+    "AUDIO != PROOF",
+    "117_121_HZ != SAT_EVIDENCE",
     "P_VS_NP = OPEN",
     "AUTHORITY_DELTA = 0",
     "MASS_EFFECT_BUDGET_DELTA = 0"
