@@ -1,0 +1,124 @@
+{
+  "schema": "janus.demihead.nexus_v2_4.i0_measurement_receipt_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_4_I0_MEASUREMENT_RECEIPT_FROZEN_CONTRACT",
+  "frozen_before_implementation": true,
+  "created_at_local": "2026-08-19T13:12:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "3480a27f4c77eb52f88827922b0c47ed7e97b106",
+    "nexus_v2_3_path": "tools/nexus_habitat_v2_3.py",
+    "nexus_v2_3_must_remain_byte_unchanged": true
+  },
+  "source": {
+    "repository": "Hawkar-usls/janus-io-public",
+    "sha": "7d02fb08fa9defd71297f8c5c4c9ac9d6be76316",
+    "project_status_blob_sha": "df92b16ab1cc62183de1d667576e57c82c10dc3c",
+    "proof_of_observation_blob_sha": "f7fcd76c376b17b4b001094355e17e517b7cb84c",
+    "engineering_capabilities_blob_sha": "e60d5ffe8aae8de0a9d946460244a22f16e29112",
+    "role": "CONTROLLED_MEASUREMENT_AND_PROOF_OF_OBSERVATION_SOURCE"
+  },
+  "new_heads": {
+    "I0_MEASUREMENT": {
+      "repository": "Hawkar-usls/janus-io-public",
+      "role": "CONTROLLED_MEASUREMENT_AND_PROOF_OF_OBSERVATION_SOURCE",
+      "accepts": [],
+      "emits": ["MEASUREMENT_RECEIPT"]
+    },
+    "MEASUREMENT_BROKER": {
+      "repository": "Hawkar-usls/Demi_Head",
+      "role": "MEASUREMENT_TO_EVIDENCE_PROJECTION_WITHOUT_PROMOTION",
+      "accepts": ["MEASUREMENT_RECEIPT"],
+      "emits": ["EVIDENCE_CANDIDATE"]
+    }
+  },
+  "new_routes_only": [
+    ["I0_MEASUREMENT", "MEASUREMENT_BROKER", "MEASUREMENT_RECEIPT"],
+    ["MEASUREMENT_BROKER", "FUNDAMENTUM", "EVIDENCE_CANDIDATE"]
+  ],
+  "input_schema": "janus.demihead.i0_measurement_summary.v1",
+  "measurement_receipt_schema": "janus.demihead.i0_measurement_receipt.v1",
+  "evidence_projection_schema": "janus.demihead.i0_measurement_evidence_candidate.v1",
+  "proof_of_observation_statuses": [
+    "NOT_EVALUATED",
+    "INSUFFICIENT_DATA",
+    "BLOCKED",
+    "OBSERVATION_ONLY",
+    "EXPLORATORY_ONLY",
+    "CANDIDATE",
+    "CONFIRMED",
+    "REVOKED_BY_NEW_EVIDENCE"
+  ],
+  "measurement_states": ["OBSERVED", "UNKNOWN", "STALE", "CONTAMINATED"],
+  "required_semantics": {
+    "facts_and_derived_metrics_separate": true,
+    "unknown_measurement_must_not_be_zero_filled": true,
+    "stale_measurement_must_not_be_current": true,
+    "contaminated_measurement_must_not_support_claim_promotion": true,
+    "hash_chain_integrity_is_not_source_truth": true,
+    "overlapping_views_do_not_count_as_independent_replication": true,
+    "holdout_required_for_confirmed_status": true,
+    "comparability_required_for_confirmed_status": true,
+    "integrity_required_for_confirmed_status": true,
+    "exact_exposure_required_when_exposure_claimed_known": true,
+    "negative_and_inconclusive_outcomes_preserved": true
+  },
+  "forbidden_promotions": [
+    "SHA256_PREDICTABILITY_OR_WEAKNESS_ESTABLISHED",
+    "INCREASED_PROOF_PROBABILITY_ESTABLISHED",
+    "MINING_ADVANTAGE_OR_PROFITABILITY_ESTABLISHED",
+    "WALL_ENERGY_SAVINGS_ESTABLISHED",
+    "EXTENDED_HARDWARE_LIFETIME_ESTABLISHED",
+    "SOURCE_TRUTH_FROM_HASH_CHAIN_ESTABLISHED"
+  ],
+  "routing_invariants": [
+    "MEASUREMENT_RECEIPT != EVIDENCE_ADMISSION",
+    "MEASUREMENT != INFERENCE",
+    "INTEGRITY != TRUTH",
+    "MISSING != ZERO",
+    "STALE != CURRENT",
+    "OVERLAPPING_VIEW != INDEPENDENT_REPLICATION",
+    "EVIDENCE_PROJECTION != CLAIM_PROMOTION",
+    "ROUTE_RECEIPT != DELIVERY",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0"
+  ],
+  "negative_controls": [
+    "NEXUS_V2_3_FILE_CHANGED_REJECT",
+    "UNKNOWN_STATUS_REJECT",
+    "UNKNOWN_MEASUREMENT_STATE_REJECT",
+    "UNKNOWN_WITH_NUMERIC_VALUE_REJECT",
+    "STALE_WITH_CURRENT_FLAG_REJECT",
+    "CONTAMINATED_SUPPORTS_PROMOTION_REJECT",
+    "EXPOSURE_KNOWN_WITHOUT_EXACT_INTEGER_REJECT",
+    "CONFIRMED_WITHOUT_HOLDOUT_REJECT",
+    "CONFIRMED_WITHOUT_COMPARABILITY_REJECT",
+    "CONFIRMED_WITHOUT_INTEGRITY_REJECT",
+    "OVERLAPPING_VIEW_COUNTED_AS_INDEPENDENT_REPLICATION_REJECT",
+    "FORBIDDEN_CLAIM_PROMOTION_REJECT",
+    "MEASUREMENT_ROUTE_AS_ADMISSION_REJECT",
+    "EVIDENCE_PROJECTION_AS_ADMISSION_REJECT",
+    "UNADMITTED_ROUTE_REJECT",
+    "AUTHORITY_ESCALATION_REJECT",
+    "MASS_EFFECT_ESCALATION_REJECT",
+    "ROUTE_AS_DELIVERY_CLAIM_REJECT"
+  ],
+  "promotion_gate": {
+    "exact_i0_source_checkout_and_blob_verification": true,
+    "adapter_adversarial_tests_pass": true,
+    "existing_repository_test_suite_pass": true,
+    "all_promoted_nexus_layers_replay_pass": true,
+    "nexus_v2_3_unchanged": true,
+    "merge_before_all_green": false
+  },
+  "claim_ceiling": {
+    "SHA256_predictability_or_weakness": "NOT_ESTABLISHED",
+    "increased_proof_probability": "NOT_ESTABLISHED",
+    "mining_advantage_or_profitability": "NOT_ESTABLISHED",
+    "wall_energy_savings": "NOT_ESTABLISHED",
+    "extended_hardware_lifetime": "NOT_ESTABLISHED",
+    "production_readiness": "NOT_ESTABLISHED",
+    "source_truth_from_integrity": false,
+    "fundamentum_admission_from_route": false,
+    "external_authority": false
+  }
+}

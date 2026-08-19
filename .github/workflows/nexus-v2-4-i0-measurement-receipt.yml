@@ -1,0 +1,95 @@
+name: Nexus v2.4 I0 Measurement Receipt
+
+on:
+  pull_request:
+  push:
+    branches:
+      - nexus-v2.4-i0-measurement-receipt
+
+permissions:
+  contents: read
+
+jobs:
+  i0-measurement:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify frozen contract and untouched Nexus v2.3
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('contracts/NEXUS_V2_4_I0_MEASUREMENT_RECEIPT_FROZEN_CONTRACT.json').read_text(encoding='utf-8'))
+          assert c['frozen_before_implementation'] is True
+          assert c['parent']['sha'] == '3480a27f4c77eb52f88827922b0c47ed7e97b106'
+          assert c['source']['sha'] == '7d02fb08fa9defd71297f8c5c4c9ac9d6be76316'
+          assert c['source']['project_status_blob_sha'] == 'df92b16ab1cc62183de1d667576e57c82c10dc3c'
+          assert c['source']['proof_of_observation_blob_sha'] == 'f7fcd76c376b17b4b001094355e17e517b7cb84c'
+          assert c['source']['engineering_capabilities_blob_sha'] == 'e60d5ffe8aae8de0a9d946460244a22f16e29112'
+          PY
+          git diff --exit-code 3480a27f4c77eb52f88827922b0c47ed7e97b106 HEAD -- tools/nexus_habitat_v2_3.py
+      - name: Run I0 measurement adversarial tests
+        run: python -m unittest tests.test_i0_measurement_receipt -v
+      - name: Checkout exact janus-io-public source
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/janus-io-public
+          ref: 7d02fb08fa9defd71297f8c5c4c9ac9d6be76316
+          path: i0-source
+          fetch-depth: 1
+      - name: Verify exact I0 revision and source blobs
+        shell: bash
+        run: |
+          test "$(git -C i0-source rev-parse HEAD)" = "7d02fb08fa9defd71297f8c5c4c9ac9d6be76316"
+          test "$(git -C i0-source hash-object PROJECT_STATUS.json)" = "df92b16ab1cc62183de1d667576e57c82c10dc3c"
+          test "$(git -C i0-source hash-object docs/proof-of-observation.md)" = "f7fcd76c376b17b4b001094355e17e517b7cb84c"
+          test "$(git -C i0-source hash-object docs/current-engineering-capabilities.md)" = "e60d5ffe8aae8de0a9d946460244a22f16e29112"
+      - name: Generate unknown-preserving I0 measurement and evidence artifacts
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          import json
+          import i0_measurement_adapter as i0
+          import nexus_habitat_v2_4 as v24
+          s={
+            'schema':'janus.demihead.i0_measurement_summary.v1','measurement_id':'I0-CI-0001','source_bundle_sha256':'d'*64,
+            'status':'OBSERVATION_ONLY','integrity_valid':True,'comparability_valid':False,'holdout_replication':False,
+            'independent_replications':0,'overlapping_views_counted_as_independent':False,
+            'exposure':{'known':True,'checked_hashes':500000},
+            'facts':{
+              'accepted_shares':{'state':'OBSERVED','value':1,'unit':'count','current':True},
+              'wall_power_w':{'state':'UNKNOWN','value':None,'unit':'W','current':False},
+              'temperature_c':{'state':'STALE','value':59.0,'unit':'C','current':False}
+            },
+            'derived_metrics':{'accepted_per_mh':{'state':'OBSERVED','value':2.0,'unit':'per_MH','current':True}},
+            'claim_flags':{name:False for name in i0.FORBIDDEN_CLAIMS}
+          }
+          receipt,e1=v24.build_measurement_route(s, envelope_id='NEXUS-V2-4-I0-CI-MEAS')
+          assert v24.verify_measurement_route(e1,s,receipt)
+          candidate,e2=v24.build_evidence_route(receipt, envelope_id='NEXUS-V2-4-I0-CI-EVIDENCE')
+          assert v24.verify_evidence_route(e2,receipt,candidate)
+          assert 'facts.wall_power_w' in candidate['projection']['unknown_fields_preserved']
+          assert 'facts.temperature_c' in candidate['projection']['stale_fields_preserved']
+          assert candidate['projection']['projection_is_claim_promotion'] is False
+          assert candidate['projection']['projection_is_evidence_admission'] is False
+          r1=v24.route_receipt(e1); r2=v24.route_receipt(e2)
+          for rr in (r1,r2):
+            assert rr['routing']['delivery_performed'] is False
+            assert rr['routing']['claim_promotion_performed'] is False
+            assert rr['routing']['evidence_admission_performed'] is False
+          out={'status':'PASS_NEXUS_V2_4_I0_MEASUREMENT_RECEIPT','measurement_receipt':receipt,'measurement_envelope':e1,'measurement_route_receipt':r1,'evidence_candidate':candidate,'evidence_envelope':e2,'evidence_route_receipt':r2}
+          json.dump(out, open('nexus_v2_4_i0_measurement.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          PY
+      - name: Upload I0 measurement receipt
+        uses: actions/upload-artifact@v6
+        with:
+          name: nexus-v2-4-i0-measurement-receipt
+          path: nexus_v2_4_i0_measurement.json
