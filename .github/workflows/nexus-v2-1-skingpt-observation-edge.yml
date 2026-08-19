@@ -1,0 +1,73 @@
+name: Nexus v2.1 SkinGPT Observation Edge
+
+on:
+  pull_request:
+  push:
+    branches:
+      - nexus-v2.1-skingpt-observation-edge
+
+permissions:
+  contents: read
+
+jobs:
+  skingpt-observation:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Verify frozen contract and untouched Nexus v2
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('contracts/NEXUS_V2_1_SKINGPT_OBSERVATION_EDGE_FROZEN_CONTRACT.json').read_text(encoding='utf-8'))
+          assert c['frozen_before_implementation'] is True
+          assert c['parent']['sha'] == '452f5d4419edb60547aa538e76407eff5b2e555f'
+          assert c['parent']['nexus_v2_must_remain_byte_unchanged'] is True
+          assert c['source']['sha'] == '1efd61a17bb24f63b8d92788acec9909bdda76c8'
+          assert c['source']['frame_schema_git_blob_sha'] == 'd1e36072e917ba32ffdeba8552064d3a526d00b4'
+          PY
+          git diff --exit-code 452f5d4419edb60547aa538e76407eff5b2e555f HEAD -- tools/nexus_habitat_v2.py
+
+      - name: Run SkinGPT observation adversarial tests
+        run: python -m unittest tests.test_skingpt_observation_edge -v
+
+      - name: Generate replayable synthetic observation artifact
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          import json
+          import nexus_habitat_v2_1 as v21
+          frame={
+            'schema':'skingpt.frame.v0.3','device_id':'ci-node','boot_id':'ci-boot','seq':7,'uptime_ms':7000,
+            'system_operational':True,'experiment_baseline_valid':True,'baseline_ready':True,
+            'event':{'type':'impact','confidence':0.61,'severity_score':0.31,'classifier':'rule_based_heuristic','score_semantics':'heuristic_not_probability'},
+            'piezo':{'peak':140.0,'rms':20.0,'samples':64,'effective_hz':1000.0,'bias_adc':2047},
+            'thermal':{'zones_c':[24.0]*8,'baseline_c':[23.9]*8,'baseline_ready_by_zone':[True]*8,'warmest_zone':0,'warmest_c':24.0,'warmest_delta_c':0.1,'spread_c':0.0},
+            'source_ip':'10.0.0.99'
+          }
+          sample,envelope=v21.build_skingpt_envelope(frame, envelope_id='NEXUS-V2-1-SKINGPT-CI-0001')
+          assert v21.verify_skingpt_envelope(envelope,frame,sample)
+          route=v21.route_receipt(envelope)
+          assert route['routing']['delivery_performed'] is False
+          assert route['claim_ceiling']['telemetry_is_observation_signal'] is False
+          assert route['claim_ceiling']['telemetry_is_truth'] is False
+          assert sample['privacy']['raw_source_ip_forwarded'] is False
+          out={'status':'PASS_NEXUS_V2_1_SKINGPT_OBSERVATION_EDGE','source_baseline_sha':'1efd61a17bb24f63b8d92788acec9909bdda76c8','sample':sample,'envelope':envelope,'route_receipt':route}
+          json.dump(out, open('nexus_v2_1_skingpt_observation.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          PY
+
+      - name: Upload observation receipt
+        uses: actions/upload-artifact@v6
+        with:
+          name: nexus-v2-1-skingpt-observation-edge
+          path: nexus_v2_1_skingpt_observation.json
