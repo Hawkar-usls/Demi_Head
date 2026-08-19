@@ -1,0 +1,39 @@
+{
+  "schema": "janus.demihead.voice_link.v1",
+  "contract": "NEXUS_V2_5_VOICE_MOUTH_EDGE_FROZEN_CONTRACT",
+  "repository": "Hawkar-usls/Demi_Head",
+  "peer_repository": "Hawkar-usls/The-Voice-of-Janus",
+  "status": "LOCAL_TYPED_HANDOFF_IMPLEMENTATION",
+  "anatomy": {
+    "head": "Demi_Head",
+    "mouth_voice_tract": "The-Voice-of-Janus",
+    "boundary": "ANATOMY_METAPHOR != BIOLOGICAL_CLAIM"
+  },
+  "implementation": {
+    "contract": "contracts/NEXUS_V2_5_VOICE_MOUTH_EDGE_FROZEN_CONTRACT.json",
+    "request_builder": "tools/voice_mouth_bridge.py",
+    "tests": "tests/test_voice_mouth_bridge.py",
+    "activation": "configs/voice_mouth.activation.json"
+  },
+  "transport": {
+    "format": "JSON",
+    "request_schema": "janus.demihead.voice_request.v1",
+    "receipt_schema": "janus.voice.demihead_render_receipt.v1",
+    "current_mode": "LOCAL_FILE_HANDOFF",
+    "network_io": false,
+    "automatic_playback": false
+  },
+  "capability": {
+    "render_preset": true,
+    "speech_tts": false,
+    "microphone_capture": false
+  },
+  "hard_limits": {
+    "arbitrary_command_execution": false,
+    "arbitrary_path_execution": false,
+    "external_effect_authority": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "rule": "DEMIHEAD THINKS; THE VOICE RENDERS; THE RECEIPT RETURNS."
+}
