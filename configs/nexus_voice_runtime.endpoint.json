@@ -1,0 +1,32 @@
+{
+  "schema": "janus.demihead.nexus_endpoint_catalog.v1",
+  "live_network_endpoints": false,
+  "endpoints": [
+    {
+      "schema": "janus.demihead.nexus_endpoint_policy.v1",
+      "endpoint_id": "DEMIHEAD.VOICE_RUNTIME.LOCAL",
+      "enabled": true,
+      "accepted_target_heads": ["VOICE_RUNTIME"],
+      "local_dispatch_only": true,
+      "external_effect_permitted": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  ],
+  "handler": {
+    "module": "tools/nexus_voice_handler.py",
+    "factory": "local_handler",
+    "handler_id": "DEMIHEAD.NEXUS_VOICE_RUNTIME_HANDLER.v1",
+    "phase": "PREPARE_ONLY",
+    "filesystem_io_permitted": false,
+    "network_io_permitted": false,
+    "external_effect_permitted": false
+  },
+  "execution_boundary": {
+    "voice_repository": "Hawkar-usls/The-Voice-of-Janus",
+    "adapter": "src/nexus_voice_runtime_adapter.py",
+    "explicit_execute_required": true,
+    "automatic_playback": false,
+    "automatic_physical_handoff": false
+  }
+}
