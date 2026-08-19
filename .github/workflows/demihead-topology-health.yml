@@ -1,0 +1,110 @@
+name: JANUS DemiHead Topology Health
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - topology-health-core-nerves-v1
+
+permissions:
+  contents: read
+
+jobs:
+  topology-health:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Verify freeze chronology and untouched existing Nexus link
+        shell: bash
+        run: |
+          git merge-base --is-ancestor 063388df943052cc3ecaa6f28c7f1251763b5da1 HEAD
+          git diff --exit-code 4e5624bc0fcc4bc196934c954e5aa8f0dca119fd HEAD -- .janus/NEXUS_LINK.json
+          git diff --exit-code 4e5624bc0fcc4bc196934c954e5aa8f0dca119fd HEAD -- tools/nexus_habitat_v2.py tools/nexus_habitat_v2_1.py tools/nexus_habitat_v2_2.py tools/nexus_habitat_v2_3.py tools/nexus_habitat_v2_4.py
+
+      - name: Checkout promoted Swarm reciprocal source
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/janus-distributed-ai-swarm
+          ref: 7b6fbe8c6ccaea80e52aace074b758f3fe250fe4
+          path: topology_sources/swarm
+          fetch-depth: 0
+
+      - name: Checkout promoted AIFC reciprocal source
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/AIFC
+          ref: c3a5db4d9d52fd361a73d9ca338c0ce08f41c6a7
+          path: topology_sources/aifc
+          fetch-depth: 0
+
+      - name: Checkout promoted I0 reciprocal source
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/janus-io-public
+          ref: 7679e53887113a971c82e61f72181ad642a5ac8a
+          path: topology_sources/i0
+          fetch-depth: 0
+
+      - name: Checkout pending Genesis lifecycle source for structural verification
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Janus_Genesis
+          ref: 633a3fd8b6fe39c790d697a5eb3b3266cba76caf
+          path: topology_sources/genesis
+          fetch-depth: 0
+
+      - name: Run topology unit tests
+        run: python -m unittest tests.test_janus_demihead_topology_health -v
+
+      - name: Replay inherited Nexus tests
+        shell: bash
+        run: |
+          python -m unittest discover -s tests -p 'test_nexus*.py' -v
+
+      - name: Structural topology pass
+        run: |
+          python tools/janus_demihead_topology_health.py \
+            --mode structural \
+            --sources-root topology_sources \
+            --output artifacts/JANUS_DEMIHEAD_TOPOLOGY_HEALTH_STRUCTURAL_RECEIPT.json
+
+      - name: Admission topology gate
+        id: admission
+        shell: bash
+        run: |
+          set +e
+          python tools/janus_demihead_topology_health.py \
+            --mode admission \
+            --sources-root topology_sources \
+            --output artifacts/JANUS_DEMIHEAD_TOPOLOGY_HEALTH_ADMISSION_RECEIPT.json
+          rc=$?
+          set -e
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          if [ "$rc" -eq 0 ]; then
+            echo "Topology admission PASS"
+            exit 0
+          fi
+          if [ "$rc" -eq 2 ]; then
+            echo "Topology admission HOLD: at least one required nerve is not promoted/CI-cleared"
+            exit 2
+          fi
+          echo "Topology admission FAIL: contradiction or drift"
+          exit 1
+
+      - name: Upload topology-health receipts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: janus-demihead-topology-health
+          path: artifacts/JANUS_DEMIHEAD_TOPOLOGY_HEALTH_*_RECEIPT.json
+          if-no-files-found: error
