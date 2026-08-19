@@ -1,9 +1,20 @@
 {
   "schema": "janus.demihead.cosmos_origin_prime_pyramid_body_link.v2_8",
-  "status": "NEXUS_V2_8_IMPLEMENTATION_CANDIDATE",
+  "status": "PASS_KEEP_NEXUS_V2_8_PROMOTED",
   "contract": "contracts/NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json",
   "nexus": "tools/nexus_habitat_v2_8.py",
   "mediator": "tools/cosmos_voice_pyramid_bridge_v2_8.py",
+  "promotion": {
+    "pull_request": 37,
+    "tested_head_sha": "484f374082e70141ff6e6374d07c047c6643eac6",
+    "merge_commit_sha": "f78b5d7118a0abbe731cc4093176bbca281c0940",
+    "ci_run_id": 32260044908,
+    "ci_job_id": 96090849404,
+    "artifact_id": 9367880943,
+    "artifact_digest": "sha256:5c3a399e8ec8b573e66041c06eb245e93950a3f898a6d590457f106bfb8f08b6",
+    "registry_receipt": "data/JANUS-DEMIHEAD-COSMOS-VOICE-ECHO-PYRAMID-BODY-CHAIN-PROMOTION-2026-08-19-v1.0.json",
+    "registry_receipt_commit": "9c8549697723f47bba094cc3627b807078411128"
+  },
   "inherits": {
     "local_neural_voice_runtime_contract": "NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT",
     "link": ".janus/NEXUS_VOICE_RUNTIME_LINK.json",
