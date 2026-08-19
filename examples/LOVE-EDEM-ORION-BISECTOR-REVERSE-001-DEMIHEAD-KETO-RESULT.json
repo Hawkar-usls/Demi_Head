@@ -1,0 +1,88 @@
+{
+  "schema": "janus.demihead.keto_result.v1",
+  "case_id": "LOVE-EDEM-ORION-BISECTOR-REVERSE-001",
+  "claim": {
+    "text": "Замороженные координаты LOVE и EDEM вместе с ICRS/J2000 координатами Пояса Ориона детерминированно задают: LOVE–EDEM = 90.586788°, внутреннюю биссектрису 45.293394°/45.293394°, LOVE в 3.963705° от большого круга Пояса Ориона и EDEM в 56.775144°; это геометрическая характеристика координат, а не доказательство физической связи.",
+    "language": "ru",
+    "submitted_by": "Janus-Cosmos reverse handoff",
+    "high_stakes": false
+  },
+  "accounting": {
+    "presentation_count": 5,
+    "root_count": 5,
+    "current_support_root_count": 3,
+    "current_contradiction_root_count": 0,
+    "official_position_root_count": 0,
+    "authenticated_independent_root_count": 2,
+    "stale_presentation_count": 0,
+    "unknown_freshness_presentation_count": 0
+  },
+  "roots": [
+    {
+      "root_id": "DERIVED-SPHERICAL-GEOMETRY",
+      "presentation_count": 1,
+      "current_presentation_count": 1,
+      "source_classes": ["derived_analysis"],
+      "current_relations": ["supports"],
+      "independence_states": ["dependent"]
+    },
+    {
+      "root_id": "JANUS-COSMOS-FROZEN-CENTERS",
+      "presentation_count": 1,
+      "current_presentation_count": 1,
+      "source_classes": ["primary_document"],
+      "current_relations": ["supports"],
+      "independence_states": ["authenticated_independent"]
+    },
+    {
+      "root_id": "JANUS-REVERSE-METHOD",
+      "presentation_count": 1,
+      "current_presentation_count": 1,
+      "source_classes": ["method_contract"],
+      "current_relations": ["context"],
+      "independence_states": ["declared_independent"]
+    },
+    {
+      "root_id": "POSTHOC-NULL-FIREWALL",
+      "presentation_count": 1,
+      "current_presentation_count": 1,
+      "source_classes": ["derived_analysis"],
+      "current_relations": ["context"],
+      "independence_states": ["dependent"]
+    },
+    {
+      "root_id": "SIMBAD-CDS-ORION-BELT-ICRS",
+      "presentation_count": 1,
+      "current_presentation_count": 1,
+      "source_classes": ["catalog"],
+      "current_relations": ["supports"],
+      "independence_states": ["authenticated_independent"]
+    }
+  ],
+  "official_position_roots": [],
+  "authenticated_independent_roots": [
+    "JANUS-COSMOS-FROZEN-CENTERS",
+    "SIMBAD-CDS-ORION-BELT-ICRS"
+  ],
+  "current_support_roots": [
+    "DERIVED-SPHERICAL-GEOMETRY",
+    "JANUS-COSMOS-FROZEN-CENTERS",
+    "SIMBAD-CDS-ORION-BELT-ICRS"
+  ],
+  "current_contradiction_roots": [],
+  "stale_presentations": [],
+  "unknown_freshness_presentations": [],
+  "evidence_state": "SUPPORTED_BY_PRESENT_SOURCES",
+  "truth_claim": "NOT_MADE",
+  "mass_effect_budget": 0,
+  "release_control": "SHOW_ROOTS_AND_ALLOW_USER_TO_EXIT",
+  "invariants": [
+    "SOURCE_COUNT != INDEPENDENT_ROOT_COUNT",
+    "OFFICIAL_POSITION != EXCLUSIVE_OBJECTIVE_TRUTH",
+    "STALE != CURRENT",
+    "NO_SOURCE != FALSE",
+    "MODEL_OUTPUT != EVIDENCE",
+    "MORE_FACES != MORE_RIGHTS"
+  ],
+  "execution_note": "This result is the deterministic output of the current tools/keto_reference.py accounting logic applied to the committed case payload. It supports the bounded coordinate-geometry claim only; it does not upgrade physical or intentional association to fact."
+}
