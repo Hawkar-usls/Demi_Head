@@ -1,0 +1,71 @@
+{
+  "schema": "janus.demihead.nexus_v2_6.pyramid_language_json_edge_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_6_PYRAMID_LANGUAGE_JSON_EDGE_FROZEN_CONTRACT",
+  "frozen_before_implementation": true,
+  "created_at_local": "2026-08-19T14:20:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "a830a11a650fc87d380f83bb07092955bea8fed8",
+    "v2_5_voice_mouth_contract_must_remain_compatible": true
+  },
+  "peer": {
+    "repository": "Hawkar-usls/The-Voice-of-Janus",
+    "role": "PYRAMID_LANGUAGE_AUDIO_RENDERER"
+  },
+  "new_capability": {
+    "task": "SONIFY_INLINE_JSON",
+    "input": "INLINE_JSON_VALUE",
+    "output": "JSON_RECORD_AUDIO_AND_RECEIPT"
+  },
+  "request_schema": "janus.demihead.voice_language_request.v1",
+  "required_semantics": {
+    "inline_json_only": true,
+    "arbitrary_file_path_forbidden": true,
+    "shell_command_forbidden": true,
+    "canonical_json_hash_required": true,
+    "request_hash_required": true,
+    "preset_allowlist_required": true,
+    "microphone_start_not_dispatchable_by_demihead": true,
+    "live_mic_capability_may_be_reported_but_not_started": true,
+    "network_io": false,
+    "automatic_playback": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "negative_controls": [
+    "EXTERNAL_PATH_REJECT",
+    "UNKNOWN_PRESET_REJECT",
+    "NON_JSON_SERIALIZABLE_VALUE_REJECT",
+    "OVERSIZE_INLINE_JSON_REJECT",
+    "CANONICAL_JSON_HASH_TAMPER_REJECT",
+    "REQUEST_HASH_TAMPER_REJECT",
+    "MIC_START_REQUEST_REJECT",
+    "NETWORK_REQUEST_REJECT",
+    "AUTOPLAY_REQUEST_REJECT",
+    "AUTHORITY_ESCALATION_REJECT"
+  ],
+  "routing_invariants": [
+    "JSON_VALUE != SHELL_COMMAND",
+    "SONIFICATION != REVERSIBLE_CODEC",
+    "MIC_CAPABILITY != MIC_PERMISSION",
+    "MOUTH != BRAIN",
+    "AUDIO_OUTPUT != EVIDENCE",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0"
+  ],
+  "promotion_gate": {
+    "demihead_builder_tests_pass": true,
+    "voice_consumer_tests_pass": true,
+    "cross_repo_inline_json_roundtrip_pass": true,
+    "existing_v2_5_tests_pass": true,
+    "exact_head_ci_observed": true,
+    "merge_before_all_green": false
+  },
+  "claim_ceiling": {
+    "reversible_json_audio_codec": "NOT_ESTABLISHED",
+    "speech_tts": "NOT_ESTABLISHED",
+    "historical_pyramid_audio_technology": "NOT_ESTABLISHED",
+    "automatic_microphone_control": "FORBIDDEN",
+    "external_authority": false
+  }
+}
