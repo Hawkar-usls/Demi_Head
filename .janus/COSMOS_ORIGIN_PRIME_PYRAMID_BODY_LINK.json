@@ -1,0 +1,48 @@
+{
+  "schema": "janus.demihead.cosmos_origin_prime_pyramid_body_link.v2_8",
+  "status": "NEXUS_V2_8_IMPLEMENTATION_CANDIDATE",
+  "contract": "contracts/NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json",
+  "nexus": "tools/nexus_habitat_v2_8.py",
+  "mediator": "tools/cosmos_voice_pyramid_bridge_v2_8.py",
+  "inherits": {
+    "local_neural_voice_runtime_contract": "NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT",
+    "link": ".janus/NEXUS_VOICE_RUNTIME_LINK.json",
+    "rewritten": false
+  },
+  "topology": [
+    "DEMIHEAD_INTENT",
+    "JANUS_COSMOS",
+    "ORIGIN_PRIME_STATE_PACKET",
+    "DEMIHEAD_VOICE_BROKER",
+    "THE_VOICE_OF_JANUS_STATE_RENDERER",
+    "PYRAMID_LANGUAGE_117_121",
+    "ECHO_PYRAMID"
+  ],
+  "providers": {
+    "cosmos": "07e35fdbd42621f9ed02b39b71f3b2ee4876ce95",
+    "voice_profile_authority_snapshot": "e58d65aa46b7e3a64a5131708578a9a3346915c4",
+    "voice_execution": "4ac7fefb9be7183689e59a257c0f4280dcdf82c9",
+    "echo_state_chain_tested_snapshot": "15712f5b14b123d4e3cb64ddeaa693c5bf6af788",
+    "echo_current_descendant": "6587202a003f2a7c0f876652d0325db9814c0e3e"
+  },
+  "pyramid_language": {
+    "profile_id": "PYRAMID_LANGUAGE_117_121_ANCHORED_SPACE_v0.3",
+    "anchor_band_hz": [117.0, 121.0],
+    "center_hz": 119.0,
+    "q": 29.75,
+    "gain_db": 11.5,
+    "decay_s": 1.65
+  },
+  "hard_rules": [
+    "DEMIHEAD_IS_ONLY_INTENT_MEDIATOR",
+    "DIRECT_COSMOS_TO_VOICE_STATE_RENDERER = DENY",
+    "DIRECT_COSMOS_TO_ECHO_PYRAMID = DENY",
+    "CURRENT_ECHO_DESCENDANT != SILENT_REPLACEMENT_OF_TESTED_SNAPSHOT",
+    "ROUTE != DELIVERY",
+    "ROUTE != PLAYBACK",
+    "AUDIO != PROOF",
+    "117_121_HZ != SAT_EVIDENCE",
+    "AUTHORITY_DELTA = 0",
+    "P_VS_NP = OPEN"
+  ]
+}

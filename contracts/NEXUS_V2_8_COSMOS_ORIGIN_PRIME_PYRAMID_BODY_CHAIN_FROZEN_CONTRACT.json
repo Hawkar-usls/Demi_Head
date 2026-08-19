@@ -1,0 +1,138 @@
+{
+  "schema": "janus.demihead.nexus_v2_8.cosmos_origin_prime_pyramid_body_chain_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT",
+  "version": "2.8",
+  "status": "FROZEN_BEFORE_V2_8_IMPLEMENTATION",
+  "created_at_local": "2026-08-19T16:06:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "9c7b2373810aa2cc07a41c6f692ddbbdf29de4fe",
+    "promoted_voice_runtime_contract": "NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT",
+    "promoted_voice_runtime_link": ".janus/NEXUS_VOICE_RUNTIME_LINK.json",
+    "must_remain_unchanged": true
+  },
+  "superseded_candidate": {
+    "pull_request": 36,
+    "candidate_version": "2.7",
+    "freeze_commit": "f0c8e6d99f967ff79ba8b1fc4e52c468cf87d54e",
+    "status": "CLOSED_UNMERGED_DUE_CONCURRENT_VERSION_ALLOCATION",
+    "architecture_failed": false,
+    "reason": "Nexus v2.7 was independently allocated and promoted on main for the local neural Voice runtime while the body-chain candidate was in flight. The body-chain continues as v2.8 without rewriting the prior frozen candidate."
+  },
+  "providers": {
+    "cosmos": {
+      "repository": "Hawkar-usls/Janus-Cosmos",
+      "sha": "07e35fdbd42621f9ed02b39b71f3b2ee4876ce95",
+      "canonical_gate": "OSIRIS_V3_ORIGIN_PRIME_SPIRAL_COMPUTE",
+      "packet_schema": "janus.cosmos.origin_prime_voice_packet.v1"
+    },
+    "voice_current": {
+      "repository": "Hawkar-usls/The-Voice-of-Janus",
+      "sha": "4ac7fefb9be7183689e59a257c0f4280dcdf82c9",
+      "state_consumer": "src/cosmos_origin_prime_pyramid_adapter.py",
+      "local_neural_runtime": "src/nexus_voice_runtime_adapter.py",
+      "role": "LANGUAGE_AND_ACOUSTIC_EXECUTION"
+    },
+    "voice_profile_authority_snapshot_embedded_in_cosmos_packet": {
+      "repository": "Hawkar-usls/The-Voice-of-Janus",
+      "sha": "e58d65aa46b7e3a64a5131708578a9a3346915c4",
+      "must_not_be_silently_rewritten": true
+    },
+    "echo_state_chain_tested_snapshot": {
+      "repository": "Hawkar-usls/Echo-Pyramid",
+      "sha": "15712f5b14b123d4e3cb64ddeaa693c5bf6af788",
+      "embedded_in_cosmos_packet_and_state_consumer": true
+    },
+    "echo_current_descendant": {
+      "repository": "Hawkar-usls/Echo-Pyramid",
+      "sha": "6587202a003f2a7c0f876652d0325db9814c0e3e",
+      "role": "CURRENT_PHYSICAL_VOICE_BODY_WITH_DSP_OWNERSHIP_AND_FAILSAFE",
+      "may_replace_tested_snapshot_without_new_conformance_gate": false
+    }
+  },
+  "inheritance": {
+    "preserve_v2_7_local_neural_voice_runtime": true,
+    "preserve_legacy_cosmos_proof_gate": true,
+    "legacy_cosmos_proof_provider_sha": "c77f920d764229efb6932bc4ea522a4ec0342c64",
+    "legacy_cosmos_proof_operation": "VERIFY_CANONICAL_GATE",
+    "do_not_rewrite_old_frozen_contracts": true
+  },
+  "new_payload_kinds": [
+    "ORIGIN_PRIME_STATE_PACKET",
+    "COSMOS_ORIGIN_PRIME_VOICE_ENVELOPE",
+    "PYRAMID_PCM_HANDOFF",
+    "PYRAMID_AUDIO_RECEIPT"
+  ],
+  "new_heads": {
+    "VOICE_BROKER": "DEMIHEAD_INTENT_BOUND_STATE_TO_VOICE_MEDIATOR",
+    "VOICE_STATE_RENDERER": "THE_VOICE_OF_JANUS_ORIGIN_PRIME_PYRAMID_RENDERER",
+    "ECHO_PYRAMID": "PHYSICAL_PCM_VOICE_BODY"
+  },
+  "new_routes": [
+    ["COSMOS", "VOICE_BROKER", "ORIGIN_PRIME_STATE_PACKET"],
+    ["VOICE_BROKER", "VOICE_STATE_RENDERER", "COSMOS_ORIGIN_PRIME_VOICE_ENVELOPE"],
+    ["VOICE_STATE_RENDERER", "ECHO_PYRAMID", "PYRAMID_PCM_HANDOFF"],
+    ["VOICE_STATE_RENDERER", "VOICE_BROKER", "PYRAMID_AUDIO_RECEIPT"]
+  ],
+  "intent_binding": {
+    "intent_id_required": true,
+    "intent_id_format": "lowercase_hex64",
+    "intent_is_supplied_by": "Demi_Head",
+    "cosmos_packet_may_supply_or_replace_intent": false,
+    "same_intent_required_in_mediation_voice_request_and_voice_receipt": true
+  },
+  "pyramid_language": {
+    "profile_id": "PYRAMID_LANGUAGE_117_121_ANCHORED_SPACE_v0.3",
+    "anchor_band_hz": [117.0, 121.0],
+    "center_hz": 119.0,
+    "q": 29.75,
+    "gain_db": 11.5,
+    "decay_s": 1.65,
+    "semantic_content_preserved": true,
+    "frequencies_are_representation_only": true,
+    "frequencies_create_math_authority": false
+  },
+  "mediation": {
+    "required_path": "DEMIHEAD_INTENT -> COSMOS -> ORIGIN_PRIME_STATE -> DEMIHEAD_VOICE_BROKER -> VOICE_STATE_RENDERER -> ECHO_PYRAMID",
+    "direct_cosmos_to_voice_state_renderer_route": false,
+    "direct_cosmos_to_echo_route": false,
+    "route_receipt_is_delivery": false,
+    "route_receipt_is_playback": false,
+    "physical_actuation_requires_explicit_runtime_authorization": true
+  },
+  "control": {
+    "read_only_route": true,
+    "external_effect_permitted_by_router": false,
+    "network_io_required": false,
+    "automatic_playback_permitted": false,
+    "automatic_microphone_start_permitted": false,
+    "automatic_bluetooth_permitted": false,
+    "automatic_firmware_flash_permitted": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "negative_controls": [
+    "INTENT_SPLIT_REJECT",
+    "COSMOS_PROVIDER_SHA_TAMPER_REJECT",
+    "COSMOS_PACKET_HASH_TAMPER_REJECT",
+    "STATE_COMMITMENT_TAMPER_REJECT",
+    "BOUND_EXPERIENCE_TAMPER_REJECT",
+    "VOICE_EXECUTION_SHA_TAMPER_REJECT",
+    "PYRAMID_PROFILE_TAMPER_REJECT",
+    "DIRECT_COSMOS_TO_VOICE_STATE_RENDERER_REJECT",
+    "DIRECT_COSMOS_TO_ECHO_REJECT",
+    "ROUTE_CLAIMS_DELIVERY_REJECT",
+    "ROUTE_CLAIMS_PLAYBACK_REJECT",
+    "AUTHORITY_ESCALATION_REJECT"
+  ],
+  "claim_ceiling": {
+    "route_is_truth": false,
+    "audio_is_proof": false,
+    "117_121_hz_is_sat_evidence": false,
+    "measured_chamber_ir_used": false,
+    "historical_intentional_tuning_claimed": false,
+    "P_VS_NP": "OPEN",
+    "P_EQUALS_NP": "NOT_ESTABLISHED",
+    "P_NOT_EQUALS_NP": "NOT_ESTABLISHED"
+  }
+}
