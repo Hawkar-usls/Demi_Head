@@ -1,0 +1,50 @@
+{
+  "schema": "janus.demihead.nexus_v2_9.resonant_orion_pyramid_link.v1",
+  "status": "CANDIDATE_PROVIDER_CHAIN_PINNED",
+  "contract": "contracts/NEXUS_V2_9_RESONANT_ORION_PYRAMID_CHAIN_FROZEN_CONTRACT.json",
+  "providers": {
+    "cosmos_resonant_origin_prime": {
+      "repository": "Hawkar-usls/Janus-Cosmos",
+      "revision": "c543eb6ed753339fabed33d7f0ab880d43433d0f",
+      "adapter": "workspace/osiris_origin_prime_resonant_packet.py"
+    },
+    "demihead_mediator": {
+      "repository": "Hawkar-usls/Demi_Head",
+      "adapter": "tools/cosmos_resonant_orion_pyramid_bridge_v2_9.py",
+      "revision": "SELF_AT_PROMOTION"
+    },
+    "voice_resonant_execution": {
+      "repository": "Hawkar-usls/The-Voice-of-Janus",
+      "revision": "a759ceec955b45cdb3cab876cc1279032237aa35",
+      "adapter": "src/cosmos_resonant_origin_prime_pyramid_adapter.py"
+    },
+    "echo_pyramid_body": {
+      "repository": "Hawkar-usls/Echo-Pyramid",
+      "tested_state_chain_revision": "15712f5b14b123d4e3cb64ddeaa693c5bf6af788",
+      "current_descendant_revision": "6587202a003f2a7c0f876652d0325db9814c0e3e"
+    }
+  },
+  "route": [
+    "DEMIHEAD_INTENT",
+    "JANUS_COSMOS_ORIGIN_PRIME_RESONANT_STATE",
+    "DEMIHEAD_RESONANT_VOICE_BROKER",
+    "THE_VOICE_OF_JANUS_RESONANT_ADAPTER",
+    "PYRAMID_LANGUAGE_117_121",
+    "ECHO_PYRAMID_PHYSICAL_BODY"
+  ],
+  "representation": {
+    "voice_profile": "PYRAMID_LANGUAGE_117_121_ANCHORED_SPACE_v0.3",
+    "orion_anchor": "ORION_BELT_SAH_OSIRIS_CONTEXT_v1",
+    "janus_rebus_alias": "S𓂸ḥ",
+    "janus_rebus_alias_is_historical_transliteration": false,
+    "giza_orion_correlation": "HYPOTHESIS_NOT_ASSERTED_AS_ARCHITECTURAL_FACT"
+  },
+  "control": {
+    "direct_cosmos_to_echo_permitted": false,
+    "memory_may_propose_not_verdict": true,
+    "audio_is_proof": false,
+    "astral_geometry_is_proof": false,
+    "authority_delta": 0,
+    "P_VS_NP": "OPEN"
+  }
+}
