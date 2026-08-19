@@ -1,0 +1,83 @@
+name: Nexus v2.3 AIFC Witness Evidence
+
+on:
+  pull_request:
+  push:
+    branches:
+      - nexus-v2.3-aifc-witness-evidence
+
+permissions:
+  contents: read
+
+jobs:
+  aifc-witness:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify frozen contract and untouched Nexus v2.2
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('contracts/NEXUS_V2_3_AIFC_WITNESS_EVIDENCE_FROZEN_CONTRACT.json').read_text(encoding='utf-8'))
+          assert c['frozen_before_implementation'] is True
+          assert c['parent']['sha'] == 'e4ac2b695b56651711064010957cc3006d80a3ed'
+          assert c['source']['sha'] == '221a523a1befd1423a8fd3165018336f7853b577'
+          assert c['source']['evidence_grades_blob_sha'] == '0b8ff69112a4a037f09ff69bdc9511829a5cfd37'
+          assert c['source']['spec_blob_sha'] == '399ceacc0e97045eda61a270290c556e7ef0ce3e'
+          PY
+          git diff --exit-code e4ac2b695b56651711064010957cc3006d80a3ed HEAD -- tools/nexus_habitat_v2_2.py
+      - name: Run AIFC witness adversarial tests
+        run: python -m unittest tests.test_aifc_witness_evidence -v
+      - name: Checkout exact AIFC source
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/AIFC
+          ref: 221a523a1befd1423a8fd3165018336f7853b577
+          path: aifc-source
+          fetch-depth: 1
+      - name: Verify exact AIFC revision and source blobs
+        shell: bash
+        run: |
+          test "$(git -C aifc-source rev-parse HEAD)" = "221a523a1befd1423a8fd3165018336f7853b577"
+          test "$(git -C aifc-source hash-object README.md)" = "11fcbbd01ac1a6e4e8ebfa5f838d096ef8988f30"
+          test "$(git -C aifc-source hash-object docs/EVIDENCE_GRADES.md)" = "0b8ff69112a4a037f09ff69bdc9511829a5cfd37"
+          test "$(git -C aifc-source hash-object spec/AIFC-SPEC-v1.0-draft.md)" = "399ceacc0e97045eda61a270290c556e7ef0ce3e"
+      - name: Generate bounded Grade-3 evidence candidate artifact
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          import json
+          import aifc_witness_adapter as aifc
+          import nexus_habitat_v2_3 as v23
+          gates={name:'PASS' for name in aifc.MANDATORY_GATES}
+          s={
+            'schema':'janus.demihead.aifc_witness_package_summary.v1',
+            'package_id':'AIFC-CI-GRADE3-0001','package_sha256':'b'*64,'trial_state':'TERMINAL',
+            'grade':'FORWARD_NULL_INCOMPATIBILITY_CANDIDATE','mandatory_gates':gates,'admitted':True,
+            'statistical_threshold_crossed':True,'internal_adversarial_audit_pass':True,
+            'independent_replications':0,'mechanism_established':False,'physical_retrocausality_claimed':False
+          }
+          candidate,envelope=v23.build_aifc_envelope(s, envelope_id='NEXUS-V2-3-AIFC-CI-0001')
+          assert v23.verify_aifc_envelope(envelope,s,candidate)
+          assert candidate['claim_ceiling']['physical_retrocausality_established'] is False
+          assert candidate['fundamentum_boundary']['route_is_fundamentum_admission'] is False
+          route=v23.route_receipt(envelope)
+          assert route['routing']['evidence_admission_performed'] is False
+          assert route['routing']['fundamentum_evaluation_performed_by_router'] is False
+          out={'status':'PASS_NEXUS_V2_3_AIFC_WITNESS_EVIDENCE','candidate':candidate,'envelope':envelope,'route_receipt':route}
+          json.dump(out, open('nexus_v2_3_aifc_witness.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          PY
+      - name: Upload AIFC evidence candidate receipt
+        uses: actions/upload-artifact@v6
+        with:
+          name: nexus-v2-3-aifc-witness-evidence
+          path: nexus_v2_3_aifc_witness.json
