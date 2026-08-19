@@ -1,0 +1,93 @@
+{
+  "schema": "janus.demihead.nexus_v2_1.skingpt_observation_edge_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_1_SKINGPT_OBSERVATION_EDGE_FROZEN_CONTRACT",
+  "frozen_before_implementation": true,
+  "created_at_local": "2026-08-19T12:52:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "452f5d4419edb60547aa538e76407eff5b2e555f",
+    "nexus_v2_path": "tools/nexus_habitat_v2.py",
+    "nexus_v2_must_remain_byte_unchanged": true
+  },
+  "source": {
+    "repository": "Hawkar-usls/SkinGPT",
+    "sha": "1efd61a17bb24f63b8d92788acec9909bdda76c8",
+    "frame_schema_path": "schema/frame_v0_3.schema.json",
+    "frame_schema_git_blob_sha": "d1e36072e917ba32ffdeba8552064d3a526d00b4",
+    "source_schema": "skingpt.frame.v0.3",
+    "role": "PHYSICAL_SENSORY_SHELL_TELEMETRY_SOURCE"
+  },
+  "new_head": {
+    "SKINGPT": {
+      "repository": "Hawkar-usls/SkinGPT",
+      "role": "PHYSICAL_SENSORY_SHELL_TELEMETRY_SOURCE",
+      "accepts": [],
+      "emits": ["TELEMETRY_SAMPLE"]
+    }
+  },
+  "new_routes_only": [
+    ["SKINGPT", "OBSERVER", "TELEMETRY_SAMPLE"]
+  ],
+  "normalization": {
+    "output_schema": "janus.demihead.skingpt_telemetry_sample.v1",
+    "input_frame_must_match_v0_3_semantics": true,
+    "frame_canonical_sha256_bound": true,
+    "source_repository_and_sha_bound": true,
+    "device_id_forwarded_raw": false,
+    "boot_id_forwarded_raw": false,
+    "source_ip_forwarded_raw": false,
+    "device_boot_identity_bound_as_hash": true,
+    "system_operational_preserved": true,
+    "experiment_baseline_valid_preserved": true,
+    "event_classifier_must_equal": "rule_based_heuristic",
+    "score_semantics_must_equal": "heuristic_not_probability",
+    "confidence_is_calibrated_probability": false,
+    "severity_score_is_damage_probability": false,
+    "thermal_values_are_traceable_calibrated_measurements": false,
+    "missing_measurements_remain_unknown": true
+  },
+  "routing_invariants": [
+    "RAW_SENSOR_FRAME != OBSERVATION_SIGNAL",
+    "TELEMETRY_SAMPLE != TRUTH",
+    "HEURISTIC_SCORE != PROBABILITY",
+    "SYSTEM_OPERATIONAL != EXPERIMENT_BASELINE_VALID",
+    "HASH_INTEGRITY != SENSOR_TRUTH",
+    "TYPE_COMPATIBILITY != ADMITTED_ROUTE",
+    "ROUTE_RECEIPT != DELIVERY",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0"
+  ],
+  "negative_controls": [
+    "NEXUS_V2_FILE_CHANGED_REJECT",
+    "WRONG_SKINGPT_SCHEMA_REJECT",
+    "MISSING_REQUIRED_FIELD_REJECT",
+    "UNKNOWN_EVENT_REJECT",
+    "CLASSIFIER_UPGRADE_REJECT",
+    "SCORE_SEMANTICS_UPGRADE_REJECT",
+    "RAW_SOURCE_IP_FORWARDING_REJECT",
+    "RAW_DEVICE_OR_BOOT_ID_FORWARDING_REJECT",
+    "SEVERITY_AS_DAMAGE_PROBABILITY_REJECT",
+    "CONFIDENCE_AS_POSTERIOR_PROBABILITY_REJECT",
+    "UNADMITTED_ROUTE_REJECT",
+    "AUTHORITY_ESCALATION_REJECT",
+    "MASS_EFFECT_ESCALATION_REJECT",
+    "ROUTE_AS_DELIVERY_CLAIM_REJECT"
+  ],
+  "promotion_gate": {
+    "exact_source_sha_checkout": true,
+    "exact_source_schema_blob_verified": true,
+    "source_repository_tests_pass": true,
+    "adapter_adversarial_tests_pass": true,
+    "existing_repository_test_suite_pass": true,
+    "nexus_v2_unchanged": true,
+    "merge_before_all_green": false
+  },
+  "claim_ceiling": {
+    "physical_sensor_validation": "NOT_ESTABLISHED_BY_SOFTWARE_OR_ROUTE_PASS",
+    "material_validation": "NOT_ESTABLISHED",
+    "medical_or_safety_authority": false,
+    "damage_probability": "NOT_ESTABLISHED",
+    "calibrated_posterior_probability": "NOT_ESTABLISHED",
+    "external_authority": false
+  }
+}
