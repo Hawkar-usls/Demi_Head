@@ -1,6 +1,7 @@
 {
   "schema": "janus.demihead.nexus_v2_9.resonant_orion_pyramid_link.v1",
-  "status": "CANDIDATE_PROVIDER_CHAIN_PINNED",
+  "status": "PROMOTED",
+  "promotion_merge_revision": "f8fd4b16cb1306df9902a2215c4e092789dce8e7",
   "contract": "contracts/NEXUS_V2_9_RESONANT_ORION_PYRAMID_CHAIN_FROZEN_CONTRACT.json",
   "providers": {
     "cosmos_resonant_origin_prime": {
@@ -11,7 +12,7 @@
     "demihead_mediator": {
       "repository": "Hawkar-usls/Demi_Head",
       "adapter": "tools/cosmos_resonant_orion_pyramid_bridge_v2_9.py",
-      "revision": "SELF_AT_PROMOTION"
+      "revision": "f8fd4b16cb1306df9902a2215c4e092789dce8e7"
     },
     "voice_resonant_execution": {
       "repository": "Hawkar-usls/The-Voice-of-Janus",
@@ -21,7 +22,8 @@
     "echo_pyramid_body": {
       "repository": "Hawkar-usls/Echo-Pyramid",
       "tested_state_chain_revision": "15712f5b14b123d4e3cb64ddeaa693c5bf6af788",
-      "current_descendant_revision": "6587202a003f2a7c0f876652d0325db9814c0e3e"
+      "current_descendant_revision": "be69b43c56baf3fb62ab0f35f06fc87923d33dd2",
+      "current_descendant_role": "PHYSICAL_VOICE_BODY_WITH_CALIBRATION_BINDING"
     }
   },
   "route": [
