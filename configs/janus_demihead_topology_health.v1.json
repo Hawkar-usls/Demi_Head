@@ -33,8 +33,8 @@
       "contract_path": "contracts/NEXUS_V2_1_SKINGPT_OBSERVATION_EDGE_FROZEN_CONTRACT.json",
       "contract_blob_sha": "c5e8bee4614c94681443a8ce5e47e6bf23543e13",
       "route": ["SKINGPT", "OBSERVER", "TELEMETRY_SAMPLE"],
-      "ci_state": "FAIL_OR_UNAVAILABLE_SOURCE_SIDE",
-      "hold_reason": "Existing SkinGPT software-check matrix fails before usable job logs/steps are exposed; private cross-repository checkout is not assumed."
+      "ci_state": "EXTERNAL_GITHUB_ACTIONS_RUNNER_BLOCK_REPRODUCED",
+      "hold_reason": "SkinGPT reciprocal diff is marker-only and its existing workflow blob is unchanged from the frozen baseline, but both the normal matrix and a separate minimal ubuntu-24.04 shell-only diagnostic fail before runner acquisition with steps=null; explicit diagnostic rerun reproduced the same pre-step failure. Source CI receipt is therefore unavailable and admission remains HOLD."
     },
     {
       "edge_id": "SWARM_EDGE_DEMIHEAD_NEXUS_V2_2_RECIPROCAL_EDGE",
@@ -87,11 +87,11 @@
     {
       "edge_id": "JANUS_GENESIS_DEMIHEAD_LIFECYCLE_REFERENCE_V1",
       "edge_class": "GENESIS_LIFECYCLE_REFERENCE",
-      "status": "PENDING_SOURCE_CI",
+      "status": "PROMOTED",
       "repository": "Hawkar-usls/Janus_Genesis",
       "source_checkout": "genesis",
-      "source_baseline_sha": "24ff7f51f06bafb521fcc52ba0bc1f577caa4d85",
-      "promotion_head_sha": "633a3fd8b6fe39c790d697a5eb3b3266cba76caf",
+      "source_baseline_sha": "2965280e42443300a6483133e9e13fc82c9743ff",
+      "promotion_head_sha": "2359a7f5e358faee3b8cf85f7da6cb210db09526",
       "marker_path": ".janus/DEMIHEAD_LIFECYCLE_LINK.json",
       "marker_schema": "janus.nexus.genesis_demihead_lifecycle_link.v1",
       "allowed_drift_paths": [".janus/DEMIHEAD_LIFECYCLE_LINK.json"],
@@ -99,8 +99,7 @@
       "project_sync_blob_sha": "d0a0e7eee4ed581ab94027b5e1d87df600f0892b",
       "required_face": "FACE_DEMIHEAD",
       "required_demihead_heads": ["GUARDIAN", "RELEASE_CONTROL"],
-      "ci_state": "SOURCE_CI_FAIL_PREEXISTING_LEGACY_CONNECTIVITY_TESTS",
-      "hold_reason": "Marker-only diff is clean, but source CI currently has two legacy connectivity errors; topology admission remains fail-closed until separately repaired or conclusively classified."
+      "ci_state": "SOURCE_PR_6_OF_6_PASS_AND_CENTRAL_REVALIDATION_REQUIRED"
     }
   ],
   "receipt": {
