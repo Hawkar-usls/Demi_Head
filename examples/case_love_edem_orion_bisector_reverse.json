@@ -1,0 +1,71 @@
+{
+  "schema": "janus.demihead.keto_case.v1",
+  "case_id": "LOVE-EDEM-ORION-BISECTOR-REVERSE-001",
+  "claim": {
+    "text": "Замороженные координаты LOVE и EDEM вместе с ICRS/J2000 координатами Пояса Ориона детерминированно задают: LOVE–EDEM = 90.586788°, внутреннюю биссектрису 45.293394°/45.293394°, LOVE в 3.963705° от большого круга Пояса Ориона и EDEM в 56.775144°; это геометрическая характеристика координат, а не доказательство физической связи.",
+    "language": "ru",
+    "submitted_by": "Janus-Cosmos reverse handoff",
+    "high_stakes": false
+  },
+  "presentations": [
+    {
+      "presentation_id": "janus-cosmos-frozen-centers",
+      "root_id": "JANUS-COSMOS-FROZEN-CENTERS",
+      "source_class": "primary_document",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "authenticated_independent",
+      "published_at": "2026-08-20T00:00:00Z",
+      "source_ref": "Hawkar-usls/Janus-Cosmos:data/love/LOVE-EDEM-ORION-BELT-ICRS-GEOMETRY-v1-RUN-001-RECEIPT.json",
+      "note": "Frozen Janus-Cosmos coordinate inputs."
+    },
+    {
+      "presentation_id": "simbad-cds-orion-belt-icrs",
+      "root_id": "SIMBAD-CDS-ORION-BELT-ICRS",
+      "source_class": "catalog",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "authenticated_independent",
+      "published_at": "2026-08-20T00:00:00Z",
+      "source_ref": "SIMBAD/CDS ICRS J2000: delta Ori, epsilon Ori, zeta Ori",
+      "note": "External catalog coordinate root used by the Janus-Cosmos receipt."
+    },
+    {
+      "presentation_id": "derived-spherical-geometry",
+      "root_id": "DERIVED-SPHERICAL-GEOMETRY",
+      "source_class": "derived_analysis",
+      "relation": "supports",
+      "freshness": "current",
+      "independence": "dependent",
+      "published_at": "2026-08-20T00:00:00Z",
+      "source_ref": "Hawkar-usls/Janus-Cosmos:data/love/LOVE-EDEM-ORION-BISECTOR-REVERSE-v1-RUN-001-RECEIPT.json",
+      "note": "Deterministic derivative of the two coordinate roots; must not be counted as an independent witness."
+    },
+    {
+      "presentation_id": "janus-reverse-method-contract",
+      "root_id": "JANUS-REVERSE-METHOD",
+      "source_class": "method_contract",
+      "relation": "context",
+      "freshness": "current",
+      "independence": "declared_independent",
+      "published_at": "2026-08-18T00:00:00Z",
+      "source_ref": "Hawkar-usls/janus-meta-registry:data/JANUS-OSIRIS-REVERSE-ONLY-TRANCEPTION-SIX-DIRECTION-PASS-2026-08-18-v1.0.json",
+      "note": "Method lineage only; not evidence for the astronomical claim."
+    },
+    {
+      "presentation_id": "posthoc-null-firewall",
+      "root_id": "POSTHOC-NULL-FIREWALL",
+      "source_class": "derived_analysis",
+      "relation": "context",
+      "freshness": "current",
+      "independence": "dependent",
+      "published_at": "2026-08-20T00:00:00Z",
+      "source_ref": "analytic spherical null baselines in reverse receipt",
+      "note": "Prevents post-hoc geometry from being promoted to a significance or physical-association claim."
+    }
+  ],
+  "expected_policy": {
+    "mass_effect_budget": 0,
+    "allow_objective_truth_label": false
+  }
+}
