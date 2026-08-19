@@ -1,0 +1,111 @@
+{
+  "schema": "janus.demihead.topology_health_manifest.v1",
+  "manifest_id": "JANUS_DEMIHEAD_TOPOLOGY_HEALTH_V1",
+  "frozen_contract": {
+    "path": "contracts/JANUS_DEMIHEAD_TOPOLOGY_HEALTH_FROZEN_CONTRACT.json",
+    "blob_sha": "4e273274fd52a03920caeefc5d9ab2764230761a"
+  },
+  "demihead": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "frozen_parent_sha": "4e5624bc0fcc4bc196934c954e5aa8f0dca119fd",
+    "nexus_link_path": ".janus/NEXUS_LINK.json",
+    "nexus_link_blob_sha": "d10208fbf3594d306464dfac1733490daafc4df9"
+  },
+  "required_edge_ids": [
+    "SKINGPT_DEMIHEAD_NEXUS_V2_1_RECIPROCAL_EDGE",
+    "SWARM_EDGE_DEMIHEAD_NEXUS_V2_2_RECIPROCAL_EDGE",
+    "AIFC_WITNESS_DEMIHEAD_NEXUS_V2_3_RECIPROCAL_EDGE",
+    "I0_MEASUREMENT_DEMIHEAD_NEXUS_V2_4_RECIPROCAL_EDGE",
+    "JANUS_GENESIS_DEMIHEAD_LIFECYCLE_REFERENCE_V1"
+  ],
+  "edges": [
+    {
+      "edge_id": "SKINGPT_DEMIHEAD_NEXUS_V2_1_RECIPROCAL_EDGE",
+      "edge_class": "FROZEN_PROVIDER_RECIPROCAL",
+      "status": "PENDING_SOURCE_CI",
+      "repository": "Hawkar-usls/SkinGPT",
+      "source_checkout": null,
+      "source_baseline_sha": "1efd61a17bb24f63b8d92788acec9909bdda76c8",
+      "promotion_head_sha": "62c619c1fc285aaa520165a9b52da4c6d6e02e04",
+      "marker_path": ".janus/DEMIHEAD_NEXUS_LINK.json",
+      "marker_schema": "janus.nexus.reciprocal_source_edge.v1",
+      "allowed_drift_paths": [".janus/DEMIHEAD_NEXUS_LINK.json"],
+      "contract_path": "contracts/NEXUS_V2_1_SKINGPT_OBSERVATION_EDGE_FROZEN_CONTRACT.json",
+      "contract_blob_sha": "c5e8bee4614c94681443a8ce5e47e6bf23543e13",
+      "route": ["SKINGPT", "OBSERVER", "TELEMETRY_SAMPLE"],
+      "ci_state": "FAIL_OR_UNAVAILABLE_SOURCE_SIDE",
+      "hold_reason": "Existing SkinGPT software-check matrix fails before usable job logs/steps are exposed; private cross-repository checkout is not assumed."
+    },
+    {
+      "edge_id": "SWARM_EDGE_DEMIHEAD_NEXUS_V2_2_RECIPROCAL_EDGE",
+      "edge_class": "FROZEN_PROVIDER_RECIPROCAL",
+      "status": "PROMOTED",
+      "repository": "Hawkar-usls/janus-distributed-ai-swarm",
+      "source_checkout": "swarm",
+      "source_baseline_sha": "43eb173e28f4a8b3e396efc1466db1da02b3c1c7",
+      "promotion_head_sha": "7b6fbe8c6ccaea80e52aace074b758f3fe250fe4",
+      "marker_path": ".janus/DEMIHEAD_NEXUS_LINK.json",
+      "marker_schema": "janus.nexus.reciprocal_source_edge.v1",
+      "allowed_drift_paths": [".janus/DEMIHEAD_NEXUS_LINK.json"],
+      "contract_path": "contracts/NEXUS_V2_2_SWARM_EDGE_OBSERVATION_FROZEN_CONTRACT.json",
+      "contract_blob_sha": "3c024bafc55bc02d95d4abfce76aedda5817aef0",
+      "route": ["SWARM_EDGE", "OBSERVER", "TELEMETRY_SAMPLE"],
+      "ci_state": "CENTRAL_REVALIDATION_REQUIRED"
+    },
+    {
+      "edge_id": "AIFC_WITNESS_DEMIHEAD_NEXUS_V2_3_RECIPROCAL_EDGE",
+      "edge_class": "FROZEN_PROVIDER_RECIPROCAL",
+      "status": "PROMOTED",
+      "repository": "Hawkar-usls/AIFC",
+      "source_checkout": "aifc",
+      "source_baseline_sha": "221a523a1befd1423a8fd3165018336f7853b577",
+      "promotion_head_sha": "c3a5db4d9d52fd361a73d9ca338c0ce08f41c6a7",
+      "marker_path": ".janus/DEMIHEAD_NEXUS_LINK.json",
+      "marker_schema": "janus.nexus.reciprocal_source_edge.v1",
+      "allowed_drift_paths": [".janus/DEMIHEAD_NEXUS_LINK.json"],
+      "contract_path": "contracts/NEXUS_V2_3_AIFC_WITNESS_EVIDENCE_FROZEN_CONTRACT.json",
+      "contract_blob_sha": "97c7dde08f036f002228dedc2289d0fa69c28f5b",
+      "route": ["AIFC_WITNESS", "FUNDAMENTUM", "EVIDENCE_CANDIDATE"],
+      "ci_state": "SOURCE_PR_CASCADE_PASS_AND_CENTRAL_REVALIDATION_REQUIRED"
+    },
+    {
+      "edge_id": "I0_MEASUREMENT_DEMIHEAD_NEXUS_V2_4_RECIPROCAL_EDGE",
+      "edge_class": "FROZEN_PROVIDER_RECIPROCAL",
+      "status": "PROMOTED",
+      "repository": "Hawkar-usls/janus-io-public",
+      "source_checkout": "i0",
+      "source_baseline_sha": "7d02fb08fa9defd71297f8c5c4c9ac9d6be76316",
+      "promotion_head_sha": "7679e53887113a971c82e61f72181ad642a5ac8a",
+      "marker_path": ".janus/DEMIHEAD_NEXUS_LINK.json",
+      "marker_schema": "janus.nexus.reciprocal_source_edge.v1",
+      "allowed_drift_paths": [".janus/DEMIHEAD_NEXUS_LINK.json"],
+      "contract_path": "contracts/NEXUS_V2_4_I0_MEASUREMENT_RECEIPT_FROZEN_CONTRACT.json",
+      "contract_blob_sha": "fec60cfa1440bd148492a25535a4fbf0ddf45539",
+      "route": ["I0_MEASUREMENT", "MEASUREMENT_BROKER", "MEASUREMENT_RECEIPT"],
+      "ci_state": "CENTRAL_REVALIDATION_REQUIRED"
+    },
+    {
+      "edge_id": "JANUS_GENESIS_DEMIHEAD_LIFECYCLE_REFERENCE_V1",
+      "edge_class": "GENESIS_LIFECYCLE_REFERENCE",
+      "status": "PENDING_SOURCE_CI",
+      "repository": "Hawkar-usls/Janus_Genesis",
+      "source_checkout": "genesis",
+      "source_baseline_sha": "24ff7f51f06bafb521fcc52ba0bc1f577caa4d85",
+      "promotion_head_sha": "633a3fd8b6fe39c790d697a5eb3b3266cba76caf",
+      "marker_path": ".janus/DEMIHEAD_LIFECYCLE_LINK.json",
+      "marker_schema": "janus.nexus.genesis_demihead_lifecycle_link.v1",
+      "allowed_drift_paths": [".janus/DEMIHEAD_LIFECYCLE_LINK.json"],
+      "project_sync_path": ".janus/PROJECT_SYNC.json",
+      "project_sync_blob_sha": "d0a0e7eee4ed581ab94027b5e1d87df600f0892b",
+      "required_face": "FACE_DEMIHEAD",
+      "required_demihead_heads": ["GUARDIAN", "RELEASE_CONTROL"],
+      "ci_state": "SOURCE_CI_FAIL_PREEXISTING_LEGACY_CONNECTIVITY_TESTS",
+      "hold_reason": "Marker-only diff is clean, but source CI currently has two legacy connectivity errors; topology admission remains fail-closed until separately repaired or conclusively classified."
+    }
+  ],
+  "receipt": {
+    "path": "artifacts/JANUS_DEMIHEAD_TOPOLOGY_HEALTH_RECEIPT.json",
+    "schema": "janus.demihead.topology_health_receipt.v1"
+  },
+  "admission_law": "ALL_REQUIRED_EDGES_PROMOTED_AND_VERIFIED_OR_HOLD"
+}
