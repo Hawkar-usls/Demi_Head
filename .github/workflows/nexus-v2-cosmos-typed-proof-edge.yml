@@ -1,0 +1,138 @@
+name: Nexus v2 Cosmos Typed Proof Edge
+
+on:
+  pull_request:
+  push:
+    branches:
+      - nexus-v2-cosmos-typed-proof-edge
+
+permissions:
+  contents: read
+
+jobs:
+  nexus-v2-cosmos:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Verify frozen contract and untouched Nexus v1
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          contract = json.loads(Path('contracts/NEXUS_V2_COSMOS_TYPED_PROOF_EDGE_FROZEN_CONTRACT.json').read_text(encoding='utf-8'))
+          assert contract['frozen_before_implementation'] is True
+          assert contract['parent']['sha'] == '7c5e19f9ce3f4274cf6b83987f2204651b032eb0'
+          assert contract['parent']['nexus_v1_must_remain_byte_unchanged'] is True
+          assert contract['provider']['sha'] == 'c77f920d764229efb6932bc4ea522a4ec0342c64'
+          assert contract['claim_ceiling']['P_VS_NP'] == 'OPEN'
+          PY
+          git diff --exit-code 7c5e19f9ce3f4274cf6b83987f2204651b032eb0 HEAD -- tools/nexus_habitat.py
+
+      - name: Run Nexus v2 adversarial tests
+        run: python -m unittest tests.test_nexus_v2_cosmos_route -v
+
+      - name: Re-run existing Cosmos bridge tests
+        run: python -m unittest tests.test_cosmos_proof_adapter -v
+
+      - name: Checkout exact Janus-Cosmos provider with submodules
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Janus-Cosmos
+          ref: c77f920d764229efb6932bc4ea522a4ec0342c64
+          path: cosmos-provider
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Verify exact provider revision
+        shell: bash
+        run: |
+          test "$(git -C cosmos-provider rev-parse HEAD)" = "c77f920d764229efb6932bc4ea522a4ec0342c64"
+
+      - name: Execute exact frozen Cosmos gate
+        shell: bash
+        run: |
+          python cosmos-provider/run_osiris.py > cosmos_result.json
+          python - <<'PY'
+          import json
+          r=json.load(open('cosmos_result.json', encoding='utf-8'))
+          assert r['status'].startswith('PASS_KEEP_S_PHALLUS_H_GATE_2')
+          assert r['implementation_conformance']['P_VS_NP'] == 'OPEN'
+          assert r['implementation_conformance']['frozen_contract_unchanged'] is True
+          assert r['implementation_conformance']['new_posthoc_threshold_added'] is False
+          PY
+
+      - name: Build intent-bound request and execution receipt
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          import json
+          from goldprompt_intent_handoff import CONTEXT_TIERS, sha256
+          from cosmos_proof_adapter import build_request, build_receipt
+
+          anchor = {
+            'schema': 'janus.goldprompt.intent_anchor.v1',
+            'current_turn_digest': '3' * 64,
+            'requested_operation': 'VERIFY_OSIRIS_CANONICAL_GATE',
+            'primary_entities': {'OSIRIS':['osiris'], 'S_PHALLUS_H':['s𓂸ḥ','s-phallus-h']},
+            'must_answer_points': ['Verify the exact frozen S𓂸ḥ/2 gate on the pinned Cosmos provider revision through Nexus v2'],
+            'required_answer_evidence': [['execution receipt'], ['provider sha'], ['P_VS_NP OPEN']],
+            'operation_markers': ['verify','execute','route'],
+            'optional_association_markers': ['janus','cosmos','nexus-v2'],
+            'explicit_constraints': ['no P=NP promotion','authority delta remains zero','route is not delivery'],
+            'allow_anaphoric_continuation': False,
+            'context_priority': [CONTEXT_TIERS[i] for i in sorted(CONTEXT_TIERS)],
+          }
+          anchor['intent_id'] = sha256(anchor)
+          request = build_request(anchor, 'NEXUS-V2-CROSS-REPO-E2E-0001')
+          result = json.load(open('cosmos_result.json', encoding='utf-8'))
+          receipt = build_receipt(request, result)
+          json.dump(request, open('cosmos_request.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          json.dump(receipt, open('cosmos_receipt.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          PY
+
+      - name: Route request and receipt through Nexus v2
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          import json
+          import nexus_habitat_v2 as v2
+
+          req=json.load(open('cosmos_request.json', encoding='utf-8'))
+          result=json.load(open('cosmos_result.json', encoding='utf-8'))
+          receipt=json.load(open('cosmos_receipt.json', encoding='utf-8'))
+          out_req=v2.build_cosmos_request_envelope(req)
+          assert v2.verify_cosmos_request_envelope(out_req, req)
+          out_receipt=v2.build_cosmos_receipt_envelope(req, result, receipt)
+          assert v2.verify_cosmos_receipt_envelope(out_receipt, req, result, receipt)
+          rr1=v2.route_receipt(out_req)
+          rr2=v2.route_receipt(out_receipt)
+          for rr in (rr1,rr2):
+            assert rr['routing']['authority_delta'] == 0
+            assert rr['routing']['mass_effect_budget_delta'] == 0
+            assert rr['routing']['delivery_performed'] is False
+            assert rr['routing']['provider_execution_performed_by_router'] is False
+            assert rr['claim_ceiling']['route_is_truth'] is False
+            assert rr['claim_ceiling']['P_VS_NP'] == 'OPEN'
+          e2e={'request_envelope':out_req,'request_route_receipt':rr1,'receipt_envelope':out_receipt,'receipt_route_receipt':rr2,'status':'PASS_NEXUS_V2_COSMOS_TYPED_PROOF_EDGE','P_VS_NP':'OPEN'}
+          json.dump(e2e, open('nexus_v2_cosmos_e2e.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          PY
+
+      - name: Upload proof-edge receipts
+        uses: actions/upload-artifact@v6
+        with:
+          name: nexus-v2-cosmos-typed-proof-edge
+          path: |
+            cosmos_result.json
+            cosmos_request.json
+            cosmos_receipt.json
+            nexus_v2_cosmos_e2e.json
