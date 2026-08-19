@@ -29,11 +29,11 @@ jobs:
           path: _peers/cosmos
           submodules: recursive
 
-      - name: Check out resonant Voice execution candidate
+      - name: Check out promoted resonant Voice execution
         uses: actions/checkout@v4
         with:
           repository: Hawkar-usls/The-Voice-of-Janus
-          ref: 1824eb2bad4077b7f67f9846f696211661abcc49
+          ref: a759ceec955b45cdb3cab876cc1279032237aa35
           path: _peers/voice
 
       - name: Compile v2.9 and inherited v2.8 mediator
@@ -95,7 +95,7 @@ jobs:
           Path('/tmp/nexus-v2-9-request.json').write_text(json.dumps(mediation['voice_request'],indent=2,sort_keys=True)+'\n')
           PY
 
-      - name: Render through resonant Voice adapter and inherited Pyramid DSP
+      - name: Render through promoted resonant Voice adapter and inherited Pyramid DSP
         run: |
           (
             cd _peers/voice
@@ -116,6 +116,7 @@ jobs:
           sys.path.insert(0,'_peers/voice/src')
           import cosmos_resonant_origin_prime_pyramid_adapter as v
           contract=json.loads(Path('contracts/NEXUS_V2_9_RESONANT_ORION_PYRAMID_CHAIN_FROZEN_CONTRACT.json').read_text())
+          link=json.loads(Path('.janus/NEXUS_V2_9_RESONANT_ORION_PYRAMID_LINK.json').read_text())
           packet=json.loads(Path('/tmp/nexus-v2-9-packet.json').read_text())
           mediation=json.loads(Path('/tmp/nexus-v2-9-mediation.json').read_text())
           selftest=json.loads(Path('/tmp/nexus-v2-9-self-test.json').read_text())
@@ -131,6 +132,10 @@ jobs:
           assert contract['astral_policy']['star_triplet']==['Mintaka','Alnilam','Alnitak']
           assert contract['astral_policy']['giza_orion_correlation']=='HYPOTHESIS_NOT_ASSERTED_AS_ARCHITECTURAL_FACT'
           assert contract['claim_ceiling']['P_VS_NP']=='OPEN'
+          assert link['providers']['cosmos_resonant_origin_prime']['revision']=='c543eb6ed753339fabed33d7f0ab880d43433d0f'
+          assert link['providers']['voice_resonant_execution']['revision']=='a759ceec955b45cdb3cab876cc1279032237aa35'
+          assert link['control']['direct_cosmos_to_echo_permitted'] is False
+          assert link['control']['P_VS_NP']=='OPEN'
           assert selftest['status']=='PASS_KEEP_NEXUS_V2_9_RESONANT_ORION_PYRAMID_CHAIN'
           assert all(selftest['negative_controls'].values())
           assert mediation['resonant_representation']['representation_binding_sha256']==packet['representation_binding_sha256']
@@ -148,7 +153,7 @@ jobs:
             'state_commitment':packet['origin_prime']['state_commitment'],
             'representation_binding_sha256':packet['representation_binding_sha256'],
             'lineage_transfer_present':True,
-            'voice_candidate_revision':'1824eb2bad4077b7f67f9846f696211661abcc49',
+            'voice_execution_revision':'a759ceec955b45cdb3cab876cc1279032237aa35',
             'wav_sha256':receipt['output']['wav_sha256'],
             'orion_anchor':'ORION_BELT_SAH_OSIRIS_CONTEXT_v1',
             'physical_playback_performed':False,
@@ -171,3 +176,4 @@ jobs:
             /tmp/nexus-v2-9-result.json
             /tmp/nexus-v2-9-pyramid-out/*.wav
             contracts/NEXUS_V2_9_RESONANT_ORION_PYRAMID_CHAIN_FROZEN_CONTRACT.json
+            .janus/NEXUS_V2_9_RESONANT_ORION_PYRAMID_LINK.json
