@@ -1,0 +1,70 @@
+name: Nexus v2.2 Swarm Edge Observation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - nexus-v2.2-swarm-edge-observation
+
+permissions:
+  contents: read
+
+jobs:
+  swarm-edge:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify frozen contract and untouched Nexus v2.1
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('contracts/NEXUS_V2_2_SWARM_EDGE_OBSERVATION_FROZEN_CONTRACT.json').read_text(encoding='utf-8'))
+          assert c['frozen_before_implementation'] is True
+          assert c['parent']['sha'] == '548b4144b55e9748667854c31c79ca2e2abfbc69'
+          assert c['source']['sha'] == '43eb173e28f4a8b3e396efc1466db1da02b3c1c7'
+          assert c['source']['critical_rules_git_blob_sha'] == 'f2f1fbc38ff84856f7558ac86ac3b00c1c9f8916'
+          assert c['source']['architecture_git_blob_sha'] == '20585721b4e4b2db6fd6bbee25d9fec950b4cbce'
+          assert c['source']['current_state_git_blob_sha'] == 'f7a05fdb2b8db78427c3f92b73a50a70c4f57cc7'
+          PY
+          git diff --exit-code 548b4144b55e9748667854c31c79ca2e2abfbc69 HEAD -- tools/nexus_habitat_v2_1.py
+      - name: Run Swarm edge adversarial tests
+        run: python -m unittest tests.test_swarm_edge_observation -v
+      - name: Generate replayable stale-preserving edge artifact
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          import json
+          import nexus_habitat_v2_2 as v22
+          summary={
+            'schema':'janus.demihead.swarm_edge_summary.v1','node_id':'blind_eye','node_kind':'ATOM_S3R_TMOS','firmware_version':'v2.15A',
+            'declared_identity':'blind_eye:ATOM_S3R_TMOS','packet_family':'S/S','observed_at_ms':1800000999000,
+            'freshness':'DEGRADED','presence_basis':'CURRENT_PACKET','observer_only':True,'submit_pressure':0,
+            'radio':{'channel':10,'peer_channel':10,'rx_age_ms':900,'tx_ok':100,'tx_fail':5,'rescue_count':2},
+            'work':{'hash_rate':0.0,'best_bits':None,'target_bits':None,'accepted':0,'rejected':0,'stale':0},
+            'sensors':{'tmos_presence':{'state':'DEGRADED','value':None,'unit':'relative'},'rf_rssi_dbm':{'state':'FRESH','value':-70.0,'unit':'dBm'}}
+          }
+          sample,envelope=v22.build_swarm_envelope(summary, envelope_id='NEXUS-V2-2-SWARM-CI-0001')
+          assert v22.verify_swarm_envelope(envelope,summary,sample)
+          assert sample['presence']['current_presence_established'] is False
+          assert sample['presence']['stale_or_degraded_state_preserved'] is True
+          assert sample['observer']['submit_pressure'] == 0.0
+          route=v22.route_receipt(envelope)
+          assert route['routing']['delivery_performed'] is False
+          assert route['routing']['command_performed'] is False
+          out={'status':'PASS_NEXUS_V2_2_SWARM_EDGE_OBSERVATION','sample':sample,'envelope':envelope,'route_receipt':route}
+          json.dump(out, open('nexus_v2_2_swarm_edge.json','w',encoding='utf-8'), ensure_ascii=False, indent=2, sort_keys=True)
+          PY
+      - name: Upload edge observation receipt
+        uses: actions/upload-artifact@v6
+        with:
+          name: nexus-v2-2-swarm-edge-observation
+          path: nexus_v2_2_swarm_edge.json
