@@ -1,0 +1,100 @@
+{
+  "schema": "janus.demihead.nexus_v2.cosmos_typed_proof_edge_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_COSMOS_TYPED_PROOF_EDGE_FROZEN_CONTRACT",
+  "frozen_before_implementation": true,
+  "created_at_local": "2026-08-19T12:43:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "7c5e19f9ce3f4274cf6b83987f2204651b032eb0",
+    "nexus_v1_path": "tools/nexus_habitat.py",
+    "nexus_v1_must_remain_byte_unchanged": true
+  },
+  "provider": {
+    "repository": "Hawkar-usls/Janus-Cosmos",
+    "sha": "c77f920d764229efb6932bc4ea522a4ec0342c64",
+    "role": "SPECIALIZED_PROOF_PROVIDER_NOT_TRUTH_ARBITER",
+    "operation": "VERIFY_CANONICAL_GATE",
+    "canonical_gate": "S𓂸ḥ/2"
+  },
+  "existing_protocol_reuse": {
+    "request_schema": "janus.demihead.cosmos_proof_request.v1",
+    "receipt_schema": "janus.demihead.cosmos_proof_receipt.v1",
+    "adapter_path": "tools/cosmos_proof_adapter.py",
+    "goldprompt_intent_schema": "janus.goldprompt.intent_anchor.v1",
+    "parallel_incompatible_cosmos_protocol_forbidden": true
+  },
+  "new_heads": {
+    "PROOF_BROKER": {
+      "repository": "Hawkar-usls/Demi_Head",
+      "role": "INTENT_BOUND_SPECIALIZED_PROOF_ROUTER",
+      "accepts": ["COSMOS_PROOF_RECEIPT"],
+      "emits": ["COSMOS_PROOF_REQUEST"]
+    },
+    "COSMOS": {
+      "repository": "Hawkar-usls/Janus-Cosmos",
+      "role": "SPECIALIZED_PROOF_PROVIDER_NOT_TRUTH_ARBITER",
+      "accepts": ["COSMOS_PROOF_REQUEST"],
+      "emits": ["COSMOS_PROOF_RECEIPT"]
+    }
+  },
+  "new_routes_only": [
+    ["PROOF_BROKER", "COSMOS", "COSMOS_PROOF_REQUEST"],
+    ["COSMOS", "PROOF_BROKER", "COSMOS_PROOF_RECEIPT"]
+  ],
+  "routing_invariants": [
+    "TYPE_COMPATIBILITY != ADMITTED_ROUTE",
+    "ROUTE_RECEIPT != DELIVERY",
+    "ROUTE_RECEIPT != PROVIDER_EXECUTION",
+    "ROUTE_RECEIPT != TRUTH",
+    "ROUTE_RECEIPT != AUTHORITY",
+    "SAME_INTENT_REQUIRED_ACROSS_DEMIHEAD_AND_COSMOS",
+    "PROOF_OF_TASK_B != PROOF_OF_TASK_A",
+    "PROVIDER_SHA_MUST_BE_EXACT",
+    "INPUT_HASH_MUST_BE_BOUND",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0",
+    "P_VS_NP = OPEN"
+  ],
+  "semantic_binding": {
+    "request_route_payload_sha256_must_equal_cosmos_request_sha256": true,
+    "receipt_route_payload_sha256_must_equal_cosmos_receipt_sha256": true,
+    "request_must_verify_with_existing_cosmos_adapter": true,
+    "receipt_must_verify_against_exact_request_and_execution_result": true,
+    "receipt_intent_id_must_equal_request_intent_anchor_intent_id": true,
+    "receipt_provider_sha_must_equal_frozen_provider_sha": true,
+    "receipt_authority_delta_must_equal_zero": true,
+    "receipt_mass_effect_budget_delta_must_equal_zero": true,
+    "receipt_P_VS_NP_must_equal_OPEN": true
+  },
+  "negative_controls": [
+    "NEXUS_V1_FILE_CHANGED_REJECT",
+    "UNADMITTED_ROUTE_REJECT",
+    "TYPE_ONLY_ROUTE_REJECT",
+    "REQUEST_PAYLOAD_HASH_SUBSTITUTION_REJECT",
+    "RECEIPT_PAYLOAD_HASH_SUBSTITUTION_REJECT",
+    "INTENT_SUBSTITUTION_REJECT",
+    "PROVIDER_SHA_SUBSTITUTION_REJECT",
+    "EXECUTION_RESULT_SUBSTITUTION_REJECT",
+    "AUTHORITY_ESCALATION_REJECT",
+    "MASS_EFFECT_ESCALATION_REJECT",
+    "P_VS_NP_PROMOTION_REJECT",
+    "ROUTE_AS_DELIVERY_CLAIM_REJECT"
+  ],
+  "promotion_gate": {
+    "new_v2_self_test_pass": true,
+    "all_negative_controls_pass": true,
+    "existing_cosmos_adapter_tests_pass": true,
+    "existing_repository_test_suite_pass": true,
+    "cross_repository_exact_provider_execution_pass": true,
+    "merge_before_all_green": false
+  },
+  "claim_ceiling": {
+    "P_VS_NP": "OPEN",
+    "P_EQUALS_NP": "NOT_ESTABLISHED",
+    "P_NOT_EQUALS_NP": "NOT_ESTABLISHED",
+    "arbitrary_cnf_polynomial_solver": "NOT_ESTABLISHED",
+    "network_delivery": "NOT_ESTABLISHED_BY_ROUTE_RECEIPT",
+    "world_truth": "NOT_ESTABLISHED_BY_PROVIDER_PASS",
+    "external_authority": false
+  }
+}
