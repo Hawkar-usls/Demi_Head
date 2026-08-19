@@ -1,0 +1,212 @@
+name: Nexus v2.8 Cosmos ORIGIN_PRIME Pyramid Body
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  body-chain:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out DemiHead candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check out promoted Cosmos provider
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Cosmos
+          ref: 07e35fdbd42621f9ed02b39b71f3b2ee4876ce95
+          path: _peers/cosmos
+          submodules: recursive
+
+      - name: Check out current Voice execution
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/The-Voice-of-Janus
+          ref: 4ac7fefb9be7183689e59a257c0f4280dcdf82c9
+          path: _peers/voice
+
+      - name: Check out state-chain tested Echo snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Echo-Pyramid
+          ref: 15712f5b14b123d4e3cb64ddeaa693c5bf6af788
+          path: _peers/echo-tested
+
+      - name: Check out current Echo descendant
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Echo-Pyramid
+          ref: 6587202a003f2a7c0f876652d0325db9814c0e3e
+          path: _peers/echo-current
+
+      - name: Compile v2.8 and parent voice runtime
+        run: |
+          python -m py_compile \
+            tools/nexus_voice_handler.py \
+            tools/voice_language_bridge.py \
+            tools/cosmos_voice_pyramid_bridge_v2_8.py \
+            tools/nexus_habitat_v2_8.py
+
+      - name: Re-run inherited Nexus v2.7 neural Voice runtime self-test
+        run: python tools/nexus_voice_handler.py --self-test > /tmp/nexus-v2-7-voice-parent.json
+
+      - name: Run v2.8 adversarial tests
+        run: python -m unittest tests.test_nexus_v2_8_cosmos_pyramid_body -v
+
+      - name: Verify frozen contract and non-erasure lineage
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('contracts/NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json').read_text())
+          assert c['status']=='FROZEN_BEFORE_V2_8_IMPLEMENTATION'
+          assert c['parent']['sha']=='9c7b2373810aa2cc07a41c6f692ddbbdf29de4fe'
+          assert c['parent']['promoted_voice_runtime_contract']=='NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT'
+          assert c['superseded_candidate']['pull_request']==36
+          assert c['superseded_candidate']['architecture_failed'] is False
+          assert c['providers']['cosmos']['sha']=='07e35fdbd42621f9ed02b39b71f3b2ee4876ce95'
+          assert c['providers']['voice_current']['sha']=='4ac7fefb9be7183689e59a257c0f4280dcdf82c9'
+          assert c['providers']['echo_state_chain_tested_snapshot']['sha']=='15712f5b14b123d4e3cb64ddeaa693c5bf6af788'
+          assert c['providers']['echo_current_descendant']['sha']=='6587202a003f2a7c0f876652d0325db9814c0e3e'
+          PY
+
+      - name: Verify current Echo descendant preserves the exact 117-121 profile
+        run: |
+          cmp _peers/echo-tested/firmware/JanusPyramid117121Profile.h _peers/echo-current/firmware/JanusPyramid117121Profile.h
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          current=json.loads(Path('_peers/echo-current/config/voice_contract.json').read_text())
+          b=current['behavior_contract']
+          dsp=current['primary_dsp']
+          assert b['input']=='ORDINARY_AUDIO_PCM'
+          assert b['output']=='SAME_SOURCE_AUDIO_WITH_PYRAMID_ACOUSTIC_COLORATION'
+          assert b['semantic_content_preserved'] is True
+          assert b['source_audio_replaced_by_synthetic_tones'] is False
+          assert dsp['anchor_band_hz']==[117.0,121.0]
+          assert dsp['anchor_center_hz']==119.0
+          assert dsp['anchor_q']==29.75
+          assert dsp['anchor_gain_db']==11.5
+          assert dsp['anchor_decay_s']==1.65
+          assert current['integration']['mutable_state_ownership']['owner']=='JANUS_AUDIO_PLAYBACK_TASK'
+          assert current['integration']['audio_budget_failsafe']['automatic_reenable'] is False
+          PY
+
+      - name: Produce live ORIGIN_PRIME state and packet in Cosmos
+        run: |
+          printf '[[1]]\n' > /tmp/formula.json
+          (
+            cd _peers/cosmos
+            python run_osiris.py --cnf /tmp/formula.json --budget 256 --state /tmp/osiris-state.json > /tmp/osiris-result.json
+            python workspace/osiris_origin_prime_voice_packet.py \
+              --state /tmp/osiris-state.json \
+              --source-revision 07e35fdbd42621f9ed02b39b71f3b2ee4876ce95 \
+              --out /tmp/cosmos-packet.json
+          )
+
+      - name: Bind live state to DemiHead intent
+        run: |
+          DEMIHEAD_REV="$(git rev-parse HEAD)"
+          python tools/cosmos_voice_pyramid_bridge_v2_8.py \
+            /tmp/cosmos-packet.json \
+            --intent-id "$(printf '7%.0s' {1..64})" \
+            --source-revision "$DEMIHEAD_REV" \
+            --output-label nexus_v2_8_origin_prime \
+            --out /tmp/demihead-mediation.json \
+            --request-out /tmp/demihead-voice-request.json
+
+      - name: Render state through current Voice and canonical Pyramid Language
+        run: |
+          (
+            cd _peers/voice
+            python src/cosmos_origin_prime_pyramid_adapter.py \
+              /tmp/demihead-voice-request.json \
+              --repo-root . \
+              --out-dir /tmp/pyramid-out \
+              > /tmp/pyramid-receipt.json
+          )
+
+      - name: Verify all typed v2.8 routes and exact lineage
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          import cosmos_voice_pyramid_bridge_v2_8 as cvp
+          import nexus_habitat_v2_8 as v28
+          packet=json.loads(Path('/tmp/cosmos-packet.json').read_text())
+          mediation=json.loads(Path('/tmp/demihead-mediation.json').read_text())
+          voice=json.loads(Path('/tmp/pyramid-receipt.json').read_text())
+          cvp.validate_cosmos_packet(packet)
+          cvp.validate_mediation(mediation)
+          v28.validate_voice_receipt(voice)
+          assert mediation['intent_id']=='7'*64
+          assert mediation['voice_request']['inline_json']['intent_id']=='7'*64
+          assert voice['request']['intent_id']=='7'*64
+          assert voice['cosmos']['packet_sha256']==packet['packet_sha256']
+          assert voice['cosmos']['state_commitment']==packet['origin_prime']['state_commitment']
+          assert mediation['providers']['voice_execution']['revision']=='4ac7fefb9be7183689e59a257c0f4280dcdf82c9'
+          assert mediation['providers']['echo_state_chain_tested_snapshot']['revision']=='15712f5b14b123d4e3cb64ddeaa693c5bf6af788'
+          assert mediation['providers']['echo_current_descendant']['revision']=='6587202a003f2a7c0f876652d0325db9814c0e3e'
+          assert mediation['providers']['echo_current_descendant']['substituted_for_tested_snapshot'] is False
+          routes=[
+            v28.build_cosmos_state_route(packet),
+            v28.build_voice_envelope_route(mediation),
+            v28.build_pcm_handoff_route(voice),
+            v28.build_audio_receipt_route(voice),
+          ]
+          receipts=[v28.route_receipt(x) for x in routes]
+          assert [x['payload_kind'] for x in routes]==[
+            'ORIGIN_PRIME_STATE_PACKET','COSMOS_ORIGIN_PRIME_VOICE_ENVELOPE','PYRAMID_PCM_HANDOFF','PYRAMID_AUDIO_RECEIPT']
+          assert all(x['routing']['delivery_performed'] is False for x in receipts)
+          assert all(x['routing']['playback_performed'] is False for x in receipts)
+          assert all(x['routing']['authority_delta']==0 for x in receipts)
+          assert all(x['claim_ceiling']['P_VS_NP']=='OPEN' for x in receipts)
+          snap=v28.habitat_snapshot()
+          assert snap['inherited_local_voice_runtime']['self_test_status']=='PASS'
+          assert snap['global_control']['nexus_v2_7_local_voice_runtime_rewritten'] is False
+          assert snap['global_control']['legacy_cosmos_proof_gate_rewritten'] is False
+          result={
+            'status':'PASS_KEEP_NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN',
+            'intent_id':mediation['intent_id'],
+            'cosmos_packet_sha256':packet['packet_sha256'],
+            'origin_prime_state_commitment':packet['origin_prime']['state_commitment'],
+            'voice_receipt_sha256':voice['receipt_sha256'],
+            'final_pcm_sha256':voice['output']['wav_sha256'],
+            'pyramid_profile':voice['pyramid_language'],
+            'echo_state_chain_tested_snapshot':'15712f5b14b123d4e3cb64ddeaa693c5bf6af788',
+            'echo_current_descendant':'6587202a003f2a7c0f876652d0325db9814c0e3e',
+            'current_echo_profile_byte_identical_to_tested_snapshot':True,
+            'routes':routes,
+            'route_receipts':receipts,
+            'physical_playback_performed':False,
+            'P_VS_NP':'OPEN',
+          }
+          Path('/tmp/nexus-v2-8-result.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Upload v2.8 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-v2-8-cosmos-origin-prime-pyramid-body
+          path: |
+            /tmp/nexus-v2-7-voice-parent.json
+            /tmp/osiris-result.json
+            /tmp/cosmos-packet.json
+            /tmp/demihead-mediation.json
+            /tmp/demihead-voice-request.json
+            /tmp/pyramid-receipt.json
+            /tmp/nexus-v2-8-result.json
+            /tmp/pyramid-out/*.wav
+            contracts/NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json
