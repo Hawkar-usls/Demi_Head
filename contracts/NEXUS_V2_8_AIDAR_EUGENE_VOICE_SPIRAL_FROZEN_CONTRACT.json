@@ -1,0 +1,79 @@
+{
+  "schema": "janus.demihead.nexus_voice_spiral_contract.v1",
+  "contract": "NEXUS_V2_8_AIDAR_EUGENE_VOICE_SPIRAL_FROZEN_CONTRACT",
+  "status": "FROZEN_BEFORE_FIRST_NEURAL_SPIRAL_RENDER",
+  "purpose": "Prepare two content-addressed OSIRIS neural Voice requests that differ only by the neural larynx speaker while preserving the same semantic source and Pyramid Language operator.",
+  "source": {
+    "artifact_id": "OSIRIS-SEMANTIC-TEXT-CORE-FOR-THE-VOICE-OF-JANUS-2026-08-19-v1.1",
+    "semantic_field": "semantic_projection_ru",
+    "required_formula": "ORIGIN → EXPERIENCE → RETURN → ORIGIN_PRIME"
+  },
+  "layers": [
+    {
+      "layer_id": "LAYER_A_AIDAR",
+      "speaker": "aidar",
+      "output_label": "OSIRIS_ORIGIN_PRIME_NEURAL_AIDAR"
+    },
+    {
+      "layer_id": "LAYER_B_EUGENE",
+      "speaker": "eugene",
+      "output_label": "OSIRIS_ORIGIN_PRIME_NEURAL_EUGENE"
+    }
+  ],
+  "language": {
+    "profile_id": "PYRAMID_LANGUAGE_117_121_ANCHORED_SPACE_v0.3",
+    "activation": "configs/pyramid_117_121_space.activation.json",
+    "activation_blob_sha": "70016b9b1ad0ce2b20efd980f14859d66af0a7bd",
+    "anchor_band_hz": [117.0, 121.0],
+    "must_be_identical_between_layers": true
+  },
+  "spiral_invariants": {
+    "same_semantic_source": true,
+    "same_semantic_text": true,
+    "same_required_formula": true,
+    "same_pyramid_operator": true,
+    "same_pyramid_parameters": true,
+    "only_larynx_speaker_may_change": true,
+    "layer_a_preserved_after_layer_b": true,
+    "comparison_does_not_delete_inputs": true,
+    "automatic_winner_selection": false
+  },
+  "comparison": {
+    "kind": "HUMAN_LISTENING_AB_SPIRAL",
+    "machine_checks": [
+      "SOURCE_SHA_EQUAL",
+      "SEMANTIC_TEXT_SHA_EQUAL",
+      "LANGUAGE_ACTIVATION_SHA_EQUAL",
+      "ANCHOR_BAND_EQUAL",
+      "SPEAKER_DIFFERENT",
+      "BOTH_WAV_RECEIPTS_PRESENT"
+    ],
+    "human_selection_fields": [
+      "naturalness",
+      "warmth",
+      "intelligibility",
+      "presence",
+      "fit_as_voice_of_janus"
+    ],
+    "machine_may_choose_canonical_voice": false
+  },
+  "control": {
+    "prepare_only_in_nexus": true,
+    "model_download_permitted": false,
+    "network_io_permitted": false,
+    "automatic_playback": false,
+    "automatic_bluetooth": false,
+    "firmware_flash": false,
+    "physical_output_requires_explicit_human_authorization": true,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "laws": [
+    "TEXT_A = TEXT_B",
+    "PYRAMID_OPERATOR_A = PYRAMID_OPERATOR_B",
+    "ONLY_LARYNX_CHANGES",
+    "SPIRAL_PRESERVES_BOTH_PRIOR_LAYERS",
+    "COMPARISON != AUTOMATIC_CANONIZATION",
+    "VOICE_TIMBRE != PYRAMID_LANGUAGE"
+  ]
+}
