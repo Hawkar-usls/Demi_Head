@@ -1,0 +1,104 @@
+{
+  "schema": "janus.demihead.nexus_v2_5.voice_mouth_edge_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_5_VOICE_MOUTH_EDGE_FROZEN_CONTRACT",
+  "frozen_before_implementation": true,
+  "created_at_local": "2026-08-19T14:02:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "599a730f5db11f7a141209c84e728d10f7a8d379",
+    "must_preserve_existing_nexus_layers": true
+  },
+  "source": {
+    "repository": "Hawkar-usls/The-Voice-of-Janus",
+    "sha": "ef63989a132b82ecdd7ddbc61014e47cb75b8802",
+    "role": "LOCAL_AUDIO_RENDER_AND_FUTURE_SPEECH_OUTPUT_ORGAN"
+  },
+  "anatomy_metaphor": {
+    "DEMIHEAD": "HEAD",
+    "THE_VOICE_OF_JANUS": "MOUTH_AND_VOICE_TRACT",
+    "engineering_boundary": "ANATOMY_METAPHOR != BIOLOGICAL_CLAIM"
+  },
+  "new_heads": {
+    "DEMIHEAD_MOUTH_ROUTER": {
+      "repository": "Hawkar-usls/Demi_Head",
+      "role": "BUILD_AND_VALIDATE_TYPED_VOICE_REQUEST",
+      "accepts": ["EXPLICIT_AUDIO_OUTPUT_INTENT"],
+      "emits": ["VOICE_REQUEST"]
+    },
+    "VOICE_OF_JANUS": {
+      "repository": "Hawkar-usls/The-Voice-of-Janus",
+      "role": "LOCAL_AUDIO_RENDERER",
+      "accepts": ["VOICE_REQUEST"],
+      "emits": ["VOICE_RENDER_RECEIPT"]
+    }
+  },
+  "new_routes_only": [
+    ["DEMIHEAD", "DEMIHEAD_MOUTH_ROUTER", "EXPLICIT_AUDIO_OUTPUT_INTENT"],
+    ["DEMIHEAD_MOUTH_ROUTER", "VOICE_OF_JANUS", "VOICE_REQUEST"],
+    ["VOICE_OF_JANUS", "DEMIHEAD", "VOICE_RENDER_RECEIPT"]
+  ],
+  "request_schema": "janus.demihead.voice_request.v1",
+  "receipt_schema": "janus.voice.demihead_render_receipt.v1",
+  "initial_capabilities": {
+    "RENDER_PRESET": "IMPLEMENTED_TARGET",
+    "GEOMETRY_TO_MODAL_AUDIO": "IMPLEMENTED_UPSTREAM",
+    "SPEECH_TTS": "NOT_IMPLEMENTED",
+    "AUTOMATIC_PLAYBACK": "FORBIDDEN_BY_DEFAULT",
+    "NETWORK_STREAMING": "NOT_IMPLEMENTED",
+    "MICROPHONE_CAPTURE": "OUT_OF_SCOPE"
+  },
+  "required_semantics": {
+    "json_is_interchange_contract": true,
+    "python_is_execution_layer": true,
+    "request_must_be_explicit": true,
+    "preset_id_must_be_allowlisted": true,
+    "arbitrary_command_execution_forbidden": true,
+    "arbitrary_path_execution_forbidden": true,
+    "render_receipt_required": true,
+    "output_hash_required": true,
+    "generated_audio_is_not_evidence": true,
+    "audio_output_cannot_raise_truth_or_authority": true,
+    "local_render_is_not_automatic_playback": true
+  },
+  "routing_invariants": [
+    "VOICE_REQUEST != COMMAND_SHELL",
+    "VOICE_RENDER != TRUTH",
+    "AUDIO_OUTPUT != EVIDENCE_PROMOTION",
+    "RENDERED != PLAYED",
+    "CAPABILITY != AUTHORITY",
+    "MOUTH != BRAIN",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0"
+  ],
+  "negative_controls": [
+    "UNKNOWN_SCHEMA_REJECT",
+    "UNKNOWN_TASK_REJECT",
+    "UNKNOWN_PRESET_REJECT",
+    "EXTRA_TOP_LEVEL_FIELDS_REJECT",
+    "ARBITRARY_PATH_REJECT",
+    "ARBITRARY_COMMAND_REJECT",
+    "NETWORK_REQUEST_REJECT",
+    "AUTOPLAY_REQUEST_REJECT",
+    "AUTHORITY_ESCALATION_REJECT",
+    "MASS_EFFECT_ESCALATION_REJECT",
+    "MISSING_RECEIPT_REJECT",
+    "TAMPERED_REQUEST_HASH_REJECT"
+  ],
+  "promotion_gate": {
+    "demihead_request_builder_tests_pass": true,
+    "voice_consumer_tests_pass": true,
+    "cross_repo_fixture_roundtrip_pass": true,
+    "existing_demihead_test_suite_pass": true,
+    "existing_voice_test_suite_pass": true,
+    "exact_heads_recorded": true,
+    "merge_before_all_green": false
+  },
+  "claim_ceiling": {
+    "speech_synthesis": "NOT_ESTABLISHED",
+    "automatic_playback": "NOT_GRANTED",
+    "network_delivery": "NOT_ESTABLISHED",
+    "production_readiness": "NOT_ESTABLISHED",
+    "machine_personhood_from_mouth_metaphor": false,
+    "external_authority": false
+  }
+}
