@@ -46,14 +46,18 @@ class DemiHeadTopologyHealthTests(unittest.TestCase):
         self.assertEqual(edge_ids, self.contract["required_edges"])
         self.assertEqual(len(edge_ids), 5)
 
-    def test_current_manifest_is_three_promoted_two_pending(self):
+    def test_current_manifest_is_four_promoted_one_pending(self):
         promoted = [e for e in self.manifest["edges"] if e["status"] == "PROMOTED"]
         pending = [e for e in self.manifest["edges"] if e["status"] != "PROMOTED"]
-        self.assertEqual(len(promoted), 3)
-        self.assertEqual(len(pending), 2)
+        self.assertEqual(len(promoted), 4)
+        self.assertEqual(len(pending), 1)
         self.assertEqual(
             {e["repository"] for e in pending},
-            {"Hawkar-usls/SkinGPT", "Hawkar-usls/Janus_Genesis"},
+            {"Hawkar-usls/SkinGPT"},
+        )
+        self.assertEqual(
+            pending[0]["ci_state"],
+            "EXTERNAL_GITHUB_ACTIONS_RUNNER_BLOCK_REPRODUCED",
         )
 
     def test_every_provider_marker_is_metadata_only_and_zero_authority(self):
