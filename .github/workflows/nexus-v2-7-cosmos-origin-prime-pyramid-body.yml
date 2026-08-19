@@ -1,0 +1,184 @@
+name: Nexus v2.7 Cosmos ORIGIN_PRIME Pyramid Body
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  body-chain:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out DemiHead candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check out promoted Cosmos provider
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Cosmos
+          ref: 07e35fdbd42621f9ed02b39b71f3b2ee4876ce95
+          path: _peers/cosmos
+          submodules: recursive
+
+      - name: Check out promoted Voice execution
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/The-Voice-of-Janus
+          ref: a2187f393ab14b9328951d05816ea7b19182ca1a
+          path: _peers/voice
+
+      - name: Check out tested Echo-Pyramid physical snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Echo-Pyramid
+          ref: 15712f5b14b123d4e3cb64ddeaa693c5bf6af788
+          path: _peers/echo
+
+      - name: Compile v2.7 mediator and Nexus
+        run: |
+          python -m py_compile \
+            tools/cosmos_voice_pyramid_bridge.py \
+            tools/nexus_habitat_v2_7.py \
+            tools/voice_language_bridge.py
+
+      - name: Run focused v2.7 adversarial tests
+        run: python -m unittest tests.test_nexus_v2_7_cosmos_pyramid_body -v
+
+      - name: Verify frozen parent and provider topology
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('contracts/NEXUS_V2_7_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json').read_text())
+          assert c['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert c['parent']['sha']=='846f6a4713a2035f1337fce7e0cd707ce753bac1'
+          assert c['providers']['cosmos_current']['sha']=='07e35fdbd42621f9ed02b39b71f3b2ee4876ce95'
+          assert c['providers']['voice_current']['sha']=='a2187f393ab14b9328951d05816ea7b19182ca1a'
+          assert c['providers']['echo_tested_physical_snapshot']['sha']=='15712f5b14b123d4e3cb64ddeaa693c5bf6af788'
+          assert c['legacy_proof_gate']['must_not_be_rewritten'] is True
+          PY
+
+      - name: Produce live ORIGIN_PRIME state and packet in Cosmos
+        run: |
+          printf '[[1]]\n' > /tmp/formula.json
+          (
+            cd _peers/cosmos
+            python run_osiris.py --cnf /tmp/formula.json --budget 256 --state /tmp/osiris-state.json > /tmp/osiris-result.json
+            python workspace/osiris_origin_prime_voice_packet.py \
+              --state /tmp/osiris-state.json \
+              --source-revision 07e35fdbd42621f9ed02b39b71f3b2ee4876ce95 \
+              --out /tmp/cosmos-packet.json
+          )
+
+      - name: Bind Cosmos packet to DemiHead intent
+        run: |
+          DEMIHEAD_REV="$(git rev-parse HEAD)"
+          python tools/cosmos_voice_pyramid_bridge.py \
+            /tmp/cosmos-packet.json \
+            --intent-id "$(printf '7%.0s' {1..64})" \
+            --source-revision "$DEMIHEAD_REV" \
+            --output-label nexus_v2_7_origin_prime \
+            --out /tmp/demihead-mediation.json \
+            --request-out /tmp/demihead-voice-request.json
+
+      - name: Render through promoted Voice and Pyramid Language
+        run: |
+          (
+            cd _peers/voice
+            python src/cosmos_origin_prime_pyramid_adapter.py \
+              /tmp/demihead-voice-request.json \
+              --repo-root . \
+              --out-dir /tmp/pyramid-out \
+              > /tmp/pyramid-receipt.json
+          )
+
+      - name: Verify all four typed Nexus v2.7 routes
+        run: |
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          import cosmos_voice_pyramid_bridge as cvp
+          import nexus_habitat_v2_7 as v27
+
+          packet=json.loads(Path('/tmp/cosmos-packet.json').read_text())
+          mediation=json.loads(Path('/tmp/demihead-mediation.json').read_text())
+          voice=json.loads(Path('/tmp/pyramid-receipt.json').read_text())
+
+          cvp.validate_cosmos_packet(packet)
+          cvp.validate_mediation(mediation)
+          v27.validate_voice_receipt(voice)
+          assert mediation['intent_id']=='7'*64
+          assert mediation['voice_request']['inline_json']['intent_id']=='7'*64
+          assert voice['request']['intent_id']=='7'*64
+          assert voice['cosmos']['packet_sha256']==packet['packet_sha256']
+          assert voice['cosmos']['state_commitment']==packet['origin_prime']['state_commitment']
+
+          routes=[
+            v27.build_cosmos_state_route(packet),
+            v27.build_voice_envelope_route(mediation),
+            v27.build_pcm_handoff_route(voice),
+            v27.build_audio_receipt_route(voice),
+          ]
+          receipts=[v27.route_receipt(r) for r in routes]
+          assert [r['payload_kind'] for r in routes] == [
+            'ORIGIN_PRIME_STATE_PACKET',
+            'COSMOS_ORIGIN_PRIME_VOICE_ENVELOPE',
+            'PYRAMID_PCM_HANDOFF',
+            'PYRAMID_AUDIO_RECEIPT',
+          ]
+          assert all(x['routing']['delivery_performed'] is False for x in receipts)
+          assert all(x['routing']['playback_performed'] is False for x in receipts)
+          assert all(x['routing']['authority_delta']==0 for x in receipts)
+          assert all(x['claim_ceiling']['P_VS_NP']=='OPEN' for x in receipts)
+          assert voice['pyramid_language']['anchor_band_hz']==[117.0,121.0]
+          assert voice['pyramid_language']['center_hz']==119.0
+          assert voice['physical_body']['repository']=='Hawkar-usls/Echo-Pyramid'
+          assert voice['physical_body']['ready_for_local_pcm_handoff'] is True
+          assert voice['physical_body']['physical_playback_performed'] is False
+
+          out={
+            'status':'PASS_KEEP_NEXUS_V2_7_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN',
+            'intent_id':mediation['intent_id'],
+            'cosmos_packet_sha256':packet['packet_sha256'],
+            'state_commitment':packet['origin_prime']['state_commitment'],
+            'voice_receipt_sha256':voice['receipt_sha256'],
+            'final_pcm_sha256':voice['output']['wav_sha256'],
+            'routes':routes,
+            'route_receipts':receipts,
+            'P_VS_NP':'OPEN',
+            'physical_playback_performed':False,
+          }
+          Path('/tmp/nexus-v2-7-result.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Verify exact physical frequency profile exists in Echo snapshot
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('_peers/echo/firmware/JanusPyramid117121Profile.h').read_text()
+          assert '117' in p and '119' in p and '121' in p
+          PY
+
+      - name: Upload v2.7 body-chain evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-v2-7-cosmos-origin-prime-pyramid-body
+          path: |
+            /tmp/osiris-result.json
+            /tmp/cosmos-packet.json
+            /tmp/demihead-mediation.json
+            /tmp/demihead-voice-request.json
+            /tmp/pyramid-receipt.json
+            /tmp/nexus-v2-7-result.json
+            /tmp/pyramid-out/*.wav
+            contracts/NEXUS_V2_7_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json
