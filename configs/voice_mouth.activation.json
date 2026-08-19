@@ -1,0 +1,27 @@
+{
+  "schema": "janus.demihead.voice_activation.v1",
+  "contract": "NEXUS_V2_5_VOICE_MOUTH_EDGE_FROZEN_CONTRACT",
+  "peer_repository": "Hawkar-usls/The-Voice-of-Janus",
+  "request_builder_enabled": true,
+  "execution_policy": {
+    "requires_explicit_audio_output_intent": true,
+    "local_file_handoff_only": true,
+    "automatic_playback": false,
+    "network_transport": false,
+    "shell_commands": false,
+    "arbitrary_paths": false
+  },
+  "allowlisted_tasks": [
+    "RENDER_PRESET"
+  ],
+  "allowlisted_presets": [
+    "GREAT_PYRAMID_KINGS_CHAMBER_EXAMPLE"
+  ],
+  "future_capabilities": {
+    "SPEECH_TTS": "NOT_IMPLEMENTED",
+    "GENERATIVE_TEXTURE": "PLANNED_UPSTREAM",
+    "LIVE_PLAYBACK": "SEPARATE_EXPLICIT_GATE_REQUIRED"
+  },
+  "authority_delta": 0,
+  "mass_effect_budget_delta": 0
+}
