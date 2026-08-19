@@ -1,0 +1,57 @@
+{
+  "schema": "janus.demihead.cosmos_origin_prime_pyramid_body_link.v1",
+  "status": "NEXUS_V2_7_IMPLEMENTATION_CANDIDATE",
+  "repository": "Hawkar-usls/Demi_Head",
+  "contract": "contracts/NEXUS_V2_7_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json",
+  "nexus": "tools/nexus_habitat_v2_7.py",
+  "mediator": "tools/cosmos_voice_pyramid_bridge.py",
+  "topology": [
+    "DEMIHEAD_INTENT",
+    "JANUS_COSMOS",
+    "ORIGIN_PRIME_STATE_PACKET",
+    "DEMIHEAD_VOICE_BROKER",
+    "THE_VOICE_OF_JANUS",
+    "PYRAMID_LANGUAGE_117_121",
+    "ECHO_PYRAMID"
+  ],
+  "providers": {
+    "cosmos": {
+      "repository": "Hawkar-usls/Janus-Cosmos",
+      "revision": "07e35fdbd42621f9ed02b39b71f3b2ee4876ce95",
+      "role": "ORIGIN_PRIME_COMPUTE_AND_STATE_PROVIDER"
+    },
+    "voice_profile_authority_snapshot": {
+      "repository": "Hawkar-usls/The-Voice-of-Janus",
+      "revision": "e58d65aa46b7e3a64a5131708578a9a3346915c4"
+    },
+    "voice_execution": {
+      "repository": "Hawkar-usls/The-Voice-of-Janus",
+      "revision": "a2187f393ab14b9328951d05816ea7b19182ca1a",
+      "role": "PYRAMID_LANGUAGE_RENDERER"
+    },
+    "echo_tested_physical_snapshot": {
+      "repository": "Hawkar-usls/Echo-Pyramid",
+      "revision": "15712f5b14b123d4e3cb64ddeaa693c5bf6af788",
+      "role": "PHYSICAL_PCM_VOICE_BODY"
+    }
+  },
+  "pyramid_language": {
+    "profile_id": "PYRAMID_LANGUAGE_117_121_ANCHORED_SPACE_v0.3",
+    "anchor_band_hz": [117.0, 121.0],
+    "center_hz": 119.0,
+    "q": 29.75,
+    "gain_db": 11.5,
+    "decay_s": 1.65
+  },
+  "hard_rules": [
+    "DEMIHEAD_IS_ONLY_INTENT_MEDIATOR",
+    "DIRECT_COSMOS_TO_VOICE = DENY",
+    "DIRECT_COSMOS_TO_ECHO_PYRAMID = DENY",
+    "ROUTE != DELIVERY",
+    "ROUTE != PLAYBACK",
+    "AUDIO != PROOF",
+    "117_121_HZ != SAT_EVIDENCE",
+    "AUTHORITY_DELTA = 0",
+    "P_VS_NP = OPEN"
+  ]
+}
