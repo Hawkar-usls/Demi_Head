@@ -1,0 +1,47 @@
+{
+  "schema": "janus.demihead.nexus_voice_runtime_link.v1",
+  "contract": "NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT",
+  "status": "IMPLEMENTED_CANDIDATE_PENDING_EXACT_HEAD_CI_CONFIRMATION",
+  "repository": "Hawkar-usls/Demi_Head",
+  "target_head": "VOICE_RUNTIME",
+  "endpoint": "configs/nexus_voice_runtime.endpoint.json",
+  "pure_handler": "tools/nexus_voice_handler.py",
+  "handler_factory": "local_handler",
+  "handler_id": "DEMIHEAD.NEXUS_VOICE_RUNTIME_HANDLER.v1",
+  "tests": "tests/test_nexus_voice_handler.py",
+  "voice_peer": {
+    "repository": "Hawkar-usls/The-Voice-of-Janus",
+    "adapter": "src/nexus_voice_runtime_adapter.py",
+    "runner": "src/semantic_recitation_v4.py",
+    "config": "configs/osiris_origin_prime_recitation.v4_neural_human.json",
+    "larynx": "silero_v5_5_ru",
+    "local_model_required": "models/v5_5_ru.pt"
+  },
+  "pyramid_language": {
+    "profile": "PYRAMID_LANGUAGE_117_121_ANCHORED_SPACE_v0.3",
+    "activation_blob_sha": "70016b9b1ad0ce2b20efd980f14859d66af0a7bd",
+    "semantic_content_preserved": true
+  },
+  "physical_body": {
+    "repository": "Hawkar-usls/Echo-Pyramid",
+    "role": "PHYSICAL_VOICE_BODY",
+    "automatic_handoff": false
+  },
+  "phases": [
+    "NEXUS_PURE_PREPARE",
+    "EXPLICIT_LOCAL_NEURAL_RENDER",
+    "OPTIONAL_EXPLICIT_PHYSICAL_OUTPUT"
+  ],
+  "hard_limits": {
+    "nexus_handler_filesystem_io": false,
+    "nexus_handler_network_io": false,
+    "nexus_handler_external_effect": false,
+    "voice_adapter_requires_explicit_execute": true,
+    "model_download_during_render": false,
+    "automatic_playback": false,
+    "automatic_bluetooth": false,
+    "automatic_firmware_flash": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  }
+}
