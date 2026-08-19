@@ -1,0 +1,16 @@
+{
+  "schema": "janus.demihead.nexus_voice_render_intent.v1",
+  "contract": "NEXUS_V2_7_LOCAL_NEURAL_VOICE_RUNTIME_FROZEN_CONTRACT",
+  "task": "RENDER_OSIRIS_ORIGIN_PRIME_NEURAL_PYRAMID",
+  "speaker": "aidar",
+  "output_label": "OSIRIS_ORIGIN_PRIME_NEURAL_AIDAR",
+  "control": {
+    "prepare_only": true,
+    "network_io": false,
+    "automatic_playback": false,
+    "automatic_bluetooth": false,
+    "firmware_flash": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  }
+}
