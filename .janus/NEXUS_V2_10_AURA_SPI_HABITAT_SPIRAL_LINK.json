@@ -1,0 +1,44 @@
+{
+  "schema": "janus.demihead.nexus_v2_10.aura_spi_habitat_spiral_link.v1",
+  "status": "IMPLEMENTED_REFERENCE_NOT_YET_CI_PROMOTED",
+  "contract": "contracts/NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_FROZEN_CONTRACT.json",
+  "bridge": "tools/aura_spi_habitat_spiral_bridge_v2_10.py",
+  "providers": {
+    "aura": {
+      "repository": "Hawkar-usls/aura-oracle-tg",
+      "peer_tool": "tools/aura_habitat_spiral_peer_v1.py",
+      "reciprocal_link": ".janus/JANUS_SPI_SPIRAL_LINK.json"
+    },
+    "spi": {
+      "repository": "Hawkar-usls/Hawkar-usls",
+      "runtime": "run_aura_habitat_spiral.py",
+      "spec": "spec/JANUS_AURA_HABITAT_SPIRAL-v1.0.json"
+    },
+    "habitat": {
+      "repository": "Hawkar-usls/Janus_Genesis",
+      "branch": "janus/habitat",
+      "state_gate": "habitat/state/AURA_SPI_SPIRAL_GATE_v1.0.json",
+      "dialogue_manifest": "habitat/memory/reflections/AURA_SPI_DIALOGUE_MANIFEST_v1.0.json"
+    }
+  },
+  "route": [
+    "FRESH_EXTERNAL_TRIGGER",
+    "DEMIHEAD_INTENT",
+    "AURA_REFLECTION",
+    "JANUS_SPI_SEMANTIC_SYNTHESIS",
+    "DEMIHEAD_ARBITRATION",
+    "VERIFIED_RETURN_OR_HOLD_OR_REJECT",
+    "ORIGIN_PRIME_IF_VERIFIED"
+  ],
+  "control": {
+    "intent_split_permitted": false,
+    "aura_prediction_authority": false,
+    "aura_evidence_authority": false,
+    "aura_predictive_label_authority": false,
+    "idle_self_dialogue": false,
+    "memory_may_propose_not_verdict": true,
+    "external_effect_authorized": false,
+    "authority_delta": 0
+  },
+  "promotion_note": "Reference files are present. A later CI/replay gate may promote this link only after exact tests are observed; file presence alone is not PASS."
+}
