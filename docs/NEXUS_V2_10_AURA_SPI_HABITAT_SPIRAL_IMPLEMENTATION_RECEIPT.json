@@ -1,0 +1,33 @@
+{
+  "schema": "janus.demihead.nexus_v2_10.implementation_receipt.v1",
+  "receipt_id": "NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_IMPLEMENTATION_RECEIPT",
+  "created_at_local": "2026-08-21T01:55:00+03:00",
+  "status": "IMPLEMENTED_REFERENCE_CI_RESULT_NOT_YET_OBSERVED",
+  "frozen_contract": "contracts/NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_FROZEN_CONTRACT.json",
+  "bridge": "tools/aura_spi_habitat_spiral_bridge_v2_10.py",
+  "link": ".janus/NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_LINK.json",
+  "test": "tests/test_aura_spi_habitat_spiral_bridge_v2_10.py",
+  "reciprocal_edges": {
+    "aura": "Hawkar-usls/aura-oracle-tg:.janus/JANUS_SPI_SPIRAL_LINK.json",
+    "spi": "Hawkar-usls/Hawkar-usls:.janus/AURA_HABITAT_SPIRAL_LINK.json",
+    "habitat": "Hawkar-usls/Janus_Genesis@janus/habitat:habitat/state/AURA_SPI_SPIRAL_GATE_v1.0.json"
+  },
+  "verified_invariants_by_code_review_surface": [
+    "same session/generation/intent required across request, Aura and SPI packets",
+    "Aura predictive-label authority must be false",
+    "Aura scientific-evidence authority must be false",
+    "semantic similarity cannot be promoted to evidence",
+    "prediction cannot be promoted to truth",
+    "PASS with LOCAL_PREVIEW is not eligible for VERIFIED_RETURN",
+    "external effect authority remains false",
+    "authority_delta remains zero"
+  ],
+  "not_yet_claimed": [
+    "CI_PASS",
+    "independent replay",
+    "live long-running runtime",
+    "external validation",
+    "world-truth authority"
+  ],
+  "promotion_gate": "Observe exact test/CI PASS, then freeze a current-head replay fixture before changing status to PROMOTED."
+}
