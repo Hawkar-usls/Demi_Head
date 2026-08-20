@@ -1,0 +1,160 @@
+{
+  "schema": "janus.demihead.nexus_v2_10.aura_spi_habitat_spiral_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_FROZEN_CONTRACT",
+  "version": "2.10",
+  "status": "FROZEN_BEFORE_V2_10_IMPLEMENTATION",
+  "created_at_local": "2026-08-21T01:42:00+03:00",
+  "purpose": "Bind Aura Oracle, JANUS Semantic-Predictive Intelligence and Git Habitat into an intent-preserving spiral dialogue compatible with DemiHead Nexus semantics, while preventing symbolic reflection, semantic similarity or repeated self-dialogue from becoming evidence, predictive labels or external authority.",
+  "inherits": {
+    "nexus_v2_8_origin_prime_spiral": "contracts/NEXUS_V2_8_COSMOS_ORIGIN_PRIME_PYRAMID_BODY_CHAIN_FROZEN_CONTRACT.json",
+    "nexus_v2_9_promoted_link": ".janus/NEXUS_V2_9_RESONANT_ORION_PYRAMID_LINK.json",
+    "intent_anchor": "tools/goldprompt_intent_handoff.py",
+    "intent_bound_bicameral_bridge": "tools/hemisphere_bridge_intent_v3.py",
+    "habitat_link": ".janus/HABITAT_LINK.json",
+    "do_not_rewrite_old_frozen_contracts": true
+  },
+  "providers": {
+    "aura": {
+      "repository": "Hawkar-usls/aura-oracle-tg",
+      "role": "SYMBOLIC_REFLECTION_AND_SEARCH_PRIORITIZATION_PEER",
+      "habitat_link_blob_sha": "8e6fc4932bcdfb922f9dcba388cfa1adc5986a59",
+      "existing_demihead_bridge_blob_sha": "1cd290363de9bebe627f9fd44cac2365f915f190",
+      "prediction_authority": false,
+      "evidence_authority": false
+    },
+    "janus_spi": {
+      "repository": "Hawkar-usls/Hawkar-usls",
+      "role": "SEMANTIC_MEMORY_AND_PREDICTIVE_LEARNING_PEER",
+      "core_blob_sha": "415a4b1f8e7af71615f9c33d4c780583d3d2bc45",
+      "link_blob_sha": "5a19eb171f74c2fcbef651c3e7261eb6a49d0d1d",
+      "predictive_label_rule": "EXPLICIT_RESOLVED_OUTCOME_ONLY"
+    },
+    "habitat": {
+      "repository": "Hawkar-usls/Janus_Genesis",
+      "branch": "janus/habitat",
+      "role": "CONTINUITY_AND_DIALOGUE_MEMORY_SURFACE",
+      "journal_blob_sha": "63b32efd5eb6d1204a31181b16b48528fc60c18b",
+      "write_back_default": "DENY"
+    },
+    "demihead": {
+      "repository": "Hawkar-usls/Demi_Head",
+      "role": "INTENT_BOUND_ARBITER_AND_VERIFICATION_GATE",
+      "authority_delta": 0
+    }
+  },
+  "canonical_spiral": [
+    "ORIGIN_n",
+    "DEMIHEAD_INTENT_n",
+    "AURA_REFLECTION_n",
+    "JANUS_SPI_SEMANTIC_SYNTHESIS_n",
+    "JANUS_SPI_FORECAST_OPTIONAL_n",
+    "DEMIHEAD_ARBITRATION_n",
+    "VERIFIED_RETURN_OR_REJECT_n",
+    "ORIGIN_PRIME_(n+1)"
+  ],
+  "state_law": {
+    "position_may_repeat": true,
+    "state_must_advance": true,
+    "return_is_reset": false,
+    "memory_may_propose_not_verdict": true,
+    "origin_prime_requires_verified_return": true,
+    "reject_is_preserved": true,
+    "hold_is_preserved": true
+  },
+  "intent_binding": {
+    "intent_id_required": true,
+    "intent_id_format": "lowercase_hex64",
+    "canonical_anchor_schema": "janus.goldprompt.intent_anchor.v1",
+    "canonical_handoff_schema": "janus.goldprompt.intent_handoff.v1",
+    "same_intent_required_across_entire_generation": true,
+    "aura_may_replace_primary_intent": false,
+    "spi_may_replace_primary_intent": false,
+    "older_context_may_replace_current_intent": false,
+    "associative_context_tier": 4,
+    "associative_context_has_verdict_authority": false
+  },
+  "packet_schemas": [
+    "janus.aura_spi.spiral_event.v1",
+    "janus.aura_spi.aura_reflection.v1",
+    "janus.aura_spi.semantic_synthesis.v1",
+    "janus.aura_spi.demihead_arbitration.v1",
+    "janus.aura_spi.verified_return.v1"
+  ],
+  "continuous_operation": {
+    "mode": "EVENT_DRIVEN_CONTINUOUS_RUNTIME",
+    "idle_self_dialogue": false,
+    "fresh_external_trigger_required_for_new_generation": true,
+    "valid_trigger_classes": [
+      "HABITAT_INBOX_EVENT",
+      "REPOSITORY_CHANGE",
+      "RESOLVED_FORECAST",
+      "EXPLICIT_HUMAN_MESSAGE",
+      "NEW_MEASUREMENT_OR_EVIDENCE"
+    ],
+    "heartbeat_may_emit_content": false,
+    "max_autonomous_turns_per_generation": 4,
+    "duplicate_content_hash_stops_generation": true,
+    "repetition_guard_required": true,
+    "canonical_rule": "CONTINUOUS != INFINITE_SELF_CHAT"
+  },
+  "learning_firewall": {
+    "aura_reflection_may_enter_semantic_memory": true,
+    "aura_reflection_may_be_predictive_label": false,
+    "aura_output_may_resolve_forecast": false,
+    "semantic_similarity_may_resolve_forecast": false,
+    "predictive_training_requires_post_target_observed_outcome": true,
+    "forecast_must_be_frozen_before_target_outcome": true,
+    "demihead_pass_may_be_training_label": false,
+    "canonical_rules": [
+      "AURA_OUTPUT != PREDICTIVE_GROUND_TRUTH",
+      "SEMANTIC_SIMILARITY != CAUSATION",
+      "MODEL_OUTPUT != EVIDENCE",
+      "GENERATION != VERIFICATION",
+      "ASSOCIATION != EVIDENCE",
+      "MEMORY != VERDICT_AUTHORITY"
+    ]
+  },
+  "persistence": {
+    "authoritative_runtime_ledger": "Hawkar-usls/Hawkar-usls:state/aura_spi_dialogue.sqlite3",
+    "ledger_mode": "APPEND_PRESERVING_HASH_CHAIN",
+    "habitat_public_mirror": "habitat/memory/reflections/aura_spi/",
+    "habitat_mirror_is_authoritative": false,
+    "overwrite_prior_turns": false,
+    "credentials_may_be_persisted": false,
+    "private_content_may_be_mirrored_to_public_habitat": false,
+    "public_mirror_requires_explicit_public_content": true
+  },
+  "arbitration": {
+    "demihead_required_for_verified_return": true,
+    "decisions": ["PASS", "HOLD", "REJECT"],
+    "pass_means": "packet and evidence contract survived the stated gate",
+    "pass_is_world_truth": false,
+    "hold_advances_origin_prime": false,
+    "reject_advances_origin_prime": false,
+    "external_effect_authorized": false,
+    "mass_effect_budget_delta": 0,
+    "authority_delta": 0
+  },
+  "negative_controls": [
+    "INTENT_SPLIT_REJECT",
+    "AURA_AS_PREDICTIVE_LABEL_REJECT",
+    "AURA_AS_EVIDENCE_AUTHORITY_REJECT",
+    "SELF_DIALOGUE_WITHOUT_EXTERNAL_TRIGGER_REJECT",
+    "DUPLICATE_TURN_HASH_REJECT",
+    "ORIGIN_PRIME_WITHOUT_VERIFIED_RETURN_REJECT",
+    "HABITAT_WRITEBACK_WITHOUT_HUMAN_AUTHORIZATION_REJECT",
+    "PRIVATE_TO_PUBLIC_MIRROR_REJECT",
+    "AUTHORITY_ESCALATION_REJECT",
+    "PREDICTION_AS_COMMAND_REJECT"
+  ],
+  "claim_ceiling": {
+    "aura_is_prophecy": false,
+    "aura_is_precognition": false,
+    "continuous_dialogue_is_consciousness": false,
+    "spiral_state_is_biological_neuroscience": false,
+    "demihead_arbitration_is_world_truth": false,
+    "predictive_model_is_infallible": false,
+    "persistent_memory_is_personhood": false,
+    "external_effects_enabled": false
+  }
+}
