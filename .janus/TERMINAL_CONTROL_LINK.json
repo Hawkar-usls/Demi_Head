@@ -1,0 +1,21 @@
+{
+  "schema": "janus.demihead.terminal_control_link.v1",
+  "status": "BOUND",
+  "terminal_repository": "Hawkar-usls/-Terminal-for-Janus",
+  "terminal_contract": "contracts/JANUS_TERMINAL_CONTROL_PLANE-v1.0.json",
+  "local_role": "INTENT_BOUND_ARBITER",
+  "terminal_role": "HUMAN_AUTHORIZED_OPERATOR_CONTROL_PLANE",
+  "terminal_may_request_arbitration": true,
+  "terminal_may_supply_human_authorized_operation": true,
+  "terminal_may_self_issue_verified_return": false,
+  "terminal_may_replace_intent": false,
+  "terminal_may_bypass_goldprompt_or_epistemic_gates": false,
+  "authority_delta": 0,
+  "laws": [
+    "TERMINAL_COMMAND != DEMIHEAD_VERDICT",
+    "TERMINAL_ACCESS != TRUTH_AUTHORITY",
+    "WRITE != VERIFIED_RETURN",
+    "HUMAN_AUTHORIZED_WRITE != ARBITER_BYPASS"
+  ],
+  "linked_nexus": ".janus/NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_LINK.json"
+}
