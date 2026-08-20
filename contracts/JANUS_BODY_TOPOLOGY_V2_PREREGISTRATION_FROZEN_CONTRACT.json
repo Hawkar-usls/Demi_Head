@@ -1,0 +1,245 @@
+{
+  "schema": "janus.demihead.body_topology_preregistration.v2",
+  "contract_id": "JANUS_BODY_TOPOLOGY_V2_PREREGISTRATION_FROZEN_CONTRACT",
+  "status": "FROZEN_SCOPE_ONLY_BLOCKED_BY_V1_SKINGPT",
+  "created_at_local": "2026-08-20T14:47:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "branch": "topology-health-core-nerves-v1",
+    "sha": "868d34f3a8d3a095260b90ba723abbe40b7094bf",
+    "pull_request": 40,
+    "v1_contract": "contracts/JANUS_DEMIHEAD_TOPOLOGY_HEALTH_FROZEN_CONTRACT.json"
+  },
+  "prerequisite": {
+    "required_before_v2_admission_implementation": true,
+    "v1_target_claim": "PASS_ALL_CORE_ORGANS_MACHINE_VERIFIABLE",
+    "current_v1_verified_edges": 4,
+    "current_v1_required_edges": 5,
+    "blocking_edge_id": "SKINGPT_DEMIHEAD_NEXUS_V2_1_RECIPROCAL_EDGE",
+    "blocking_source_repository": "Hawkar-usls/SkinGPT",
+    "blocking_source_head": "62c619c1fc285aaa520165a9b52da4c6d6e02e04",
+    "blocking_state": "HOLD_PENDING_SOURCE_CI",
+    "fresh_replay_2026_08_20": {
+      "workflow_run_id": 32303189971,
+      "jobs": {
+        "python_3_13": 96414246792,
+        "python_3_12": 96414246974,
+        "python_3_11": 96414247070
+      },
+      "all_jobs_conclusion": "failure",
+      "runner_steps_observed": false,
+      "specific_platform_root_cause_asserted": false
+    }
+  },
+  "purpose": "Expand topology health from the five-edge core-nerve gate into one machine-readable JANUS body map without weakening, replacing, or bypassing v1 admission.",
+  "laws": [
+    "FIVE_CORE_NERVES != COMPLETE_JANUS_BODY",
+    "V2_PREREGISTRATION != V2_ADMISSION",
+    "PENDING_EDGE != VERIFIED_EDGE",
+    "LINKED_REPOSITORY != ACTIVE_BODY_ORGAN",
+    "ROUTE != DELIVERY",
+    "CONNECTION != AUTHORITY",
+    "TELEMETRY != TRUTH",
+    "FACE_AGREEMENT != TRUTH",
+    "SOURCE_WRITEBACK_DEFAULT = DENY",
+    "CI_GREEN != MERGE_PERMISSION"
+  ],
+  "body_topology": [
+    {
+      "stage": 1,
+      "group": "COGNITION",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/Hrain",
+          "role": "STRUCTURAL_CONTEXT",
+          "evidence_revision": "79fa11fe302c0354b5868260d65c71e8757bcb93",
+          "v2_state": "EVIDENCE_EXISTS_RECIPROCAL_V2_BINDING_REQUIRED"
+        },
+        {
+          "repository": "Hawkar-usls/iNaiHR",
+          "role": "ASSOCIATIVE_CONTEXT",
+          "evidence_revision": "f6cfdb35a0dee08f2bf2bebfc07d9ef2d540532d",
+          "v2_state": "EVIDENCE_EXISTS_RECIPROCAL_V2_BINDING_REQUIRED"
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "group": "ARBITER",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/Demi_Head",
+          "role": "BICAMERAL_ARBITER_AND_TOPOLOGY_MEDIATOR",
+          "evidence_revision": "868d34f3a8d3a095260b90ba723abbe40b7094bf",
+          "v2_state": "PARENT_V1_HELD_ON_SKINGPT"
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "group": "CORE",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/Janus_Genesis",
+          "role": "RESIDENT_HABITAT_AND_GUARDIAN_MESH_ORCHESTRATOR",
+          "evidence_revision": "2359a7f5e358faee3b8cf85f7da6cb210db09526",
+          "v2_state": "V1_LIFECYCLE_EDGE_PROMOTED_V2_BINDING_REQUIRED"
+        }
+      ]
+    },
+    {
+      "stage": 4,
+      "group": "MEMORY",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/janus-meta-registry",
+          "role": "ARCHIVE_AUTHORITY_POINTERS_AND_APPEND_ONLY_MEMORY",
+          "evidence_revision": "f880809875acdabdcb7c08088ff35a62500ff088",
+          "v2_state": "EVIDENCE_EXISTS_V2_BINDING_REQUIRED"
+        }
+      ]
+    },
+    {
+      "stage": 5,
+      "group": "SWARM",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/janus-distributed-ai-swarm",
+          "role": "EDGE_SENSOR_RECOVERY_CLIENT",
+          "evidence_revision": "7b6fbe8c6ccaea80e52aace074b758f3fe250fe4",
+          "v2_state": "V1_RECIPROCAL_EDGE_PROMOTED"
+        }
+      ]
+    },
+    {
+      "stage": 6,
+      "group": "OBSERVATION",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/janus-io-public",
+          "role": "SYSTEMS_OBSERVER_EVIDENCE",
+          "evidence_revision": "7679e53887113a971c82e61f72181ad642a5ac8a",
+          "v2_state": "V1_RECIPROCAL_EDGE_PROMOTED"
+        },
+        {
+          "repository": "Hawkar-usls/SkinGPT",
+          "role": "PHYSICAL_SENSORY_SHELL_TELEMETRY_SOURCE",
+          "evidence_revision": "62c619c1fc285aaa520165a9b52da4c6d6e02e04",
+          "v2_state": "HOLD_PENDING_SOURCE_CI"
+        }
+      ]
+    },
+    {
+      "stage": 7,
+      "group": "VERIFIERS",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/AIFC",
+          "role": "TEMPORAL_CAUSAL_EVIDENCE_VERIFIER",
+          "evidence_revision": "c3a5db4d9d52fd361a73d9ca338c0ce08f41c6a7",
+          "v2_state": "V1_RECIPROCAL_EDGE_PROMOTED"
+        },
+        {
+          "repository": "Hawkar-usls/Janus-Fundamentum",
+          "role": "PROOF_FALSIFICATION_VERIFIER",
+          "evidence_revision": null,
+          "v2_state": "NEXT_REQUIRED_ADMISSION_AFTER_SKINGPT"
+        },
+        {
+          "repository": "Hawkar-usls/Fast-CAT-SHAiTan",
+          "role": "BLINDED_REVIEW_AND_TEMPORAL_MEASUREMENT",
+          "evidence_revision": null,
+          "v2_state": "PENDING_ADMISSION"
+        },
+        {
+          "repository": "Hawkar-usls/SCOBY-D0",
+          "role": "CONTEXT_MATCHING_EVIDENCE_ADMISSION",
+          "evidence_revision": null,
+          "v2_state": "PENDING_ADMISSION"
+        }
+      ]
+    },
+    {
+      "stage": 8,
+      "group": "COSMOS",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/Janus-Cosmos",
+          "role": "BLIND_STATISTICAL_AND_ORIGIN_PRIME_RESEARCH",
+          "evidence_revision": "c543eb6ed753339fabed33d7f0ab880d43433d0f",
+          "v2_state": "PROMOTED_BODY_CHAIN_EVIDENCE_EXISTS"
+        }
+      ]
+    },
+    {
+      "stage": 9,
+      "group": "VOICE",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/The-Voice-of-Janus",
+          "role": "VOICE_AND_PYRAMID_LANGUAGE_RENDERER",
+          "evidence_revision": "a759ceec955b45cdb3cab876cc1279032237aa35",
+          "v2_state": "PROMOTED_BODY_CHAIN_EVIDENCE_EXISTS"
+        }
+      ]
+    },
+    {
+      "stage": 10,
+      "group": "PHYSICAL_BODY",
+      "required_organs": [
+        {
+          "repository": "Hawkar-usls/Echo-Pyramid",
+          "role": "PHYSICAL_VOICE_BODY",
+          "evidence_revision": "aaa4d0f2af95302243c70e1658608fd699768cd6",
+          "v2_state": "RECIPROCAL_BODY_LINK_MERGED"
+        }
+      ]
+    }
+  ],
+  "deferred_auxiliary_lanes": [
+    {
+      "repository": "Hawkar-usls/Janus-Demiurge",
+      "planned_role": "BOUNDED_PROPOSAL_BUILDER",
+      "state": "DEFERRED_AFTER_CORE_BODY_V2_REQUIRED_VERIFIERS"
+    },
+    {
+      "repository": "Hawkar-usls/janus-lapis",
+      "planned_role": "HYPOTHESIS_RANKER",
+      "state": "DEFERRED"
+    },
+    {
+      "repository": "Hawkar-usls/Janus",
+      "planned_role": "MODEL_GATEWAY_METADATA_HUB",
+      "state": "DEFERRED_AUTHORITY_REVIEW"
+    },
+    {
+      "repository": "Hawkar-usls/-Terminal-for-Janus",
+      "planned_role": "OPERATOR_TERMINAL",
+      "state": "DEFERRED_READ_ONLY_CONTRACT"
+    },
+    {
+      "repository": "Hawkar-usls/aura-oracle-tg",
+      "planned_role": "REFLECTIVE_HEURISTIC",
+      "state": "DEFERRED_NO_TRUTH_AUTHORITY"
+    },
+    {
+      "repository": "Hawkar-usls/janus-first-followers-club-",
+      "planned_role": "PUBLIC_GOVERNANCE_PROTOCOL",
+      "state": "DEFERRED_NO_CONSENT_INFERENCE"
+    },
+    {
+      "repository_class": "PRIVATE_LANES",
+      "state": "OPAQUE_HOLD_UNTIL_EXPLICIT_PRIVATE_ADMISSION"
+    }
+  ],
+  "v2_admission_rule": {
+    "all_required_body_groups_must_be_machine_verifiable": true,
+    "missing_required_organ_result": "HOLD",
+    "contradiction_or_drift_result": "FAIL",
+    "candidate_or_reference_counts_as_verified": false,
+    "auxiliary_lane_required_for_core_body_v2_pass": false,
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "next_gate": "FIRST_CLOSE_SKINGPT_V1_SOURCE_CI; THEN_IMPLEMENT_V2_VALIDATOR_WITH_JANUS_FUNDAMENTUM_AS_THE_NEXT_NEW_REQUIRED_VERIFIER_EDGE"
+}
