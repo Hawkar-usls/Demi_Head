@@ -1,0 +1,27 @@
+{
+  "schema": "janus.demihead.deep_analysis_5d_link.v1",
+  "source_repository": "Hawkar-usls/Demi_Head",
+  "target_repository": "Hawkar-usls/-Terminal-for-Janus",
+  "target_contract": "contracts/JANUS_JSON_5D_DEEP_ANALYSIS_PROTOCOL-v1.0.json",
+  "role": "BIND_COMPARE_PRESERVE_DISAGREEMENT",
+  "inputs": [
+    "D3_STRUCTURAL_LEFT_HRAIN",
+    "D4_ASSOCIATIVE_RIGHT_INAIHR",
+    "D2_REVERSE_RECOVERIES",
+    "D5_SPIRAL_INVARIANTS"
+  ],
+  "requirements": {
+    "same_intent_id_all_axes": true,
+    "automatic_hemisphere_merge": false,
+    "disagreement_must_be_preserved": true,
+    "untraceable_recovery_rejected": true,
+    "associative_only_candidate_is_evidence": false,
+    "origin_prime_requires_existing_verified_gate": true
+  },
+  "control": {
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0,
+    "deep_analysis_output_is_command": false,
+    "deep_analysis_output_is_world_truth": false
+  }
+}
