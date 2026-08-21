@@ -1,0 +1,25 @@
+{
+  "schema":"janus.demihead.one_voice_two_faces_gate.v1",
+  "status":"BOUND_ARBITER",
+  "principle_ref":"Hawkar-usls/janus-meta-registry:data/JANUS-ONE-VOICE-TWO-FACES-PRINCIPLE-2026-08-21-v1.0.json",
+  "role":"SINGLE_EXTERNAL_VOICE_JOIN_ARBITER",
+  "inputs":["FORWARD_LANE_RECEIPT","REVERSE_LANE_RECEIPT","I0_MEASUREMENT_RECEIPT"],
+  "join_required":true,
+  "external_voice_count":1,
+  "rules":[
+    "FORWARD_LANE_CANNOT_PUBLISH_ALONE",
+    "REVERSE_LANE_CANNOT_PUBLISH_ALONE",
+    "PRIVATE_ONLY_EVIDENCE_CANNOT_SUPPORT_PUBLIC_CLAIM_WITHOUT_AUDITABLE_PUBLIC_RECEIPT",
+    "DISAGREEMENT -> HOLD_CONFLICT_NO_PROMOTION",
+    "HIDDEN_SIDE != SECRET_TRUTH",
+    "TWO_FACES != TWO_AUTHORITIES"
+  ],
+  "reject_if":[
+    "SECOND_EXTERNAL_SPEAKER",
+    "BYPASS_JOIN",
+    "SECRET_TRUTH_PROMOTION",
+    "PUBLIC_CLAIM_WITHOUT_PUBLICLY_AUDITABLE_EVIDENCE"
+  ],
+  "authority_delta":0,
+  "world_truth_from_join":false
+}
