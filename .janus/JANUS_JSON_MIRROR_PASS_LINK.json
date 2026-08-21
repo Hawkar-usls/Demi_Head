@@ -1,0 +1,20 @@
+{
+  "schema": "janus.demihead.json_mirror_pass_link.v1",
+  "source_repository": "Hawkar-usls/Demi_Head",
+  "target_repository": "Hawkar-usls/-Terminal-for-Janus",
+  "target_contract": "contracts/JANUS_JSON_MIRROR_PASS_PROTOCOL-v1.0.json",
+  "mode": "INTENT_PRESERVING_JSON_ARBITRATION",
+  "requirements": {
+    "json_packets": true,
+    "same_intent_id_forward_and_reverse": true,
+    "reverse_pass_may_not_replace_intent": true,
+    "recovered_at_origin_visible_to_arbiter": true,
+    "untraceable_recovery_rejected": true
+  },
+  "authority": {
+    "reverse_recovery_is_world_truth": false,
+    "reverse_recovery_is_verified_return": false,
+    "demihead_gate_still_required": true,
+    "authority_delta": 0
+  }
+}
