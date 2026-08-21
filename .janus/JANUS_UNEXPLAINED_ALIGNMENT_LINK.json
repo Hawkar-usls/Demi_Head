@@ -1,0 +1,10 @@
+{
+  "schema": "janus.unexplained_alignment.link.v1",
+  "repository": "Hawkar-usls/Demi_Head",
+  "canonical_principle": "Hawkar-usls/janus-meta-registry:data/JANUS-UNEXPLAINED-ALIGNMENT-PRINCIPLE-2026-08-21-v1.0.json",
+  "role": "ARBITRATE_ALIGNMENT_WITHOUT_CAUSALITY_PROMOTION",
+  "required_checks": ["BASE_RATE", "SOURCE_INDEPENDENCE", "ALTERNATIVE_EXPLANATIONS", "SELECTION_BIAS", "MULTIPLE_COMPARISONS", "MEASUREMENT_ERROR"],
+  "forbidden_transition": "OBSERVED_ALIGNMENT -> CAUSAL_TRUTH",
+  "allowed_terminal_states": ["EXPLAINED_BY_NULL", "CAUSAL_CANDIDATE_NEEDS_VALIDATION", "UNRESOLVED_INSUFFICIENT_DATA", "NEGATIVE_RESULT"],
+  "laws": ["COINCIDENCE != CAUSALITY", "DISAGREEMENT != ERROR", "BOTH_HEMISPHERES_AGREE != TRUTH"]
+}
