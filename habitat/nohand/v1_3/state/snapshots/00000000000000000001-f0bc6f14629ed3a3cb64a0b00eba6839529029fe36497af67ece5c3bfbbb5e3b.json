@@ -1,0 +1,89 @@
+{
+  "action_counts": {},
+  "action_success": {},
+  "authority_delta": 0,
+  "bins": [
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    }
+  ],
+  "context_action_counts": {},
+  "context_action_success": {},
+  "global_success": {
+    "successes": 0,
+    "total": 0
+  },
+  "metric_sums": {
+    "cal_brier": 0.0,
+    "logloss": 0.0,
+    "n": 0,
+    "raw_brier": 0.0
+  },
+  "pending": {
+    "NASV13-LIVE-NAS-STARTUP-3ee6137b3192e01b7ec9-STARTUP_HAND-cda63a8f3d7636f4": {
+      "action": "STARTUP_HANDSHAKE",
+      "calibrated_success_probability": 0.5,
+      "context_sha256": "cda63a8f3d7636f4a542e981f9b9c63d9bb4ae2a019d59ee1d9cfa1947c9d102",
+      "forecast_sha256": "ca8f7cb6a92a3817934bd3142bd62dfbcdb00de1588cfa54e4f69deb3a5fdfb1",
+      "next_action_probability": 0.25,
+      "prediction_is_command": false,
+      "prediction_is_permission": false,
+      "prediction_is_truth": false,
+      "raw_success_probability": 0.5,
+      "request_id": "NASV13-LIVE-NAS-STARTUP-3ee6137b3192e01b7ec9-STARTUP_HAND-cda63a8f3d7636f4",
+      "state_sequence": 1,
+      "uncertainty": 0.3535533905932738
+    }
+  },
+  "raw_context_persisted": false,
+  "schema": "janus.habitat.nohand.demihead_predictor_state.v1",
+  "sequence": 1,
+  "state_sha256": "f0bc6f14629ed3a3cb64a0b00eba6839529029fe36497af67ece5c3bfbbb5e3b"
+}

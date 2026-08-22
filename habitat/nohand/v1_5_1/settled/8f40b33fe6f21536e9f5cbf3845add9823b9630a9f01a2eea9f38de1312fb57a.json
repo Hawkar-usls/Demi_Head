@@ -1,0 +1,15 @@
+{
+  "outcome_sha256": "8f40b33fe6f21536e9f5cbf3845add9823b9630a9f01a2eea9f38de1312fb57a",
+  "schema": "janus.habitat.nohand.demihead_settlement.v1",
+  "settlement": {
+    "action": "GIT_TO_LOCAL_CREATE",
+    "calibrated_brier": 0.18367346938775514,
+    "outcome_grants_authority": false,
+    "raw_brier": 0.18367346938775514,
+    "request_id": "NASV142-SELFUPDATE-000002-NOHAND-002-GIT_TO_LOCAL-c0b673bd2529-0091f4802949",
+    "settlement_sha256": "e9fa3d6b646ab1a34ad60b32733336ba188b1140db4d7ed021da801a99f1fb1d",
+    "state_sequence": 11,
+    "success": false,
+    "success_logloss": 0.5596157879354228
+  }
+}
