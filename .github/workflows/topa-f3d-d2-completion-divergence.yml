@@ -1,0 +1,48 @@
+name: Validate TOPA F3D-D2 Completion Divergence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_F3D_D2_SOURCE_SELF_REDUCTION_PROOF_PROGRAM.md'
+      - 'contracts/TOPA_F3D_D2_COMPLETION_DIVERGENCE_FROZEN_CONTRACT.json'
+      - 'fixtures/topa_f3d_d2_completion_divergence.py'
+      - '.github/workflows/topa-f3d-d2-completion-divergence.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_F3D_D2_SOURCE_SELF_REDUCTION_PROOF_PROGRAM.md'
+      - 'contracts/TOPA_F3D_D2_COMPLETION_DIVERGENCE_FROZEN_CONTRACT.json'
+      - 'fixtures/topa_f3d_d2_completion_divergence.py'
+      - '.github/workflows/topa-f3d-d2-completion-divergence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-f3d-d2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate frozen D2 contract
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('contracts/TOPA_F3D_D2_COMPLETION_DIVERGENCE_FROZEN_CONTRACT.json'))
+          assert p['schema']=='janus.demihead.topa_f3d_d2.completion_divergence_frozen_contract.v1'
+          assert p['fixture_scope']=='SOURCE_LIKE_LINE11_LINE12_STATE_NOT_FULL_LEMMA22_HARD_FAMILY'
+          assert p['required_results']['F_D2_01']['B1_ab_with_same_lex_nu_rule']=='CONST_0'
+          assert p['required_results']['F_D2_01']['B2_cd_with_same_lex_nu_rule']=='CROSSING'
+          assert p['required_results']['F_D2_02']['same_B_ab_nu_00']=='CONST_0'
+          assert p['required_results']['F_D2_02']['same_B_ab_nu_11']=='CROSSING'
+          assert p['p_vs_np']=='OPEN'
+          print('TOPA_F3D_D2_COMPLETION_DIVERGENCE_CONTRACT = PASS')
+          PY
+      - name: Compile D2 completion probe
+        run: python -m py_compile fixtures/topa_f3d_d2_completion_divergence.py
+      - name: Replay F-D2-01 and F-D2-02
+        run: python fixtures/topa_f3d_d2_completion_divergence.py
