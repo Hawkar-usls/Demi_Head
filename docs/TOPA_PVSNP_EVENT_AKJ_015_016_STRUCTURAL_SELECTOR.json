@@ -1,6 +1,6 @@
 {
-  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-015-017-STRUCTURAL-SELECTOR-2026-08-25",
-  "format_version": "1.1",
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-015-018-STRUCTURAL-SELECTOR-2026-08-25",
+  "format_version": "1.2",
   "parent_journal": {
     "path": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
     "parent_format_version": "1.4",
@@ -9,7 +9,7 @@
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
   "created_local": "2026-08-25T01:37:00+03:00",
-  "last_updated_local": "2026-08-25T01:41:00+03:00",
+  "last_updated_local": "2026-08-25T01:43:30+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws_added": [
     "POLYNOMIAL_ENUMERABILITY_OF_A_VOCABULARY != UNIVERSAL_PROGRESS",
@@ -38,12 +38,9 @@
       "artifacts": [
         "docs/TOPA_AKINATOR_PROOF_CARRYING_STRUCTURAL_SELECTOR_BARRIER.md",
         "probes/akinator_structural_selector_barrier_probe.py",
-        ".github/workflows/validate-akinator-structural-selector.yml",
-        "commit 09e401081233549df191cac1f0262c28810c340b",
-        "commit ef930618500f66c183cb11804cae6cb1be1e8ebe",
-        "commit 9199d473e32890edbc721befe0fe3645f0fb8592"
+        ".github/workflows/validate-akinator-structural-selector.yml"
       ],
-      "mechanical_status": "PROVIDER_CI_FAILED_FIXTURE_PENDING_REPAIR",
+      "mechanical_status": "PROVIDER_CI_PASS_AFTER_PRESERVED_FIXTURE_FAILURE",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Permit cross-neighborhood macros and quantify the minimum structural complexity a polynomial selector vocabulary must support."
     },
@@ -72,7 +69,7 @@
         "deterministic polynomial discovery",
         "global potential decrease theorem"
       ],
-      "mechanical_status": "PROVIDER_CI_FAILED_FIXTURE_PENDING_REPAIR",
+      "mechanical_status": "PROVIDER_CI_PASS_AFTER_PRESERVED_FIXTURE_FAILURE",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Build or refute a polynomially discoverable robust structural progress certificate without exact coNP-hard semantic usefulness and without exponential schema backtracking."
     },
@@ -98,8 +95,34 @@
         "This is a finite-fixture bug, not evidence against the F3 asymptotic tradeoff."
       ],
       "repair_rule": "Move only this dominance witness to an explicitly verified sufficiently-large-k regime; keep the analytical theorem independent of the finite replay.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-018",
+      "local_time": "2026-08-25T01:43:30+03:00",
+      "title": "Structural-selector finite mechanics passed after explicit asymptotic-range repair",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "workflow": "Validate Akinator Structural Selector",
+        "head_sha": "ff97f8ac95c35db4cc6fbe3cec2c6257cf5f18e3",
+        "run_id": 32786001620,
+        "job_id": 97617957030,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_STRUCT_SELECTOR_F3_BUDGET_ALGEBRA = PASS",
+          "AKINATOR_STRUCT_SELECTOR_F3D_ONE_BIT_COLLAPSE = PASS",
+          "AKINATOR_STRUCT_SELECTOR_SMALL_N_ASYMPTOTIC_FIXTURE = REPAIRED",
+          "NW_LOCAL_SELECTOR_LOWER_BOUND = EXTERNAL_PLUS_INTERNAL_THEOREM_NOT_CI",
+          "LOW_BD_SELECTOR_BARRIER = ANALYTICAL_DERIVATION_NOT_CI",
+          "ROBUST_STRUCTURAL_PROGRESS_CERTIFICATE = OPEN",
+          "CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "meaning": "Provider CI validates only finite budget/collapse mechanics and JSON syntax. The selector barriers remain analytical deductions from the external Sokolov theorem plus frozen TOPA transfer/simulation.",
       "claim_ceiling_after": "P_VS_NP = OPEN",
-      "next_gap": "Repair fixture, rerun independently, preserve this failed receipt permanently."
+      "next_gap": "Attack whether exact restriction-survival itself hides counting/search complexity."
     }
   ],
   "active_front": {
