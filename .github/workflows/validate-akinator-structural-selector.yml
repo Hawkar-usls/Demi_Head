@@ -1,0 +1,29 @@
+name: Validate Akinator Structural Selector
+
+on:
+  push:
+    paths:
+      - 'docs/TOPA_AKINATOR_PROOF_CARRYING_STRUCTURAL_SELECTOR_BARRIER.md'
+      - 'probes/akinator_structural_selector_barrier_probe.py'
+      - 'docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json'
+      - '.github/workflows/validate-akinator-structural-selector.yml'
+  workflow_dispatch:
+
+jobs:
+  finite-mechanics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run structural-selector finite mechanics
+        run: python probes/akinator_structural_selector_barrier_probe.py
+      - name: Validate event JSON
+        run: python -m json.tool docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json >/dev/null
+      - name: Claim ceiling reminder
+        run: |
+          echo 'CI validates finite budget algebra and one-bit-collapse mechanics only.'
+          echo 'NW-local/low-(b,d) selector barriers are analytical deductions from frozen TOPA transfer + external Sokolov lower bound.'
+          echo 'Robust structural progress certificate remains OPEN.'
+          echo 'P_VS_NP = OPEN'
