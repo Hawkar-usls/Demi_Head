@@ -1,0 +1,42 @@
+{
+  "schema": "janus.demihead.topa_f3d_d4.provider_receipt.v1",
+  "receipt_id": "JANUS-DEMIHEAD-TOPA-F3D-D4-PARITY-RESIDUAL-TRANSFER-PROVIDER-RECEIPT-v1.0",
+  "created_at_local": "2026-08-24T23:06:00+03:00",
+  "arbiter_repository": "Hawkar-usls/Demi_Head",
+  "scientific_lineage": "Hawkar-usls/TOPA:C025-E2R-L1G-F3-D4",
+  "theorem_note": "docs/TOPA_F3D_D4_PARITY_RESIDUAL_TRANSFER.md",
+  "fixture": "fixtures/topa_f3d_d4_parity_residual_transfer.py",
+  "provider": {
+    "repository": "Hawkar-usls/Janus-Fundamentum",
+    "branch": "c025-policy0b-fair-reason",
+    "pull_request": 214,
+    "head_commit": "11fa89d32c4a567ee5881d75840fe429027db4ec",
+    "merge_ref_commit": "246aa4322bf0b7c9231125d780962dca72d6a148",
+    "workflow": "Validate C025 F3D-D4 Parity Residual Transfer",
+    "run_id": 32770550434,
+    "job_id": 97569693684,
+    "conclusion": "SUCCESS"
+  },
+  "provider_markers": [
+    "C025_E2R_F3D_D4_X_DIRECT_PARITY_RESTRICTION_IDENTITY = PASS",
+    "C025_E2R_F3D_D4_X_RESIDUAL_BALANCEDNESS_ARITHMETIC = PASS",
+    "C025_E2R_F3D_D4_X_LOCAL_FUNCTION_ADMISSION = PASS",
+    "C025_E2R_F3D_D4_X_CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+    "P_VS_NP = OPEN"
+  ],
+  "analytical_status": {
+    "direct_truth_table_cnf_restriction_identity": "PROVED",
+    "parity_residual_balancedness_condition": "PROVED under (1-8epsilon)Delta>=1",
+    "residual_theorem14_reapplication": "PROVED_IN_STATED_PARITY_SOURCE_SCOPE",
+    "local_residual_B2_to_functional_variable": "PROVED_AS_EXISTENCE_TRANSLATION",
+    "input_size_polynomial_relation": "PROVED_CONDITIONAL_ON_EXPLICIT m_rho=Theta(m), Delta=C log n REGIME"
+  },
+  "remaining_bottleneck": "AMORTIZED_REUSE_OF_THE_SAME_GLOBAL_EXTENSION_ACROSS_MANY_HARD_RESIDUAL_STAGES",
+  "not_established": [
+    "superpolynomial total extension-count lower bound for unrestricted ER3",
+    "full Extended Resolution lower bound",
+    "P versus NP resolution"
+  ],
+  "p_vs_np": "OPEN",
+  "target_state": "CLOSE_ONLY_AFTER_CHECKABLE_RESOLUTION"
+}
