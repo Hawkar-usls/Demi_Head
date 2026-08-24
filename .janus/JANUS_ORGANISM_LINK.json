@@ -1,0 +1,16 @@
+{
+  "schema": "janus.organism.member_link.v1",
+  "organism_id": "JANUS_FEDERATED_ORGANISM",
+  "canonical_manifest": "Hawkar-usls/Janus:organism/JANUS_ORGANISM_v1.json",
+  "member_repository": "Hawkar-usls/Demi_Head",
+  "organ_key": "guardian_cortex",
+  "role": "GUARDIAN_REVIEW_AND_EVIDENCE_CORTEX",
+  "consumes": ["CLAIM", "SOURCE", "TELEMETRY", "SCOUT_REPORT"],
+  "emits": ["BOUNDED_REVIEW", "SOURCE_ROOT_GRAPH", "DISAGREEMENT_RECEIPT", "HOLD"],
+  "routes_to": ["memory", "gateway", "orchestrator", "proof_spine"],
+  "authority": "BOUNDED_REVIEW",
+  "evidence_authority": false,
+  "authority_delta": 0,
+  "cross_repo_write_default": "DENY",
+  "claim_boundary": ["REVIEW != WORLD_TRUTH", "SOURCE_COUNT != INDEPENDENT_ROOT_COUNT", "MORE_FACES != MORE_RIGHTS"]
+}
