@@ -75,14 +75,19 @@
     "F_D1_08_FINITE_ORACLE_EXPONENTIAL_ASSIGNMENT_COUNT",
     "F_D1_09_UNKNOWN_INSTEAD_OF_GUESS"
   ],
+  "implementation_paths": {
+    "finite_reference_oracle": "fixtures/topa_f3d_d1_semantic_residual_classifier.py",
+    "operational_partial_classifier": "fixtures/topa_f3d_d1_operational_partial_classifier.py",
+    "arbiter_workflow": ".github/workflows/topa-f3d-d1-semantic-residual.yml"
+  },
   "exit_criteria": {
     "D1_E1_definitions_frozen": true,
-    "D1_E2_exact_finite_reference_oracle": "PENDING_CI",
-    "D1_E3_adversarial_falsifier_suite": "PENDING_CI",
+    "D1_E2_exact_finite_reference_oracle": "IMPLEMENTED__ARBITER_CI_PENDING",
+    "D1_E3_adversarial_falsifier_suite": "IMPLEMENTED_OR_INHERITED_FROM_F3D_D0__ARBITER_CI_PENDING",
     "D1_E4_complexity_barrier_recorded": true,
-    "D1_E5_proof_carrying_partial_classifier": "PENDING_IMPLEMENTATION_REPLAY",
-    "D1_E6_arbiter_ci": "PENDING",
-    "D1_E7_d2_handoff": "BLOCKED_UNTIL_E2_TO_E6_PASS"
+    "D1_E5_proof_carrying_partial_classifier": "IMPLEMENTED__ARBITER_CI_PENDING",
+    "D1_E6_arbiter_ci": "PENDING_RECEIPT",
+    "D1_E7_d2_handoff": "PREPARATORY_D2_SOURCE_AUDIT_STARTED__FORMAL_HANDOFF_BLOCKED_UNTIL_E6_PASS"
   },
   "claim_ceiling": [
     "finite exhaustive semantics proves only finite fixture mechanics",
