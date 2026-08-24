@@ -1,0 +1,32 @@
+name: Validate TOPA C025-C2 Hidden Search Exponent
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_C025_C2_HIDDEN_SEARCH_EXPONENT_AUDIT.md'
+      - 'fixtures/topa_c025_c2_hidden_search_exponent.py'
+      - '.github/workflows/topa-c025-c2-hidden-search-exponent.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_C025_C2_HIDDEN_SEARCH_EXPONENT_AUDIT.md'
+      - 'fixtures/topa_c025_c2_hidden_search_exponent.py'
+      - '.github/workflows/topa-c025-c2-hidden-search-exponent.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-c2-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile C2 audit replay
+        run: python -m py_compile fixtures/topa_c025_c2_hidden_search_exponent.py
+      - name: Replay branch-mass and search-exponent fixtures
+        run: python fixtures/topa_c025_c2_hidden_search_exponent.py
