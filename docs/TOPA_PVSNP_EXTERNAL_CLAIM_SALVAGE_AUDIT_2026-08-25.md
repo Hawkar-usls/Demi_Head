@@ -49,36 +49,65 @@ VEGA_THEOREM6_ALL_2XHS_GRAPHS_ARE_LINE_GRAPHS = REFUTED_BY_K33
 VEGA_P_EQUALS_NP_ROUTE = CLOSED_AT_THEOREM6
 ```
 
+### Provider receipt
+
+Fundamentum independent finite replay:
+
+```text
+workflow = Validate External Vega K3,3 Claim Audit
+run      = 32777580324
+job      = 97592079452
+result   = SUCCESS
+
+EXT_VEGA_2XHS_K33_LEGAL = PASS
+EXT_VEGA_K33_INDUCED_CLAW = PASS
+EXT_VEGA_THEOREM6_ALL_2XHS_ARE_LINE_GRAPHS = REFUTED_BY_K33
+P_VS_NP = OPEN
+```
+
+CI validates the explicit finite mechanics. The route refutation is the elementary graph argument above.
+
 **Reusable law:** a polynomial algorithm for a restricted graph class cannot be imported until the reduction proves **exact object-class membership**. “Cubic” / degree-bounded != “line graph”.
 
 ---
 
-## 2. Changryeol Lee — “Graph-Based Deterministic Polynomial Algorithm for NP Problems” (2025–2026)
+## 2. Changryeol Lee — “Graph-Based Deterministic Polynomial Framework for NP Problems” (2025–2026)
 
 **Claim direction:** `P = NP`.  
-**Route:** merge all certificate computations into a polynomial-size graph and decide existence of a valid computation walk by pruning/reachability.
+**Route:** merge certificate computations into a polynomial-size graph and replace certificate search by graph pruning / edge validation.
 
-### Current status
+### Source facts now frozen
 
-Open preprint remains publicly available. A recent external machine review flags two load-bearing concerns:
-1. local edge validity may not enforce global tape-history consistency along a path;
-2. correctness arguments use the semantic set of valid walks while the algorithm itself must avoid enumerating that exponential object.
+The public v8 preprint defines the raw computation graph extremely broadly: an edge `(u,v)` exists whenever the tape-cell indices differ by one. A **computation walk** is much stronger and additionally requires tier consistency, index-predecessor state/symbol history, head-state flow, cell-flow and displacement consistency.
 
-JANUS does **not** import that review as theorem.
+Algorithm 8 `TakeArbitraryWalk()` claims to produce a computation walk by storing a transition surface and repeatedly taking the first graph-next edge “consistent with surface S.” Thus the critical equality to audit is not merely graph reachability; it is:
+
+```text
+ALGORITHM8_SURFACE_CONSISTENCY
+<=>
+ALL_DEFINITION18_COMPUTATION_WALK_CONSTRAINTS
+```
+
+The preprint later relies on this procedure inside the pruning logic and distinguishes ordinary graph walks from computation walks explicitly.
+
+### External review signal — not imported as theorem
+
+A recent machine review reports a possible spurious-walk/local-vs-global defect. JANUS treats this only as a falsifier target.
 
 ### JANUS target
 
-Construct the smallest deterministic verifier/tape fixture with a graph path consisting of locally valid transitions but whose revisit of a cell reads a symbol inconsistent with the last write on the same path.
+Either:
+1. construct a smallest graph/surface fixture that Algorithm 8 admits although it violates Definition 18; or
+2. prove from the exact primitive predicate “consistent with surface” that every returned sequence satisfies all Definition-18 conditions.
 
-Exit:
+Until this exact equivalence is settled:
 
 ```text
-LEE_SPURIOUS_WALK_EXPLICIT_FIXTURE = OPEN_HIGH_PRIORITY
+LEE_ROUTE = OPEN_FOR_EXACT_AUDIT
+LEE_ALGORITHM8_SURFACE_TO_GLOBAL_WALK_EQUIVALENCE = OPEN_HIGH_PRIORITY
 ```
 
-If found, the route closes by finite semantic counterexample. If no such fixture exists, audit the exact pruning theorem next.
-
-**Reusable idea:** shared transition structure is real compression, but local transition compatibility must be proved equivalent to global computation-history consistency.
+**Reusable idea:** a polynomial shared transition graph can be a legitimate representation compression. The unresolved burden is whether the polynomial local verifier certifies a **single globally coherent history** rather than compatible fragments from different histories.
 
 ---
 
@@ -126,7 +155,7 @@ GUBIN_ROUTE = PUBLICLY_REFUTED
 
 ---
 
-## 6. Sergey V. Yakhontov — TCPE / linear-programming accepting-path construction (2012)
+## 6. Sergey V. Yakhontov — TCPE / linear-programming accepting-path construction (2012–2014)
 
 **Claim direction:** `P = NP`.
 
@@ -140,23 +169,31 @@ The crucial statement is the claimed equivalence:
 TCPELP is feasible <=> there exists one tape-consistent path.
 ```
 
-The proof moves from fractional flow feasibility to existence of a single path satisfying all tape-consistency relations.
+In the published proof of Proposition 3.9, feasibility of the fractional network systems is used to choose a path for one commodity and then assert that the same path is also a path in other commodity graphs. That inference is not a generic consequence of independent fractional network-flow conservation: different commodities can route their positive flow on different paths.
+
+JANUS does **not** yet call this a refutation, because the remaining cross-commodity equations may impose additional synchronization. The exact next obligation is therefore:
+
+```text
+DO_THE_FULL_TCPELP_CROSS_COMMODITY_EQUATIONS_FORCE_ONE_COMMON_INTEGRAL_PATH?
+```
 
 ### JANUS target
 
-Build a minimal DAG where fractional commodity flows can satisfy the LP coupling while the required consistency pairs cannot all lie on one common path, or prove that the published equations prohibit such mixing.
+Build a minimal DAG where all published equations admit a fractional solution whose commodity supports cannot be realized by one common tape-consistent path, or prove an integrality/common-path theorem for the exact polytope.
 
 ```text
 YAKHONTOV_PROP_3_9_FRACTIONAL_TO_SINGLE_PATH = OPEN_HIGH_PRIORITY
 ```
 
-**Why valuable:** this is almost exactly our recurring hidden-exponent pattern:
+**Reusable law candidate:**
 
 ```text
 POLYNOMIAL LOCAL/FRACTIONAL REPRESENTATION
 !=
-ONE GLOBALLY CONSISTENT WITNESS
+ONE GLOBALLY CONSISTENT INTEGRAL WITNESS
 ```
+
+unless an integrality/synchronization theorem is proved.
 
 ---
 
@@ -188,21 +225,48 @@ BLUM_2017_CLOSURE_CLAIM = WITHDRAWN_AND_REFUTED
 
 ---
 
-## 9. Priority order for JANUS salvage
+## 9. Ted Swart -> Yannakakis — canonical productive failed proof lineage
+
+**Claim direction:** `P = NP` (1986–1987).
+
+Swart proposed polynomial-size linear programs for TSP. The concrete closure claim failed. Instead of endlessly patching individual formulations, Yannakakis developed a structural barrier: every **symmetric** extended formulation of the TSP polytope requires exponential size. Later work removed the symmetry restriction for natural TSP extension formulations and developed the modern theory of extension complexity.
+
+This is the exact salvage pattern JANUS wants:
 
 ```text
-A1 VEGA_K33_LINEGRAPH_COUNTEREXAMPLE     = READY / EXACT FINITE REFUTATION
-A2 LEE_SPURIOUS_WALK                     = NEXT EXPLICIT FALSIFIER
-A3 YAKHONTOV_FRACTIONAL_PATH_MIXING      = NEXT LP FALSIFIER
-A4 DENG_DU_GUBIN                         = IMPORT KNOWN FAILURE LAWS
-A5 DEOLALIKAR_BLUM                       = LOWER-BOUND BARRIER LINEAGE
+FAILED_CLOSURE_ATTEMPT
+-> IDENTIFY_THE_SHARED_STRUCTURAL_ASSUMPTION
+-> PROVE_A_BARRIER_FOR_THE_ENTIRE_ROUTE_CLASS
+-> REAL_THEOREM
+```
+
+Scott Aaronson has described Swart's attempt as possibly the most productive failed P=NP proof because it helped inspire this line.
+
+```text
+SWART_P_EQUALS_NP = FAILED
+SWART_TO_YANNAKAKIS_SALVAGE = MAJOR_REAL_THEOREM_LINEAGE
+```
+
+**JANUS lesson:** when a public proof dies, ask whether the failed constructions share a common representation class. If yes, proving a lower bound for that class can be more valuable than repairing one manuscript.
+
+---
+
+## 10. Priority order for JANUS salvage
+
+```text
+A1 VEGA_K33_LINEGRAPH_COUNTEREXAMPLE     = CLOSED / PROVIDER PASS
+A2 LEE_SURFACE_TO_GLOBAL_WALK            = ACTIVE EXPLICIT FALSIFIER / PROOF GATE
+A3 YAKHONTOV_FRACTIONAL_COMMON_PATH      = ACTIVE LP INTEGRALITY GATE
+A4 SWART_YANNAKAKIS_PATTERN              = IMPORT AS SALVAGE TEMPLATE
+A5 DENG_DU_GUBIN                         = IMPORT KNOWN FAILURE LAWS
+A6 DEOLALIKAR_BLUM                       = LOWER-BOUND BARRIER LINEAGE
 ```
 
 The aim is not to “combine failed proofs” indiscriminately. We extract only objects that survive an exact admission gate.
 
 ---
 
-## 10. P-vs-NP closure firewall
+## 11. P-vs-NP closure firewall
 
 ```text
 ONE EXTERNAL ROUTE REFUTED
@@ -216,6 +280,10 @@ P_EQUALS_NP
 ONE LOWER-BOUND IDEA
 !=
 P_NOT_EQUAL_NP
+
+FAILED_PROOF_SALVAGE
+CAN
+PRODUCE_REAL_NEW_THEOREMS
 
 P_VS_NP = OPEN
 ```
