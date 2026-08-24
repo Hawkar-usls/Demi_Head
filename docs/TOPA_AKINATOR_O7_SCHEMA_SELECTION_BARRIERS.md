@@ -1,7 +1,7 @@
 # TOPA / JANUS — Akinator O7 Universal Schema-Selection Barriers
 
 **Frozen:** 2026-08-25  
-**Status:** `ANALYTICAL_BARRIERS_FROZEN__FINITE_REPLAY_PENDING`  
+**Status:** `PROVED_IN_STATED_SCOPE__CI_PASS`  
 **Global ceiling:** `P_VS_NP = OPEN`
 
 ## 0. Context
@@ -159,7 +159,32 @@ Admissible progress certificates may use only explicitly verified syntactic/proo
 
 ---
 
-## 6. Next exact attack
+## 6. Independent finite mechanics receipt
+
+Dedicated GitHub Actions replay:
+
+```text
+workflow = Validate Akinator O7 Schema Selection
+head     = d36087362c42b68fa369d4ed0e13bfc7d6eba59d
+run      = 32785058422
+job      = 97615160428
+result   = SUCCESS
+
+AKINATOR_O7_SELECTOR_LIFT_FORCEDNESS_EQ_UNSAT = PASS fixtures=5
+AKINATOR_O7_E0_BRANCH_DEATH_EQ_UNSAT = PASS
+AKINATOR_O7_BINARY_SCHEMA_SEQUENCE_COUNT = PASS
+CO_NP_COMPLETENESS = ANALYTICAL_REDUCTION_NOT_CI
+BRUTE_FORCE_SCHEMA_ENUMERATION_ONLY = BARRIER_SCOPE
+UNIVERSAL_PROOF_CARRYING_B2_SELECTOR = OPEN
+CLAIM_CEILING = FINITE_MECHANICS_ONLY
+P_VS_NP = OPEN
+```
+
+CI validates the finite selector-lift identity and explicit sequence-count mechanics. The coNP-completeness statement follows from the analytical reduction above; the cryptographic proof-search discussion is conditional external literature, not CI evidence.
+
+---
+
+## 7. Next exact attack
 
 The next question is no longer "which extension looks useful?" It is:
 
@@ -175,12 +200,13 @@ A positive theorem would be a genuine move toward the #42 closure contract. A co
 
 ---
 
-## 7. Claim ceiling
+## 8. Claim ceiling
 
 ```text
 EXACT_EXTENSION_FORCEDNESS = coNP_COMPLETE
 BRUTE_FORCE_EXTENSION_SEQUENCE_ENUMERATION = EXPONENTIAL_WHEN_K_GROWS
 POLY_CANDIDATES_PER_STAGE_IMPLIES_POLY_DISCOVERY = REFUTED
+O7_SCHEMA_SELECTION_FINITE_MECHANICS = PROVIDER_CI_PASS
 UNIVERSAL_PROOF_CARRYING_B2_SELECTOR = OPEN
 UNIVERSAL_B2_SCHEMA_SELECTION = OPEN
 P_VS_NP = OPEN
