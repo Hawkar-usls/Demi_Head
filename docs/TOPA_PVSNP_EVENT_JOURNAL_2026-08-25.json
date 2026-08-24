@@ -1,8 +1,9 @@
 {
   "journal_id": "TOPA-PVSNP-AKINATOR-EVENT-JOURNAL-2026-08-25",
-  "format_version": "1.0",
+  "format_version": "1.1",
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
+  "last_updated_local": "2026-08-25T01:18:03+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws": [
     "HEURISTIC != EVIDENCE",
@@ -149,18 +150,56 @@
       ],
       "artifacts": [
         "docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md",
-        "commit 2720a9cdc030e4b9b180d447cc5b90daeec08898"
+        "commit 2720a9cdc030e4b9b180d447cc5b90daeec08898",
+        "probes/akinator_o5_width_context_probe.py",
+        ".github/workflows/validate-akinator-o5-width-context.yml"
       ],
-      "mechanical_status": "CI_PROBE_NOT_YET_ADDED",
+      "mechanical_status": "PROVIDER_CI_PASS",
+      "provider_receipt": {
+        "workflow": "Validate Akinator O5 Width Context",
+        "head_sha": "a8cd65acf3e171fe50003dc790bab97bccd96fa6",
+        "run_id": 32783967221,
+        "job_id": 97611853242,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_O5_CONTEXT_AXIOM_LIFT_SHAPE = PASS",
+          "AKINATOR_O5_SINGLE_CONTEXT_WIDTH_BOUND = PASS bound=2 actual=2",
+          "AKINATOR_O5_NESTED_TREE_WIDTH_BOUND = PASS bound=2 actual=2",
+          "AKINATOR_O5_ROOT_GLOBAL_FLATTEN = PASS width=2",
+          "AKINATOR_O5_BRANCH_COMPOSITION = PASS",
+          "CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+          "P_VS_NP = OPEN"
+        ]
+      },
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "closed_false_road": "REPEATED_BOUNDED_WIDTH_PLAIN_RESOLUTION_CONTRACTIONS_AS_UNIVERSAL_POLY_ESCAPE",
       "next_gap": "Escalate beyond plain Resolution: identify the first stronger exact proof-carrying observable (likely B2/ER or another non-Resolution rule) that can contract graph-PHP while retaining polynomial discovery and total-cost bounds."
+    },
+    {
+      "event_id": "AKJ-009",
+      "local_time": "2026-08-25T01:18:03+03:00",
+      "title": "Independent O5 finite-mechanics replay passed",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "workflow": "Validate Akinator O5 Width Context",
+        "head_sha": "a8cd65acf3e171fe50003dc790bab97bccd96fa6",
+        "run_id": 32783967221,
+        "job_id": 97611853242
+      },
+      "meaning": "CI independently confirms the finite context-lift/branch-composition mechanics and validates JSON syntax. It does not establish the external asymptotic graph-PHP lower bound.",
+      "artifacts": [
+        "docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md",
+        "commit 185a7d8558bcc57cb01004f3b47ad36990018658"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Use graph-PHP as a separator to determine whether O7/B2/ER provides a constructive escape and locate the cost of generating the required extension definitions."
     }
   ],
   "active_front": {
     "name": "AKINATOR-CLOSE",
     "primary_issue": 42,
-    "current_exact_question": "What is the weakest proof-carrying rule strictly beyond ordinary Resolution that produces certified global contraction on the graph-PHP counterfamily with deterministic polynomial discovery and polynomial total representation?",
+    "current_exact_question": "Can O7/B2/Extended Resolution construct a proof-carrying polynomial escape on the exact graph-PHP separator, and if so is the extension schema itself deterministically generable in polynomial time from the sparse input?",
     "forbidden_shortcuts": [
       "free SAT oracle",
       "free #SAT/model-count oracle",
