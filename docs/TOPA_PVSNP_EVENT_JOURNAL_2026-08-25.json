@@ -1,9 +1,9 @@
 {
   "journal_id": "TOPA-PVSNP-AKINATOR-EVENT-JOURNAL-2026-08-25",
-  "format_version": "1.3",
+  "format_version": "1.4",
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
-  "last_updated_local": "2026-08-25T01:27:00+03:00",
+  "last_updated_local": "2026-08-25T01:32:00+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws": [
     "HEURISTIC != EVIDENCE",
@@ -14,7 +14,9 @@
     "EXISTENCE != CHEAP_DISCOVERY",
     "FAILED_ROUTE_MUST_BE_PRESERVED",
     "ENCODING_SIZE_BOUND_MUST_BE_PROVED_BEFORE_INPUT_RELATIVE_TRANSFER",
-    "FAMILY_SPECIFIC_SCHEMA != UNIVERSAL_SCHEMA_SELECTOR"
+    "FAMILY_SPECIFIC_SCHEMA != UNIVERSAL_SCHEMA_SELECTOR",
+    "EXACT_SEMANTIC_USEFULNESS != CHEAP_SELECTOR",
+    "POLY_LOCAL_CHOICES != POLY_GLOBAL_SEARCH"
   ],
   "events": [
     {
@@ -254,21 +256,80 @@
       "artifacts": ["docs/TOPA_AKINATOR_O7_GRAPH_PHP_POSITIVE_CONTROL.md", "commit 66e9e78bf90cdcc3045e30000cb4ac89745e7848"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Formalize and attack UNIVERSAL_B2_SCHEMA_SELECTION: how to select the right extension macros with deterministic polynomial total cost on arbitrary CNF without exhaustive sequence search."
+    },
+    {
+      "event_id": "AKJ-013",
+      "local_time": "2026-08-25T01:30:00+03:00",
+      "title": "O7 universal schema-selection naïve routes closed",
+      "type": "BARRIER",
+      "hypothesis": "A universal O7 selector might cheaply score candidate extensions by exact semantic usefulness or simply enumerate all short candidate sequences.",
+      "result": "TWO_NAIVE_ROUTES_REFUTED_IN_STATED_SCOPE",
+      "formal_statement": [
+        "For arbitrary CNF H, define F_H={s OR C:C in H} union {t} and e <-> (s AND t). Then F_H union Def(e) entails e iff H is UNSAT.",
+        "Therefore exact candidate forcedness / exact death of branch e=0 is coNP-complete under a polynomial reduction.",
+        "If explicit schema enumeration keeps M_i live candidates at K stages, the number of sequences is product_i M_i; if M_i>=2 then at least 2^K.",
+        "Polynomially many candidates per stage do not imply a fixed-polynomial global search when K grows with N."
+      ],
+      "external_sanity": "Known proof-complexity literature gives conditional non-automatability results for strong Frege systems under standard cryptographic assumptions; this is treated only as a conditional warning, not a theorem about P vs NP.",
+      "artifacts": [
+        "docs/TOPA_AKINATOR_O7_SCHEMA_SELECTION_BARRIERS.md",
+        "probes/akinator_o7_schema_selection_barrier_probe.py",
+        ".github/workflows/validate-akinator-o7-schema-selection.yml",
+        "commit 59dab7638b7dde827091427062ae0cf1aab1dc44",
+        "commit eb3f5649511a24efe246415771d49460521a5c43",
+        "commit d36087362c42b68fa369d4ed0e13bfc7d6eba59d"
+      ],
+      "closed_false_roads": [
+        "FREE_EXACT_SEMANTIC_EXTENSION_USEFULNESS_SCORE",
+        "BRUTE_FORCE_EXTENSION_SEQUENCE_ENUMERATION_AS_UNIVERSAL_POLY_SELECTOR"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Find a proof-carrying structural vocabulary whose candidate progress can be certified cheaply and whose selection is guaranteed to avoid exponential fallback on every CNF."
+    },
+    {
+      "event_id": "AKJ-014",
+      "local_time": "2026-08-25T01:31:45+03:00",
+      "title": "Independent O7 schema-selection barrier replay passed",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "workflow": "Validate Akinator O7 Schema Selection",
+        "head_sha": "d36087362c42b68fa369d4ed0e13bfc7d6eba59d",
+        "run_id": 32785058422,
+        "job_id": 97615160428,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_O7_SELECTOR_LIFT_FORCEDNESS_EQ_UNSAT = PASS fixtures=5",
+          "AKINATOR_O7_E0_BRANCH_DEATH_EQ_UNSAT = PASS",
+          "AKINATOR_O7_BINARY_SCHEMA_SEQUENCE_COUNT = PASS",
+          "CO_NP_COMPLETENESS = ANALYTICAL_REDUCTION_NOT_CI",
+          "BRUTE_FORCE_SCHEMA_ENUMERATION_ONLY = BARRIER_SCOPE",
+          "UNIVERSAL_PROOF_CARRYING_B2_SELECTOR = OPEN",
+          "CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "meaning": "CI confirms finite selector-lift and sequence-count mechanics. coNP-completeness remains an analytical reduction; the barrier applies to semantic forcedness scoring and explicit exhaustive schema enumeration, not to every possible structural selector.",
+      "artifacts": ["docs/TOPA_AKINATOR_O7_SCHEMA_SELECTION_BARRIERS.md", "commit c0622ff8e44f2865c134da436fbb06505225c73d"],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "PROOF_CARRYING_STRUCTURAL_SELECTOR: a polynomially enumerable vocabulary V(F) with at least one cheaply certifiable progress action on every CNF and a deterministic polynomial selection rule."
     }
   ],
   "active_front": {
     "name": "AKINATOR-CLOSE",
     "primary_issue": 42,
-    "current_exact_question": "Can a deterministic polynomial-time selector choose proof-useful B2/ER extension definitions for every CNF with a certified global progress invariant, avoiding exponential search over extension sequences?",
+    "current_exact_question": "Does there exist a polynomially enumerable structural vocabulary V(F) of B2/ER macro candidates such that every CNF has a candidate with a polynomially checkable progress certificate and a deterministic polynomial selector can find it without semantic forcedness or exponential sequence enumeration?",
     "forbidden_shortcuts": [
       "free SAT oracle",
       "free #SAT/model-count oracle",
+      "free exact semantic extension-usefulness oracle",
       "heuristic branch deletion",
       "finite benchmark promoted to universal theorem",
       "unpaid proof discovery",
       "unbounded hidden polynomial exponent",
       "unproved input-length compression",
-      "family-specific extension schema relabeled as universal selector"
+      "family-specific extension schema relabeled as universal selector",
+      "polynomial local candidate set relabeled as polynomial global search"
     ]
   },
   "journal_policy": {
