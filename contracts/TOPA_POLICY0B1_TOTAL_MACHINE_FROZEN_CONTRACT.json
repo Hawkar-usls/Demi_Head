@@ -1,0 +1,82 @@
+{
+  "schema": "janus.demihead.topa_policy0b1.total_machine_frozen_contract.v1",
+  "contract_id": "TOPA_POLICY0B1_TOTAL_MACHINE_FROZEN_CONTRACT",
+  "created_at_local": "2026-08-24T23:17:00+03:00",
+  "status": "FROZEN_BASELINE__TOTAL_CORRECT__EXPONENTIAL_BRANCH_BOUND_EXPLICIT",
+  "arbiter_repository": "Hawkar-usls/Demi_Head",
+  "scientific_lineage": [
+    "Hawkar-usls/TOPA",
+    "Hawkar-usls/Janus-Fundamentum"
+  ],
+  "specification": "docs/TOPA_POLICY0B1_TOTAL_MACHINE_FREEZE.md",
+  "canonical_orders": {
+    "literal": "(abs(literal), literal<0)",
+    "clause": "(length, literal_tuple)",
+    "branch_variable": "minimum unassigned root id appearing in residual CNF",
+    "branch_values": [0, 1]
+  },
+  "disabled_features": {
+    "automatic_extension_proposal": true,
+    "global_reason_cache": true,
+    "exact_residual_memoization": true,
+    "model_score_or_confidence": true,
+    "activity_or_frequency_branching": true,
+    "random_tie_breaking": true
+  },
+  "preprocess_order": [
+    "restrict_by_context",
+    "canonicalize_and_subsumption_reduce",
+    "exact_smallest_unit_propagation",
+    "complete_fair_frozen_resolution_layer",
+    "empty_or_unit_processing",
+    "one_canonical_strict_subsuming_strengthening_per_frozen_clause",
+    "repeat_to_fixpoint"
+  ],
+  "fair_layer": {
+    "parents": "frozen start-of-layer active clauses only",
+    "pivot_order": "increasing root variable id",
+    "all_complementary_pairs_visited": true,
+    "same_layer_reuse_of_new_resolvents": false,
+    "attempt_bound": "sum_x p_x*q_x <= L^2/4"
+  },
+  "retention": {
+    "empty_resolvent": "immediate conflict",
+    "unit_resolvent": "forced-unit queue; not permanent clause growth",
+    "nonunit_eligibility": "candidate is strict subset of at least one frozen active clause",
+    "per_clause_choice": "minimum by (candidate_length, canonical_candidate_tuple)",
+    "other_nonunit_candidates": "discard",
+    "clause_count_increase_allowed": false,
+    "literal_volume_if_nonunit_change": "strictly decreases"
+  },
+  "termination": {
+    "preprocess_potential": "active_literal_volume + unassigned_root_count",
+    "branch_depth": "<= number of root variables",
+    "recursive_node_upper_bound": "<= 2^(n+1)-1"
+  },
+  "result_objects": {
+    "sat": "complete root assignment",
+    "unsat": "deterministic binary branch certificate with conflict leaves",
+    "verification": "replay exact frozen preprocessing at each certificate node"
+  },
+  "complexity": {
+    "per_node": "N^O(1); coarse straightforward implementation <= O(N^5 log N)",
+    "total_current_upper_bound": "2^N * N^O(1)",
+    "polynomial_total_runtime_proved": false,
+    "hidden_exponent_location": "branch frontier / global search mass"
+  },
+  "c2_handoff": {
+    "must_be_deterministic": true,
+    "sound_output_must_be_checkable": true,
+    "per_call_polytime_is_sufficient": false,
+    "global_state_count_or_amortization_theorem_required": true,
+    "total_representation_bound_required": true
+  },
+  "claim_firewall": [
+    "TOTAL_DETERMINISTIC_MACHINE != POLYNOMIAL_TIME_MACHINE",
+    "NO_HEURISTICS != P_EQUALS_NP",
+    "POLYNOMIAL_PREPROCESSING_PER_NODE != POLYNOMIAL_TOTAL_RUNTIME",
+    "CHECKABLE_EXPONENTIAL_CERTIFICATE != POLYNOMIAL_CERTIFICATE",
+    "POLICY0B1_FROZEN != C2_SOLVED"
+  ],
+  "p_vs_np": "OPEN"
+}
