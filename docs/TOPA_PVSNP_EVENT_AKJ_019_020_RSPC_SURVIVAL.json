@@ -1,0 +1,90 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-020-RSPC-SURVIVAL-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal_chain": [
+    "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+    "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json"
+  ],
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T01:45:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "scientific_laws_added": [
+    "EXACT_SURVIVAL_PROBABILITY != FREE_STRUCTURAL_SCORE",
+    "POLY_CANDIDATE_COUNT_PLUS_POLY_WITNESS_CHECK != POLY_WITNESS_DISCOVERY",
+    "ONE_CANDIDATE != CHEAP_CERTIFICATE_DISCOVERY",
+    "ABSTRACT_RESTRICTION_HARDNESS != SOURCE_MATCHED_RESTRICTION_HARDNESS"
+  ],
+  "events": [
+    {
+      "event_id": "AKJ-019",
+      "local_time": "2026-08-25T01:45:00+03:00",
+      "title": "Exact RSPC crossing-survival probability contains model counting",
+      "type": "COUNTING_HARDNESS_REDUCTION",
+      "result": "PROVED_IN_STATED_ABSTRACT_LOCALITY_MODEL",
+      "construction": [
+        "Compile arbitrary CNF truth H(X) into a polynomial frozen-B2 signed-AND DAG with output h.",
+        "Choose fresh roots p,q with no single locality neighborhood containing both.",
+        "Define g <-> (p AND q) and e <-> (h AND g).",
+        "Use the uniform distribution D_X over full assignments alpha to X only, leaving p,q unassigned."
+      ],
+      "formal_identity": "Pr_{alpha~D_X}[e|alpha is CROSSING] = #SAT(H)/2^n",
+      "consequences": [
+        "Exact crossing-survival numerator is #P-hard on this reduction image.",
+        "Positive survival iff H is SAT; zero survival iff H is UNSAT.",
+        "Exact survival probability may not be treated as a free universal structural score."
+      ],
+      "scope_firewall": [
+        "This is a polynomial hardness reduction, not an unconditional superpolynomial time lower bound.",
+        "The distribution D_X is a constructed abstract locality distribution, not Sokolov Algorithm 1/self-reduction.",
+        "Sokolov source-matched survival counting hardness is NOT_PROVED.",
+        "P_VS_NP remains OPEN."
+      ],
+      "artifacts": [
+        "docs/TOPA_AKINATOR_RSPC_SURVIVAL_COUNTING_BARRIER.md",
+        "probes/akinator_rspc_survival_counting_probe.py"
+      ],
+      "mechanical_status": "PROVIDER_CI_PENDING",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Replace exact survival counting with a sound incomplete lower-bound certificate."
+    },
+    {
+      "event_id": "AKJ-020",
+      "local_time": "2026-08-25T01:45:00+03:00",
+      "title": "Certificate discovery can encode SAT search even with one structural candidate",
+      "type": "SEARCH_REDUCTION",
+      "result": "PROVED_IN_STATED_ABSTRACT_LOCALITY_MODEL",
+      "formal_statement": [
+        "Use the single candidate e from AKJ-019.",
+        "A restriction alpha is a polynomially checkable survival witness iff e|alpha is CROSSING.",
+        "By construction, alpha is a survival witness iff alpha satisfies H.",
+        "Therefore promised-positive survival-witness discovery is at least as hard as SAT witness search under the polynomial reduction."
+      ],
+      "important_separator": [
+        "candidate vocabulary size can be exactly 1",
+        "witness bytes O(n)",
+        "witness verification polynomial",
+        "witness existence promised",
+        "deterministic polynomial witness discovery still requires an additional theorem"
+      ],
+      "scope_firewall": "This does not prove SAT search superpolynomial unless P vs NP is separately resolved.",
+      "new_exact_gate": "AKINATOR-RSPC-LB__SOUND_INCOMPLETE_SURVIVAL_LOWER_BOUND_CERTIFICATE",
+      "mechanical_status": "PROVIDER_CI_PENDING",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Find a polynomially checkable and polynomially constructible lower-bound certificate for true source-matched survival that avoids exact counting and yields global potential decrease."
+    }
+  ],
+  "active_front": {
+    "name": "AKINATOR-RSPC-LB",
+    "current_exact_question": "Is there a sound incomplete survival lower-bound certificate whose verifier and deterministic constructor are polynomial in original input length, which is guaranteed to exist for at least one polynomially enumerable candidate at every nonterminal state and whose repeated use yields a fixed polynomial global progress bound?",
+    "adversarial_question": "Can a macro family admit large cheap certificate-local structure while true survival under the exact source-matched restriction relation is arbitrarily small or zero?",
+    "forbidden_shortcuts": [
+      "exact survival probability oracle",
+      "positive-survival oracle",
+      "SAT witness hidden as a free robustness certificate",
+      "exponential restriction enumeration",
+      "abstract distribution silently substituted for source-matched self-reduction",
+      "finite replay promoted to #P-hardness proof"
+    ]
+  }
+}
