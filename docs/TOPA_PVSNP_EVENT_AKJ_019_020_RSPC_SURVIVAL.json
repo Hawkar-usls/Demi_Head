@@ -1,6 +1,6 @@
 {
-  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-020-RSPC-SURVIVAL-2026-08-25",
-  "format_version": "1.0",
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-021-RSPC-SURVIVAL-2026-08-25",
+  "format_version": "1.1",
   "parent_journal_chain": [
     "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
     "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json"
@@ -8,6 +8,7 @@
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
   "created_local": "2026-08-25T01:45:00+03:00",
+  "last_updated_local": "2026-08-25T01:47:15+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws_added": [
     "EXACT_SURVIVAL_PROBABILITY != FREE_STRUCTURAL_SCORE",
@@ -42,9 +43,10 @@
       ],
       "artifacts": [
         "docs/TOPA_AKINATOR_RSPC_SURVIVAL_COUNTING_BARRIER.md",
-        "probes/akinator_rspc_survival_counting_probe.py"
+        "probes/akinator_rspc_survival_counting_probe.py",
+        ".github/workflows/validate-akinator-rspc-survival.yml"
       ],
-      "mechanical_status": "PROVIDER_CI_PENDING",
+      "mechanical_status": "PROVIDER_CI_PASS",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Replace exact survival counting with a sound incomplete lower-bound certificate."
     },
@@ -69,9 +71,37 @@
       ],
       "scope_firewall": "This does not prove SAT search superpolynomial unless P vs NP is separately resolved.",
       "new_exact_gate": "AKINATOR-RSPC-LB__SOUND_INCOMPLETE_SURVIVAL_LOWER_BOUND_CERTIFICATE",
-      "mechanical_status": "PROVIDER_CI_PENDING",
+      "mechanical_status": "PROVIDER_CI_PASS",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Find a polynomially checkable and polynomially constructible lower-bound certificate for true source-matched survival that avoids exact counting and yields global potential decrease."
+    },
+    {
+      "event_id": "AKJ-021",
+      "local_time": "2026-08-25T01:47:15+03:00",
+      "title": "Independent RSPC survival finite-mechanics replay passed",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "workflow": "Validate Akinator RSPC Survival",
+        "head_sha": "bb1166c47790968c0068c7b99d9a7700b320a2ca",
+        "run_id": 32786286191,
+        "job_id": 97618777826,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_RSPC_EXACT_SURVIVAL_NUMERATOR_EQ_SAT_COUNT = PASS fixtures=5",
+          "AKINATOR_RSPC_SINGLE_CANDIDATE_SURVIVAL_WITNESS_EQ_SAT_WITNESS = PASS",
+          "AKINATOR_RSPC_B2_DISTINCT_OPERAND_GATE = PASS",
+          "EXACT_SURVIVAL_#P_HARDNESS = ANALYTICAL_REDUCTION_NOT_CI",
+          "SURVIVAL_WITNESS_SEARCH_HARDNESS = ANALYTICAL_REDUCTION_NOT_CI",
+          "SOKOLOV_SOURCE_MATCHED_SURVIVAL_HARDNESS = NOT_PROVED",
+          "SOUND_INCOMPLETE_SURVIVAL_LOWER_BOUND_CERTIFICATE = OPEN",
+          "CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "meaning": "Provider CI independently confirms only the finite frozen-B2 compilation and the survival-witness/SAT-witness identity on the named fixtures. The #P-hardness and SAT-search-hardness statements are analytical reductions and are not promoted by CI.",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Attack the simplest sound incomplete lower-bound certificate: an explicit restriction subcube together with a claim of universal survival on that region."
     }
   ],
   "active_front": {
