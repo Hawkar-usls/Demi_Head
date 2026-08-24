@@ -1,0 +1,30 @@
+name: Validate Akinator RSPC Survival
+
+on:
+  push:
+    paths:
+      - 'docs/TOPA_AKINATOR_RSPC_SURVIVAL_COUNTING_BARRIER.md'
+      - 'probes/akinator_rspc_survival_counting_probe.py'
+      - 'docs/TOPA_PVSNP_EVENT_AKJ_019_020_RSPC_SURVIVAL.json'
+      - '.github/workflows/validate-akinator-rspc-survival.yml'
+  workflow_dispatch:
+
+jobs:
+  finite-mechanics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run RSPC survival finite mechanics
+        run: python probes/akinator_rspc_survival_counting_probe.py
+      - name: Validate RSPC event JSON
+        run: python -m json.tool docs/TOPA_PVSNP_EVENT_AKJ_019_020_RSPC_SURVIVAL.json >/dev/null
+      - name: Claim ceiling reminder
+        run: |
+          echo 'CI validates finite B2 compilation and survival/SAT witness-set identity only.'
+          echo '#P-hardness and SAT-search hardness are analytical reductions, not CI results.'
+          echo 'Sokolov source-matched survival hardness remains NOT_PROVED.'
+          echo 'Sound incomplete survival lower-bound certificate remains OPEN.'
+          echo 'P_VS_NP = OPEN'
