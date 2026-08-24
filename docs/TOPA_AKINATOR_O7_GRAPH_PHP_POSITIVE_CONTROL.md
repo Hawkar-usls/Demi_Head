@@ -1,7 +1,7 @@
 # TOPA / JANUS — Akinator O7 Graph-PHP Constructive Positive Control
 
 **Frozen:** 2026-08-25  
-**Status:** `ANALYTICAL_CONSTRUCTION_FROZEN__FINITE_REPLAY_PENDING`  
+**Status:** `PROVED_IN_STATED_SCOPE__CI_PASS`  
 **Global ceiling:** `P_VS_NP = OPEN`
 
 ## 0. Purpose
@@ -201,7 +201,32 @@ Hence graph-PHP is a clean JANUS separator demonstrating that the extension rule
 
 ---
 
-## 9. Where the hidden exponent moved
+## 9. Independent finite mechanics receipt
+
+Dedicated GitHub Actions replay:
+
+```text
+workflow = Validate Akinator O7 Graph PHP
+head     = ac204d8b1f7214786ad5ceb3653c8d7b8f2b9fbb
+run      = 32784649602
+job      = 97613921306
+result   = SUCCESS
+
+AKINATOR_O7_B2_FALSE_GADGET = PASS
+AKINATOR_O7_COOK_MACRO_B2_ENCODING = PASS
+AKINATOR_O7_GRAPH_PHP_STRONGER_AXIOM_MAP = PASS
+AKINATOR_O7_SUBSUMPTION_SIMULATION_FIXTURE = PASS
+SOURCE_COOK_POLY_ER = EXTERNAL_THEOREM_NOT_CI
+UNIVERSAL_SCHEMA_SELECTION = OPEN
+CLAIM_CEILING = FINITE_MECHANICS_ONLY
+P_VS_NP = OPEN
+```
+
+CI validates only the finite B2/strengthening mechanics and JSON syntax. The polynomial Cook ER construction is an external source theorem; the graph-PHP generator conclusion uses that theorem together with our analytical translations above.
+
+---
+
+## 10. Where the hidden exponent moved
 
 This positive control kills a false generalization:
 
@@ -234,7 +259,7 @@ Thus the next exact Akinator gate is **schema selection with certified progress*
 
 ---
 
-## 10. Claim ceiling
+## 11. Claim ceiling
 
 ```text
 COOK_STANDARD_PHP_POLY_ER = SOURCE_THEOREM
@@ -242,7 +267,7 @@ COOK_MACRO_TO_B2_CONSTANT_OVERHEAD = PROVED_IN_STATED_SCOPE
 B2_FALSE_PLACEHOLDER_GADGET = PROVED_IN_STATED_SCOPE
 RESOLUTION_STRENGTHENING_SIMULATION = PROVED_IN_STATED_SCOPE
 CANONICAL_GRAPH_PHP_POLY_B2_GENERATOR = PROVED_FROM_STATED_COMPONENTS
-O7_GRAPH_PHP_FINITE_MECHANICS = CI_PENDING
+O7_GRAPH_PHP_FINITE_MECHANICS = PROVIDER_CI_PASS
 UNIVERSAL_B2_SCHEMA_SELECTION = OPEN
 DETERMINISTIC_POLY_DISCOVERY_FOR_ARBITRARY_CNF = OPEN
 P_VS_NP = OPEN
