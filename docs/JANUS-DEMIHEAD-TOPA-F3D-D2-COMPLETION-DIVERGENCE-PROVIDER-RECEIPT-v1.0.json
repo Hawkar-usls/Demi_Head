@@ -1,0 +1,47 @@
+{
+  "schema": "janus.demihead.topa_f3d_d2.provider_receipt.v1",
+  "receipt_id": "JANUS-DEMIHEAD-TOPA-F3D-D2-COMPLETION-DIVERGENCE-PROVIDER-RECEIPT-v1.0",
+  "created_at_local": "2026-08-24T22:36:00+03:00",
+  "arbiter_repository": "Hawkar-usls/Demi_Head",
+  "scientific_lineage": "Hawkar-usls/TOPA:C025-E2R-L1G-F3-D",
+  "canonical_result": "docs/TOPA_F3D_D2_COMPLETION_DIVERGENCE_RESULT.md",
+  "canonical_fixture": "fixtures/topa_f3d_d2_completion_divergence.py",
+  "provider": {
+    "repository": "Hawkar-usls/Janus-Fundamentum",
+    "branch": "c025-policy0b-fair-reason",
+    "pull_request": 214,
+    "head_commit": "9158480e7a2ef0dd2a602fa1a1de37d17f2fbdd5",
+    "merge_ref_commit": "83f87d303116939c74f84991decbde2ca826a96e",
+    "workflow": "Validate C025 F3D-D2 Completion Divergence",
+    "run_id": 32769042434,
+    "job_id": 97564996970,
+    "conclusion": "SUCCESS"
+  },
+  "provider_markers": [
+    "C025_E2R_F3D_D2_F01_TWO_MAXIMIZERS = PASS",
+    "C025_E2R_F3D_D2_F01_SAME_LEX_NU_CONST0_VS_CROSSING = PASS",
+    "C025_E2R_F3D_D2_F02_FIXED_B_TWO_VALID_NU = PASS",
+    "C025_E2R_F3D_D2_F02_CONST0_VS_CROSSING = PASS",
+    "C025_E2R_F3D_D2_COMPLETION_CHOICE_IS_REAL_SEMANTIC_PARAMETER = PASS",
+    "C025_E2R_F3D_D2_CLAIM_CEILING = SOURCE_LIKE_LINE11_LINE12_FIXTURE_ONLY",
+    "C025_E2R_F3D_D2_FULL_HARD_NW_DIVERGENCE = NOT_ESTABLISHED",
+    "P_VS_NP = OPEN"
+  ],
+  "established": {
+    "f_d2_01": "Two valid maximum line-11 choices can induce CONST_0 versus CROSSING residual semantics for one frozen external B2 macro under the same lex-first satisfying-nu completion rule.",
+    "f_d2_02": "For one fixed valid B, two satisfying line-12 nu assignments can induce CONST_0 versus CROSSING residual semantics for the same macro.",
+    "completion_choice_is_real_semantic_parameter": true
+  },
+  "not_established": [
+    "full Lemma-22 hard-family semantic divergence",
+    "unrestricted ER3 extension-count lower bound",
+    "polynomial-time completion selection",
+    "P versus NP resolution"
+  ],
+  "next": [
+    "D2-T2 completion-independence audit of source-core invariants",
+    "D3 robust SURV_min lower bound over all valid completions or exact source-matched collapse escape"
+  ],
+  "p_vs_np": "OPEN",
+  "target_state": "CLOSE_ONLY_AFTER_CHECKABLE_RESOLUTION"
+}
