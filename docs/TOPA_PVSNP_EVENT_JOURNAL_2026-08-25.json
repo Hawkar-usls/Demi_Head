@@ -1,9 +1,9 @@
 {
   "journal_id": "TOPA-PVSNP-AKINATOR-EVENT-JOURNAL-2026-08-25",
-  "format_version": "1.1",
+  "format_version": "1.2",
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
-  "last_updated_local": "2026-08-25T01:18:03+03:00",
+  "last_updated_local": "2026-08-25T01:20:00+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws": [
     "HEURISTIC != EVIDENCE",
@@ -12,7 +12,8 @@
     "POLY_IN_A_GROWING_HIDDEN_PARAMETER != POLY_IN_INPUT_N",
     "REPRESENTATION != DERIVATION",
     "EXISTENCE != CHEAP_DISCOVERY",
-    "FAILED_ROUTE_MUST_BE_PRESERVED"
+    "FAILED_ROUTE_MUST_BE_PRESERVED",
+    "ENCODING_SIZE_BOUND_MUST_BE_PROVED_BEFORE_INPUT_RELATIVE_TRANSFER"
   ],
   "events": [
     {
@@ -23,10 +24,7 @@
       "hypothesis": "A constant number of Akinator questions is not required; polynomial total dialogue is sufficient.",
       "result": "PROVED_BY_DEFINITION_OF_POLYNOMIAL_TIME",
       "formal_statement": "If deterministic exact SAT is decided with total cost <= N^c for one fixed c on every CNF, then SAT in P and therefore P=NP.",
-      "artifacts": [
-        "docs/TOPA_AKINATOR_P_EQUALS_NP_CLOSURE_CONTRACT.md",
-        "Demi_Head issue #42"
-      ],
+      "artifacts": ["docs/TOPA_AKINATOR_P_EQUALS_NP_CLOSURE_CONTRACT.md", "Demi_Head issue #42"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Find a universally available exact question/observable family with polynomial total cost and certified progress."
     },
@@ -38,11 +36,7 @@
       "hypothesis": "Low-degree exact SAT-indicator wave coefficients might be cheap enough to guide the Akinator.",
       "result": "REFUTED_AS_FREE_PRIMITIVE",
       "formal_statement": "For G=F AND (NOT y) with fresh y, W_G({y})=#SAT(F); exact computation of even this degree-1 coefficient is #P-hard.",
-      "artifacts": [
-        "Demi_Head issue #46",
-        "Demi_Head issue #56",
-        "Demi_Head issue #59"
-      ],
+      "artifacts": ["Demi_Head issue #46", "Demi_Head issue #56", "Demi_Head issue #59"],
       "mechanical_status": "FINITE_PROBE_PENDING_REPOSITORY_CI",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Search for exact observables weaker than model counting."
@@ -55,9 +49,7 @@
       "hypothesis": "The Akinator can cheaply choose a question that balances satisfying witnesses.",
       "result": "REFUTED_AS_FREE_PRIMITIVE",
       "formal_statement": "Exact balance needs #SAT(F AND q) and #SAT(F AND NOT q); these counts are #P-hard in general.",
-      "artifacts": [
-        "Demi_Head issue #51"
-      ],
+      "artifacts": ["Demi_Head issue #51"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Use proof-carrying structural progress rather than exact entropy/model balance."
     },
@@ -68,10 +60,7 @@
       "type": "ACCOUNTING_THEOREM",
       "result": "FROZEN",
       "formal_statement": "Every exact question must yield certified collapse, keep both live branches, or pay for an exact semantic answer; heuristic discard is forbidden.",
-      "artifacts": [
-        "Demi_Head issue #45",
-        "Demi_Head issue #57"
-      ],
+      "artifacts": ["Demi_Head issue #45", "Demi_Head issue #57"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Bound total branch mass or exact-answer cost."
     },
@@ -82,10 +71,7 @@
       "type": "FORMALIZATION",
       "result": "PROVED_AS_MODEL_BRIDGE",
       "formal_statement": "Without a semantic oracle, adaptive variable questions form a backdoor-style decision tree; a supplied depth-d tree with polytime leaves costs O(2^d poly(N)).",
-      "artifacts": [
-        "Demi_Head issue #47",
-        "Demi_Head issue #49"
-      ],
+      "artifacts": ["Demi_Head issue #47", "Demi_Head issue #49"],
       "external_basis": "Dreier, Ordyniak, Szeider, SAT Backdoors: Depth Beats Size (2022).",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Prove shallow/poly-amortized depth or find counterfamilies."
@@ -106,11 +92,7 @@
         "O6_BACKDOOR_TO_TRACTABLE_PORTFOLIO",
         "O7_B2_ER_EXTENSION_AWARE_REASONS"
       ],
-      "artifacts": [
-        "Demi_Head issue #44",
-        "Demi_Head issue #48",
-        "Demi_Head issue #53"
-      ],
+      "artifacts": ["Demi_Head issue #44", "Demi_Head issue #48", "Demi_Head issue #53"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Kill or prove each rung without silent heuristic fallback."
     },
@@ -121,9 +103,7 @@
       "type": "FALSIFIER_TARGET",
       "result": "SELECTED",
       "reason": "Root has no unit propagation; bounded-degree pigeon clauses are non-Horn/non-Krom; connected expanders defeat component decomposition; known Resolution width/size lower bounds attack O5.",
-      "artifacts": [
-        "Demi_Head issue #54"
-      ],
+      "artifacts": ["Demi_Head issue #54"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Determine whether repeated bounded-width contractions can evade the width lower bound under adaptive contexts."
     },
@@ -146,7 +126,8 @@
       ],
       "consequence": [
         "For bounded-degree expander graph-PHP, W=Omega(n), so fixed/logarithmic-width O5 requires branch depth Omega(n).",
-        "By Resolution size lower bounds and transcript-to-Resolution compilation, O5 total work is 2^{Omega(n)} in the literal-unit model, hence superpolynomial in encoded input length."
+        "By Resolution size lower bounds and transcript-to-Resolution compilation, O5 total work is 2^{Omega(n)} in the graph parameter.",
+        "Using only constant left degree, a safe explicit encoded-input upper bound is N=O(n^2 log n), hence a conservative input-relative lower bound 2^{Omega(sqrt(N/log N))}, still superpolynomial."
       ],
       "artifacts": [
         "docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md",
@@ -173,7 +154,7 @@
       },
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "closed_false_road": "REPEATED_BOUNDED_WIDTH_PLAIN_RESOLUTION_CONTRACTIONS_AS_UNIVERSAL_POLY_ESCAPE",
-      "next_gap": "Escalate beyond plain Resolution: identify the first stronger exact proof-carrying observable (likely B2/ER or another non-Resolution rule) that can contract graph-PHP while retaining polynomial discovery and total-cost bounds."
+      "next_gap": "Escalate beyond plain Resolution: identify the first stronger exact proof-carrying observable that can contract graph-PHP while retaining polynomial discovery and total-cost bounds."
     },
     {
       "event_id": "AKJ-009",
@@ -188,25 +169,41 @@
         "job_id": 97611853242
       },
       "meaning": "CI independently confirms the finite context-lift/branch-composition mechanics and validates JSON syntax. It does not establish the external asymptotic graph-PHP lower bound.",
-      "artifacts": [
-        "docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md",
-        "commit 185a7d8558bcc57cb01004f3b47ad36990018658"
-      ],
+      "artifacts": ["docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md", "commit 185a7d8558bcc57cb01004f3b47ad36990018658"],
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Use graph-PHP as a separator to determine whether O7/B2/ER provides a constructive escape and locate the cost of generating the required extension definitions."
+    },
+    {
+      "event_id": "AKJ-010",
+      "local_time": "2026-08-25T01:20:00+03:00",
+      "title": "Graph-PHP encoded-input map conservatively repaired",
+      "type": "CLAIM_REPAIR",
+      "trigger": "The prior shorthand N=O(n log n) implicitly required bounded right degree, while the imported expander statement explicitly supplied constant left degree only.",
+      "result": "REPAIRED_WITHOUT_CHANGING_ROUTE_VERDICT",
+      "formal_statement": [
+        "Constant left degree implies total edges O(n).",
+        "With right degrees r_h, collision clauses sum_h C(r_h,2) <= O(n^2).",
+        "Safe binary-identifier encoding bound: N=O(n^2 log n).",
+        "Thus 2^{Omega(n)} implies 2^{Omega(sqrt(N/log N))}, which remains superpolynomial."
+      ],
+      "old_claim_withdrawn": "2^{Omega(N/log N)} without a separately established bounded-right-degree construction",
+      "artifacts": ["docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md", "commit c61a3dceb1d9c75cf373823312deb3c7320ad6ed"],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "O7/B2/ER separator: proof existence vs deterministic schema generation vs universal extension discovery."
     }
   ],
   "active_front": {
     "name": "AKINATOR-CLOSE",
     "primary_issue": 42,
-    "current_exact_question": "Can O7/B2/Extended Resolution construct a proof-carrying polynomial escape on the exact graph-PHP separator, and if so is the extension schema itself deterministically generable in polynomial time from the sparse input?",
+    "current_exact_question": "Can O7/B2/Extended Resolution construct a proof-carrying polynomial escape on the graph-PHP separator, and if so is the extension schema itself deterministically generable in polynomial time from the sparse input?",
     "forbidden_shortcuts": [
       "free SAT oracle",
       "free #SAT/model-count oracle",
       "heuristic branch deletion",
       "finite benchmark promoted to universal theorem",
       "unpaid proof discovery",
-      "unbounded hidden polynomial exponent"
+      "unbounded hidden polynomial exponent",
+      "unproved input-length compression"
     ]
   },
   "journal_policy": {
