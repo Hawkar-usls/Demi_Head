@@ -1,0 +1,180 @@
+{
+  "journal_id": "TOPA-PVSNP-AKINATOR-EVENT-JOURNAL-2026-08-25",
+  "format_version": "1.0",
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "scientific_laws": [
+    "HEURISTIC != EVIDENCE",
+    "SHORT_QUESTION != CHEAP_ANSWER",
+    "FINITE_REPLAY != ASYMPTOTIC_THEOREM",
+    "POLY_IN_A_GROWING_HIDDEN_PARAMETER != POLY_IN_INPUT_N",
+    "REPRESENTATION != DERIVATION",
+    "EXISTENCE != CHEAP_DISCOVERY",
+    "FAILED_ROUTE_MUST_BE_PRESERVED"
+  ],
+  "events": [
+    {
+      "event_id": "AKJ-001",
+      "local_time": "2026-08-25T00:55:00+03:00",
+      "title": "Akinator closure contract frozen",
+      "type": "CONTRACT",
+      "hypothesis": "A constant number of Akinator questions is not required; polynomial total dialogue is sufficient.",
+      "result": "PROVED_BY_DEFINITION_OF_POLYNOMIAL_TIME",
+      "formal_statement": "If deterministic exact SAT is decided with total cost <= N^c for one fixed c on every CNF, then SAT in P and therefore P=NP.",
+      "artifacts": [
+        "docs/TOPA_AKINATOR_P_EQUALS_NP_CLOSURE_CONTRACT.md",
+        "Demi_Head issue #42"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Find a universally available exact question/observable family with polynomial total cost and certified progress."
+    },
+    {
+      "event_id": "AKJ-002",
+      "local_time": "2026-08-25T00:58:00+03:00",
+      "title": "Exact Walsh wave is not a free observable",
+      "type": "BARRIER",
+      "hypothesis": "Low-degree exact SAT-indicator wave coefficients might be cheap enough to guide the Akinator.",
+      "result": "REFUTED_AS_FREE_PRIMITIVE",
+      "formal_statement": "For G=F AND (NOT y) with fresh y, W_G({y})=#SAT(F); exact computation of even this degree-1 coefficient is #P-hard.",
+      "artifacts": [
+        "Demi_Head issue #46",
+        "Demi_Head issue #56",
+        "Demi_Head issue #59"
+      ],
+      "mechanical_status": "FINITE_PROBE_PENDING_REPOSITORY_CI",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Search for exact observables weaker than model counting."
+    },
+    {
+      "event_id": "AKJ-003",
+      "local_time": "2026-08-25T01:00:00+03:00",
+      "title": "Exact semantic split balance is #P-hard",
+      "type": "BARRIER",
+      "hypothesis": "The Akinator can cheaply choose a question that balances satisfying witnesses.",
+      "result": "REFUTED_AS_FREE_PRIMITIVE",
+      "formal_statement": "Exact balance needs #SAT(F AND q) and #SAT(F AND NOT q); these counts are #P-hard in general.",
+      "artifacts": [
+        "Demi_Head issue #51"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Use proof-carrying structural progress rather than exact entropy/model balance."
+    },
+    {
+      "event_id": "AKJ-004",
+      "local_time": "2026-08-25T01:01:00+03:00",
+      "title": "Branch-or-answer trilemma frozen",
+      "type": "ACCOUNTING_THEOREM",
+      "result": "FROZEN",
+      "formal_statement": "Every exact question must yield certified collapse, keep both live branches, or pay for an exact semantic answer; heuristic discard is forbidden.",
+      "artifacts": [
+        "Demi_Head issue #45",
+        "Demi_Head issue #57"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Bound total branch mass or exact-answer cost."
+    },
+    {
+      "event_id": "AKJ-005",
+      "local_time": "2026-08-25T01:02:00+03:00",
+      "title": "Akinator mapped to SAT backdoor depth",
+      "type": "FORMALIZATION",
+      "result": "PROVED_AS_MODEL_BRIDGE",
+      "formal_statement": "Without a semantic oracle, adaptive variable questions form a backdoor-style decision tree; a supplied depth-d tree with polytime leaves costs O(2^d poly(N)).",
+      "artifacts": [
+        "Demi_Head issue #47",
+        "Demi_Head issue #49"
+      ],
+      "external_basis": "Dreier, Ordyniak, Szeider, SAT Backdoors: Depth Beats Size (2022).",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Prove shallow/poly-amortized depth or find counterfamilies."
+    },
+    {
+      "event_id": "AKJ-006",
+      "local_time": "2026-08-25T01:03:00+03:00",
+      "title": "BASE0 exact observable portfolio frozen",
+      "type": "EXPERIMENTAL_CONTRACT",
+      "result": "ACTIVE",
+      "portfolio": [
+        "O0_UNIT_PROPAGATION",
+        "O1_FAILED_LITERAL_WITH_BOUNDED_PROOF",
+        "O2_HORN_KROM",
+        "O3_COMPONENT_DECOMPOSITION",
+        "O4_EXPLICIT_CERTIFIED_AFFINE_XOR",
+        "O5_FIXED_WIDTH_RESOLUTION_CONSEQUENCES",
+        "O6_BACKDOOR_TO_TRACTABLE_PORTFOLIO",
+        "O7_B2_ER_EXTENSION_AWARE_REASONS"
+      ],
+      "artifacts": [
+        "Demi_Head issue #44",
+        "Demi_Head issue #48",
+        "Demi_Head issue #53"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Kill or prove each rung without silent heuristic fallback."
+    },
+    {
+      "event_id": "AKJ-007",
+      "local_time": "2026-08-25T01:04:00+03:00",
+      "title": "Expander graph-PHP selected as first BASE0/O5 stress family",
+      "type": "FALSIFIER_TARGET",
+      "result": "SELECTED",
+      "reason": "Root has no unit propagation; bounded-degree pigeon clauses are non-Horn/non-Krom; connected expanders defeat component decomposition; known Resolution width/size lower bounds attack O5.",
+      "artifacts": [
+        "Demi_Head issue #54"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Determine whether repeated bounded-width contractions can evade the width lower bound under adaptive contexts."
+    },
+    {
+      "event_id": "AKJ-008",
+      "local_time": "2026-08-25T01:10:00+03:00",
+      "title": "Bounded-width contraction to Resolution-width bridge",
+      "type": "THEOREM",
+      "hypothesis": "Repeated bounded-width contractions under partial assignments might evade a Resolution width lower bound.",
+      "result": "REFUTED_IN_O5_PLAIN_RESOLUTION_SCOPE",
+      "formal_statement": [
+        "Root-global width-w contractions concatenate into one Resolution derivation of width <= max(w0(F),w).",
+        "If F|rho has a width-w residual derivation, pure Resolution lifts it to a subclause of D OR B(rho) with width <= max(w0(F),w+|rho|).",
+        "A complete O5(w) adaptive tree of branch depth d compiles to Resolution width <= max(w0(F),w+d).",
+        "The compiled Resolution DAG has size O(total local Resolution lines + branch-composition events)."
+      ],
+      "external_basis": [
+        "Ben-Sasson and Wigderson, Short Proofs are Narrow — Resolution Made Simple, ECCC TR99-022 / JACM 2001.",
+        "Their graph-PHP width theorem gives W(PHP(G)) >= r*e/2 for suitable bipartite expanders."
+      ],
+      "consequence": [
+        "For bounded-degree expander graph-PHP, W=Omega(n), so fixed/logarithmic-width O5 requires branch depth Omega(n).",
+        "By Resolution size lower bounds and transcript-to-Resolution compilation, O5 total work is 2^{Omega(n)} in the literal-unit model, hence superpolynomial in encoded input length."
+      ],
+      "artifacts": [
+        "docs/TOPA_AKINATOR_O5_WIDTH_CONTEXT_THEOREM.md",
+        "commit 2720a9cdc030e4b9b180d447cc5b90daeec08898"
+      ],
+      "mechanical_status": "CI_PROBE_NOT_YET_ADDED",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "closed_false_road": "REPEATED_BOUNDED_WIDTH_PLAIN_RESOLUTION_CONTRACTIONS_AS_UNIVERSAL_POLY_ESCAPE",
+      "next_gap": "Escalate beyond plain Resolution: identify the first stronger exact proof-carrying observable (likely B2/ER or another non-Resolution rule) that can contract graph-PHP while retaining polynomial discovery and total-cost bounds."
+    }
+  ],
+  "active_front": {
+    "name": "AKINATOR-CLOSE",
+    "primary_issue": 42,
+    "current_exact_question": "What is the weakest proof-carrying rule strictly beyond ordinary Resolution that produces certified global contraction on the graph-PHP counterfamily with deterministic polynomial discovery and polynomial total representation?",
+    "forbidden_shortcuts": [
+      "free SAT oracle",
+      "free #SAT/model-count oracle",
+      "heuristic branch deletion",
+      "finite benchmark promoted to universal theorem",
+      "unpaid proof discovery",
+      "unbounded hidden polynomial exponent"
+    ]
+  },
+  "journal_policy": {
+    "append_every_material_event": true,
+    "preserve_failures": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_must_keep_source_identity": true,
+    "p_vs_np_close_only_on_full_closure_contract": true
+  }
+}
