@@ -1,0 +1,48 @@
+name: Validate TOPA Policy-0B.1 Total Machine
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_POLICY0B1_TOTAL_MACHINE_FREEZE.md'
+      - 'contracts/TOPA_POLICY0B1_TOTAL_MACHINE_FROZEN_CONTRACT.json'
+      - 'fixtures/topa_policy0b1_total_machine.py'
+      - '.github/workflows/topa-policy0b1-total-machine.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_POLICY0B1_TOTAL_MACHINE_FREEZE.md'
+      - 'contracts/TOPA_POLICY0B1_TOTAL_MACHINE_FROZEN_CONTRACT.json'
+      - 'fixtures/topa_policy0b1_total_machine.py'
+      - '.github/workflows/topa-policy0b1-total-machine.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-policy0b1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate frozen contract
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('contracts/TOPA_POLICY0B1_TOTAL_MACHINE_FROZEN_CONTRACT.json'))
+          assert p['schema']=='janus.demihead.topa_policy0b1.total_machine_frozen_contract.v1'
+          assert p['disabled_features']['automatic_extension_proposal'] is True
+          assert p['disabled_features']['global_reason_cache'] is True
+          assert p['disabled_features']['model_score_or_confidence'] is True
+          assert p['retention']['clause_count_increase_allowed'] is False
+          assert p['complexity']['polynomial_total_runtime_proved'] is False
+          assert p['p_vs_np']=='OPEN'
+          print('TOPA_POLICY0B1_FROZEN_CONTRACT = PASS')
+          PY
+      - name: Compile machine replay
+        run: python -m py_compile fixtures/topa_policy0b1_total_machine.py
+      - name: Replay deterministic finite machine suite
+        run: python fixtures/topa_policy0b1_total_machine.py
