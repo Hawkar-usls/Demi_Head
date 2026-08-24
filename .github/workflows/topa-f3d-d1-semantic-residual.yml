@@ -7,6 +7,7 @@ on:
       - 'docs/TOPA_F3D_D1_SEMANTIC_RESIDUAL_PROOF_PROGRAM.md'
       - 'contracts/TOPA_F3D_D1_SEMANTIC_RESIDUAL_CLASSIFIER_FROZEN_CONTRACT.json'
       - 'fixtures/topa_f3d_d1_semantic_residual_classifier.py'
+      - 'fixtures/topa_f3d_d1_operational_partial_classifier.py'
       - '.github/workflows/topa-f3d-d1-semantic-residual.yml'
   pull_request:
     branches: [main]
@@ -14,6 +15,7 @@ on:
       - 'docs/TOPA_F3D_D1_SEMANTIC_RESIDUAL_PROOF_PROGRAM.md'
       - 'contracts/TOPA_F3D_D1_SEMANTIC_RESIDUAL_CLASSIFIER_FROZEN_CONTRACT.json'
       - 'fixtures/topa_f3d_d1_semantic_residual_classifier.py'
+      - 'fixtures/topa_f3d_d1_operational_partial_classifier.py'
       - '.github/workflows/topa-f3d-d1-semantic-residual.yml'
   workflow_dispatch:
 
@@ -41,7 +43,11 @@ jobs:
           assert p['p_vs_np']=='OPEN'
           print('TOPA_F3D_D1_FROZEN_CONTRACT = PASS')
           PY
-      - name: Compile finite semantic replay
-        run: python -m py_compile fixtures/topa_f3d_d1_semantic_residual_classifier.py
+      - name: Compile D1 probes
+        run: |
+          python -m py_compile fixtures/topa_f3d_d1_semantic_residual_classifier.py
+          python -m py_compile fixtures/topa_f3d_d1_operational_partial_classifier.py
       - name: Replay exact finite semantic classifier and falsifiers
         run: python fixtures/topa_f3d_d1_semantic_residual_classifier.py
+      - name: Replay proof-carrying partial classifier
+        run: python fixtures/topa_f3d_d1_operational_partial_classifier.py
