@@ -1,0 +1,99 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-015-016-STRUCTURAL-SELECTOR-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": {
+    "path": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+    "parent_format_version": "1.4",
+    "last_known_blob_sha": "0062fac3984d8e2f4b4a71d4096bf4fc6c92375b"
+  },
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T01:37:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "scientific_laws_added": [
+    "POLYNOMIAL_ENUMERABILITY_OF_A_VOCABULARY != UNIVERSAL_PROGRESS",
+    "LOCAL_STRUCTURAL_CERTIFICATE != GLOBAL_PROOF_PROGRESS",
+    "LARGE_PRE_RESTRICTION_STRUCTURE != RESTRICTION_ROBUST_STRUCTURE",
+    "SOURCE_LOWER_BOUND_PLUS_INTERNAL_TRANSFER != SOURCE_PROVES_OUR_SELECTOR_THEOREM"
+  ],
+  "events": [
+    {
+      "event_id": "AKJ-015",
+      "local_time": "2026-08-25T01:37:00+03:00",
+      "title": "NW-local proof-carrying structural selector class refuted on frozen hard family",
+      "type": "SELECTOR_CLASS_BARRIER",
+      "hypothesis": "A universal polynomial Akinator may be obtained by selecting only B2 macros whose transitive root support stays inside one NW neighborhood, provided the candidates and progress certificates are polynomially enumerable/checkable.",
+      "result": "REFUTED_IN_STATED_NW_LOCAL_ER3_SCOPE",
+      "formal_statement": [
+        "On the frozen existential NW-parity hard family, every NW-neighborhood-local B2/ER3 refutation has superpolynomial size and superpolynomial extension count in actual encoded input length.",
+        "Therefore a selector restricted to NW-local B2 macros cannot both terminate on every sufficiently large hard-family member and keep total work/extension count bounded by N^c for one fixed c.",
+        "Such a selector must return UNKNOWN, exceed polynomial resources, or emit a cross-neighborhood macro."
+      ],
+      "external_basis": "Dmitry Sokolov, Pseudorandom Generators, Resolution and Heavy Width, CCC 2022.",
+      "internal_dependencies": [
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_E2R_L1E_NW_LOCAL_ER3_LOWER_BOUND.md"
+      ],
+      "artifacts": [
+        "docs/TOPA_AKINATOR_PROOF_CARRYING_STRUCTURAL_SELECTOR_BARRIER.md",
+        "probes/akinator_structural_selector_barrier_probe.py",
+        ".github/workflows/validate-akinator-structural-selector.yml",
+        "commit 09e401081233549df191cac1f0262c28810c340b",
+        "commit ef930618500f66c183cb11804cae6cb1be1e8ebe",
+        "commit 9199d473e32890edbc721befe0fe3645f0fb8592"
+      ],
+      "mechanical_status": "PROVIDER_CI_PENDING",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Permit cross-neighborhood macros and quantify the minimum structural complexity a polynomial selector vocabulary must support."
+    },
+    {
+      "event_id": "AKJ-016",
+      "local_time": "2026-08-25T01:37:00+03:00",
+      "title": "Low width-depth structural vocabulary refuted; robust survival becomes next certificate resource",
+      "type": "STRUCTURAL_TRADEOFF_BARRIER",
+      "result": "PROVED_IN_STATED_F3_TRANSFER_SCOPE",
+      "formal_statement": [
+        "For any polynomial-size B2/ER3 escape on the frozen NW hard-family transfer, negative-frontier width b and inversion depth d must obey (d+1)*log(b+2)=Omega(log N).",
+        "Hence any selector class whose successful runs guarantee b<=B(N), d<=D(N) with (D(N)+1)*log(B(N)+2)=o(log N) cannot be a universal polynomial escape on that family.",
+        "Constant b requires d=Omega(log N); constant d requires b=N^Omega(1); polylogarithmic b requires d=Omega(log N/log log N).",
+        "However large original b,d is not itself a valid progress certificate: the F3D.D0 abstract counterfamily has arbitrarily large pre-restriction b,d but a one-root-bit restriction collapses every crossing macro to a constant."
+      ],
+      "internal_dependencies": [
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_E2R_L1G_F3_FRONTIER_WIDTH_DEPTH.md",
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_E2R_L1G_F3D_SEMANTIC_SURVIVAL_BARRIER.md"
+      ],
+      "new_exact_gate": "AKINATOR-RSPC__ROBUST_STRUCTURAL_PROGRESS_CERTIFICATE",
+      "required_certificate_components": [
+        "cross-neighborhood mixing",
+        "sufficient negative-frontier width/inversion depth",
+        "restriction-robust semantic survival under an exact source-matched restriction relation/distribution",
+        "polynomial verification",
+        "deterministic polynomial discovery",
+        "global potential decrease theorem"
+      ],
+      "mechanical_status": "PROVIDER_CI_PENDING",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Build or refute a polynomially discoverable robust structural progress certificate without exact coNP-hard semantic usefulness and without exponential schema backtracking."
+    }
+  ],
+  "active_front": {
+    "name": "AKINATOR-RSPC",
+    "current_exact_question": "Can a deterministic polynomial selector find a cross-neighborhood B2 macro with a polynomially checkable certificate of restriction-robust structural survival and certified global progress, for every nonterminal CNF/proof state?",
+    "adversarial_question": "Can a polynomial-size macro family pass every proposed cheap structural certificate while collapsing under the exact source-matched restriction relation?",
+    "forbidden_shortcuts": [
+      "semantic forcedness oracle",
+      "model counting oracle",
+      "heuristic structural score",
+      "exponential schema enumeration",
+      "pre-restriction b,d treated as survival",
+      "unproved source self-reduction constructor cost",
+      "finite replay promoted to asymptotic theorem"
+    ]
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_ci_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "merge_into_parent_journal_when_full_parent_bytes_are_safely_available": true
+  }
+}
