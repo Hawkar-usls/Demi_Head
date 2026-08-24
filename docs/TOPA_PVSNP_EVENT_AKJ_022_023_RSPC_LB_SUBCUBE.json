@@ -1,6 +1,6 @@
 {
-  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-022-023-RSPC-LB-SUBCUBE-2026-08-25",
-  "format_version": "1.0",
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-022-024-RSPC-LB-SUBCUBE-2026-08-25",
+  "format_version": "1.1",
   "parent_journal_chain": [
     "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
     "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json",
@@ -9,6 +9,7 @@
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
   "created_local": "2026-08-25T01:48:30+03:00",
+  "last_updated_local": "2026-08-25T01:51:15+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws_added": [
     "POLYNOMIAL_MEASURE_REGION != POLYNOMIALLY_DISCOVERABLE_REGION",
@@ -39,9 +40,10 @@
       ],
       "artifacts": [
         "docs/TOPA_AKINATOR_RSPC_LB_SUBCUBE_BARRIER.md",
-        "probes/akinator_rspc_lb_subcube_probe.py"
+        "probes/akinator_rspc_lb_subcube_probe.py",
+        ".github/workflows/validate-akinator-rspc-lb-subcube.yml"
       ],
-      "mechanical_status": "PROVIDER_CI_PENDING",
+      "mechanical_status": "PROVIDER_CI_PASS",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Require a proof-carrying region certificate rather than semantic universal checking."
     },
@@ -66,9 +68,37 @@
         "deterministic polynomial constructor trace",
         "global potential decrease theorem"
       ],
-      "mechanical_status": "PROVIDER_CI_PENDING",
+      "mechanical_status": "PROVIDER_CI_PASS",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Construct or refute a direct polynomial proof-carrying robust-region constructor that does not enumerate the quasipolynomial region vocabulary."
+    },
+    {
+      "event_id": "AKJ-024",
+      "local_time": "2026-08-25T01:51:15+03:00",
+      "title": "Independent RSPC-LB subcube finite-mechanics replay passed",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "workflow": "Validate Akinator RSPC-LB Subcube",
+        "head_sha": "a2666dabf2c80befd8c545eb3b0e7cfd5a247470",
+        "run_id": 32786615249,
+        "job_id": 97619739020,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_RSPC_LB_FULL_CUBE_SURVIVAL_EQ_UNSAT = PASS",
+          "AKINATOR_RSPC_LB_SUBCUBE_COUNT_FORMULA = PASS",
+          "AKINATOR_RSPC_LB_FINITE_LARGE_REGION_COUNT = PASS",
+          "SEMANTIC_FULL_CUBE_SURVIVAL_CoNP_COMPLETENESS = ANALYTICAL_REDUCTION_NOT_CI",
+          "CODIM_LOG_N_ENUMERATION_ASYMPTOTIC = ANALYTICAL_COUNTING_NOT_CI",
+          "PROOF_CARRYING_ROBUST_REGION_CONSTRUCTOR = OPEN",
+          "SOKOLOV_SOURCE_MATCHED_REGION_HARDNESS = NOT_PROVED",
+          "CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "meaning": "Provider CI confirms only the named finite full-cube identity and subcube-count mechanics. coNP-completeness and quasipolynomial exhaustive-search growth remain analytical results.",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Attack the proof-carrying robust-region constructor itself: region discovery, robustness-proof discovery, and global-potential accounting must all be polynomial without semantic or exhaustive fallback."
     }
   ],
   "active_front": {
