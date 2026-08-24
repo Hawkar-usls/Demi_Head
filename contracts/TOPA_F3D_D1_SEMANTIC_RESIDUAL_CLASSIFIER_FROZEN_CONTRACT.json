@@ -1,0 +1,95 @@
+{
+  "schema": "janus.demihead.topa_f3d_d1.semantic_residual_classifier_frozen_contract.v1",
+  "contract_id": "TOPA_F3D_D1_SEMANTIC_RESIDUAL_CLASSIFIER_FROZEN_CONTRACT",
+  "created_at_local": "2026-08-24T22:15:00+03:00",
+  "frozen_before_promotion": true,
+  "arbiter_repository": "Hawkar-usls/Demi_Head",
+  "scientific_canonical_lineage": {
+    "repository": "Hawkar-usls/TOPA",
+    "front": "C025-E2R-L1G-F3-D",
+    "parent_note": "research/mathematics/p-vs-np/C025_E2R_L1G_F3D_SEMANTIC_SURVIVAL_BARRIER.md"
+  },
+  "proof_program": "docs/TOPA_F3D_D1_SEMANTIC_RESIDUAL_PROOF_PROGRAM.md",
+  "purpose": "Freeze exact semantic definitions, finite reference semantics, complexity firewalls and proof-carrying partial-classifier outputs for F3D-D1 without assuming a polynomial-time total semantic oracle.",
+  "frozen_objects": {
+    "root_variables": "explicit finite Boolean variable set R",
+    "locality_hypergraph": "explicit finite list H={V_i subseteq R}",
+    "b2_gate": "e := signed_literal(a) AND signed_literal(b), with topological freshness",
+    "root_restriction": "partial assignment rho on root variables only",
+    "residual_function": "exact Boolean function f_u^rho on free roots",
+    "essential_support": "variables whose single-bit cofactor change can change the residual function",
+    "semantic_fingerprint": "complete truth table under one fixed free-root ordering; finite-reference only"
+  },
+  "exact_reference_classes": [
+    "CONST_0",
+    "CONST_1",
+    "ROOT_LITERAL",
+    "NEG_ROOT_LITERAL",
+    "LOCAL",
+    "CROSSING"
+  ],
+  "operational_outputs": [
+    "CERTIFIED_CONST_0",
+    "CERTIFIED_CONST_1",
+    "CERTIFIED_LOCAL",
+    "WITNESSED_CROSSING",
+    "UNKNOWN"
+  ],
+  "operational_rules": {
+    "unknown_is_valid": true,
+    "heuristic_fallback_allowed": false,
+    "syntactic_crossing_may_be_promoted_to_semantic_crossing": false,
+    "absence_of_local_certificate_implies_crossing": false,
+    "absence_of_crossing_witness_implies_local": false,
+    "model_vote_or_confidence_may_change_class": false,
+    "finite_truth_table_may_be_called_general_polytime": false
+  },
+  "crossing_witness": {
+    "required_for_each_neighborhood": true,
+    "pair_condition": "alpha_i and beta_i agree on V_i but output values differ",
+    "verification": "evaluate explicit B2 DAG on both assignments and verify projection equality plus output inequality",
+    "claim": "sound certificate that the function is not local to any listed neighborhood"
+  },
+  "local_certificate": {
+    "finite_fixture_mode": "complete truth-table plus exact essential-support computation",
+    "general_mode": "formal equivalence/dependency certificate with separately specified verifier",
+    "no_general_short_certificate_assumption": true
+  },
+  "complexity_firewall": {
+    "truth_table_reference_cost": "O(S * 2^r) where r is the number of free roots and S is explicit DAG gate count",
+    "const0_recognition": "coNP-complete for general frozen-B2 DAGs",
+    "const1_recognition": "coNP-complete for general frozen-B2 DAGs",
+    "fixed_neighborhood_locality": "coNP-complete for general frozen-B2 DAGs",
+    "semantic_alias_equivalence": "coNP-complete for general frozen-B2 DAGs",
+    "polytime_total_exact_classifier_assumed": false,
+    "consequence_if_polytime_total_exact_classifier_exists": "would place coNP-complete circuit-unsatisfiability/equivalence tasks in P and therefore collapse P, NP and coNP"
+  },
+  "mandatory_falsifiers": [
+    "F_D1_01_ONE_BIT_KILL_SWITCH",
+    "F_D1_02_SYNTACTIC_SUPPORT_FALSE_POSITIVE",
+    "F_D1_03_RESIDUAL_ALIAS_COLLISION",
+    "F_D1_04_NEIGHBORHOOD_AMBIGUITY",
+    "F_D1_05_CROSSING_WITNESS_POSITIVE",
+    "F_D1_06_FAKE_CROSSING_WITNESS_REJECTION",
+    "F_D1_07_RESTRICTION_CREATED_LOCALITY",
+    "F_D1_08_FINITE_ORACLE_EXPONENTIAL_ASSIGNMENT_COUNT",
+    "F_D1_09_UNKNOWN_INSTEAD_OF_GUESS"
+  ],
+  "exit_criteria": {
+    "D1_E1_definitions_frozen": true,
+    "D1_E2_exact_finite_reference_oracle": "PENDING_CI",
+    "D1_E3_adversarial_falsifier_suite": "PENDING_CI",
+    "D1_E4_complexity_barrier_recorded": true,
+    "D1_E5_proof_carrying_partial_classifier": "PENDING_IMPLEMENTATION_REPLAY",
+    "D1_E6_arbiter_ci": "PENDING",
+    "D1_E7_d2_handoff": "BLOCKED_UNTIL_E2_TO_E6_PASS"
+  },
+  "claim_ceiling": [
+    "finite exhaustive semantics proves only finite fixture mechanics",
+    "coNP-completeness barrier is a complexity classification, not P!=NP",
+    "D1 does not establish a universal semantic survival theorem",
+    "D1 does not establish unrestricted ER3 or ER lower bounds",
+    "P versus NP remains open"
+  ],
+  "p_vs_np": "OPEN"
+}
