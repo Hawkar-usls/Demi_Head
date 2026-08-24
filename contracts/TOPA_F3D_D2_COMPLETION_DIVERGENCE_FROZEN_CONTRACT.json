@@ -1,0 +1,73 @@
+{
+  "schema": "janus.demihead.topa_f3d_d2.completion_divergence_frozen_contract.v1",
+  "contract_id": "TOPA_F3D_D2_COMPLETION_DIVERGENCE_FROZEN_CONTRACT",
+  "created_at_local": "2026-08-24T22:31:00+03:00",
+  "arbiter_repository": "Hawkar-usls/Demi_Head",
+  "scientific_lineage": {
+    "canonical_repository": "Hawkar-usls/TOPA",
+    "parent_front": "C025-E2R-L1G-F3-D",
+    "proof_program": "docs/TOPA_F3D_D2_SOURCE_SELF_REDUCTION_PROOF_PROGRAM.md"
+  },
+  "primary_source": {
+    "paper": "Dmitry Sokolov, Pseudorandom Generators, Resolution and Heavy Width, CCC 2022",
+    "doi": "10.4230/LIPIcs.CCC.2022.15",
+    "algorithm": "Algorithm 1",
+    "audited_steps": [11, 12]
+  },
+  "fixture_scope": "SOURCE_LIKE_LINE11_LINE12_STATE_NOT_FULL_LEMMA22_HARD_FAMILY",
+  "line11_fixture": {
+    "left_vertices": ["a", "b", "c", "d"],
+    "r_limit": 2,
+    "epsilon": 0.25,
+    "adjacency": {
+      "a": ["y1", "w1"],
+      "b": ["y1", "w1"],
+      "c": ["y2", "w2"],
+      "d": ["y2", "w2"]
+    },
+    "expected_maximizers": [["a", "b"], ["c", "d"]],
+    "selection_rule_for_isolation": "LEXICOGRAPHICALLY_FIRST_SATISFYING_NU_FOR_THE_SELECTED_B"
+  },
+  "line12_fixture": {
+    "fixed_B": ["a", "b"],
+    "constraint": "PARITY(y1,w1)=0 for both left constraints",
+    "expected_valid_nu": [
+      {"w1": 0, "y1": 0},
+      {"w1": 1, "y1": 1}
+    ]
+  },
+  "target_macro": {
+    "frozen_b2": [
+      "h := z1 AND z2",
+      "M := y1 AND h"
+    ],
+    "locality_hypergraph": [
+      ["y1", "w1"],
+      ["y2", "w2"],
+      ["z1"],
+      ["z2"]
+    ]
+  },
+  "required_results": {
+    "F_D2_01": {
+      "B1_ab_with_same_lex_nu_rule": "CONST_0",
+      "B2_cd_with_same_lex_nu_rule": "CROSSING",
+      "meaning": "argmax tie completion can change target semantic survival in the frozen line-11 fixture"
+    },
+    "F_D2_02": {
+      "same_B_ab_nu_00": "CONST_0",
+      "same_B_ab_nu_11": "CROSSING",
+      "meaning": "valid satisfying-assignment completion can change target semantic survival in the frozen line-12 fixture"
+    }
+  },
+  "scientific_conclusion": "COMPLETION_CHOICE_IS_A_REAL_PARAMETER_FOR_SEMANTIC_SURVIVAL_IN_SOURCE_LIKE_ALGORITHM1_STATES",
+  "not_established": [
+    "the same divergence occurs in every state satisfying all Lemma 22 hypotheses",
+    "the hard NW family admits a polynomial-size ER3 escape exploiting this ambiguity",
+    "a source-valid completion causes high-probability crossing collapse",
+    "unrestricted ER3 has polynomial or superpolynomial extension count",
+    "P versus NP is resolved"
+  ],
+  "next_gate": "D2_T2_CHECK_COMPLETION_INDEPENDENT_LEMMA22_INVARIANTS_THEN_D3_QUANTIFY_OVER_ALL_VALID_COMPLETIONS_OR_BUILD_SOURCE_MATCHED_ESCAPE",
+  "p_vs_np": "OPEN"
+}
