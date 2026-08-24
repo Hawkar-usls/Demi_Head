@@ -1,0 +1,30 @@
+name: Validate Akinator RSPC-LB Subcube
+
+on:
+  push:
+    paths:
+      - 'docs/TOPA_AKINATOR_RSPC_LB_SUBCUBE_BARRIER.md'
+      - 'probes/akinator_rspc_lb_subcube_probe.py'
+      - 'docs/TOPA_PVSNP_EVENT_AKJ_022_023_RSPC_LB_SUBCUBE.json'
+      - '.github/workflows/validate-akinator-rspc-lb-subcube.yml'
+  workflow_dispatch:
+
+jobs:
+  finite-mechanics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run RSPC-LB subcube finite mechanics
+        run: python probes/akinator_rspc_lb_subcube_probe.py
+      - name: Validate RSPC-LB event JSON
+        run: python -m json.tool docs/TOPA_PVSNP_EVENT_AKJ_022_023_RSPC_LB_SUBCUBE.json >/dev/null
+      - name: Claim ceiling reminder
+        run: |
+          echo 'CI validates finite full-cube identity and exact subcube-count mechanics only.'
+          echo 'coNP-completeness and exp(Theta(log^2 N)) exhaustive-search growth are analytical results.'
+          echo 'Sokolov source-matched region hardness remains NOT_PROVED.'
+          echo 'Proof-carrying robust region constructor remains OPEN.'
+          echo 'P_VS_NP = OPEN'
