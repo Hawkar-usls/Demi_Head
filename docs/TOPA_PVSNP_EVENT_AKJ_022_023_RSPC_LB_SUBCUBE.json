@@ -1,0 +1,86 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-022-023-RSPC-LB-SUBCUBE-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal_chain": [
+    "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+    "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json",
+    "docs/TOPA_PVSNP_EVENT_AKJ_019_020_RSPC_SURVIVAL.json"
+  ],
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T01:48:30+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "scientific_laws_added": [
+    "POLYNOMIAL_MEASURE_REGION != POLYNOMIALLY_DISCOVERABLE_REGION",
+    "REGION_DESCRIPTION != PROOF_OF_UNIVERSAL_SURVIVAL",
+    "CHEAP_REGION_PROOF_VERIFIER != CHEAP_REGION_PROOF_DISCOVERY",
+    "COMPRESSED_SEARCH_SPACE != POLYNOMIAL_SEARCH_SPACE"
+  ],
+  "events": [
+    {
+      "event_id": "AKJ-022",
+      "local_time": "2026-08-25T01:48:30+03:00",
+      "title": "Semantic verification of universal survival on a named subcube already contains UNSAT",
+      "type": "CERTIFICATE_VERIFICATION_BARRIER",
+      "result": "PROVED_IN_STATED_ABSTRACT_LOCALITY_MODEL",
+      "construction": [
+        "Compile arbitrary CNF H(X) to frozen-B2 output h.",
+        "Choose roots p,q with crossing support and define g <-> (p AND q).",
+        "Define target e <-> ((NOT h) AND g).",
+        "Use the codimension-zero region R=*^n containing every full assignment to X."
+      ],
+      "formal_identity": "Every alpha in R leaves e CROSSING iff H is UNSAT.",
+      "complexity_statement": "SEMANTIC_UNIVERSAL_FULL_CUBE_SURVIVAL is coNP-complete on this polynomial reduction image; a falsifying alpha is a polynomial complement witness.",
+      "meaning": "A region name plus an instruction for the verifier to semantically check all points is not a cheap proof-carrying robustness certificate. A separate derivation must be carried.",
+      "scope_firewall": [
+        "This is a complexity reduction, not an unconditional superpolynomial time lower bound.",
+        "The restriction distribution is abstract/uniform, not Sokolov source-matched self-reduction.",
+        "P_VS_NP remains OPEN."
+      ],
+      "artifacts": [
+        "docs/TOPA_AKINATOR_RSPC_LB_SUBCUBE_BARRIER.md",
+        "probes/akinator_rspc_lb_subcube_probe.py"
+      ],
+      "mechanical_status": "PROVIDER_CI_PENDING",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Require a proof-carrying region certificate rather than semantic universal checking."
+    },
+    {
+      "event_id": "AKJ-023",
+      "local_time": "2026-08-25T01:48:30+03:00",
+      "title": "Exhaustive search over inverse-polynomial-measure subcubes is not polynomial",
+      "type": "CERTIFICATE_DISCOVERY_ENUMERATION_BARRIER",
+      "result": "PROVED_FOR_EXHAUSTIVE_SUBCUBE_ENUMERATION_STRATEGY",
+      "formal_statement": [
+        "The number of codimension-k subcubes over n roots is exactly C(n,k)*2^k.",
+        "A subcube of measure at least N^{-c} may have k<=c log_2 N.",
+        "On state families with n=Theta(N) and k=Theta(log N), C(n,k)*2^k = exp(Theta((log N)^2)) up to lower-order log-log factors.",
+        "Therefore enumerating every polynomial-measure subcube and applying a polynomial verifier is superpolynomial/quasipolynomial in the worst case."
+      ],
+      "scope_firewall": "This lower bound applies to explicit exhaustive region enumeration, not to every possible direct region constructor.",
+      "new_exact_gate": "AKINATOR-RSPC-PC__PROOF_CARRYING_ROBUST_REGION_CONSTRUCTOR",
+      "required_object": [
+        "explicit region R",
+        "polynomial-size proof Pi of required robustness on all rho in R",
+        "explicit measure lower bound for R",
+        "deterministic polynomial constructor trace",
+        "global potential decrease theorem"
+      ],
+      "mechanical_status": "PROVIDER_CI_PENDING",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Construct or refute a direct polynomial proof-carrying robust-region constructor that does not enumerate the quasipolynomial region vocabulary."
+    }
+  ],
+  "active_front": {
+    "name": "AKINATOR-RSPC-PC",
+    "current_exact_question": "Can syntax/graph structure directly generate, in deterministic polynomial time, a polynomial-measure restriction region together with a polynomial-size proof that the required crossing/inversion resource survives throughout that region, and can repeated such moves be charged to one fixed polynomial global potential?",
+    "forbidden_shortcuts": [
+      "semantic universal region oracle",
+      "exhaustive codimension-O(log N) subcube enumeration",
+      "region description without proof",
+      "proof verification silently substituted for proof discovery",
+      "source-mismatched restriction distribution",
+      "finite region counts promoted to asymptotic theorem"
+    ]
+  }
+}
