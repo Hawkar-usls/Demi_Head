@@ -4,18 +4,18 @@
 **Arbiter home:** `Hawkar-usls/Demi_Head`  
 **Scientific lineage:** `Hawkar-usls/TOPA`  
 **Parent:** `TOPA_F3D_D5_PARITY_LIFETIME_REUSE_BARRIER.md`  
-**Status:** `D6_NAIVE_COFACTOR_RENEWAL_REFUTED__PROOF_RELATIVE_MEASURE_OPEN`  
+**Status:** `D6_COFACTOR_AND_FIXED_PROOF_CUTSET_ROUTES_REFUTED__PROOF_SYSTEM_RELATIVE_MEASURE_OPEN`  
 **Global ceiling:** `P_VS_NP = OPEN`.
 
 ## 1. Goal
 
 D5 refuted raw semantic lifetime as an amortization resource: one small global circuit can remain crossing through all hard residual stages.
 
-D6 asks whether repeated restrictions force the same extension circuit to expose many **distinct residual semantic functions**, and whether that number can be charged to extension count.
+D6 asks whether repeated restrictions force a genuinely renewed proof resource that can be charged to distinct extension gates rather than repeatedly charging the same reusable global circuit.
 
-The first naive route is refuted below.
+Two naive routes are now refuted.
 
-## 2. Inner-product cofactor counterexample
+## 2. D6-A — inner-product cofactor counterexample
 
 Let roots be split into
 
@@ -57,7 +57,7 @@ Therefore one `O(k)`-gate B2 circuit has exactly
 
 distinct cofactors under the `2^k` restrictions fixing `X`.
 
-### D6-A theorem
+### Theorem D6-A
 
 ```text
 EXPONENTIALLY_MANY_DISTINCT_RESIDUAL_FUNCTIONS
@@ -67,7 +67,7 @@ EXPONENTIALLY_MANY_EXTENSION_GATES.
 
 A lower bound based only on counting distinct cofactor/semantic classes cannot force superpolynomial extension count.
 
-## 3. Why this is stronger than the earlier flat-case barrier
+## 3. Why D6-A is stronger than the earlier flat-case barrier
 
 The old class-count/parity barrier showed that exponentially many flat CNF/DNF cases can be compressed by a small extension circuit.
 
@@ -94,68 +94,159 @@ To prove a superpolynomial B2 gate lower bound, a communication-style measure wo
 
 No such theorem is assumed.
 
-## 5. Proof reachability is not yet proof utility
+## 5. D6-B1 — fixed-proof extension cutset is not proof-system necessity
+
+Define a tempting syntactic measure on one chosen proof DAG:
+
+```text
+CUT_EXT(P)
+:= minimum number of crossing extension definitions whose removal
+   disconnects the used derivation from root axioms to the empty clause.
+```
+
+This is a property of a representation of one proof, not automatically of the root formula or proof system.
+
+### Exact frozen-calculus counterfixture
+
+Use root CNF
+
+```text
+{x}
+{~x}
+{y}
+```
+
+and locality neighborhoods
+
+```text
+{x}, {y}.
+```
+
+The formula has the direct zero-extension Resolution refutation
+
+```text
+x, ~x -> empty.
+```
+
+Now introduce the crossing frozen-B2 extension
+
+```text
+e <-> (x AND y).
+```
+
+Its exact defining clauses include
+
+```text
+~e OR x
+~e OR y
+e OR ~x OR ~y.
+```
+
+A second exact Resolution refutation is:
+
+```text
+(e OR ~x OR ~y), x -> (e OR ~y)
+(e OR ~y), y       -> e
+(~e OR x), ~x      -> ~e
+e, ~e              -> empty.
+```
+
+In this chosen proof `e` is an obvious one-extension bottleneck and is semantically crossing because its support `{x,y}` is not contained in either locality block.
+
+But the same root CNF has a shorter proof with **no extensions at all**.
+
+### Theorem D6-B1
+
+A crossing-extension cutset of a chosen proof DAG is not a lower bound on extension resources necessary for the formula:
+
+```text
+CUTSET_OF_ONE_PROOF
+!=
+MINIMUM_EXTENSION_RESOURCE_OVER_ALL_PROOFS.
+```
+
+Syntactic routing can make a dispensable extension look globally central.
+
+## 6. Consequence for any repaired cutset measure
+
+To turn B1 into a proof-complexity invariant one would need to minimize over alternative proofs, for example
+
+```text
+CUT*_B(F)
+:= min CUT_EXT(P)
+   over all refutations P of F with size <= B.
+```
+
+This is mathematically well-defined, but it now quantifies over the very space of short proofs whose complexity JANUS is trying to lower-bound.
+
+Therefore it may be useful as a target quantity but cannot be assumed to provide an easier route. Its algorithmic computation/search cost is not free and its lower bound may be essentially equivalent to a proof-complexity lower-bound problem.
+
+## 7. Proof reachability is not proof utility
 
 D4 correctly prunes definitions unreachable from the final residual refutation.
 
-However syntactic reachability alone is not a quantitative information-renewal theorem. A macro may occur on proof paths while carrying a reusable global function that serves many restrictions.
+D6-B1 shows that even reachability/centrality in the selected derivation is not the same as necessity across alternative proofs.
 
-The next resource must be proof-relative and must survive the following adversarial question:
+Freeze:
 
 ```text
-Can the same small global circuit be reused to satisfy the proposed measure
-at polynomially many residual stages?
+PROOF_REACHABLE
+!=
+FORMULA_NECESSARY
+
+DERIVATION_BOTTLENECK
+!=
+PROOF_SYSTEM_BOTTLENECK.
 ```
 
-If yes, the measure cannot be summed to obtain a distinct-`K` lower bound.
-
-## 6. Candidate D6-B objects — test before promotion
-
-The following are candidates only.
-
-### B1 — extension cutset
-
-Minimum number of crossing extension definitions whose removal disconnects all residual axiom-to-empty-clause derivation paths in a fixed proof DAG.
-
-Risk: purely syntactic routing may be gameable by proof rewrites and may not be invariant under p-equivalent proofs.
+## 8. Surviving D6 candidates
 
 ### B2 — budgeted indispensability
 
-For size budget `B`, minimum number of extension definitions that must be available to obtain *any* refutation of the residual formula of size at most `B`.
+For size budget `B`, minimum extension resource required by **any** refutation of the residual formula of size at most `B`.
 
-This is proof-relative in the right sense, but its definition quantifies over alternative proofs and may essentially restate the target proof-complexity problem.
+This has the right proof-system quantifier but may simply repackage the target lower-bound problem.
 
 ### B3 — partition-profile complexity
 
-Associate to each used extension function a vector of communication/information values over the relevant NW output partitions and seek a direct-sum lower bound for a complete residual refutation.
+Associate to each used extension function a vector of communication/information values over the relevant NW output partitions and seek a direct-sum theorem for a complete residual refutation.
 
-This has the best chance to penalize reusable global macros, but no valid direct-sum theorem is currently established.
+A scalar value is insufficient; a genuine proof-relative composition theorem is required.
 
 ### B4 — semantic influence on source heavy width
 
-Measure how much removing/restricting an extension can reduce the minimum achievable heavy width of functional forms of the proof.
+Measure how availability of a set of arbitrary B2 circuits changes the minimum achievable heavy width of refutations of the source formula.
 
-This aligns most directly with Sokolov's source invariant but requires extending the heavy-width formalism beyond local functional variables to arbitrary B2 circuits.
+This aligns most directly with Sokolov's invariant but requires extending the heavy-width formalism beyond local functional variables to arbitrary circuits.
 
-## 7. Exact next decision
-
-```text
-D6-A cofactor-count renewal                 = REFUTED
-D6-B1 syntactic cutset                       = CANDIDATE / ADVERSARIAL TEST NEEDED
-D6-B2 budgeted indispensability              = CANDIDATE / MAY BE CIRCULAR
-D6-B3 partition-profile direct sum            = CANDIDATE / OPEN
-D6-B4 generalized heavy-width influence       = CANDIDATE / OPEN
-```
-
-Priority order:
+## 9. Exact next decision
 
 ```text
-1. Attack B1 with proof-rewrite falsifiers.
-2. If B1 dies, test whether B4 can be defined semantically without a free classifier.
-3. Keep B3 as a bridge to known communication/interpolation techniques, but require a direct-sum theorem before any counting claim.
+D6-A cofactor-count renewal                  = REFUTED
+D6-B1 fixed-proof extension cutset            = REFUTED
+D6-B2 budgeted proof-system indispensability  = OPEN / POSSIBLY CIRCULAR
+D6-B3 partition-profile direct sum            = OPEN
+D6-B4 generalized heavy-width influence       = OPEN / PREFERRED NEXT FORMALIZATION
 ```
 
-## 8. Claim firewall
+Preferred next move:
+
+```text
+Define B4 without heuristic semantics and ask whether one K-gate global extension circuit
+can reduce source heavy-width obstruction by more than poly(K).
+```
+
+If a bound of the form
+
+```text
+HEAVY_WIDTH_DAMAGE <= poly(K)
+```
+
+survives adversarial testing, it could connect the source lower bound directly to extension count without lifetime summation.
+
+No such bound is currently claimed.
+
+## 10. Claim firewall
 
 ```text
 MANY_COFACTORS
@@ -168,7 +259,11 @@ SUPERPOLYNOMIAL_PROOF_SIZE
 
 PROOF_REACHABILITY
 !=
-PROOF_INFORMATION_RENEWAL
+PROOF_SYSTEM_NECESSITY
+
+CUTSET_OF_ONE_DERIVATION
+!=
+MINIMUM_CUTSET_OVER_REFUTATIONS
 
 D6_CANDIDATE_MEASURE
 !=
