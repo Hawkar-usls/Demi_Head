@@ -1,7 +1,7 @@
 # TOPA / JANUS — Akinator O5 Bounded-Width Contraction Theorem
 
 **Frozen:** 2026-08-25  
-**Status:** `PROVED_IN_STATED_SCOPE__CI_PENDING`  
+**Status:** `PROVED_IN_STATED_SCOPE__CI_PASS`  
 **Global ceiling:** `P_VS_NP = OPEN`
 
 ## 0. Question attacked
@@ -225,7 +225,31 @@ within the stated O5 calculus.
 
 ---
 
-## 7. What this does NOT close
+## 7. Independent finite mechanics receipt
+
+Dedicated GitHub Actions replay:
+
+```text
+workflow = Validate Akinator O5 Width Context
+head     = a8cd65acf3e171fe50003dc790bab97bccd96fa6
+run      = 32783967221
+job      = 97611853242
+result   = SUCCESS
+
+AKINATOR_O5_CONTEXT_AXIOM_LIFT_SHAPE = PASS
+AKINATOR_O5_SINGLE_CONTEXT_WIDTH_BOUND = PASS bound=2 actual=2
+AKINATOR_O5_NESTED_TREE_WIDTH_BOUND = PASS bound=2 actual=2
+AKINATOR_O5_ROOT_GLOBAL_FLATTEN = PASS width=2
+AKINATOR_O5_BRANCH_COMPOSITION = PASS
+CLAIM_CEILING = FINITE_MECHANICS_ONLY
+P_VS_NP = OPEN
+```
+
+CI also parsed `docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json` successfully. The asymptotic graph-PHP lower bound is source-derived from Ben-Sasson–Wigderson plus the analytical compilation theorem above; CI does not prove that asymptotic theorem.
+
+---
+
+## 8. What this does NOT close
 
 The result does not refute the full JANUS Akinator closure program.
 
@@ -247,11 +271,12 @@ Those are precisely where the next candidate escape must live.
 
 ---
 
-## 8. Claim ceiling
+## 9. Claim ceiling
 
 ```text
 O5_CONTEXT_LIFT_WIDTH_THEOREM = PROVED_IN_STATED_SCOPE
 O5_ADAPTIVE_TREE_TO_RESOLUTION = PROVED_IN_STATED_SCOPE
+O5_FINITE_MECHANICS = PROVIDER_CI_PASS
 O5_GRAPH_PHP_UNIVERSAL_POLY_ROUTE = REFUTED_FROM_BSW_LOWER_BOUND + OUR_COMPILATION
 BASE0_FULL_PORTFOLIO = NOT_REFUTED_BY_THIS_NOTE
 B2_ER_ROUTE = OPEN
