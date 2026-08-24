@@ -1,0 +1,47 @@
+name: Validate TOPA F3D-D1 Semantic Residual Classifier
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_F3D_D1_SEMANTIC_RESIDUAL_PROOF_PROGRAM.md'
+      - 'contracts/TOPA_F3D_D1_SEMANTIC_RESIDUAL_CLASSIFIER_FROZEN_CONTRACT.json'
+      - 'fixtures/topa_f3d_d1_semantic_residual_classifier.py'
+      - '.github/workflows/topa-f3d-d1-semantic-residual.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/TOPA_F3D_D1_SEMANTIC_RESIDUAL_PROOF_PROGRAM.md'
+      - 'contracts/TOPA_F3D_D1_SEMANTIC_RESIDUAL_CLASSIFIER_FROZEN_CONTRACT.json'
+      - 'fixtures/topa_f3d_d1_semantic_residual_classifier.py'
+      - '.github/workflows/topa-f3d-d1-semantic-residual.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-f3d-d1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate frozen contract
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('contracts/TOPA_F3D_D1_SEMANTIC_RESIDUAL_CLASSIFIER_FROZEN_CONTRACT.json'))
+          assert p['schema']=='janus.demihead.topa_f3d_d1.semantic_residual_classifier_frozen_contract.v1'
+          assert p['operational_rules']['unknown_is_valid'] is True
+          assert p['operational_rules']['heuristic_fallback_allowed'] is False
+          assert p['operational_rules']['syntactic_crossing_may_be_promoted_to_semantic_crossing'] is False
+          assert p['complexity_firewall']['polytime_total_exact_classifier_assumed'] is False
+          assert p['p_vs_np']=='OPEN'
+          print('TOPA_F3D_D1_FROZEN_CONTRACT = PASS')
+          PY
+      - name: Compile finite semantic replay
+        run: python -m py_compile fixtures/topa_f3d_d1_semantic_residual_classifier.py
+      - name: Replay exact finite semantic classifier and falsifiers
+        run: python fixtures/topa_f3d_d1_semantic_residual_classifier.py
