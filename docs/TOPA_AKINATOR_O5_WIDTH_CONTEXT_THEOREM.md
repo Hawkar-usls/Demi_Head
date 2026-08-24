@@ -1,7 +1,7 @@
 # TOPA / JANUS — Akinator O5 Bounded-Width Contraction Theorem
 
 **Frozen:** 2026-08-25  
-**Status:** `PROVED_IN_STATED_SCOPE__CI_PASS`  
+**Status:** `PROVED_IN_STATED_SCOPE__CI_PASS__ENCODING_BOUND_REPAIRED`  
 **Global ceiling:** `P_VS_NP = OPEN`
 
 ## 0. Question attacked
@@ -180,11 +180,11 @@ Ben-Sasson and Wigderson prove for graph pigeonhole formulas over suitable bipar
 W(PHP(G)) >= r*e/2.
 ```
 
-For `m=n+1`, constant left degree (e.g. 5), `r=Theta(n)` and constant expansion surplus, there are bounded-degree instances with
+For `m=n+1`, constant left degree and `r=Theta(n)` with constant expansion surplus, there are instances with
 
 ```text
 w0 = O(1)
-number_of_variables = Theta(n)
+number_of_variables = |E| = Theta(n)
 W(PHP(G)) = Omega(n).
 ```
 
@@ -200,19 +200,43 @@ d >= W(PHP(G)) - w = Omega(n) - w.
 
 For fixed `w` or `w=O(log N)`, the decision depth is linear in the graph parameter.
 
-More importantly, the same width lower bound combined with the Ben-Sasson–Wigderson size-width relation yields exponential Resolution size for the constant-degree expander graph-PHP family. Since O5 execution compiles to Resolution with only transcript-linear proof overhead,
+More importantly, the same width lower bound combined with the Ben-Sasson–Wigderson size-width relation yields exponential Resolution size in the graph parameter. Since O5 execution compiles to Resolution with only transcript-linear proof overhead,
 
 ```text
 O5_TOTAL_WORK >= 2^{Omega(n)}
 ```
 
-in the usual literal-unit model. With explicit binary variable identifiers the serialized input length is `N = O(n log n)`, giving at least
+in the usual literal-unit model.
+
+### Conservative encoded-input map
+
+Constant **left** degree gives `|E|=O(n)`, but by itself does not bound every right degree. If `r_h` denotes the degree of hole `h`, the number of collision clauses is
 
 ```text
-2^{Omega(N/log N)},
+sum_h binom(r_h,2) <= O((sum_h r_h)^2) = O(n^2).
 ```
 
-still superpolynomial in the actual encoded input length.
+Thus without importing an additional bounded-right-degree expander construction, the safe explicit binary-identifier encoding bound is
+
+```text
+N = O(n^2 log n).
+```
+
+Therefore
+
+```text
+n = Omega(sqrt(N / log N))
+```
+
+for this encoding upper bound, and the source-derived exponential lower bound implies the conservative input-relative statement
+
+```text
+O5_TOTAL_WORK >= 2^{Omega(sqrt(N/log N))},
+```
+
+which is still superpolynomial in the actual encoded input length `N`.
+
+The earlier stronger shorthand `2^{Omega(N/log N)}` is **not used** unless bounded right degree is separately established.
 
 Hence:
 
@@ -278,6 +302,7 @@ O5_CONTEXT_LIFT_WIDTH_THEOREM = PROVED_IN_STATED_SCOPE
 O5_ADAPTIVE_TREE_TO_RESOLUTION = PROVED_IN_STATED_SCOPE
 O5_FINITE_MECHANICS = PROVIDER_CI_PASS
 O5_GRAPH_PHP_UNIVERSAL_POLY_ROUTE = REFUTED_FROM_BSW_LOWER_BOUND + OUR_COMPILATION
+O5_INPUT_RELATIVE_LOWER_BOUND = 2^{Omega(sqrt(N/log N))}  # conservative encoding map
 BASE0_FULL_PORTFOLIO = NOT_REFUTED_BY_THIS_NOTE
 B2_ER_ROUTE = OPEN
 P_VS_NP = OPEN
