@@ -1,6 +1,6 @@
 {
-  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-015-016-STRUCTURAL-SELECTOR-2026-08-25",
-  "format_version": "1.0",
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-015-017-STRUCTURAL-SELECTOR-2026-08-25",
+  "format_version": "1.1",
   "parent_journal": {
     "path": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
     "parent_format_version": "1.4",
@@ -9,12 +9,14 @@
   "canonical_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
   "created_local": "2026-08-25T01:37:00+03:00",
+  "last_updated_local": "2026-08-25T01:41:00+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws_added": [
     "POLYNOMIAL_ENUMERABILITY_OF_A_VOCABULARY != UNIVERSAL_PROGRESS",
     "LOCAL_STRUCTURAL_CERTIFICATE != GLOBAL_PROOF_PROGRESS",
     "LARGE_PRE_RESTRICTION_STRUCTURE != RESTRICTION_ROBUST_STRUCTURE",
-    "SOURCE_LOWER_BOUND_PLUS_INTERNAL_TRANSFER != SOURCE_PROVES_OUR_SELECTOR_THEOREM"
+    "SOURCE_LOWER_BOUND_PLUS_INTERNAL_TRANSFER != SOURCE_PROVES_OUR_SELECTOR_THEOREM",
+    "ASYMPTOTIC_DOMINANCE != SMALL_N_DOMINANCE"
   ],
   "events": [
     {
@@ -41,7 +43,7 @@
         "commit ef930618500f66c183cb11804cae6cb1be1e8ebe",
         "commit 9199d473e32890edbc721befe0fe3645f0fb8592"
       ],
-      "mechanical_status": "PROVIDER_CI_PENDING",
+      "mechanical_status": "PROVIDER_CI_FAILED_FIXTURE_PENDING_REPAIR",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Permit cross-neighborhood macros and quantify the minimum structural complexity a polynomial selector vocabulary must support."
     },
@@ -70,9 +72,34 @@
         "deterministic polynomial discovery",
         "global potential decrease theorem"
       ],
-      "mechanical_status": "PROVIDER_CI_PENDING",
+      "mechanical_status": "PROVIDER_CI_FAILED_FIXTURE_PENDING_REPAIR",
       "claim_ceiling_after": "P_VS_NP = OPEN",
       "next_gap": "Build or refute a polynomially discoverable robust structural progress certificate without exact coNP-hard semantic usefulness and without exponential schema backtracking."
+    },
+    {
+      "event_id": "AKJ-017",
+      "local_time": "2026-08-25T01:41:00+03:00",
+      "title": "Structural-selector finite probe failed on premature asymptotic dominance assertion",
+      "type": "FAILED_PROVIDER_REPLAY",
+      "result": "FAIL_PRESERVED",
+      "provider_receipt": {
+        "workflow": "Validate Akinator Structural Selector",
+        "head_sha": "5fe2c0b0e91d4f7354a540c527d3235311e96ba7",
+        "run_id": 32785801057,
+        "job_id": 97617363127,
+        "conclusion": "FAILURE"
+      },
+      "failure_location": "probes/akinator_structural_selector_barrier_probe.py::check_budget_examples",
+      "failed_assertion": "constD_polyB.normalized > constD_polylogB.normalized for k=8..20",
+      "diagnosis": [
+        "The analytical theorem is asymptotic.",
+        "The fixture incorrectly demanded N^(1/4) > (log_2 N)^2 already for small N=2^k with k in 8..20.",
+        "For those finite values the inequality can be reversed even though N^(1/4) eventually dominates (log N)^2.",
+        "This is a finite-fixture bug, not evidence against the F3 asymptotic tradeoff."
+      ],
+      "repair_rule": "Move only this dominance witness to an explicitly verified sufficiently-large-k regime; keep the analytical theorem independent of the finite replay.",
+      "claim_ceiling_after": "P_VS_NP = OPEN",
+      "next_gap": "Repair fixture, rerun independently, preserve this failed receipt permanently."
     }
   ],
   "active_front": {
