@@ -1,0 +1,143 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-027-030-PF3-PF4-2026-08-25",
+  "format_version": "1.0",
+  "parent_extension": "docs/TOPA_PVSNP_EVENT_AKJ_019_026_ORGANISM_PF2.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "provider_home": "Hawkar-usls/Janus-Fundamentum",
+  "arbitration_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-027",
+      "title": "PF1/PF2 provider mirror passed independent Fundamentum replay",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "repo": "Hawkar-usls/Janus-Fundamentum",
+        "branch": "c025-policy0b-fair-reason",
+        "workflow": "Validate C025 Akinator PF1 PF2",
+        "head_sha": "4141bfe278b4110f37f120c84cc5fa297c3934cf",
+        "run_id": 32795123777,
+        "job_id": 97644702518,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "C025_AKINATOR_PF1_PREBIRTH_FACTOR_FINITE_REPLAY = PASS",
+          "C025_AKINATOR_PF1_WITNESS_LIFT_FINITE_REPLAY = PASS",
+          "C025_AKINATOR_ADD_ONLY_FRONTIER_MONOTONICITY = PASS",
+          "C025_AKINATOR_PF2_FUNCTION_TO_RELATION = PASS",
+          "C025_AKINATOR_PF2_JOINT_CORRELATION = PASS",
+          "C025_AKINATOR_PROVIDER_CLAIM_CEILING = FINITE_MECHANICS_ONLY",
+          "UNIVERSAL_POLY_BOUNDARY_QUOTIENT = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "meaning": "Independent provider validates finite mechanics only. PF1/PF2 analytic theorems remain TOPA derivations, not CI theorems."
+    },
+    {
+      "event_id": "AKJ-028",
+      "title": "Pure syntactic Shannon/hash-cons quotient route closed on equality family",
+      "type": "FROZEN_POLICY_ROUTE_CLOSURE",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF3_SYNTACTIC_SHANNON_EQUALITY_BARRIER.md",
+      "result": "PROVED_FOR_FROZEN_SYNTACTIC_PROJECTOR_POLICY",
+      "formal_statement": [
+        "For EQ_n(X,Y)=AND_i(x_i<->y_i), X-first Shannon existential projection with only structural hash-consing/local simplifications materializes at least 2^n distinct Y-prefix/minterm branch structures in cumulative DAG history.",
+        "After all variables are projected the final live DAG can nevertheless be constant TRUE.",
+        "PF1 eliminates each equality pivot prebirth because the two residual sides are y and NOT y, whose disjunction is TRUE."
+      ],
+      "provider_receipt": {
+        "repo": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator PF3 Syntactic Shannon",
+        "head_sha": "c94d13cddcc8c2d0c2e13aea595a8ea59197be6d",
+        "run_id": 32795288081,
+        "job_id": 97645195267,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_PF3_SYNTACTIC_SHANNON_EQUALITY_FINITE_REPLAY = PASS",
+          "AKINATOR_PF3_D_TOTAL_GE_2_POW_N_TESTED_N_1_TO_10 = PASS",
+          "AKINATOR_PF3_FINAL_TRUE_AFTER_EXPENSIVE_HISTORY = PASS",
+          "AKINATOR_PF3_PF1_EQUALITY_PREBIRTH_COLLAPSE = PASS",
+          "SYNTACTIC_SHANNON_EXPONENTIAL_ROUTE_CLOSURE = ANALYTIC_FROZEN_LANE_NOT_CI",
+          "PF3_UNIVERSAL_ALGEBRAIC_ORBIT_QUOTIENT = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "laws": [
+        "HASH_CONSING_CHILDREN_AFTER_BIRTH != PREBIRTH_FACTORING",
+        "FINAL_TRUE != CHEAP_DISCOVERY_OF_TRUE",
+        "D_TOTAL_MATTERS_EVEN_WHEN_D_FINAL_IS_ONE"
+      ]
+    },
+    {
+      "event_id": "AKJ-029",
+      "title": "Known knowledge-compilation languages audited as universal boundary containers",
+      "type": "EXTERNAL_REPRESENTATION_BARRIER",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF3_KNOWLEDGE_COMPILATION_BARRIERS.md",
+      "result": [
+        "Bova-Capelli-Mengel-Slivovsky expander graph-CNF theorem gives DNNF size 2^Omega(n) for a class of sparse CNFs.",
+        "Therefore universal exact polynomial boundary compilation into DNNF is refuted.",
+        "Literal DNNF subclasses inherit this size barrier on the source family.",
+        "OBDD/structured-DNNF width barriers and BDD/ZDD operation blow-ups are preserved only in their source representation scopes.",
+        "No DNNF/OBDD/ZDD lower bound is promoted to an arbitrary unrestricted B2-circuit lower bound."
+      ],
+      "external_sources": [
+        "Bova, Capelli, Mengel, Slivovsky, arXiv:1411.1995",
+        "Amarilli, Monet, Senellart, ICDT 2018, DOI 10.4230/LIPIcs.ICDT.2018.6",
+        "Nakamura, Nishino, Denzumi, ISAAC 2024, DOI 10.4230/LIPIcs.ISAAC.2024.52"
+      ],
+      "new_tension": "Restricted tractable query languages can have exponential representation size; unrestricted circuits restore hard equivalence/quotient discovery."
+    },
+    {
+      "event_id": "AKJ-030",
+      "title": "ER-certified rewrite lane identified with existing Extended Resolution frontier",
+      "type": "FRONTIER_IDENTITY",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF4_ER_CERTIFIED_REWRITE_BRIDGE.md",
+      "result": "PROVED_IN_FROZEN_CERTIFICATE_LANE",
+      "formal_statement": [
+        "A rewrite sequence whose logical certificates consist only of frozen B2 extensions plus Resolution/local identities compiled to B2/Resolution fragments concatenates into one B2 proof with polynomial overhead.",
+        "By existing B2/ER p-equivalence, universal polynomial total rewrite-certificate size implies ER p-boundedness.",
+        "Deterministic polynomial rewrite discovery is still the separate C2/#215 automatability/discovery obligation."
+      ],
+      "meaning": "Calling a trace rewrite/quotient does not bypass ER if its proof authority compiles to ER. PF1/orbit/live-width are useful candidate generators/controllers, not automatic new proof power.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    }
+  ],
+  "active_front": {
+    "name": "PF5_EXACT_OPERATOR_PORTFOLIO_COVERAGE",
+    "question": "Does the union of deterministic proof-carrying operators already present in the Hawkar-usls organism provide a capped exact progress step on every state, and if not, what is the first frozen adversarial family/state escaping all operators?",
+    "operators": [
+      "PF1 prebirth pivot factorization",
+      "deterministic low-live-width relational DP",
+      "ROBDD/decision diagram under frozen paid order and cap",
+      "exact prebirth orbit generator quotient",
+      "Horn/Krom/affine special solvers where syntactically certified",
+      "family-specific Cook/PHP ER generator",
+      "B2/ER proof-carrying reasons and extensions"
+    ],
+    "required_metrics": [
+      "original input N",
+      "D_live",
+      "D_total",
+      "failed candidate work",
+      "proof/certificate bytes",
+      "witness provenance bytes",
+      "live/boundary width",
+      "number of accepted original-root/rank decreases"
+    ],
+    "forbidden_shortcuts": [
+      "semantic oracle",
+      "heuristic score promoted to progress",
+      "unpriced representation switching",
+      "parallel latency without total work",
+      "ER-certified rewrite renamed as new proof power",
+      "small final artifact after exponential history"
+    ],
+    "global_status": "P_VS_NP = OPEN"
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_ci_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "architecture_pattern_has_zero_theorem_authority_without_reduction": true
+  }
+}
