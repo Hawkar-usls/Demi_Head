@@ -1,0 +1,80 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-033-035-PROJECTION-FRONTIER-MAP-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+  "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_031_032_PROJECTION_COMPRESSION.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-033",
+      "title": "Brute-force search over polynomial-size B2 compression blocks is exponential",
+      "type": "DISCOVERY_BARRIER",
+      "result": "REFUTED_AS_UNIVERSAL_DISCOVERY_METHOD__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "With two fixed distinct root literals p,q, each fresh B2 gate can choose at least between e_i=(p AND q) and e_i=(p AND NOT q), both syntactically legal.",
+        "Therefore K-gate replacement blocks contain at least 2^K syntactic sequences.",
+        "For growing K, exhaustive block enumeration is not polynomial even though every individual replacement block has polynomial size.",
+        "Cheap proof verification does not repair candidate discovery cost."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1I3 Compression Block Search",
+        "head_sha": "76d549e6f5e0aca46ff467e37257b31b8df4fb92",
+        "run_id": 32827194362,
+        "job_id": 97737699830,
+        "conclusion": "SUCCESS"
+      },
+      "scientific_laws": [
+        "POLY_OBJECT_SIZE != POLY_OBJECT_DISCOVERY",
+        "POLY_ONE_STEP_DECK != POLY_K_STEP_SCHEMA_TREE",
+        "CHEAP_PROOF_VERIFICATION != CHEAP_COMPRESSION_DISCOVERY"
+      ],
+      "next_gate": "DIRECT_CONSTRUCTIVE_PROJECTION_GRAMMAR_OR_CERTIFIED_SINGLE_STEP_DESCENT"
+    },
+    {
+      "event_id": "AKJ-034",
+      "title": "Nonuniform projection-size frontier is exactly NP subseteq P/poly",
+      "type": "COMPLEXITY_FRONTIER_EQUIVALENCE",
+      "result": "PROVED_ANALYTICALLY",
+      "formal_statement": [
+        "If every polynomial-size verifier/circuit existential projection has polynomial-size circuits with one fixed polynomial bound, every NP language has polynomial-size circuits, hence NP subseteq P/poly.",
+        "Conversely, if NP subseteq P/poly, the universal NP language U={(C,y): exists w C(w,y)} has polynomial-size circuits; hardwiring C yields a polynomial-size circuit for y -> exists w C(w,y).",
+        "Therefore universal polynomial projection-size existence iff NP subseteq P/poly.",
+        "By Karp-Lipton, NP subseteq P/poly implies PH collapses to Sigma_2^p."
+      ],
+      "external_basis": "Karp-Lipton theorem; standard P/poly circuit theory.",
+      "claim_ceiling": "This is a nonuniform equivalence, not P=NP. A general superpolynomial projection-size lower bound would prove NP not subseteq P/poly and hence a major circuit lower bound.",
+      "artifact": "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_U1J_NONUNIFORM_VS_UNIFORM_PROJECTION.md"
+    },
+    {
+      "event_id": "AKJ-035",
+      "title": "Uniform semantic exact projection compiler is equivalent to P=NP",
+      "type": "CLOSURE_EQUIVALENCE_FIREWALL",
+      "result": "PROVED_AT_SEMANTIC_UNIFORM_COMPILER_LEVEL",
+      "formal_statement": [
+        "A uniform polynomial-time exact projection compiler decides SAT by projecting all SAT variables to a zero-input circuit, so it implies P=NP.",
+        "If P=NP, the universal predicate A(C,y)=exists x C(x,y) is in P; standard P-uniform circuitization with C hardwired constructs polynomial-size circuits for the projected function, then translates them to B2.",
+        "Thus the broad semantic uniform projection compiler is essentially equivalent to P=NP.",
+        "This does not establish an equivalence for the stronger requirement of polynomial Extended-Resolution proof certificates for every compiled projection."
+      ],
+      "external_basis": "Standard theorem: P equals the class of languages decided by P-uniform polynomial-size circuit families.",
+      "claim_ceiling": "Reformulating P=NP as an unrestricted uniform projection compiler is not by itself progress; progress requires an independently analyzable structural construction mechanism.",
+      "artifact": "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_U1K_PROJECTION_COMPILER_EQUIVALENCE.md",
+      "next_gate": "U1_L_CERTIFIED_LOCAL_TO_GLOBAL_PROJECTION_GRAMMAR"
+    }
+  ],
+  "active_front": {
+    "name": "U1_L_CERTIFIED_LOCAL_TO_GLOBAL_PROJECTION_GRAMMAR",
+    "question": "Can an independently specified structural grammar, rather than a black-box projection compiler, decompose every B2 projection into polynomially many locally certified rewrites while keeping total state polynomial and avoiding semantic recognition/backtracking?",
+    "reason_for_front": "The unrestricted semantic compiler is equivalent to P=NP, so a useful next theorem must exploit additional structure instead of assuming the equivalent object."
+  },
+  "journal_policy": {
+    "append_only": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "analytical_equivalence_may_be_recorded_without_CI_but_must_be_labeled_analytical": true,
+    "external_theorem_identity_preserved": true,
+    "P_vs_NP_status_must_remain_open_until_actual_closure_proof": true
+  }
+}
