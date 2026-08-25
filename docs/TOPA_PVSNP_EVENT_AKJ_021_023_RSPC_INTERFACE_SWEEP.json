@@ -1,0 +1,119 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-021-023-RSPC-INTERFACE-SWEEP-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+  "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_019_020_RSPC_WITNESS_FRONTIER.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T11:01:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-021",
+      "title": "Natural tractable frontier languages fail universal B2 interface requirements in distinct ways",
+      "type": "REPRESENTATION_KILL_SWEEP",
+      "result": "MULTIPLE_ROUTES_CLOSED__PROVIDER_CI_PASS",
+      "results": [
+        "Horn exact relations fail on constant-size XOR2 by meet closure.",
+        "Krom/2-CNF exact relations fail on constant-size odd PARITY3 by majority closure.",
+        "Affine GF(2) exact relations fail on constant-size OR2 by ternary-XOR closure.",
+        "OBDDs support useful exact operations in explicit representation size, but Hidden Weighted Bit has an external exponential OBDD lower bound while retaining polynomial ordinary/B2 circuit size."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator RSPC Tractable Language Sweep",
+        "head_sha": "75aa1b540d7597312e88ce4e0d94a31d5db83818",
+        "run_id": 32824111473,
+        "job_id": 97728301929,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_RSPC_HORN_XOR_CLOSURE_COUNTEREXAMPLE = PASS",
+          "AKINATOR_RSPC_KROM_PARITY3_CLOSURE_COUNTEREXAMPLE = PASS",
+          "AKINATOR_RSPC_AFFINE_OR_CLOSURE_COUNTEREXAMPLE = PASS",
+          "AKINATOR_RSPC_CONSTANT_SIZE_B2_TRUTH_TABLES = PASS",
+          "OBDD_HWB_EXPONENTIAL_SIZE = EXTERNAL_THEOREM_NOT_CI",
+          "UNIVERSAL_TRACTABLE_FRONTIER_LANGUAGE = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "claim_ceiling": "Does not rule out all tractable representation languages; OBDD lower bound is external and not a circuit lower bound."
+    },
+    {
+      "event_id": "AKJ-022",
+      "title": "Structured knowledge compilation does not provide a free universal exact B2 frontier",
+      "type": "STRUCTURED_KC_BARRIER",
+      "result": "PROVED_IN_STATED_SCOPES__PROVIDER_CI_PASS",
+      "results": [
+        "External IJCAI 2024 theorem: general structured d-DNNF is not polynomially closed under negation/disjunction/existential quantification, blocking free signed-B2 semantic updates.",
+        "For bounded-degree expander vertex-cover monotone 2-CNF, internal transfer gives linear ordinary/B2 encoding and linear graph treewidth.",
+        "External Amarilli-Monet-Senellart structured d-DNNF lower bound then yields exponential d-SDNNF size in the stated bounded-arity/bounded-degree treewidth scope; SDD inherits the lower bound as a structured deterministic subclass."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator RSPC Structured KC Barrier",
+        "head_sha": "83b8af4914040bffd22b9910d3e3b95a1738a73d",
+        "run_id": 32824325013,
+        "job_id": 97728945314,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_RSPC_MONOTONE_2CNF_BOUNDED_DEGREE_FIXTURES = PASS",
+          "AKINATOR_RSPC_LINEAR_B2_ENCODING_FINITE = PASS",
+          "AKINATOR_RSPC_CNF_B2_TRUTH_EQUIVALENCE = PASS",
+          "EXPANDER_LINEAR_TREEWIDTH = ANALYTICAL_GRAPH_THEOREM_NOT_CI",
+          "DSDNNF_SDD_EXPONENTIAL_LOWER_BOUND = EXTERNAL_THEOREM_NOT_CI",
+          "STRUCTURED_DDNNF_NEGATION_BARRIER = EXTERNAL_THEOREM_NOT_CI",
+          "RSPC_U1_PROOF_RELEVANT_INTERFACE = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "new_gate": "RSPC_U1_PROOF_RELEVANT_INTERFACE",
+      "claim_ceiling": "Knowledge-compilation barriers do not imply P!=NP and do not rule out interfaces weaker than full semantic model-set representations."
+    },
+    {
+      "event_id": "AKJ-023",
+      "title": "Complete root-clause proof interface has width-versus-frontier-size dichotomy",
+      "type": "PROOF_RELEVANT_INTERFACE_BARRIER",
+      "result": "ANALYTIC_THEOREM_IN_STATED_RESOLUTION_SCOPE__PROVIDER_CI_PENDING",
+      "formal_statement": [
+        "The complete width-w root Resolution frontier has exact universe size sum_{k<=w} 2^k binom(n,k).",
+        "For fixed w this is polynomially bounded and exact saturation is a tractable complete width-w interface.",
+        "Existing Ben-Sasson-Wigderson expander G-PHP width lower bounds show sufficiently low w cannot refute the frozen hard-family scope.",
+        "If w enters a linear hard-width regime, materializing the complete clause frontier requires 2^Omega(n) possible clauses.",
+        "This does not imply every sparse wide proof is exponential; it moves the next gate to sparse derivational discovery."
+      ],
+      "artifacts": [
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_U1_CLAUSE_FRONTIER_WIDTH_DICHOTOMY.md",
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/akinator_rspc_u1_clause_frontier_probe.py",
+        "Hawkar-usls/TOPA/.github/workflows/validate-akinator-rspc-u1-clause-frontier.yml"
+      ],
+      "new_gate": "U1_B_SPARSE_DERIVATIONAL_INTERFACE",
+      "claim_ceiling": "Root Resolution width barrier is not an ER/B2 lower bound. Exponential complete frontier is not an exponential sparse-proof lower bound."
+    }
+  ],
+  "scientific_laws_added": [
+    "TRACTABLE_INTERSECTION != B2_EXPRESSIVE_CLOSURE",
+    "TRACTABLE_BOOLEAN_APPLY != UNIVERSAL_POLY_SERIALIZATION",
+    "FULL_SEMANTIC_FRONTIER_MAY_BE_STRONGER_THAN_SELECTOR_NEEDS",
+    "POLY_COMPLETE_LOW_WIDTH_CLOSURE != UNIVERSAL_RESOLUTION_POWER",
+    "EXPONENTIAL_COMPLETE_FRONTIER != EXPONENTIAL_SPARSE_PROOF",
+    "SPARSE_PROOF_EXISTS != CHEAP_SPARSE_PROOF_DISCOVERY"
+  ],
+  "active_front": {
+    "name": "U1_B_SPARSE_DERIVATIONAL_INTERFACE",
+    "question": "Can a deterministic polynomial Akinator maintain only a sparse polynomial number of proof objects and always discover a locally checkable, globally progressing B2 move without complete consequence saturation, semantic oracle calls, or exponential schema backtracking?",
+    "forbidden_shortcuts": [
+      "materialize all wide clauses",
+      "call exact semantic usefulness cheap",
+      "infer ER hardness from Resolution width",
+      "infer sparse-proof lower bound from complete-frontier size",
+      "promote provider replay to asymptotic theorem"
+    ]
+  },
+  "journal_policy": {
+    "append_only": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "negative_results_preserved": true
+  }
+}
