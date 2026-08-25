@@ -1,0 +1,38 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-025-LIVE-WIDTH-PATH-DP-2026-08-25",
+  "format_version": "1.0",
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T03:21:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "event": {
+    "event_id": "AKJ-025",
+    "title": "Deterministic live-width path-DP gives a second large-support exact-survival lane",
+    "type": "POSITIVE_BOUNDARY_CERTIFICATE_RESULT",
+    "result": "PROVED_IN_SCOPE_WITH_TOPA_AND_PROVIDER_FINITE_PASS",
+    "statement": [
+      "Live intervals derived from the frozen B2 gate trace form a valid path decomposition without any order/decomposition search.",
+      "Exact output feasibility and residual nonconstancy cost poly(T)*2^O(lambda), where lambda is maximum live-bag width.",
+      "Polynomial trace bytes plus a universal lambda=O(log N) bound imply deterministic polynomial exact-survival discovery in original N.",
+      "Parity has polynomially large support yet constant live width in its streaming representation.",
+      "A pair-fanout dependency architecture of size O(n^2) forces lambda=Omega(n) for every topological serialization of that fixed architecture, but an equivalent lower-width representation may exist."
+    ],
+    "provider_receipt": {
+      "topa_run": 32793132510,
+      "topa_job": 97638737275,
+      "fundamentum_head": "d4146e7f8232c4d38818f42517d8fbd804b2f464",
+      "fundamentum_run": 32793214883,
+      "fundamentum_job": 97639002424,
+      "conclusion": "SUCCESS",
+      "claim_ceiling": "FINITE_MECHANICS_ONLY"
+    },
+    "new_hidden_resource": "LIVE_BOUNDARY_WIDTH_lambda_AND_REPRESENTATION_REWRITE_DISCOVERY",
+    "boundaries": [
+      "No universal low-live-width representation theorem is proved.",
+      "No cheap equivalent-circuit rewrite constructor is proved.",
+      "Exact survival is not yet global proof progress.",
+      "P_VS_NP remains OPEN."
+    ],
+    "next_gate": "GLOBAL_PROGRESS_CERTIFICATE"
+  }
+}
