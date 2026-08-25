@@ -1,0 +1,87 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-031-032-PROJECTION-COMPRESSION-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+  "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_029_030_EXACT_PROJECTION_EXPONENT.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-031",
+      "title": "Inner Product separates exponential cofactor count from compact exact projection",
+      "type": "PROJECTION_COMPRESSION_SEPARATOR_AND_POSITIVE_CONTROL",
+      "result": "PROVED_IN_FAMILY_SCOPE__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "IP_k(x,y)=XOR_i(x_i AND y_i) has O(k) B2 size.",
+        "Fixing all x bits produces exactly 2^k distinct y-cofactors, one parity function for each subset of y variables.",
+        "Nevertheless exists x_1...x_k IP_k(x,y) equals OR_i y_i and therefore has O(k) B2 size.",
+        "Moreover exists x_i [(x_i AND y_i) XOR R] equals y_i OR R when R is x_i-independent, yielding a polynomial family-specific stagewise projection algorithm.",
+        "Therefore enumerating/caching every distinct cofactor before compression can be exponentially wasteful even when the exact projected function is small."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1I Inner Product Projection",
+        "head_sha": "ab40642e65565e8e3f805c9d0dbd3da0c34ce4f5",
+        "run_id": 32826830230,
+        "job_id": 97736590378,
+        "conclusion": "SUCCESS"
+      },
+      "scientific_laws": [
+        "MANY_DISTINCT_COFATORS != LARGE_PROJECTED_FUNCTION",
+        "COFACTOR_ENUMERATION != PROJECTION_COMPRESSION",
+        "SEMANTIC_DEDUPLICATION_DOES_NOT_SAVE_IP_COFACTOR_CACHE",
+        "ALGEBRAIC_STRUCTURE_CAN_COMPRESS_EXACT_PROJECTION_WITHOUT_ENUMERATING_COFATORS"
+      ],
+      "claim_ceiling": "This is a family-specific separator/positive control. It is not a lower bound on minimum B2 projection size for arbitrary formulas and does not establish universal smart compression.",
+      "next_gate": "U1_I2_PROJECTION_TARGET_RECOGNITION"
+    },
+    {
+      "event_id": "AKJ-032",
+      "title": "Recognizing even the constant-TRUE exact projection target is coNP-complete in general B2 scope",
+      "type": "SEMANTIC_RECOGNITION_BARRIER",
+      "result": "PROVED_BY_ANALYTICAL_REDUCTION__PROVIDER_CI_PASS_FOR_FINITE_MECHANICS",
+      "formal_statement": [
+        "Define PROJ_TRUE_B2: given C(x,y), decide whether exists x C is identically TRUE over y.",
+        "NO has a polynomial witness y with C(0,y)=C(1,y)=0, so the problem is in coNP.",
+        "For arbitrary F(y), let C_F=x AND F. Then exists x C_F=F, so PROJ_TRUE_B2 is TRUE iff F is a tautology; hence coNP-hard.",
+        "Therefore exact recognition of a proposed simple projection target cannot be treated as a free semantic operation.",
+        "The more general target-equivalence problem R(y) <-> exists x C(x,y) is also coNP-complete by taking R=TRUE."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1I2 Projection Target",
+        "head_sha": "aec4bde8c938e676c5928fe71f58a437e160003a",
+        "run_id": 32827008259,
+        "job_id": 97737131282,
+        "conclusion": "SUCCESS"
+      },
+      "scientific_laws": [
+        "SMALL_PROJECTION_TARGET != CHEAP_TARGET_RECOGNITION",
+        "POLY_REPLACEMENT_DECK != POLY_EXACT_TARGET_SELECTION",
+        "SYNTACTIC_MATCH != SEMANTIC_MATCH",
+        "REWRITE_SOUNDNESS != REWRITE_COMPLETENESS"
+      ],
+      "claim_ceiling": "coNP-completeness is an analytical theorem, not produced by CI. Syntactic/proof-carrying rewrite libraries remain viable; only unrestricted semantic target recognition is closed as a free operation.",
+      "next_gate": "U1_I3_PROOF_CARRYING_REWRITE_COMPLETENESS"
+    }
+  ],
+  "active_front": {
+    "name": "U1_I3_PROOF_CARRYING_REWRITE_COMPLETENESS",
+    "question": "Can a polynomially matchable/proof-carrying library of local projection rewrites keep every exact variable-elimination stage polynomial for arbitrary frozen-B2 states without semantic target recognition or exponential rewrite-sequence search?",
+    "positive_control": "Inner Product XOR-toggle projection identity",
+    "negative_controls": [
+      "Galil Davis-Putnam hard family",
+      "HWB / structured knowledge-compilation size barriers",
+      "selector-lift",
+      "F3D collapse",
+      "exponential schema-sequence enumeration"
+    ]
+  },
+  "journal_policy": {
+    "append_only": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_or_analytical_theorem_identity_preserved": true,
+    "P_vs_NP_status_must_remain_open_until_actual_closure_proof": true
+  }
+}
