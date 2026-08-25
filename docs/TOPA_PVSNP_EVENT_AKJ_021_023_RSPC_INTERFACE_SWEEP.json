@@ -1,12 +1,13 @@
 {
   "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-021-023-RSPC-INTERFACE-SWEEP-2026-08-25",
-  "format_version": "1.0",
+  "format_version": "1.1",
   "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
   "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_019_020_RSPC_WITNESS_FRONTIER.json",
   "canonical_science_home": "Hawkar-usls/TOPA",
   "arbitration_journal_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
   "created_local": "2026-08-25T11:01:00+03:00",
+  "last_updated_local": "2026-08-25T11:06:00+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "events": [
     {
@@ -74,7 +75,7 @@
       "event_id": "AKJ-023",
       "title": "Complete root-clause proof interface has width-versus-frontier-size dichotomy",
       "type": "PROOF_RELEVANT_INTERFACE_BARRIER",
-      "result": "ANALYTIC_THEOREM_IN_STATED_RESOLUTION_SCOPE__PROVIDER_CI_PENDING",
+      "result": "PROVED_IN_STATED_RESOLUTION_SCOPE__PROVIDER_CI_PASS",
       "formal_statement": [
         "The complete width-w root Resolution frontier has exact universe size sum_{k<=w} 2^k binom(n,k).",
         "For fixed w this is polynomially bounded and exact saturation is a tractable complete width-w interface.",
@@ -82,6 +83,23 @@
         "If w enters a linear hard-width regime, materializing the complete clause frontier requires 2^Omega(n) possible clauses.",
         "This does not imply every sparse wide proof is exponential; it moves the next gate to sparse derivational discovery."
       ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator RSPC U1 Clause Frontier",
+        "head_sha": "5c53c0e5e82b01f2e87cdc007513583026d23f8c",
+        "run_id": 32824721165,
+        "job_id": 97730121637,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1_CLAUSE_UNIVERSE_EXACT_COUNT = PASS",
+          "AKINATOR_U1_FIXED_WIDTH_POLY_COUNT_FINITE = PASS",
+          "AKINATOR_U1_GROWING_WIDTH_EXPONENTIAL_SUBCOUNT_FINITE = PASS",
+          "AKINATOR_U1_WIDTH_BOUNDED_SATURATION_FIXTURE = PASS",
+          "EXPANDER_GPHP_WIDTH_LOWER_BOUND = EXTERNAL_PLUS_FROZEN_TRANSFER_NOT_CI",
+          "SPARSE_WIDE_B2_INTERFACE = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
       "artifacts": [
         "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_U1_CLAUSE_FRONTIER_WIDTH_DICHOTOMY.md",
         "Hawkar-usls/TOPA/research/mathematics/p-vs-np/akinator_rspc_u1_clause_frontier_probe.py",
