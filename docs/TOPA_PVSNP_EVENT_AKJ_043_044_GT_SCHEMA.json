@@ -1,0 +1,116 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-043-044-GT-SCHEMA-2026-08-25",
+  "format_version": "1.0",
+  "parent_extension": "docs/TOPA_PVSNP_EVENT_AKJ_041_042_BOUNDARY_WIDTH.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "provider_home": "Hawkar-usls/Janus-Fundamentum",
+  "arbitration_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-043",
+      "title": "Frozen-order exact residual-CNF DAG hits transition-work cap before state cap on GT12 residue",
+      "type": "REPRESENTATION_LANE_CAP_RESULT",
+      "result": "OPEN_LITERAL_WORK_CAP",
+      "receipt": {
+        "workflow": "Receipt PF5 GT12 Residual DAG",
+        "run_id": 32797498698,
+        "job_id": 97651675015,
+        "conclusion": "SUCCESS"
+      },
+      "frozen_policy": {
+        "variable_order": "ASCENDING_CURRENT_VARIABLE_ID_NO_SEARCH",
+        "residual_equality": "EXACT_CANONICAL_CNF_BYTES_ONLY",
+        "state_cap": 20000,
+        "literal_work_cap": 1000000,
+        "subsumption": false,
+        "semantic_equivalence": false,
+        "posthoc_order_change_allowed": false,
+        "posthoc_cap_raise_allowed": false
+      },
+      "observed": {
+        "input_units": 37821,
+        "input_clauses": 10145,
+        "input_variables": 4193,
+        "frontier_by_completed_levels": [2,4,8,16],
+        "cumulative_state_insertions_proxy": 31,
+        "max_frontier": 16,
+        "literal_work_after_levels": [46966,140836,328460,703460],
+        "trigger_level": 5,
+        "trigger_variable": 73,
+        "frontier_before_trigger": 16,
+        "literal_work_at_trigger": 1000002
+      },
+      "interpretation": [
+        "The frozen lane did not hit its state-count cap; it hit the transition-maintenance work cap while repeatedly scanning large residual CNFs.",
+        "This result does not establish an ROBDD or residual-state size lower bound.",
+        "An incremental/persistent cofactor data structure could improve this implementation and remains a separate route.",
+        "The result localizes a mandatory cost column Q_discovery/Q_state-update for the frozen implementation."
+      ],
+      "laws": [
+        "STATE_SMALL_CAN_COEXIST_WITH_EXPENSIVE_TRANSITION_MAINTENANCE",
+        "A_STATE_CAP_NONFAILURE_DOES_NOT_IMPLY_POLYNOMIAL_TOTAL_WORK",
+        "DO_NOT_CALL_A_WORK_CAP_HIT_A_REPRESENTATION_SIZE_LOWER_BOUND"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-044",
+      "title": "Exact JANUS graph-tautology encoding has a deterministic cubic Resolution schema; GT12 reclassified as positive control",
+      "type": "FAMILY_SPECIFIC_UPPER_BOUND_AND_BENCHMARK_REPAIR",
+      "result": "PROVED_BY_CONSTRUCTION_WITH_PROVIDER_FINITE_REPLAY",
+      "analytic_artifact": "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_GT_LINEAR_RESOLUTION_SCHEMA.md",
+      "generator": "Hawkar-usls/TOPA/research/mathematics/p-vs-np/gt_linear_resolution_schema_probe.py",
+      "external_alignment": "Buss and Johannsen, On Linear Resolution, Theorem 14: ordering principles / graph tautologies have O(n^3) linear Resolution refutations.",
+      "formal_statement": [
+        "For the exact JANUS graph_tautology_cnf(n) encoding, a deterministic recursive Resolution generator derives GT_{m-1} non-minimality clauses from GT_m using (m-1)^2 inferences per level.",
+        "One final GT_2 inference yields the empty clause.",
+        "Total inference count is SUM_{r=1}^{n-1} r^2 = (n-1)n(2n-1)/6.",
+        "For n=12 the exact count is 506 Resolution inferences."
+      ],
+      "provider_receipt": {
+        "repo": "Hawkar-usls/TOPA",
+        "workflow": "Validate GT Linear Resolution Schema",
+        "head_sha": "86b2a59d5cd439fd1b3e5bff50291809815663f6",
+        "run_id": 32797725776,
+        "job_id": 97652332775,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "JANUS_GT_LINEAR_RESOLUTION_N2_TO_N12 = PASS",
+          "JANUS_GT12_RESOLUTION_INFERENCES = 506",
+          "JANUS_GT12_ROOT_CLAUSES = 452",
+          "GT_GENERIC_SEARCH_CAP_HIT_IS_NOT_RESOLUTION_LOWER_BOUND = PASS",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "benchmark_reclassification": {
+        "old_role": "generic red stress benchmark / search-cap witness",
+        "new_role": "FAMILY_SCHEMA_POSITIVE_CONTROL_AND_GENERIC_SEARCH_NEGATIVE_CONTROL",
+        "forbidden_inference": "GT12 generic residual/quotient cap hits may not be cited as Resolution proof-size hardness."
+      },
+      "laws": [
+        "GENERIC_SEARCH_COST != MINIMUM_PROOF_SIZE",
+        "KNOWN_SHORT_FAMILY_SCHEMA_BEATS_GENERIC_STATE_EXPLORATION",
+        "A_RED_BENCHMARK_MUST_BE_AUDITED_FOR_KNOWN_SAME_OR_STRONGER_SYSTEM_POLY_UPPER_BOUNDS"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    }
+  ],
+  "active_front": {
+    "name": "PF5_UNIVERSAL_SCHEMA_SELECTOR_AND_UPPER_BOUND_AUDITED_RED_BENCHMARK",
+    "question": "Can the organism recognize and generate the appropriate exact polynomial schema/quotient for every CNF without semantic oracle or exponential schema search, and what is the first frozen family/state escaping the admitted operator portfolio after known upper-bound audit?",
+    "next_actions": [
+      "Add GT_LINEAR_RESOLUTION_SCHEMA to the PF5 operator portfolio as a cheap syntactically recognized family-specific operator.",
+      "Freeze a benchmark-admission protocol requiring same-system/stronger-system polynomial upper-bound audit before red-family use.",
+      "Select the next adversarial family only after that audit; random sparse unsatisfiable 3-CNF is a candidate discovery stress family, not a claimed ER-hard family."
+    ],
+    "global_status": "P_VS_NP = OPEN"
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_open_and_cap_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "family_specific_upper_bounds_must_reclassify_benchmarks": true,
+    "no_generic_search_cap_hit_may_be_promoted_to_minimum_proof_lower_bound": true
+  }
+}
