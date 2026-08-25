@@ -1,0 +1,90 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-020-RSPC-WITNESS-FRONTIER-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": {
+    "path": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+    "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json"
+  },
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T10:51:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "scientific_laws_added": [
+    "EXPLICIT_WITNESS_FRONTIER != COMPACT_COMPLETE_INTERFACE",
+    "SMALL_MACRO != SMALL_COMPLETE_WITNESS_FRONTIER",
+    "COMPACT_SYMBOLIC_FRONTIER != CHEAP_EXACT_INTERSECTION",
+    "TRACTABLE_REPRESENTATION != UNIVERSAL_PROGRESS",
+    "GENERAL_COMPOSITION_BARRIER != SOURCE_MATCHED_SELECTOR_LOWER_BOUND"
+  ],
+  "events": [
+    {
+      "event_id": "AKJ-019",
+      "title": "RSPC semantic-survival finite replay receives independent provider PASS",
+      "type": "PROVIDER_RECEIPT",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator RSPC",
+        "head_sha": "0b2bd8ab020a5c728bfe0d763c9d263ea8bded57",
+        "run_id": 32791677963,
+        "job_id": 97634309131,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_RSPC_SAT_TO_NONCONSTANCY_FINITE_REPLAY = PASS",
+          "AKINATOR_RSPC_SINGLE_WITNESS_COUNTEREXAMPLE = PASS",
+          "AKINATOR_RSPC_PAIR_ENUMERATION_FINITE_ALGEBRA = PASS",
+          "GENERAL_RESIDUAL_NONCONSTANCY_NP_COMPLETE = ANALYTIC_REDUCTION_NOT_CI",
+          "WITNESS_FRONTIER_SUPERPOLY_LOWER_BOUND = NOT_PROVED",
+          "SOURCE_MATCHED_RESTRICTION_HARDNESS = OPEN",
+          "PROOF_CARRYING_STRUCTURAL_SELECTOR = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "meaning": "Finite mechanics for the SAT-to-nonconstancy reduction and one-witness incompleteness are independently reproduced. NP-completeness remains an analytic theorem; no universal witness-frontier lower bound is inferred from CI.",
+      "next_gap": "Audit whether a complete explicit compositional witness frontier can itself require exponential storage."
+    },
+    {
+      "event_id": "AKJ-020",
+      "title": "Explicit-frontier versus symbolic-intersection dichotomy exposed",
+      "type": "REPRESENTATION_SEARCH_BARRIER",
+      "result": "PROVED_IN_GENERAL_COMPOSITION_SCOPE__PROVIDER_CI_PENDING",
+      "formal_statement": [
+        "PAR_n has O(n)-size B2 representation.",
+        "Every odd assignment a defines an O(n)-size point macro P_a with unique positive witness a and PAR_n AND P_a = P_a.",
+        "An explicit positive frontier for PAR_n that is partner-complete against all odd-parity point macros must contain every odd assignment, hence at least 2^(n-1) witnesses.",
+        "Replacing the explicit set by arbitrary compact symbolic witness circuits does not make exact compatibility free: nonempty symbolic intersection is NP-complete in the general circuit scope by F -> (F, TRUE)."
+      ],
+      "artifacts": [
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_WITNESS_FRONTIER_DICHOTOMY.md",
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/akinator_rspc_witness_frontier_probe.py",
+        "Hawkar-usls/TOPA/.github/workflows/validate-akinator-rspc-witness-frontier.yml"
+      ],
+      "claim_ceiling": [
+        "Does not prove a polynomial selector must enumerate all point partners.",
+        "Does not prove source-matched Sokolov states require exponential frontier.",
+        "Does not rule out restricted symbolic languages with polynomial exact intersection.",
+        "Does not resolve P vs NP."
+      ],
+      "new_exact_gate": "RSPC-T1__TRACTABLE_INTERSECTION_LANGUAGE",
+      "next_gap": "Find a restricted frontier language with polynomial serialization, exact polynomial intersection, polynomial closure under required updates, and enough expressiveness for universal progress."
+    }
+  ],
+  "active_front": {
+    "name": "RSPC-T1__TRACTABLE_INTERSECTION_LANGUAGE",
+    "question": "Can a frozen restricted representation language simultaneously have polynomial serialization, exact polynomial intersection, polynomial closure under B2-style updates/restrictions, and enough expressive power to guarantee a proof-carrying progress move on every target state?",
+    "forbidden_shortcuts": [
+      "arbitrary circuit intersection called cheap",
+      "explicit exponential frontier hidden behind cache size",
+      "heuristic compatibility score",
+      "candidate success inferred from finite tests",
+      "tractability treated as universal completeness"
+    ]
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "analytic_theorem_and_CI_mechanics_must_remain_separate": true
+  }
+}
