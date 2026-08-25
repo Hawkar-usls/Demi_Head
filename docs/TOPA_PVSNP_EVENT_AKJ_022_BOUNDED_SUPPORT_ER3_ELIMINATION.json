@@ -1,0 +1,38 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-022-BOUNDED-SUPPORT-ER3-ELIMINATION-2026-08-25",
+  "format_version": "1.0",
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T03:08:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "event": {
+    "event_id": "AKJ-022",
+    "title": "Bounded-support ER3 elimination forces large-support macro in any polynomial-size escape",
+    "type": "STRUCTURAL_SIMULATION_BARRIER",
+    "result": "PROVED_IN_SCOPE_WITH_PROVIDER_FINITE_MECHANICS_PASS",
+    "analytic_statement": [
+      "If an ER3/B2 refutation pi has S lines and maximum transitive syntactic root support K_root, then pure Resolution simulates it with size at most S*2^O(K_root).",
+      "Combining this internal simulation with the frozen exponential root-Resolution lower bound yields K_root=Omega(N^eta) for at least one macro in any hypothetical polynomial-size ER3 escape on the stated hard family.",
+      "Since Delta<=log_2 N+1 in the direct parity encoding, at least one such macro has minimum NW-neighborhood cover Omega(N^eta/log N).",
+      "Therefore fixed-cover exhaustive truth-table survival cannot carry an entire polynomial-size ER3 escape."
+    ],
+    "provider_receipt": {
+      "repository": "Hawkar-usls/Janus-Fundamentum",
+      "branch": "c025-policy0b-fair-reason",
+      "head_sha": "82f630a22ed0a3f0f6705823f1e5d23324600257",
+      "run_id": 32792338096,
+      "job_id": 97636265159,
+      "conclusion": "SUCCESS",
+      "claim_ceiling": "FINITE_MECHANICS_ONLY"
+    },
+    "boundaries": [
+      "Provider PASS is not the analytic theorem.",
+      "The Resolution lower bound is a frozen prior result, not proved by this replay.",
+      "No unrestricted ER3 superpolynomial size lower bound is proved.",
+      "Large support does not imply large circuit/certificate size.",
+      "P_VS_NP remains OPEN."
+    ],
+    "tracking_issue": "Hawkar-usls/Janus-Fundamentum#227",
+    "next_gate": "LARGE_SUPPORT_SUCCINCT_CERTIFICATE_VIA_RESIDUAL_STATE_COMPRESSION"
+  }
+}
