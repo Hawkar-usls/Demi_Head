@@ -1,0 +1,50 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-023-024-ROBDD-RESIDUAL-FRONTIER-2026-08-25",
+  "format_version": "1.0",
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T03:17:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-023",
+      "title": "Large-support exact ROBDD certificate lane survives semantic-oracle gate",
+      "type": "POSITIVE_LOCAL_CERTIFICATE_RESULT",
+      "result": "PROVED_IN_EXPLICIT_DIAGRAM_SCOPE_WITH_PROVIDER_FINITE_PASS",
+      "statement": [
+        "Under a fixed root order, exact B2 NOT/AND ROBDD construction and verification are polynomial in explicit diagram bytes.",
+        "Restriction and residual nonconstancy plus explicit 0/1 witnesses are polynomial in explicit diagram bytes.",
+        "Parity proves that polynomially large root support can coexist with a linear exact certificate.",
+        "Therefore large support alone is not the hidden exponential."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/Janus-Fundamentum",
+        "head_sha": "a79e8ee05e5568edf3ba55f60cfa08df2c96bd2b",
+        "run_id": 32792861253,
+        "job_id": 97637867156,
+        "conclusion": "SUCCESS",
+        "claim_ceiling": "FINITE_MECHANICS_ONLY"
+      }
+    },
+    {
+      "event_id": "AKJ-024",
+      "title": "Residual-function frontier and variable-order discovery become the next exact exponent",
+      "type": "REPRESENTATION_AND_DISCOVERY_BARRIER",
+      "result": "INTERNAL_ORDER_SENSITIVITY_THEOREM_PLUS_EXTERNAL_GENERAL_ORDERING_BARRIER",
+      "statement": [
+        "For a frozen variable order, distinct residual functions after a prefix cannot merge into one reduced ordered state; the maximum residual frontier lower-bounds ROBDD size.",
+        "EQ_n has an O(n) B2 DAG but 2^n residual functions after the X cut under X-then-Y order, while an interleaved order gives linear ROBDD size.",
+        "Bollig and Wegener (1996) prove the general OBDD variable-order improvement problem NP-complete; generic good-order search therefore cannot be treated as a free selector operation.",
+        "This external result does not prove order-discovery hardness for the exact NW target macro class."
+      ],
+      "new_exact_resource": "RESIDUAL_FRONTIER_WIDTH_PLUS_ORDER_DISCOVERY_COST",
+      "next_gate": "COMPOSITIONAL_BOUNDARY_WIDTH_CERTIFICATE",
+      "boundaries": [
+        "No order-independent OBDD lower bound for target NW macros is proved.",
+        "No target-NW ordering NP-hardness theorem is proved.",
+        "Exact survival is still not global proof progress.",
+        "P_VS_NP remains OPEN."
+      ]
+    }
+  ]
+}
