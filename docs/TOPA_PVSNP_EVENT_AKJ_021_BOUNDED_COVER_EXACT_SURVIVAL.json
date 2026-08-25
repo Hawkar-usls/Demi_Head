@@ -1,0 +1,32 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-021-BOUNDED-COVER-EXACT-SURVIVAL-2026-08-25",
+  "format_version": "1.0",
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T03:03:00+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "event": {
+    "event_id": "AKJ-021",
+    "title": "Fixed-neighborhood-cover lane removes semantic oracle by exact input-relative enumeration",
+    "type": "POSITIVE_RESTRICTED_SELECTOR_RESULT",
+    "result": "PROVED_FOR_FROZEN_DIRECT_NW_PARITY_ENCODING",
+    "statement": [
+      "The direct parity encoding contributes 2^(Delta-1) wrong-parity clauses per output, hence 2^Delta <= 2N for actual encoded input length N.",
+      "A macro with explicit verified cover size <= fixed universal C has support size <= C*Delta.",
+      "Exact residual nonconstancy can therefore be found by exhaustive evaluation in at most 2^(C*Delta) <= (2N)^C assignments, times polynomial circuit-evaluation cost.",
+      "For fixed C this is deterministic polynomial time in original N and needs no semantic oracle or backtracking for the survival test.",
+      "Candidate NOT/AND pairs are polynomially enumerable in explicit state size V."
+    ],
+    "barrier_and_open_front": [
+      "C=1 is already insufficient as a universal escape in the stated NW-local ER3 scope.",
+      "No theorem currently excludes every fixed C>1.",
+      "No theorem currently proves that some fixed C>1 is universally sufficient.",
+      "If required cover c(N) grows, the exact-enumeration route costs N^O(c(N)); this is the newly exposed hidden exponent.",
+      "Semantic survival is still not a global proof-progress potential."
+    ],
+    "new_hidden_exponent": "NEIGHBORHOOD_COVER_COUNT_c(e)_OR_SUPPORT_TO_DELTA_RATIO",
+    "canonical_artifact": "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_BOUNDED_COVER_EXACT_SURVIVAL.md",
+    "next_gate": "BC1_FIXED_C_LOWER_BOUND_TRANSFER_OR_BC2_FIXED_C_CONSTRUCTIVE_PROGRESS",
+    "claim_ceiling_after": "P_VS_NP = OPEN"
+  }
+}
