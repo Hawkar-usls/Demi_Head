@@ -1,0 +1,171 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-031-035-PF5-GT12-2026-08-25",
+  "format_version": "1.0",
+  "parent_extension": "docs/TOPA_PVSNP_EVENT_AKJ_027_030_PF3_PF4.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "provider_home": "Hawkar-usls/Janus-Fundamentum",
+  "arbitration_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-031",
+      "title": "PF5 exact operator portfolio contract frozen across the Hawkar-usls organism",
+      "type": "PORTFOLIO_CONTRACT",
+      "result": "FROZEN",
+      "artifact": "Hawkar-usls/TOPA/data/PF5_OPERATOR_PORTFOLIO_CONTRACT.json",
+      "operators": [
+        "PF1_PREBIRTH_PIVOT_FACTOR",
+        "C025_CERTIFIED_SUBSUMPTION_NORMALIZER",
+        "C025_RESIDUAL_AUTOMATON",
+        "BHQ2_SIGNED_ORBIT_ABSORPTION",
+        "LIVE_WIDTH_RELATIONAL_DP",
+        "ROBDD_EXACT_LANE",
+        "TRANCEPTION_PREBIRTH_ORBIT_GENERATOR",
+        "B2_ER_CERTIFIED_REWRITE"
+      ],
+      "selection_rule": "DETERMINISTIC_FIRST_ACCEPTING_OPERATOR_UNDER_FROZEN_CAPS; ALL_FAILED_PROPOSALS_ARE_CHARGED",
+      "cost_columns": [
+        "proposal_work",
+        "verification_work",
+        "accepted_output_bytes",
+        "temporary_bytes",
+        "failed_candidate_work",
+        "proof_certificate_bytes",
+        "witness_provenance_bytes",
+        "canonicalization_work",
+        "communication_work_if_distributed",
+        "cumulative_distinct_state_or_dag_nodes"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-032",
+      "title": "Cross-repository PF5 organism replay pinned historical Fundamentum bytes and current TOPA operators",
+      "type": "CROSS_REPO_PROVIDER_REPLAY",
+      "result": "SUCCESS",
+      "provider_receipt": {
+        "repo": "Hawkar-usls/TOPA",
+        "workflow": "Validate PF5 Organism Portfolio",
+        "head_sha": "94a47e79fb6a9e8340175a203ed24a7741697626",
+        "run_id": 32796216316,
+        "job_id": 97647948830,
+        "conclusion": "SUCCESS"
+      },
+      "pinned_historical_fundamentum": {
+        "commit": "122ccf2c1082fc5967d063dc7b73ac8e26c9325d",
+        "verified_blob_shas": {
+          "experiments/direct/janus_c025_core.py": "414c81edf4e20248965d12069b2fe88937f9f7e1",
+          "experiments/direct/janus_c025_families.py": "4385c73819a53ae624717edff7edc10a4de7b998",
+          "experiments/direct/janus_certified_residual_quotient.py": "aef9ddefb9d4aff5cddc6852363c3fdc7c418693"
+        }
+      },
+      "markers": [
+        "PF5_FROZEN_C025_BLOB_IDENTITY = PASS",
+        "PF5_C025_CERTIFIED_RESIDUAL_QUOTIENT_CONTROLS = PASS",
+        "AKINATOR_PF1_EXISTENTIAL_PIVOT_IDENTITY_FINITE_REPLAY = PASS",
+        "AKINATOR_PF2_FUNCTION_GRAPH_TO_RELATION = PASS",
+        "AKINATOR_PF3_SYNTACTIC_SHANNON_EQUALITY_FINITE_REPLAY = PASS",
+        "PF5_CROSS_REPO_ORGANISM_REPLAY = PASS",
+        "PF5_UNIVERSAL_COVERAGE = OPEN",
+        "P_VS_NP = OPEN"
+      ],
+      "meaning": "Provider success validates the pinned cross-repository finite mechanics only; it is not a universal complexity theorem."
+    },
+    {
+      "event_id": "AKJ-033",
+      "title": "GT12 PF1 instrumentation was repaired before result promotion",
+      "type": "INSTRUMENTATION_CLAIM_REPAIR",
+      "result": "REPAIRED_AND_OLD_MEASUREMENT_NOT_AUTHORITATIVE",
+      "old_head": "84179b6ca39323e918c1b2c9e337dbe3d93bc558",
+      "flaws": [
+        "The first probe materialized the complete Davis-Putnam frontier merely to report explicit distinct resolvents, performing the work PF1 was intended to avoid.",
+        "Residual-automaton state_budget capped state count but not the input encoding volume handed to normalization."
+      ],
+      "repair_head": "94a47e79fb6a9e8340175a203ed24a7741697626",
+      "repair": [
+        "Avoided pair volume is now computed arithmetically as p*q.",
+        "Exact frontier materialization is permitted only when p*q <= 4096 and is separately charged.",
+        "A separate HANDOFF_ENCODING_CAP=20000 is checked before starting the historical residual automaton.",
+        "Main PF1 encoding cap remains 200000; post-hoc cap raise is forbidden."
+      ],
+      "law": "MEASUREMENT_MUST_NOT_MATERIALIZE_THE_OBJECT_THE_OPERATOR_IS_SUPPOSED_TO_AVOID",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-034",
+      "title": "PF1 on frozen pre-PF1 GT12 eliminates every original root but stops at extended-state handoff cap",
+      "type": "FROZEN_HOLDOUT_CAPABILITY_RESULT",
+      "result": "OPEN_HANDOFF_INPUT_CAP",
+      "subject": {
+        "family": "GRAPH_TAUTOLOGY",
+        "order": 12,
+        "original_variables": 66,
+        "original_clauses": 452,
+        "original_literal_occurrences": 1452,
+        "original_input_units": 1970
+      },
+      "frozen_caps": {
+        "PF1_ENCODING_CAP": 200000,
+        "HANDOFF_ENCODING_CAP": 20000,
+        "RESIDUAL_AUTOMATON_STATE_BUDGET": 20000,
+        "FRONTIER_DIAGNOSTIC_PAIR_CAP": 4096,
+        "posthoc_cap_raise_allowed": false
+      },
+      "observed": {
+        "roots_processed": 66,
+        "all_original_roots_eliminated": true,
+        "final_extension_variables": 4368,
+        "final_clauses": 10670,
+        "final_literals": 24708,
+        "final_encoding_units": 39746,
+        "peak_encoding_units": 39746,
+        "cumulative_b2_gates_added": 4368,
+        "cumulative_pair_attempts_avoided_proxy": 34571,
+        "cumulative_diagnostic_pair_materializations": 34571,
+        "automaton_handoff_started": false
+      },
+      "interpretation": [
+        "PF1 removes the immediate explicit root-pivot pair-cross-product on this finite holdout.",
+        "The cost migrates into retained extension-definition/state volume.",
+        "The exact next finite resource is not root count but post-projection extension/boundary residue.",
+        "The finite GT12 result proves neither polynomial scaling nor a lower bound."
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-035",
+      "title": "PF5 total certified quotient accounting frozen",
+      "type": "TOTAL_COST_CRITERION",
+      "artifact": "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF5_CERTIFIED_RESIDUAL_QUOTIENT_CRITERION.md",
+      "definition": "Q_total(F)=Q_state(F)+Q_proof(F)+Q_discovery(F)+Q_witness(F)",
+      "result": [
+        "For a frozen implementation, deterministic polynomial runtime implies every mandatory nonnegative charged component is polynomial.",
+        "If one exact deterministic SAT solver has a universal fixed polynomial Q_total bound, polynomially many exact rank decreases, exact terminal correctness and polynomial witness recovery, then SAT is in P and therefore P=NP."
+      ],
+      "status": "DIRECT_ALGORITHMIC_CRITERION_NOT_EXISTENCE_PROOF",
+      "active_next": "DISTINGUISH_TRUE_BOUNDARY_INFORMATION_FROM_REPEATED_SYNTACTIC_EXTENSION_ENCODING",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    }
+  ],
+  "active_front": {
+    "name": "PF5-R1_GLOBAL_STRUCTURAL_REUSE_AND_BOUNDARY_RESIDUE",
+    "exact_question": "Of the 4368 extension variables left by repeated PF1 on frozen GT12, how many are genuinely distinct live boundary relations/functions and how many are repeated syntactic clause/gate encodings that can be eliminated by exact structural interning/reuse without semantic equivalence?",
+    "next_negative_question": "After maximal exact structural reuse, does the GT12 residue remain above the frozen handoff cap, and which mandatory resource dominates?",
+    "forbidden_shortcuts": [
+      "semantic equivalence oracle",
+      "posthoc cap raise",
+      "unpriced full-frontier diagnostics",
+      "deleting extension definitions without proof/provenance accounting",
+      "reporting final bytes without cumulative construction bytes",
+      "finite GT12 trend promoted to asymptotic theorem"
+    ],
+    "global_status": "P_VS_NP = OPEN"
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_and_flawed_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "all_diagnostic_work_charged": true
+  }
+}
