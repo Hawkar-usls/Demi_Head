@@ -1,0 +1,157 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-036-040-GT12-CLEANUP-2026-08-25",
+  "format_version": "1.0",
+  "parent_extension": "docs/TOPA_PVSNP_EVENT_AKJ_031_035_PF5_GT12.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "provider_home": "Hawkar-usls/Janus-Fundamentum",
+  "arbitration_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-036",
+      "title": "Certified subsumption normalization leaves PF1 GT12 residue unchanged",
+      "type": "MECHANISTIC_SUCCESSOR_RESULT",
+      "result": "NO_SUBSUMPTION_REDUCTION",
+      "frozen_caps": {
+        "normalization_subset_probe_cap": 500000,
+        "handoff_encoding_cap": 20000,
+        "residual_automaton_state_budget": 20000,
+        "posthoc_cap_raise_allowed": false
+      },
+      "receipt": {
+        "workflow": "Receipt PF5 GT12 Normalized Handoff",
+        "run_id": 32796683094,
+        "job_id": 97649332726,
+        "head_sha": "898664c1caa0ba2accde510c471dfdcd704789df",
+        "conclusion": "SUCCESS"
+      },
+      "observed": {
+        "before_units": 39746,
+        "before_clauses": 10670,
+        "before_variables": 4368,
+        "subset_probes": 45482,
+        "certificate_steps": 0,
+        "certificate_verified": true,
+        "after_units": 39746,
+        "after_clauses": 10670,
+        "after_variables": 4368,
+        "terminal": "OPEN_HANDOFF_INPUT_CAP_AFTER_CERTIFIED_NORMALIZATION"
+      },
+      "interpretation": "The PF1 residue is not reducible by the frozen exact syntactic clause-subsumption normalizer. This finite result does not imply an asymptotic lower bound.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-037",
+      "title": "Compact normalization receipt wrapper failure preserved",
+      "type": "FAILED_WORKFLOW_WRAPPER",
+      "result": "FAIL_PRESERVED_NO_SCIENTIFIC_CODE_EXECUTED",
+      "failed_run_id": 32796647075,
+      "failed_head": "e9d4ea32da6820dc26a40b4797db5e33ad900d00",
+      "diagnosis": "Invalid workflow/YAML wrapper prevented the compact receipt job from executing. No GT12 scientific result is inferred from this run.",
+      "repair": "Workflow YAML repaired without changing the experiment or any frozen cap; repaired run recorded in AKJ-036.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-038",
+      "title": "Exact intact B2 gate congruence removes only a small fraction of PF1 GT12 residue",
+      "type": "MECHANISTIC_SUCCESSOR_RESULT",
+      "result": "PARTIAL_EXACT_COMPRESSION_HANDOFF_CAP_STILL_BLOCKED",
+      "theorem_artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF5_INTACT_GATE_CONGRUENCE_REUSE.md",
+      "receipt": {
+        "workflow": "Receipt PF5 GT12 Gate Congruence",
+        "run_id": 32796828767,
+        "job_id": 97649747207,
+        "head_sha": "179a91bb758f8f3a92391900ef25c800a3dedd6e",
+        "conclusion": "SUCCESS"
+      },
+      "observed": {
+        "historical_gates": 4368,
+        "before_units": 39746,
+        "before_variables": 4368,
+        "first_pass_intact_definitions": 3368,
+        "first_pass_unique_structural_keys": 3193,
+        "duplicate_groups": 175,
+        "successful_merges": 175,
+        "passes": 2,
+        "work_total": 53298,
+        "after_units": 37821,
+        "after_clauses": 10145,
+        "after_variables": 4193,
+        "surviving_unique_intact_definitions": 3193,
+        "terminal": "OPEN_HANDOFF_INPUT_CAP_AFTER_GATE_CONGRUENCE"
+      },
+      "interpretation": "Some residue is repeated intact syntax, but after exact congruence fixpoint every surviving intact definition has a distinct signed AND structural key. Historical provenance alone is not used for non-intact gates.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-039",
+      "title": "Dead intact B2 gate garbage collection finds zero removable outputs on congruence-normalized GT12 residue",
+      "type": "MECHANISTIC_SUCCESSOR_RESULT",
+      "result": "ZERO_DEAD_INTACT_OUTPUTS",
+      "theorem_artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF5_DEAD_INTACT_GATE_GC.md",
+      "receipt": {
+        "workflow": "Receipt PF5 GT12 Dead Gate GC",
+        "run_id": 32796971653,
+        "job_id": 97650163920,
+        "head_sha": "b929ecdc79a795f769046e6c836fc5abc1701cf1",
+        "conclusion": "SUCCESS"
+      },
+      "observed": {
+        "congruence_merges_replayed": 175,
+        "start_units": 37821,
+        "start_variables": 4193,
+        "intact_definitions": 3193,
+        "dead_outputs_found": 0,
+        "pruned_outputs": 0,
+        "provenance_records_added": 0,
+        "gc_passes": 1,
+        "gc_work_total": 34235,
+        "after_units": 37821,
+        "after_clauses": 10145,
+        "after_variables": 4193,
+        "surviving_intact_definitions": 3193,
+        "nonintact_or_other_extension_variables": 1000,
+        "terminal": "OPEN_HANDOFF_INPUT_CAP_AFTER_DEAD_GC"
+      },
+      "interpretation": [
+        "Every surviving intact B2 output is currently referenced outside its own definition triple.",
+        "Approximately 1000 surviving extension variables are non-intact or otherwise outside the intact-function lane and must be treated under PF2 relational/provenance rules.",
+        "The remaining 37821-unit state cannot be attributed to duplicate intact gates, dead intact computation, or syntactic clause subsumption under the frozen exact operators."
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-040",
+      "title": "GT12 red resource localized from syntactic residue toward live connected boundary correlation",
+      "type": "FRONTIER_UPDATE",
+      "result": "NEXT_GATE_FROZEN",
+      "closed_or_exhausted_cheap_exact_repairs": [
+        "certified clause subsumption: zero deletions",
+        "intact duplicate gate congruence: 175 merges then structural fixpoint",
+        "dead intact gate GC: zero deletions"
+      ],
+      "current_state": {
+        "units": 37821,
+        "clauses": 10145,
+        "variables": 4193,
+        "intact_unique_definitions": 3193,
+        "nonintact_or_other_extension_variables": 1000
+      },
+      "next_exact_gate": "PF5_R3_CNF_INCIDENCE_COMPONENT_DECOMPOSITION",
+      "decision_rule": [
+        "If the state decomposes into independent incidence components, solve/represent each component separately and charge total component work.",
+        "If one giant component dominates, move to exact boundary-width/orphan-relation analysis; do not invoke semantic equivalence.",
+        "Handoff cap remains 20000; no posthoc cap raise."
+      ],
+      "global_status": "P_VS_NP = OPEN"
+    }
+  ],
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_workflows": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "no_posthoc_cap_raise": true,
+    "all_diagnostic_work_charged": true,
+    "architecture_pattern_has_zero_theorem_authority_without_reduction": true
+  }
+}
