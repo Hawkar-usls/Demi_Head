@@ -1,0 +1,123 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-041-042-BOUNDARY-WIDTH-2026-08-25",
+  "format_version": "1.0",
+  "parent_extension": "docs/TOPA_PVSNP_EVENT_AKJ_036_040_GT12_CLEANUP.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-041",
+      "title": "Exact incidence-component decomposition finds one giant connected GT12 residue",
+      "type": "MECHANISTIC_SUCCESSOR_RESULT",
+      "result": "ONE_GIANT_COMPONENT",
+      "theorem_artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF5_COMPONENT_DECOMPOSITION.md",
+      "receipt": {
+        "workflow": "Receipt PF5 GT12 Components",
+        "run_id": 32797179723,
+        "job_id": 97650765896,
+        "conclusion": "SUCCESS"
+      },
+      "observed": {
+        "input_units": 37821,
+        "input_clauses": 10145,
+        "input_variables": 4193,
+        "component_count": 1,
+        "largest_component_units": 37821,
+        "largest_component_fraction": 1.0,
+        "component_discovery_work": 61304,
+        "global_states_used": 0,
+        "handoff_count": 0,
+        "terminal": "OPEN_GIANT_COMPONENT_INPUT_CAP"
+      },
+      "interpretation": [
+        "The current residue is not a conjunction of independent smaller variable-disjoint CNFs.",
+        "The full 4193-variable residue belongs to one connected incidence component.",
+        "This closes only the disconnected-component decomposition route on this finite state; connectedness is not itself a hardness lower bound."
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-042",
+      "title": "Canonical clause-trace exact boundary DP hits state cap almost immediately and has full-state live width",
+      "type": "FROZEN_EXPLICIT_DP_LANE_RESULT",
+      "result": "OPEN_BOUNDARY_STATE_CAP",
+      "theorem_artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF5_CLAUSE_TRACE_BOUNDARY_DP.md",
+      "receipt": {
+        "workflow": "Receipt PF5 GT12 Clause Trace DP",
+        "run_id": 32797312828,
+        "job_id": 97651148706,
+        "head_sha": "fa581afe2efff25f8dcd7510f41ea6d18073944b",
+        "conclusion": "SUCCESS"
+      },
+      "frozen_caps": {
+        "boundary_state_cap": 20000,
+        "transition_work_cap": 1000000,
+        "clause_order": "CURRENT_CANONICAL_CNF_SERIALIZATION_NO_SEARCH",
+        "posthoc_order_change_allowed": false,
+        "posthoc_cap_raise_allowed": false
+      },
+      "observed": {
+        "input_units": 37821,
+        "input_clauses": 10145,
+        "input_variables": 4193,
+        "max_live_variables": 4193,
+        "lambda_clause": 4192,
+        "max_live_clause_index": 6949,
+        "max_retained_states_before_cap": 9375,
+        "max_retained_states_clause_index": 10,
+        "transition_work": 60934,
+        "trigger": {
+          "clause_index": 11,
+          "clause_width": 2,
+          "new_vars": 2,
+          "forgotten_vars": 0,
+          "live_vars_before_forget": 19,
+          "boundary_vars_after_forget": 19,
+          "states_before": 9375,
+          "states_after_clause_before_forget": 28125,
+          "states_after_projection": 28125
+        }
+      },
+      "interpretation": [
+        "The exact DP exceeds the frozen 20000-state cap at clause index 11 with a 19-variable boundary.",
+        "The frozen canonical serialization later has all 4193 variables live simultaneously, giving lambda_clause=4192.",
+        "This width is not minimum pathwidth and the result does not rule out a better order, another decomposition, or another quotient representation.",
+        "The result closes only this exact deterministic clause-order DP lane on the finite GT12 residue."
+      ],
+      "next_gate": "PF5_R5_ROBDD_OR_RESIDUAL_FUNCTION_QUOTIENT_UNDER_ITS_OWN_FROZEN_CAPS",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    }
+  ],
+  "active_front": {
+    "name": "PF5_R5_REPRESENTATION_OR_ORBIT_QUOTIENT",
+    "state": {
+      "units": 37821,
+      "variables": 4193,
+      "clauses": 10145,
+      "connected_components": 1,
+      "canonical_clause_trace_lambda": 4192
+    },
+    "next_operator_order": [
+      "ROBDD/residual-function exact lane under a separately frozen node/work cap",
+      "prebirth orbit/symmetry quotient from historical Tranception/BH-Q2 machinery",
+      "B2/ER certified rewrite/discovery"
+    ],
+    "forbidden_shortcuts": [
+      "reusing the failed clause-trace order under a different name",
+      "raising the old residual-automaton handoff input cap post hoc",
+      "calling high frozen-trace width minimum pathwidth",
+      "semantic equivalence oracle",
+      "unpriced variable-order search",
+      "finite GT12 result promoted to asymptotic theorem"
+    ],
+    "global_status": "P_VS_NP = OPEN"
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_and_open_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "no_posthoc_cap_raise": true,
+    "all_diagnostic_work_charged": true
+  }
+}
