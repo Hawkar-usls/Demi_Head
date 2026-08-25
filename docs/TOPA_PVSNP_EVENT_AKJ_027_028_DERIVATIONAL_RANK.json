@@ -1,0 +1,91 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-027-028-DERIVATIONAL-RANK-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+  "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_024_026_B2_POTENTIAL_FRONT.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-027",
+      "title": "Fixed-presentation derivational ranks are not representation-stable; full semantic quotient is hard",
+      "type": "DERIVATIONAL_RANK_BARRIER",
+      "result": "PROVED_IN_STATED_PRESENTATION_SCOPE__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "On root units x=t=1, the legal B2 alias chain e1<->(x AND t), ei<->(e_{i-1} AND t) makes every ei semantically equivalent to x.",
+        "The chosen target ek has an explicit two-Resolution-steps-per-level derivation chain while x is already a root axiom, so selected proof depth/remaining chosen nodes can be inflated without changing the underlying root fact.",
+        "A root-only rank avoids alias sensitivity but is unchanged by a pure conservative extension and therefore cannot supply strict extension-step descent by itself.",
+        "Exact semantic quotienting of arbitrary B2 circuits is coNP-complete in the general circuit scope, so representation invariance cannot be assumed free."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1E Derivational Rank Barrier",
+        "head_sha": "f0540e559e68550493bb9ebf69e03815be622e1b",
+        "run_id": 32825790342,
+        "job_id": 97733357645,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1E_ALIAS_CHAIN_SEMANTIC_EQUIVALENCE_FINITE = PASS",
+          "AKINATOR_U1E_ALIAS_CHAIN_TWO_RES_STEPS_PER_LEVEL = PASS",
+          "AKINATOR_U1E_CHOSEN_PRESENTATION_DEPTH_LINEAR_INFLATION = PASS",
+          "AKINATOR_U1E_ROOT_ONLY_STATE_STASIS = PASS",
+          "GENERAL_B2_EQUIVALENCE_CONP_COMPLETE = ANALYTICAL_REDUCTION_NOT_CI",
+          "PROOF_CARRYING_QUOTIENT_RANK = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "surviving_repair": "Merge/quotient proof objects only when a polynomially checkable equivalence or implication certificate is actually present; do not call a semantic equivalence oracle.",
+      "next_gate": "U1_F_CERTIFIED_DERIVATIONAL_QUOTIENT_RANK"
+    },
+    {
+      "event_id": "AKJ-028",
+      "title": "Cook PHP gives a genuine family-specific certified stage rank",
+      "type": "POSITIVE_CONTROL",
+      "result": "PROVED_FROM_EXTERNAL_COOK_CONSTRUCTION_PLUS_INTERNAL_B2_ENCODING__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "Cook's Extended-Resolution PHP proof recursively reduces PHP(m) to PHP(m-1) and has O(n^4) total proof size according to the external construction.",
+        "Define mu_PHP(m)=m-1; each certified recursive stage decreases it by exactly one and the base case has rank zero.",
+        "Cook's macro x'=a OR (b AND c) has a constant-overhead frozen-B2 realization via t=(b AND c), u=((NOT a) AND (NOT t)), with signed literal NOT u representing x'.",
+        "Therefore a cheap exact derivational stage rank exists on this nontrivial structured family without computing shortest-proof distance."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1F PHP Stage Rank",
+        "head_sha": "db56f5f93c4c18bc5abb36b3fbf6686836bbbeca",
+        "run_id": 32825970017,
+        "job_id": 97733932377,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1F_COOK_MACRO_B2_TRUTH_EQUIVALENCE = PASS",
+          "AKINATOR_U1F_PHP_STAGE_RANK_STRICT_DESCENT = PASS",
+          "AKINATOR_U1F_PHP_STAGE_COUNT_LINEAR = PASS",
+          "COOK_PHP_O_N4_ER_PROOF = EXTERNAL_THEOREM_NOT_CI",
+          "UNIVERSAL_CERTIFIED_STAGE_DECOMPOSITION = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "external_source": "Grosof, Zhang, Heule 2022 modern account of Cook's O(n^4) ER PHP construction; original Cook 1976.",
+      "claim_ceiling": "Family-specific positive control only; does not give a universal CNF rank or solve P vs NP.",
+      "next_gate": "U1_G_UNIVERSAL_CERTIFIED_STAGE_DECOMPOSITION"
+    }
+  ],
+  "scientific_laws_added": [
+    "CHOSEN_PROOF_DEPTH != PROBLEM_INVARIANT",
+    "SEMANTIC_ALIAS_QUOTIENT != CHEAP_CANONICALIZATION",
+    "PROOF_CARRYING_EQUIVALENCE_MAY_BE_CHEAPER_THAN_FULL_SEMANTIC_EQUIVALENCE",
+    "DERIVATIONAL_RANK_CAN_EXIST_FAMILY_SPECIFICALLY",
+    "SHORTEST_PROOF_SEARCH_HARDNESS != ALL_STRUCTURAL_STAGE_RANKS_HARD",
+    "FAMILY_SPECIFIC_STAGE_RANK != UNIVERSAL_CNF_STAGE_RANK"
+  ],
+  "active_front": {
+    "name": "U1_G_UNIVERSAL_CERTIFIED_STAGE_DECOMPOSITION",
+    "question": "Can arbitrary CNF states be given polynomially constructible proof-carrying reduction stages with a polynomial-range exact rank, generalizing the Cook/PHP pattern without semantic oracle calls or exponential state growth/backtracking?"
+  },
+  "journal_policy": {
+    "append_only": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "P_vs_NP_status_must_remain_open_until_actual_closure_proof": true
+  }
+}
