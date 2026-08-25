@@ -1,0 +1,100 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-029-030-EXACT-PROJECTION-EXPONENT-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+  "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_027_028_DERIVATIONAL_RANK.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-029",
+      "title": "Davis-Putnam gives universal exact descent but Galil proves exponential state generation for a hard family under every elimination order",
+      "type": "UNIVERSAL_DESCENT_ROUTE_CLOSURE",
+      "result": "EXACT_DESCENT_PROVED__NAIVE_DP_POLYTIME_REFUTED_BY_EXTERNAL_LOWER_BOUND__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "Davis-Putnam elimination DP_x(F) exactly represents exists x F and therefore preserves satisfiability.",
+        "The rank mu_DP=#remaining variables decreases by exactly one at every elimination stage for every CNF.",
+        "A one-step bucket with m positive-x and m negative-x clauses can create m^2 distinct resolvents, so work polynomial in current state does not imply polynomial work in original input.",
+        "Zvi Galil 1977 constructs infinitely many contradictory CNFs for which Davis-Putnam generates 2^(c n) distinct clauses for any variable-elimination order."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1G Davis Putnam",
+        "head_sha": "a818bc5397c0ff87f832f407c37a66523e9d2af1",
+        "run_id": 32826296721,
+        "job_id": 97734953512,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1G_DP_EXACT_PROJECTION_FINITE = PASS",
+          "AKINATOR_U1G_DP_VARIABLE_RANK_STRICT_DESCENT = PASS",
+          "AKINATOR_U1G_DP_QUADRATIC_ONE_STEP_BLOWUP = PASS",
+          "GALIL_DP_EXPONENTIAL_ANY_ORDER = EXTERNAL_THEOREM_NOT_CI",
+          "B2_EXACT_PROJECTION_COMPRESSION = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "external_source": "Zvi Galil, On the complexity of regular resolution and the Davis-Putnam procedure, Theoretical Computer Science 4 (1977), 23-46.",
+      "scientific_law": "PERFECT_UNIVERSAL_DESCENT != POLY_STATE",
+      "claim_ceiling": "Galil closes the exact Davis-Putnam procedure, not unrestricted ER/B2 and not P vs NP.",
+      "next_gate": "U1_H_B2_EXACT_PROJECTION_COMPRESSION"
+    },
+    {
+      "event_id": "AKJ-030",
+      "title": "Naive quantifier-free B2 Shannon projection preserves exact descent but retains exponential representation growth",
+      "type": "B2_PROJECTION_BASELINE_BARRIER",
+      "result": "NAIVE_ROUTE_EXPONENTIAL_BY_CONSTRUCTION__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "Exact projection satisfies exists x C(x,y)=C(0,y) OR C(1,y).",
+        "Frozen B2 implements the OR with a De-Morgan AND gate over signed outputs.",
+        "A no-sharing constructor that copies both restricted circuits obeys S_(k+1)=2 S_k+1, hence S_k=2^k(S_0+1)-1.",
+        "This is an algorithm-specific exponential recurrence, not a lower bound on minimum B2 circuit size of the projected function.",
+        "Keeping an existential quantifier wrapper compact does not solve the problem unless quantifier elimination/evaluation is also polynomial."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1H B2 Shannon Projection",
+        "head_sha": "2c0d472516732a825ebf036635b4a898597f1100",
+        "run_id": 32826461539,
+        "job_id": 97735452370,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1H_B2_OR_GADGET = PASS",
+          "AKINATOR_U1H_EXISTENTIAL_SHANNON_IDENTITY_ALL_3VAR_TABLES = PASS",
+          "AKINATOR_U1H_NAIVE_NO_SHARING_SIZE_RECURRENCE = PASS",
+          "MINIMUM_B2_PROJECTION_SIZE_LOWER_BOUND = NOT_PROVED",
+          "PROOF_CARRYING_B2_PROJECTION_COMPRESSION = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "scientific_laws": [
+        "EXACT_SHANNON_PROJECTION != POLY_COMPRESSION",
+        "SMALL_QUANTIFIER_WRAPPER != CHEAP_QUANTIFIER_ELIMINATION",
+        "SYNTACTIC_SHARING != SEMANTIC_EQUIVALENCE_ORACLE"
+      ],
+      "new_gate": "U1_I_PROOF_CARRYING_B2_PROJECTION_COMPRESSION",
+      "claim_ceiling": "No lower bound on minimum unrestricted B2 projection size is proved. Smart proof-carrying sharing/compression remains open."
+    }
+  ],
+  "active_front": {
+    "name": "U1_I_PROOF_CARRYING_B2_PROJECTION_COMPRESSION",
+    "question": "Can every exact existential projection of a polynomial-size frozen-B2 state be transformed into a polynomial-size quantifier-free B2 state in deterministic polynomial total work, using only proof-carrying sharing/compression and preserving one-variable-per-stage descent?",
+    "closure_if_proved": "Repeated exact projection would decide SAT in polynomial time, hence P=NP.",
+    "first_adversarial_controls": [
+      "Galil Davis-Putnam hard family",
+      "high-induced-width/expander formulas",
+      "selector-lift",
+      "HWB/knowledge-compilation size barriers",
+      "F3D collapse",
+      "parity/inner-product reuse",
+      "p-reencoding wrappers"
+    ]
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "P_vs_NP_status_must_remain_open_until_actual_closure_proof": true
+  }
+}
