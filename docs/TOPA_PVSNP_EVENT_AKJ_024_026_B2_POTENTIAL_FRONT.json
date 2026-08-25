@@ -1,0 +1,136 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-024-026-B2-POTENTIAL-FRONT-2026-08-25",
+  "format_version": "1.0",
+  "parent_journal": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
+  "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_021_023_RSPC_INTERFACE_SWEEP.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_journal_home": "Hawkar-usls/Demi_Head",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-024",
+      "title": "Complete one-step frozen-B2 candidate deck is polynomially enumerable",
+      "type": "POSITIVE_LOCAL_THEOREM",
+      "result": "PROVED_IN_FROZEN_B2_SCOPE__PROVIDER_CI_PASS",
+      "formal_statement": [
+        "With V currently available root/extension variables there are at most 2V signed literals.",
+        "Every legal next B2 definition has the form e <-> (a AND b), so the ordered candidate deck has size at most 4V^2; under abs(a)!=abs(b) its pre-dedup count is exactly 4V(V-1).",
+        "If serialized state size is polynomial in original input N, then the complete one-step candidate deck and syntactic legality scan are polynomial in N.",
+        "This does not bound the number of multi-step candidate sequences."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1B B2 Enumeration",
+        "head_sha": "c1c10a6be9730e4e41df74b5e4cf848e8780f348",
+        "run_id": 32825060419,
+        "job_id": 97731119877,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1B_B2_SIGNED_LITERAL_COUNT = PASS",
+          "AKINATOR_U1B_ALL_NEXT_B2_CANDIDATES_QUADRATIC = PASS",
+          "AKINATOR_U1B_CANONICAL_PAIR_DEDUP = PASS",
+          "AKINATOR_U1B_CONSTANT_DEFINITION_BYTES_MECHANICS = PASS",
+          "POLY_ONE_STEP_PROPOSAL = ANALYTICAL_BOUND_PLUS_FINITE_MECHANICS",
+          "POLY_GLOBAL_SELECTION = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "law": "POLY_ONE_STEP_CANDIDATE_DECK != POLY_SCHEMA_TREE",
+      "next_gap": "Replace global candidate-search mystery by a cheap exact progress criterion over the already-polynomial deck."
+    },
+    {
+      "event_id": "AKJ-025",
+      "title": "Polynomial B2 deck plus cheap exact polynomial-range descent potential would yield a polynomial Akinator",
+      "type": "CONDITIONAL_CLOSURE_THEOREM",
+      "result": "PROVED_CONDITIONALLY__PROVIDER_CI_PASS_FOR_MECHANICS",
+      "formal_statement": [
+        "Assume polynomial state, polynomial transition cost, polynomial one-step deck, an exactly polynomial-time computable integer potential 0<=mu(S)<=N^d, universal strict descent from every nonterminal state, and terminal correctness.",
+        "Scanning the whole polynomial deck and choosing the first candidate with lower mu is polynomial per step.",
+        "Strict integer descent gives at most N^d accepted steps.",
+        "Under all assumptions SAT is decidable deterministically in polynomial time, hence P=NP."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1C Global Potential Lemma",
+        "head_sha": "20a3b51caf2ba2df2745aa53c5975c8fa82e3446",
+        "run_id": 32825256480,
+        "job_id": 97731707223,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1C_POLY_DECK_SCAN_MECHANICS = PASS",
+          "AKINATOR_U1C_STRICT_INTEGER_DESCENT_STEP_BOUND = PASS",
+          "AKINATOR_U1C_B2_DECK_POLY_COMPOSITION_ALGEBRA = PASS",
+          "UNIVERSAL_SAT_DESCENT_POTENTIAL = NOT_CONSTRUCTED",
+          "RESOLUTION_AUTOMATABILITY_NP_HARD = EXTERNAL_THEOREM_NOT_CI",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "claim_ceiling": "No universal SAT potential has been constructed; provider CI validates only finite deck-scan/descent mechanics.",
+      "new_red_point": "CHEAP_EXACT_GLOBAL_DESCENT_POTENTIAL"
+    },
+    {
+      "event_id": "AKJ-026",
+      "title": "Naive semantic/syntactic global potentials fail",
+      "type": "POTENTIAL_KILL_SWEEP",
+      "result": "MULTIPLE_ROUTES_REFUTED__PROVIDER_CI_PASS",
+      "refuted_candidates": [
+        "free-root count: unchanged by pure B2 extension",
+        "clause count / literal volume: basic extension increases them",
+        "variable/macro count and next-candidate count: increase under extension",
+        "exact model count: conservative definitions preserve it; exact counting is also #P-hard externally",
+        "support/globality deficit: can hit zero while formula remains nonterminal",
+        "raw F3 width/depth/crossing: lower-bound escape resource, not monotone solver distance",
+        "shortest-proof distance treated as free: hides proof search; Resolution automatability is NP-hard externally"
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator U1D Naive Potentials",
+        "head_sha": "220c791141fb25668f7c302aba2fb9730e27c8a6",
+        "run_id": 32825417645,
+        "job_id": 97732197317,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_U1D_FREE_ROOT_COUNT_STASIS = PASS",
+          "AKINATOR_U1D_CLAUSE_LITERAL_VARIABLE_COUNTS_INCREASE = PASS",
+          "AKINATOR_U1D_NEXT_CANDIDATE_COUNT_INCREASE = PASS",
+          "AKINATOR_U1D_CONSERVATIVE_EXTENSION_MODEL_BIJECTION = PASS",
+          "AKINATOR_U1D_ZERO_SUPPORT_DEFICIT_NONTERMINAL_FIXTURE = PASS",
+          "MODEL_COUNT_SHARP_P_HARD = EXTERNAL_THEOREM_NOT_CI",
+          "SHORTEST_RESOLUTION_PROOF_SEARCH_NP_HARD = EXTERNAL_THEOREM_NOT_CI",
+          "U1_E_DERIVATIONAL_RANK = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
+      "new_gate": "U1_E_DERIVATIONAL_RANK"
+    }
+  ],
+  "scientific_laws_added": [
+    "ALL_NEXT_B2_MACROS_CAN_BE_ENUMERATED_WITHOUT_A_SEMANTIC_ORACLE",
+    "POLY_DECK_PLUS_CHEAP_EXACT_POLY_RANGE_DESCENT_POTENTIAL_IMPLIES_POLY_SELECTION",
+    "CONSERVATIVE_EXTENSION_PRESERVES_MODEL_COUNT",
+    "FORMULA_SIZE != SOLVER_DISTANCE",
+    "GLOBAL_SUPPORT != TERMINAL_PROGRESS",
+    "LOWER_BOUND_RESOURCE != DESCENT_POTENTIAL",
+    "SHORTEST_PROOF_DISTANCE != CHEAP_COMPUTABLE_RANK"
+  ],
+  "active_front": {
+    "name": "U1_E_DERIVATIONAL_RANK",
+    "question": "Can a representation-stable, polynomial-range, polynomial-time exact derivational rank be defined so that every nonterminal frozen-B2 state has at least one legal one-step candidate that strictly decreases it, with terminal rank equivalent to exact SAT/UNSAT completion?",
+    "first_adversarial_tests": [
+      "decorative/alias extension chains",
+      "selector-lift",
+      "graph-PHP/Cook positive control",
+      "NW-local hard family",
+      "F3D one-bit collapse",
+      "parity/inner-product reuse",
+      "p-reencoding wrapper"
+    ]
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "P_vs_NP_status_must_remain_open_until_actual_closure_proof": true
+  }
+}
