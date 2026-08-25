@@ -1,0 +1,198 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-026-ORGANISM-PF2-2026-08-25",
+  "format_version": "1.0",
+  "parent_extension": "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json",
+  "canonical_science_home": "Hawkar-usls/TOPA",
+  "arbitration_home": "Hawkar-usls/Demi_Head",
+  "provenance_home": "Hawkar-usls/janus-meta-registry",
+  "timezone": "Europe/Kyiv",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-019",
+      "title": "Hawkar-usls repository ecosystem activated as one P-vs-NP research organism",
+      "type": "ORGANISM_INVENTORY",
+      "result": "ROLE_MAP_FROZEN",
+      "artifact": "Hawkar-usls/TOPA/data/JANUS-PVSNP-ORGANISM-MAP-2026-08-25-v1.0.json",
+      "key_facts": [
+        "TOPA remains strict-science synthesis and claim firewall.",
+        "Janus-Fundamentum remains formal/provider proof and CI authority.",
+        "Demi_Head remains adversarial proof-program/gap-ledger arbitration.",
+        "janus-meta-registry remains provenance memory, not truth authority.",
+        "Other repositories may donate exact mechanisms or test discipline but gain no automatic theorem authority.",
+        "Historical repository lookup Hawkar-usls/Janus-P-N-junction currently resolves to Hawkar-usls/Janus-Fundamentum and is treated as lineage alias rather than a separate live authority.",
+        "Hawkar-usls/tranception is classified as an upstream-derived working copy; it must not be confused with JANUS-authored Tranception-named internal P-vs-NP diagnostic artifacts in the registry."
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-020",
+      "title": "Cross-repository mechanism synthesis found a repeated prebirth-compression architecture",
+      "type": "CROSS_REPO_SYNTHESIS",
+      "result": "ARCHITECTURE_PATTERN_ONLY",
+      "evidence_nodes": [
+        "janus-meta-registry/data/JANUS-TRANCEPTION-BACK-FORTH-PNP-PATH-DIAGNOSIS-2026-08-18-v1.0.json",
+        "janus-meta-registry/data/JANUS-QUANTUM-PHYSARUM-PNP-FAIL-CLOSED-BRAIN-RUN-2026-08-18-v1.0.json",
+        "janus-meta-registry/data/JANUS-ODONTOFORGE-REGENERATION-PNP-BRIDGE-2026-08-25-v1.0.json",
+        "janus-meta-registry/data/JANUS-P-N-JUNCTION-SELECTIVE-DISTRIBUTED-FIELD-v2.0.json"
+      ],
+      "synthesis": "PREBIRTH_EXACT_COMPRESSION + GENERATOR_VERIFIER_SEPARATION + LINEAGE_EXIT_ACCOUNTING + TOTAL_WORK_ACCOUNTING",
+      "scientific_boundary": "Repeated architecture is a search heuristic for theorem discovery, not mathematical evidence by itself.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-021",
+      "title": "Stale fixed-C next-gate pointer detected by organism-wide reconciliation",
+      "type": "CLAIM_ROUTE_REPAIR",
+      "result": "OLD_BC1_PRIORITY_SUPERSEDED",
+      "old_pointer": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_NEXT_GATE.md previously named BC1-A as NEXT",
+      "stronger_existing_result": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_BOUNDED_SUPPORT_ER3_ELIMINATION.md",
+      "formal_consequence": [
+        "ResSize(F) <= ER3Size(pi)*2^O(K_root(pi)).",
+        "On the frozen Resolution-hard family, polynomial ER3 size forces K_root=Omega(N^eta).",
+        "Since each NW neighborhood has Delta=O(log N), at least one macro in a polynomial escape has cover Omega(N^eta/log N).",
+        "Therefore every universal fixed-C bounded-cover escape is already refuted in the stated ER3 hard-family scope."
+      ],
+      "repair": "C025_AKINATOR_RSPC_NEXT_GATE.md advanced to the boundary-quotient front.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-022",
+      "title": "BC1-A auxiliary C-local restriction theorem proved while direct source shortcut was refuted",
+      "type": "AUXILIARY_TRANSFER_BOUNDARY",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_BC1A_C_LOCAL_SUBSTITUTION_AND_RESTRICTION.md",
+      "result": [
+        "C_LOCALITY_IS_STABLE_UNDER_SOURCE_SELF_REDUCTION = PROVED",
+        "C_HYPERLOCAL_FUNCTIONAL_FORM_RESTRICTION_LEMMA = PROVED_IN_GENERALIZED_ENCODING",
+        "DIRECT_SOURCE_FUNCTIONAL_ENCODING_REUSE_FOR_C_GT_1 = REFUTED",
+        "SOURCE_SINGLE_OUTPUT_KILL_LEMMA_EXTENDS_VERBATIM_TO_C_LOCAL = REFUTED"
+      ],
+      "meaning": "Cover stability does not authorize importing Sokolov's published one-neighborhood heavy-width theorem into a C-neighborhood proof language.",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-023",
+      "title": "Add-only macro restoration route closed",
+      "type": "ROUTE_CLOSURE",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_MACRO_RESTORE_CAP_ADD_ONLY_BARRIER.md",
+      "result": "PROVED_IN_FROZEN_COMPLETE_ELIMINATION_CALCULUS",
+      "formal_statement": "For F_plus=F union D with old clauses retained, Q_x(F) subseteq Q_x(F_plus) for every original pivot x; therefore adding definitions cannot reduce the original exact Davis-Putnam resolvent frontier.",
+      "new_requirement": "A successful macro must replace/quotient the representation before expensive resolvents are born.",
+      "laws": [
+        "ADDING_NAMES != REMOVING_THE_OLD_FRONTIER",
+        "COMPRESS_BEFORE_RESOLVENT_BIRTH_OR_PAY_THE_FRONTIER"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-024",
+      "title": "Exact prebirth pivot factorization discovered and finite mechanics validated after preserved CI failure",
+      "type": "POSITIVE_OPERATOR_PLUS_FAILURE_REPAIR",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PREBIRTH_PIVOT_FACTORIZATION.md",
+      "analytic_identity": "AND_{i,j}(A_i OR B_j) == (AND_i A_i) OR (AND_j B_j), equivalently exists x . F == R AND ((AND_i A_i) OR (AND_j B_j)).",
+      "analytic_result": [
+        "One pivot pair cross-product can be represented by a B2 factor DAG linear in explicit pivot literal volume up to fixed factors.",
+        "Eliminated pivot witness has a deterministic exact lift."
+      ],
+      "failed_ci_preserved": {
+        "workflow": "Validate TOPA mathematics",
+        "head_sha": "ae951ea9e9e7c07eed87431b9f137dbd44dce59d",
+        "run_id": 32794430918,
+        "job_id": 97642657355,
+        "conclusion": "FAILURE",
+        "cause": "Python SyntaxError in finite probe assertion; theorem not exercised."
+      },
+      "repair": "Changed pseudo-mathematical assert syntax to explicit if/then assert; no theorem text changed.",
+      "provider_receipts": [
+        {
+          "workflow": "Validate Akinator Prebirth Factor",
+          "head_sha": "eeb24e8db669d3cad9fb3985a24ee8857c19cc6b",
+          "run_id": 32794493677,
+          "job_id": 97642842756,
+          "conclusion": "SUCCESS",
+          "markers": [
+            "AKINATOR_PF1_EXISTENTIAL_PIVOT_IDENTITY_FINITE_REPLAY = PASS",
+            "AKINATOR_PF1_WITNESS_LIFT_FINITE_REPLAY = PASS",
+            "AKINATOR_ADD_ONLY_ORIGINAL_FRONTIER_MONOTONICITY = PASS",
+            "AKINATOR_PAIR_CROSS_PRODUCT_VS_LINEAR_FACTOR_FIXTURE = PASS",
+            "PREBIRTH_PIVOT_FACTORIZATION_THEOREM = ANALYTIC_NOT_CI",
+            "ITERATED_FACTOR_DAG_POLY_BOUND = OPEN",
+            "P_VS_NP = OPEN"
+          ]
+        },
+        {
+          "workflow": "Validate TOPA mathematics",
+          "head_sha": "eeb24e8db669d3cad9fb3985a24ee8857c19cc6b",
+          "run_id": 32794493679,
+          "conclusion": "SUCCESS"
+        }
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-025",
+      "title": "PF2 function-to-relation projection barrier connected prebirth factorization to live-width",
+      "type": "RELATIONAL_BOUNDARY_THEOREM",
+      "artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF2_FUNCTION_TO_RELATION_BOUNDARY.md",
+      "result": [
+        "exists x [e <-> (x AND y)] need not be the graph of any Boolean function e=h(y).",
+        "Independent per-macro survival marginals can lose exact joint correlation.",
+        "Repeated exact factorization must carry a joint projected boundary relation, eliminate the affected dependency cone, or provide a new exact quotient/rewrite.",
+        "Existing deterministic live-width DP is an exact relational lane with explicit cost poly(T)*2^O(lambda)."
+      ],
+      "new_resource": "BOUNDARY_RELATION / LIVE_WIDTH / ORPHAN_FRONTIER",
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    },
+    {
+      "event_id": "AKJ-026",
+      "title": "Parallel TOPA organism branch contributed canonical-sharing trilemma and was source-checked before integration",
+      "type": "PARALLEL_ORGANISM_INTEGRATION",
+      "source_branch": "c025-pf2-canonical-sharing-trilemma",
+      "source_commit": "57f1ddb9e74c0d84be3e286aa2d869044824d70d",
+      "integrated_artifact": "TOPA/research/mathematics/p-vs-np/C025_AKINATOR_PF2_CANONICAL_SHARING_TRILEMMA.md",
+      "result": [
+        "Structural hash-consing is polynomial and exact but merges only identical syntax.",
+        "General Boolean circuit equivalence is coNP-complete, so complete semantic canonicalization is not a free primitive.",
+        "ISAAC 2024 source confirms exponential BDD/ZDD family-operation blow-up for Join from polynomial-size inputs, including order-independent worst-case output size in the source representation.",
+        "Source-bound ZDD/BDD result is not promoted to an arbitrary B2-circuit lower bound."
+      ],
+      "external_source": "Nakamura, Nishino, Denzumi, ISAAC 2024, DOI 10.4230/LIPIcs.ISAAC.2024.52",
+      "trilemma": [
+        "cheap syntactic sharing but weak compression",
+        "restricted canonical representation with representation-size risk",
+        "strong semantic/proof-carrying sharing with paid equivalence/discovery"
+      ],
+      "claim_ceiling_after": "P_VS_NP = OPEN"
+    }
+  ],
+  "active_front": {
+    "name": "PF3_RESIDUAL_NOVELTY_AND_BOUNDARY_QUOTIENT",
+    "exact_question": "Can the organism deterministically construct, for every nonterminal state, an exact proof-carrying quotient of the joint projected boundary relation with one universal polynomial bound on total live bytes, cumulative novel nodes, construction, verification, failed attempts and witness provenance, while decreasing an exact global SAT progress rank?",
+    "negative_control_metrics": [
+      "D_t live canonical DAG nodes",
+      "D_total cumulative canonical DAG nodes including discarded temporaries",
+      "boundary live width lambda",
+      "exact relational state count",
+      "proof bytes for non-syntactic merges",
+      "failed quotient discovery work",
+      "witness/provenance bytes"
+    ],
+    "forbidden_shortcuts": [
+      "semantic equality oracle",
+      "heuristic quotient score",
+      "independent per-macro marginals used as joint relation",
+      "stale B2 function provenance after parent root elimination",
+      "unpriced BDD/ZDD reordering or representation switching",
+      "small final DAG after exponential temporary construction",
+      "parallel latency reported without total work"
+    ],
+    "global_status": "P_VS_NP = OPEN"
+  },
+  "journal_policy": {
+    "append_only": true,
+    "preserve_failed_ci_runs": true,
+    "provider_pass_required_before_mechanical_promotion": true,
+    "external_theorem_identity_preserved": true,
+    "architecture_pattern_has_zero_theorem_authority_without_reduction": true
+  }
+}
