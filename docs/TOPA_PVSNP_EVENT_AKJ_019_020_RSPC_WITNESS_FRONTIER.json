@@ -1,6 +1,6 @@
 {
   "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-020-RSPC-WITNESS-FRONTIER-2026-08-25",
-  "format_version": "1.0",
+  "format_version": "1.1",
   "parent_journal": {
     "path": "docs/TOPA_PVSNP_EVENT_JOURNAL_2026-08-25.json",
     "prior_extension": "docs/TOPA_PVSNP_EVENT_AKJ_015_016_STRUCTURAL_SELECTOR.json"
@@ -9,6 +9,7 @@
   "arbitration_journal_home": "Hawkar-usls/Demi_Head",
   "timezone": "Europe/Kyiv",
   "created_local": "2026-08-25T10:51:00+03:00",
+  "last_updated_local": "2026-08-25T10:56:00+03:00",
   "global_claim_ceiling": "P_VS_NP = OPEN",
   "scientific_laws_added": [
     "EXPLICIT_WITNESS_FRONTIER != COMPACT_COMPLETE_INTERFACE",
@@ -48,13 +49,30 @@
       "event_id": "AKJ-020",
       "title": "Explicit-frontier versus symbolic-intersection dichotomy exposed",
       "type": "REPRESENTATION_SEARCH_BARRIER",
-      "result": "PROVED_IN_GENERAL_COMPOSITION_SCOPE__PROVIDER_CI_PENDING",
+      "result": "PROVED_IN_GENERAL_COMPOSITION_SCOPE__PROVIDER_CI_PASS",
       "formal_statement": [
         "PAR_n has O(n)-size B2 representation.",
         "Every odd assignment a defines an O(n)-size point macro P_a with unique positive witness a and PAR_n AND P_a = P_a.",
         "An explicit positive frontier for PAR_n that is partner-complete against all odd-parity point macros must contain every odd assignment, hence at least 2^(n-1) witnesses.",
         "Replacing the explicit set by arbitrary compact symbolic witness circuits does not make exact compatibility free: nonempty symbolic intersection is NP-complete in the general circuit scope by F -> (F, TRUE)."
       ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator RSPC Witness Frontier",
+        "head_sha": "86b6d0f53e38b9912002216d49e7fc95f9425d27",
+        "run_id": 32823856270,
+        "job_id": 97727538072,
+        "conclusion": "SUCCESS",
+        "markers": [
+          "AKINATOR_RSPC_EXPLICIT_PARITY_FRONTIER_FINITE = PASS",
+          "AKINATOR_RSPC_POINT_PARTNER_UNIQUE_COMPATIBILITY = PASS",
+          "AKINATOR_RSPC_SYMBOLIC_INTERSECTION_FINITE_REPLAY = PASS",
+          "EXPLICIT_FRONTIER_EXPONENTIAL_THEOREM = ANALYTICAL_COUNT_NOT_CI",
+          "SYMBOLIC_INTERSECTION_NP_COMPLETE = ANALYTICAL_REDUCTION_NOT_CI",
+          "UNIVERSAL_RESTRICTED_SELECTOR_FRONTIER = OPEN",
+          "P_VS_NP = OPEN"
+        ]
+      },
       "artifacts": [
         "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_WITNESS_FRONTIER_DICHOTOMY.md",
         "Hawkar-usls/TOPA/research/mathematics/p-vs-np/akinator_rspc_witness_frontier_probe.py",
