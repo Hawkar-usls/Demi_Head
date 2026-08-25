@@ -1,0 +1,80 @@
+{
+  "journal_extension_id": "TOPA-PVSNP-AKINATOR-AKJ-019-020-RSPC-SEMANTIC-SURVIVAL-2026-08-25",
+  "format_version": "1.0",
+  "canonical_home": "Hawkar-usls/Demi_Head",
+  "timezone": "Europe/Kyiv",
+  "created_local": "2026-08-25T02:58:30+03:00",
+  "global_claim_ceiling": "P_VS_NP = OPEN",
+  "events": [
+    {
+      "event_id": "AKJ-019",
+      "title": "Exact semantic-survival witness discovery is SAT-hard in the general circuit scope",
+      "type": "SEARCH_DISCOVERY_BARRIER",
+      "result": "PROVED_IN_GENERAL_CIRCUIT_SCOPE",
+      "statement": [
+        "For Boolean circuit/B2 DAG C and partial assignment rho, SURVIVE(C,rho) means C|rho is nonconstant.",
+        "SURVIVE is in NP because two completions alpha,beta with different outputs form a polynomially verifiable witness.",
+        "SAT reduces linearly: F(x) maps to C_F(z,x)=z AND F(x) with empty rho; F is satisfiable iff C_F is nonconstant.",
+        "Therefore general residual nonconstancy is NP-complete and residual constancy is coNP-complete."
+      ],
+      "claim_boundary": [
+        "This does not prove hardness for the exact Sokolov source-matched restriction relation.",
+        "This does not prove a superpolynomial lower bound for every restricted macro language.",
+        "P_VS_NP remains OPEN."
+      ],
+      "new_laws": [
+        "CHEAP_SURVIVAL_WITNESS_VERIFICATION != CHEAP_SURVIVAL_WITNESS_DISCOVERY",
+        "SHORT_ASSIGNMENT_WITNESS != POLYNOMIAL_WITNESS_SEARCH"
+      ],
+      "artifacts": [
+        "Hawkar-usls/TOPA/research/mathematics/p-vs-np/C025_AKINATOR_RSPC_SEMANTIC_SURVIVAL_SEARCH_BARRIER.md",
+        "Hawkar-usls/Janus-Fundamentum/proof_attempts/C025/C025_AKINATOR_RSPC_SEMANTIC_SURVIVAL_SEARCH_BARRIER.md"
+      ]
+    },
+    {
+      "event_id": "AKJ-020",
+      "title": "Constructive bi-witness macro language isolated; one-witness completeness fails and witness-frontier width becomes the next exact resource",
+      "type": "CONSTRUCTIVE_SELECTOR_FRONTIER",
+      "result": "FINITE_COUNTEREXAMPLE_PLUS_OPEN_RESOURCE",
+      "statement": [
+        "Accepted AND candidates can inherit a positive witness without semantic search when child positive witnesses are compatible on overlap.",
+        "All explicit operand pairs in state size V are enumerable in O(V^2), so accepted-step discovery is polynomial in explicit state size.",
+        "One retained positive witness per function is not compositionally complete: a=x OR y and b=x OR NOT y can carry incompatible retained positive witnesses although a AND b is nonconstant.",
+        "The next resource is witness-frontier width Omega(S), the maximum retained constructive positive-witness count per represented function."
+      ],
+      "provider_receipt": {
+        "repository": "Hawkar-usls/TOPA",
+        "workflow": "Validate Akinator RSPC",
+        "head_sha": "0b2bd8ab020a5c728bfe0d763c9d263ea8bded57",
+        "run_id": 32791677963,
+        "job_id": 97634309131,
+        "conclusion": "SUCCESS",
+        "claim_ceiling": "FINITE_MECHANICS_ONLY"
+      },
+      "markers": [
+        "AKINATOR_RSPC_SAT_TO_NONCONSTANCY_FINITE_REPLAY = PASS",
+        "AKINATOR_RSPC_SINGLE_WITNESS_COUNTEREXAMPLE = PASS",
+        "AKINATOR_RSPC_PAIR_ENUMERATION_FINITE_ALGEBRA = PASS",
+        "GENERAL_RESIDUAL_NONCONSTANCY_NP_COMPLETE = ANALYTIC_REDUCTION_NOT_CI",
+        "WITNESS_FRONTIER_SUPERPOLY_LOWER_BOUND = NOT_PROVED",
+        "SOURCE_MATCHED_RESTRICTION_HARDNESS = OPEN",
+        "PROOF_CARRYING_STRUCTURAL_SELECTOR = OPEN",
+        "P_VS_NP = OPEN"
+      ],
+      "next_gate": "RSPC-S2_WITNESS_FRONTIER_ACCOUNTING_AND_NO_BACKTRACKING_COMPLETENESS"
+    }
+  ],
+  "active_front": {
+    "name": "AKINATOR-RSPC-S2",
+    "question": "Can a source-matched constructive macro language retain only polynomially many survival witnesses in original input length N while guaranteeing a deterministic no-backtracking admissible step at every nonterminal target state?",
+    "hidden_exponent_candidate": "WITNESS_FRONTIER_WIDTH_AND_COMPATIBILITY_JOIN_WIDTH",
+    "forbidden_shortcuts": [
+      "semantic SAT oracle",
+      "model counting",
+      "exponential witness enumeration",
+      "backtracking hidden inside witness replacement",
+      "polynomial in cache size without input-relative accounting",
+      "provider CI promoted to NP-completeness theorem"
+    ]
+  }
+}
