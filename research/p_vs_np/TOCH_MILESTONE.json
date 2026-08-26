@@ -1,0 +1,7 @@
+{
+  "schema":"JANUS.DEMI_HEAD.TOCH_MILESTONE.v0.1",
+  "milestone":"PREDECESSOR_DERIVED_GATES_BOOTSTRAPPED",
+  "implemented":["contract validation","Tranception obligation synthesis","adversary audit","aggregate self-test","C025 lineage manifest"],
+  "next":"migrate exact C025 primitives with verifier parity before any new universal representation experiment",
+  "P_VS_NP":"OPEN"
+}
