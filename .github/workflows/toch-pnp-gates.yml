@@ -1,0 +1,27 @@
+name: Validate TOCH PNP Gates
+
+on:
+  push:
+    branches:
+      - research/toch-claim-mining-2026-08-27
+    paths:
+      - 'research/p_vs_np/**'
+      - '.github/workflows/toch-pnp-gates.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile research/p_vs_np/toch_gate_registry.py
+      - name: Self test
+        run: python research/p_vs_np/toch_gate_registry.py
+      - name: Frozen status guard
+        run: |
+          grep -q 'P_VS_NP = "OPEN"' research/p_vs_np/toch_gate_registry.py
+          grep -q '"P_VS_NP":"OPEN"' research/p_vs_np/TOCH_IMPORT_CONTRACT.json
