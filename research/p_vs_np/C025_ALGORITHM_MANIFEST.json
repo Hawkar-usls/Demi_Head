@@ -1,0 +1,23 @@
+{
+  "schema":"JANUS.DEMI_HEAD.C025_ALGORITHM_MANIFEST.v0.1",
+  "status":"PINNED_LINEAGE_MANIFEST",
+  "upstream_repository":"Hawkar-usls/Janus-Fundamentum",
+  "upstream_branch":"research/c025-unified-proof-carrying-akinator-jec",
+  "algorithm_stack":[
+    {"stage":1,"name":"GLOBAL_EXACT_ALGEBRA","role":"fail-closed exact algebra selector; admitted counting/affine lanes only when independently verified"},
+    {"stage":2,"name":"COMPONENT_DIRECT_SUM","role":"split primal connected components and solve each through admitted exact lanes"},
+    {"stage":3,"name":"ONE_VARIABLE_EXACT_ESCAPE","role":"deterministic one-variable restriction; no recursive Shannon branching"},
+    {"stage":4,"name":"PROOF_CARRYING_EXTENSION_PROGRESS","role":"exact extension/representation move with independent replay, frozen cap, and strict potential decrease"},
+    {"stage":5,"name":"HISTORICAL_CLAIM_MINED_REPRESENTATION_GATES","role":"TOCH-derived candidate grammars are allowed only after TOPA contract validation; not yet a universal solver stage"}
+  ],
+  "global_guardrails":[
+    "P_VS_NP=OPEN",
+    "arbitrary_CNF_totality_not_proved",
+    "one_fixed_polynomial_bound_required_for_any_universal_promotion",
+    "no_recursive_Shannon_depth_increase",
+    "ambiguity_or_verifier_failure=>OPEN",
+    "finite_holdout_success!=universal_theorem"
+  ],
+  "migration_policy":"DemiHead is the live algorithm host; Fundamentum remains mathematical authority for admitted exact primitives. Each migrated primitive must preserve upstream provenance and verifier semantics.",
+  "P_VS_NP":"OPEN"
+}
