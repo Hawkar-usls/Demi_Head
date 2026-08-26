@@ -1,0 +1,7 @@
+{
+  "schema":"JANUS.DEMI_HEAD.TOCH_RUN_LOG.v0.1",
+  "status":"APPEND_ONLY_INTENT",
+  "runs":[],
+  "logging_rule":"Every CI or local experiment must record commit, workflow/run id if available, input fingerprint/fixture, result, and whether the result is mathematical or infrastructure-only.",
+  "P_VS_NP":"OPEN"
+}
