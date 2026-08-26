@@ -1,0 +1,26 @@
+{
+  "schema":"JANUS.DEMI_HEAD.TOCH_IMPORT_CONTRACT.v0.1",
+  "status":"PREREGISTERED_BEFORE_IMPLEMENTATION",
+  "source_registry":"Hawkar-usls/janus-meta-registry:registry/p_vs_np/TOCH",
+  "purpose":"Import only formalized surviving mathematical seeds from predecessor audits; never import historical claims as truth.",
+  "admission_requirements":[
+    "exact input/output semantics",
+    "explicit computational model",
+    "independent verifier or replay predicate",
+    "full discovery/construction/state/certificate/verification resource ledger",
+    "no hidden SAT/equivalence/oracle/optimization primitive",
+    "fail closed to OPEN on ambiguity or budget failure",
+    "finite success cannot promote P_VS_NP",
+    "Shannon depth may not be increased as an escape hatch"
+  ],
+  "initial_candidate_gates":[
+    "NASH_SHORTCUT_COMPLETENESS_GATE",
+    "CERTIFICATE_DISCOVERY_GATE",
+    "EXACT_CONTRACTION_CONGRUENCE_GATE",
+    "REDUCTION_SIZE_WITNESS_GATE",
+    "RELATIVIZATION_GATE",
+    "SCHAEFER_MIXED_LANGUAGE_GATE",
+    "EXTENDED_FORMULATION_SIZE_GATE"
+  ],
+  "P_VS_NP":"OPEN"
+}
