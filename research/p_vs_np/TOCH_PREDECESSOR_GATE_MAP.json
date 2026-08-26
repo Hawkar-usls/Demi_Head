@@ -1,0 +1,13 @@
+{
+  "schema":"JANUS.DEMI_HEAD.TOCH_PREDECESSOR_GATE_MAP.v0.1",
+  "map":[
+    {"source":"TOCH-NASH-1955","gate":"NASH_SHORTCUT_COMPLETENESS_GATE","role":"adversary: distinguish candidate-space explosion from proven necessary work"},
+    {"source":"TOCH-GODEL-1956","gate":"CERTIFICATE_DISCOVERY_GATE","role":"charge finder cost separately from verifier cost"},
+    {"source":"TOCH-EDMONDS-1965","gate":"EXACT_CONTRACTION_CONGRUENCE_GATE","role":"seek exact blossom-like quotient before branching"},
+    {"source":"TOCH-KARP-1972","gate":"REDUCTION_SIZE_WITNESS_GATE","role":"preserve size and witness maps through transformations"},
+    {"source":"TOCH-BGS-1975","gate":"RELATIVIZATION_GATE","role":"reject purely relativizing universal proof arguments"},
+    {"source":"TOCH-SCHAEFER-1978","gate":"SCHAEFER_MIXED_LANGUAGE_GATE","role":"prevent tractable-language reasoning from silently covering arbitrary mixed CNFs"},
+    {"source":"TOCH-SWART-YANNAKAKIS-1986-1991","gate":"EXTENDED_FORMULATION_SIZE_GATE","role":"charge exact lifted representation and nested manipulation size"}
+  ],
+  "P_VS_NP":"OPEN"
+}
