@@ -1,0 +1,45 @@
+name: nexus-v2-11-simptomat-diagnostic-reasoning
+
+on:
+  push:
+    paths:
+      - 'contracts/NEXUS_V2_11_SIMPTOMAT_DIAGNOSTIC_REASONING_FROZEN_CONTRACT.json'
+      - 'schemas/simptomat-*.schema.json'
+      - 'tools/simptomat_diagnostic_bridge_v2_11.py'
+      - 'tests/test_simptomat_diagnostic_bridge_v2_11.py'
+      - '.github/workflows/nexus-v2-11-simptomat-diagnostic-reasoning.yml'
+  pull_request:
+    paths:
+      - 'contracts/NEXUS_V2_11_SIMPTOMAT_DIAGNOSTIC_REASONING_FROZEN_CONTRACT.json'
+      - 'schemas/simptomat-*.schema.json'
+      - 'tools/simptomat_diagnostic_bridge_v2_11.py'
+      - 'tests/test_simptomat_diagnostic_bridge_v2_11.py'
+      - '.github/workflows/nexus-v2-11-simptomat-diagnostic-reasoning.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse v2.11 contract and schemas
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          paths = [
+              Path('contracts/NEXUS_V2_11_SIMPTOMAT_DIAGNOSTIC_REASONING_FROZEN_CONTRACT.json'),
+              Path('schemas/simptomat-diagnostic-reasoning-packet.schema.json'),
+              Path('schemas/simptomat-epistemic-review.schema.json'),
+          ]
+          for path in paths:
+              json.loads(path.read_text(encoding='utf-8'))
+              print('JSON PASS', path)
+          PY
+      - name: Run Simptomat fail-closed bridge tests
+        run: python -m unittest tests.test_simptomat_diagnostic_bridge_v2_11 -v
