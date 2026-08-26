@@ -1,0 +1,25 @@
+{
+  "schema": "janus.demihead.simptomat_diagnostic_reasoning_link.v1",
+  "link_id": "DEMIHEAD_SIMPTOMAT_NEXUS_V2_11_LINK",
+  "source_repository": "Hawkar-usls/Demi_Head",
+  "peer_repository": "Hawkar-usls/Simptomat",
+  "peer_organ_key": "diagnostic_reasoning",
+  "nexus_contract": "contracts/NEXUS_V2_11_SIMPTOMAT_DIAGNOSTIC_REASONING_FROZEN_CONTRACT.json",
+  "bridge": "tools/simptomat_diagnostic_bridge_v2_11.py",
+  "outbound_schema": "schemas/simptomat-epistemic-review.schema.json",
+  "inbound_schema": "schemas/simptomat-diagnostic-reasoning-packet.schema.json",
+  "relationship": "BIDIRECTIONAL_TYPED_EPISTEMIC_REVIEW",
+  "privacy_default": "MINIMIZED_PACKET_ONLY",
+  "clinical_confirmation_authority": false,
+  "reference_label_authority": false,
+  "treatment_authority": false,
+  "external_effect_default": "DENY",
+  "authority_delta": 0,
+  "laws": [
+    "DEMIHEAD_REVIEW != CLINICAL_CONFIRMATION",
+    "SIMPTOMAT_HYPOTHESIS != WORLD_TRUTH",
+    "CONSENT_SCOPE_SURVIVES_ROUTE",
+    "PRIVATE_HEALTH_DATA != HABITAT_MIRROR",
+    "ROUTE != AUTHORITY"
+  ]
+}

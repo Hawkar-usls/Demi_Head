@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "janus.simptomat.diagnostic_reasoning_packet.v1",
+  "title": "Simptomat diagnostic reasoning packet",
+  "type": "object",
+  "required": [
+    "schema",
+    "packet_id",
+    "session_scope",
+    "consent_scope",
+    "target_question",
+    "ranked_differential",
+    "supporting_features",
+    "contradicting_features",
+    "uncertainties",
+    "next_best_question",
+    "next_confirmation_step",
+    "urgent_red_flags",
+    "claim_ceiling",
+    "clinical_confirmation_claimed",
+    "authority_delta"
+  ],
+  "properties": {
+    "schema": {"const": "janus.simptomat.diagnostic_reasoning_packet.v1"},
+    "packet_id": {"type": "string", "minLength": 1},
+    "session_scope": {"enum": ["EPHEMERAL_CONVERSATION", "CONSENTED_RESEARCH_CASE"]},
+    "consent_scope": {
+      "type": "object",
+      "required": ["conversation_processing_allowed", "public_case_persistence_consent"],
+      "properties": {
+        "conversation_processing_allowed": {"const": true},
+        "public_case_persistence_consent": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "target_question": {"type": "string", "minLength": 1},
+    "ranked_differential": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["candidate", "state"],
+        "properties": {
+          "candidate": {"type": "string", "minLength": 1},
+          "state": {"enum": ["SUPPORTED", "COMPATIBLE", "WEAKLY_COMPATIBLE", "CONTRADICTED", "INSUFFICIENT_DATA", "ESCALATE_FOR_REAL_WORLD_EVALUATION"]},
+          "research_score": {"type": "number"},
+          "clinical_probability": {"type": "number", "minimum": 0, "maximum": 1},
+          "probability_calibration": {"enum": ["NONE", "RESEARCH_ONLY", "EXTERNALLY_VALIDATED"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "supporting_features": {"type": "array", "items": {"type": "string"}},
+    "contradicting_features": {"type": "array", "items": {"type": "string"}},
+    "uncertainties": {"type": "array", "items": {"type": "string"}},
+    "next_best_question": {"type": ["string", "null"]},
+    "next_confirmation_step": {
+      "type": "object",
+      "required": ["kind", "description", "requires_external_measurement"],
+      "properties": {
+        "kind": {"enum": ["MORE_HISTORY", "PHYSICAL_EXAM", "LAB", "IMAGING", "PHYSIOLOGIC_TEST", "SPECIALIST_REVIEW", "OTHER"]},
+        "description": {"type": "string"},
+        "requires_external_measurement": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "urgent_red_flags": {"type": "array", "items": {"type": "string"}},
+    "claim_ceiling": {"const": "RESEARCH_DIAGNOSTIC_HYPOTHESIS_ONLY"},
+    "clinical_confirmation_claimed": {"type": "boolean"},
+    "authority_delta": {"const": 0}
+  },
+  "additionalProperties": false
+}

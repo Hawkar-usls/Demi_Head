@@ -1,0 +1,115 @@
+{
+  "schema": "janus.demihead.nexus_v2_11.simptomat_diagnostic_reasoning_frozen_contract.v1",
+  "contract_id": "NEXUS_V2_11_SIMPTOMAT_DIAGNOSTIC_REASONING_FROZEN_CONTRACT",
+  "version": "2.11",
+  "status": "FROZEN_BEFORE_V2_11_IMPLEMENTATION",
+  "created_at_local": "2026-08-26T17:00:00+03:00",
+  "purpose": "Admit Simptomat as a typed health-domain differential-reasoning organ into DemiHead Nexus while preserving consent, privacy, uncertainty, contradictions and strict separation between diagnostic hypotheses and clinically confirmed diagnoses.",
+  "inherits": {
+    "prior_spiral_contract": "contracts/NEXUS_V2_10_AURA_SPI_HABITAT_SPIRAL_FROZEN_CONTRACT.json",
+    "global_epistemic_constitution": "Hawkar-usls/janus-meta-registry:registry/epistemic/JANUS-GLOBAL-EPISTEMIC-SELF-DECEPTION-TRUTH-CONSTITUTION-v1.0.json",
+    "janus_organism_manifest": "Hawkar-usls/Janus:organism/JANUS_ORGANISM_v1.json",
+    "do_not_rewrite_old_frozen_contracts": true
+  },
+  "providers": {
+    "simptomat": {
+      "repository": "Hawkar-usls/Simptomat",
+      "role": "CONSENT_FIRST_HEALTH_DIFFERENTIAL_REASONING_AND_CALIBRATION_ORGAN",
+      "core_contract": "protocols/SIMPTOMAT_DIAGNOSTIC_REASONING_CORE-v1.0.json",
+      "core_contract_blob_sha": "b2adbc5f151c8b175dbe0b3d158728241be94358",
+      "clinical_diagnostic_authority": false,
+      "evidence_authority": false
+    },
+    "demihead": {
+      "repository": "Hawkar-usls/Demi_Head",
+      "role": "GUARDIAN_REVIEW_AND_EVIDENCE_CORTEX",
+      "clinical_diagnostic_authority": false,
+      "authority_delta": 0
+    }
+  },
+  "routes": [
+    {
+      "from": "SIMPTOMAT",
+      "to": "DEMIHEAD",
+      "payload": "janus.simptomat.diagnostic_reasoning_packet.v1",
+      "purpose": "epistemic review of a minimized differential-reasoning state",
+      "authority_delta": 0
+    },
+    {
+      "from": "DEMIHEAD",
+      "to": "SIMPTOMAT",
+      "payload": "janus.demihead.simptomat_epistemic_review.v1",
+      "purpose": "return contradiction/provenance/claim-ceiling review without clinical confirmation",
+      "authority_delta": 0
+    }
+  ],
+  "canonical_spiral": [
+    "HUMAN_SYMPTOM_OR_QUESTION",
+    "SIMPTOMAT_DIFFERENTIAL_UPDATE",
+    "SIMPTOMAT_MINIMIZED_REASONING_PACKET",
+    "DEMIHEAD_PRIVACY_AND_CLAIM_GATE",
+    "DEMIHEAD_CONTRADICTION_AND_PROVENANCE_REVIEW",
+    "OPTIONAL_LAPIS_OR_MEASUREMENT_HANDOFF",
+    "DEMIHEAD_BOUNDED_REVIEW",
+    "SIMPTOMAT_REINTEGRATION",
+    "NEXT_DISCRIMINATING_QUESTION_OR_EXTERNAL_MEASUREMENT",
+    "ASCEND_ONLY_IF_STATE_CHANGED"
+  ],
+  "packet_schemas": [
+    "janus.simptomat.diagnostic_reasoning_packet.v1",
+    "janus.demihead.simptomat_epistemic_review.v1"
+  ],
+  "privacy_firewall": {
+    "raw_transcript_default": "DENY",
+    "direct_identifiers_default": "DENY",
+    "medical_record_identifiers_default": "DENY",
+    "genetic_data_default": "DENY",
+    "normalized_minimized_reasoning_state_allowed": true,
+    "consent_scope_required": true,
+    "transport_may_expand_consent": false,
+    "private_to_public_habitat_mirror_default": "DENY"
+  },
+  "diagnostic_firewall": {
+    "simptomat_may_form_hypotheses": true,
+    "simptomat_may_rank_candidates": true,
+    "demihead_may_review_hypothesis": true,
+    "demihead_review_may_be_clinical_ground_truth": false,
+    "demihead_pass_may_confirm_diagnosis": false,
+    "numeric_clinical_probability_without_calibration": "REJECT_UNSAFE_PROMOTION",
+    "treatment_order_authority": false,
+    "permission_to_delay_care": false
+  },
+  "review_decisions": [
+    "PASS_AS_RESEARCH_HYPOTHESIS",
+    "HOLD_FOR_MORE_INFORMATION",
+    "HOLD_FOR_EXTERNAL_MEASUREMENT",
+    "ESCALATE_FOR_REAL_WORLD_EVALUATION",
+    "REJECT_UNSAFE_PROMOTION"
+  ],
+  "calibration_firewall": {
+    "demihead_review_is_reference_label": false,
+    "self_report_is_reference_label": false,
+    "independent_reference_label_requires_provenance": true,
+    "development_set_is_holdout": false,
+    "case_persistence_requires_explicit_consent": true
+  },
+  "negative_controls": [
+    "DIRECT_IDENTIFIER_PACKET_REJECT",
+    "RAW_TRANSCRIPT_PACKET_REJECT",
+    "CONSENT_SCOPE_MISSING_REJECT",
+    "CLINICAL_CONFIRMATION_FROM_MODEL_OUTPUT_REJECT",
+    "UNCALIBRATED_CLINICAL_PROBABILITY_REJECT",
+    "DEMIHEAD_PASS_AS_REFERENCE_LABEL_REJECT",
+    "AUTHORITY_ESCALATION_REJECT",
+    "PRIVATE_TO_PUBLIC_MIRROR_REJECT"
+  ],
+  "claim_ceiling": {
+    "simptomat_is_clinician": false,
+    "demihead_is_clinician": false,
+    "demihead_review_is_medical_truth": false,
+    "ranked_first_is_certain": false,
+    "model_score_is_clinical_probability": false,
+    "nexus_membership_is_medical_validation": false,
+    "external_effects_enabled": false
+  }
+}

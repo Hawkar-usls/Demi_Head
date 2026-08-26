@@ -1,0 +1,30 @@
+{
+  "schema": "janus.demihead.nexus_integration_status.v1",
+  "integration": "SIMPTOMAT_NEXUS_V2_11",
+  "status": "IMPLEMENTED_LOCAL_DETERMINISTIC_REFERENCE",
+  "peer_repository": "Hawkar-usls/Simptomat",
+  "peer_organ_key": "diagnostic_reasoning",
+  "frozen_contract": "contracts/NEXUS_V2_11_SIMPTOMAT_DIAGNOSTIC_REASONING_FROZEN_CONTRACT.json",
+  "bridge": "tools/simptomat_diagnostic_bridge_v2_11.py",
+  "tests": "tests/test_simptomat_diagnostic_bridge_v2_11.py",
+  "ci": ".github/workflows/nexus-v2-11-simptomat-diagnostic-reasoning.yml",
+  "implemented": [
+    "minimized diagnostic reasoning packet validation",
+    "direct-identifier and raw-transcript rejection",
+    "clinical-confirmation promotion rejection",
+    "uncalibrated clinical-probability rejection",
+    "urgent-red-flag escalation",
+    "external-measurement HOLD",
+    "deterministic SHA-256-bound review receipt",
+    "authority-delta-zero verification"
+  ],
+  "not_established": [
+    "production cross-repository transport",
+    "clinical validation",
+    "DemiHead medical diagnostic authority",
+    "Simptomat medical diagnostic authority",
+    "real-world health outcome benefit",
+    "DemiHead review as a clinical reference standard"
+  ],
+  "authority_delta": 0
+}

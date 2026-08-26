@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "janus.demihead.simptomat_epistemic_review.v1",
+  "title": "DemiHead review of a Simptomat diagnostic reasoning packet",
+  "type": "object",
+  "required": [
+    "schema",
+    "packet_id",
+    "packet_sha256",
+    "decision",
+    "preserved_candidate_order",
+    "contradiction_count",
+    "uncertainty_count",
+    "privacy_gate",
+    "clinical_confirmation_granted",
+    "reference_label_granted",
+    "authority_delta",
+    "claim_ceiling",
+    "review_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "janus.demihead.simptomat_epistemic_review.v1"},
+    "packet_id": {"type": "string", "minLength": 1},
+    "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision": {"enum": ["PASS_AS_RESEARCH_HYPOTHESIS", "HOLD_FOR_MORE_INFORMATION", "HOLD_FOR_EXTERNAL_MEASUREMENT", "ESCALATE_FOR_REAL_WORLD_EVALUATION", "REJECT_UNSAFE_PROMOTION"]},
+    "preserved_candidate_order": {"type": "array", "items": {"type": "string"}},
+    "contradiction_count": {"type": "integer", "minimum": 0},
+    "uncertainty_count": {"type": "integer", "minimum": 0},
+    "privacy_gate": {"const": "PASS_MINIMIZED_PACKET"},
+    "clinical_confirmation_granted": {"const": false},
+    "reference_label_granted": {"const": false},
+    "authority_delta": {"const": 0},
+    "claim_ceiling": {"const": "DEMIHEAD_EPISTEMIC_REVIEW_ONLY_NOT_CLINICAL_CONFIRMATION"},
+    "review_notes": {"type": "array", "items": {"type": "string"}},
+    "review_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
