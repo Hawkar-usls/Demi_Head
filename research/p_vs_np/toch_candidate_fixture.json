@@ -1,0 +1,14 @@
+{
+  "source_fingerprint":"fixture-not-a-real-proof",
+  "representation_kind":"EXACT_QUOTIENT",
+  "exact_equivalence":true,
+  "witness_map":"replayable",
+  "discovery_bound":"",
+  "representation_bound":"UNPROVED_SYMBOLIC_BOUND",
+  "verification_bound":"UNPROVED_SYMBOLIC_BOUND",
+  "transition_closure_bound":"",
+  "hidden_oracle_free":true,
+  "expected_status":"OPEN",
+  "expected_failures":["CERTIFICATE_DISCOVERY_GATE","NESTED_OPERATIONAL_CLOSURE_GATE"],
+  "P_VS_NP":"OPEN"
+}
