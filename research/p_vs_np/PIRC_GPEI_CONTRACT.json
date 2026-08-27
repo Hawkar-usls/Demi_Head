@@ -1,0 +1,52 @@
+{
+  "schema": "JANUS.DEMI_HEAD.PIRC_GPEI_CONTRACT.v0.1",
+  "status": "FROZEN_RESEARCH_CONTRACT_NOT_UNIVERSAL_THEOREM",
+  "P_VS_NP": "OPEN",
+  "purpose": "Prevent local polynomial-in-current-state transitions from being promoted to a polynomial-in-original-input algorithm without a globally invariant input-relative envelope.",
+  "core_law": "LOCAL_POLY_IN_CURRENT_STATE != GLOBAL_POLY_IN_ORIGINAL_INPUT",
+  "counterexample": {
+    "initial": "s_0=N",
+    "transition": "s_(i+1)=s_i^2",
+    "closed_form": "s_i=N^(2^i)",
+    "lesson": "Every local transition is polynomial in s_i, but polynomially many compositions need not stay polynomial in N."
+  },
+  "envelope": {
+    "form": "B(N)=N^c",
+    "c": "ONE_FIXED_UNIVERSAL_INTEGER_FOR_THE_CLAIMED_ALGORITHM",
+    "must_bound": [
+      "encoded_state_bytes",
+      "semantic_auxiliary_variables",
+      "representation_nodes",
+      "DAG_edges",
+      "contexts_or_boundary_states",
+      "coefficient_or_integer_bit_length",
+      "certificate_bytes",
+      "retained_index_bytes"
+    ]
+  },
+  "universal_obligations": [
+    "INITIAL_ENVELOPE",
+    "REACHABLE_ENVELOPE_PRESERVATION",
+    "EXACT_CONTEXTUAL_SEMANTICS",
+    "TRACTABLE_SCHEDULED_INTERFACE",
+    "POLYNOMIAL_DISCOVERY_IN_ORIGINAL_N",
+    "POLYNOMIAL_NORMALIZATION_MICROSTEPS_IN_ORIGINAL_N",
+    "POLYNOMIAL_STEP_WORK_IN_ORIGINAL_N",
+    "POLYNOMIAL_CERTIFICATE_AND_VERIFIER_WORK_IN_ORIGINAL_N",
+    "POLYNOMIAL_MACROSTEP_COUNT_IN_ORIGINAL_N",
+    "POLYNOMIAL_TERMINAL_TRUTH_QUERY",
+    "NO_HIDDEN_ORACLE",
+    "NO_RUNTIME_GRAMMAR_SELF_MODIFICATION",
+    "FAIL_CLOSED"
+  ],
+  "finite_trace_statuses": [
+    "FINITE_TRACE_ENVELOPE_PASS_NOT_UNIVERSAL_THEOREM",
+    "OPEN_ENVELOPE_VIOLATION",
+    "SAFE_ERROR_INVALID_TRACE"
+  ],
+  "conditional_bridge": {
+    "statement": "If one fixed deterministic JANUS algorithm satisfies all universal obligations for every CNF with fixed polynomial exponents, then its total SAT decision runtime is polynomial in original input length N by induction over the bounded scheduled steps.",
+    "status": "PROVED_CONDITIONALLY",
+    "universal_premises": "OPEN"
+  }
+}
