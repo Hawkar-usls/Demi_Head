@@ -1,0 +1,74 @@
+{
+  "schema": "JANUS.DEMI_HEAD.PIRC_PREDECESSOR_GATE_MAP.v0.2",
+  "status": "RESEARCH_GATE_MAP_NOT_PROOF",
+  "P_VS_NP": "OPEN",
+  "map": [
+    {
+      "source": "TOCH-NASH-1955",
+      "gate": "NASH_SHORTCUT_COMPLETENESS_GATE",
+      "question": "Are we proving necessary work, or merely observing a large naive candidate space?"
+    },
+    {
+      "source": "TOCH-GODEL-1956",
+      "gate": "CERTIFICATE_DISCOVERY_GATE",
+      "question": "Is the exact representation/certificate deterministically discoverable in polynomial total work, not merely polynomially verifiable?"
+    },
+    {
+      "source": "TOCH-EDMONDS-1965",
+      "gate": "EXACT_CONTRACTION_CONGRUENCE_GATE",
+      "question": "Can an exact quotient contract boundary states before alternatives are enumerated, with replayable semantics and charged discovery?"
+    },
+    {
+      "source": "TOCH-DAVIS-PUTNAM-1960",
+      "gate": "ELIMINATION_REPRESENTATION_DEBT_GATE",
+      "question": "After exact existential elimination, where did the cross-product information go, and is its representation still inside the input-relative envelope?"
+    },
+    {
+      "source": "TOCH-SCHAEFER-1978",
+      "gate": "SCHAEFER_MIXED_LANGUAGE_GATE",
+      "question": "Can an exact tractable algebraic/relational lane discharge this state before a generic representation is invoked?"
+    },
+    {
+      "source": "TOCH-BRYANT-1986",
+      "gate": "RESIDUAL_FRONTIER_AND_ORDER_GATE",
+      "question": "Is the exact residual-state quotient polynomial-size under the frozen/discovered order, and is order discovery itself polynomial?"
+    },
+    {
+      "source": "TOCH-DARWICHE-MARQUIS-2002",
+      "gate": "TRACTABLE_REPRESENTATION_INTERFACE_GATE",
+      "question": "Does the selected representation simultaneously meet succinctness, exact query and scheduled transformation obligations?"
+    },
+    {
+      "source": "TOCH-MARQUIS-2011",
+      "gate": "SCHEDULED_FORGETTING_GATE",
+      "question": "Does existential/forgetting closure preserve the global input-relative envelope across the whole scheduled trajectory?"
+    },
+    {
+      "source": "TOCH-BOVA-CAPELLI-MENGEL-SLIVOVSKY-2014",
+      "gate": "FIXED_KC_LANGUAGE_BLOWUP_GATE",
+      "question": "Is the proposed universal lane already defeated by an exact size lower bound for that representation language?"
+    },
+    {
+      "source": "JANUS-REVERSE-PASS-2026-08-27",
+      "gate": "GLOBAL_POLYNOMIAL_ENVELOPE_INVARIANCE_GATE",
+      "question": "Does every reachable scheduled step preserve one fixed B(N)=N^c envelope in original input size, including all hidden representation/discovery resources?"
+    }
+  ],
+  "frozen_order_for_theorem_mode": [
+    "EXACT_FAMILY_RECOGNITION",
+    "TRACTABLE_TYPED_ESCAPE_IF_CERTIFIED",
+    "RESIDUAL_INTERFACE_ACCOUNTING",
+    "SCHEDULED_EXACT_ELIMINATION",
+    "NORMALIZATION",
+    "GLOBAL_POLYNOMIAL_ENVELOPE_CHECK",
+    "INDEPENDENT_REPLAY",
+    "SAT_OR_UNSAT_OR_OPEN"
+  ],
+  "truth_channel_forbidden": [
+    "HEURISTIC_BEST_REPRESENTATION",
+    "UNBOUNDED_TRY_MANY_ORDERS",
+    "SEMANTIC_CANONICALIZATION_AS_FREE_PRIMITIVE",
+    "M2R_FORECAST_AS_PROOF",
+    "RUNTIME_NEW_GRAMMAR_SYNTHESIS"
+  ]
+}
