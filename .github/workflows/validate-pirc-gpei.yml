@@ -1,0 +1,39 @@
+name: validate-pirc-gpei
+
+on:
+  push:
+    branches:
+      - research/pirc-gpei-reverse-pass-2026-08-27
+    paths:
+      - 'research/p_vs_np/PIRC_GPEI_CONTRACT.json'
+      - 'research/p_vs_np/PIRC_PREDECESSOR_GATE_MAP_v0.2.json'
+      - 'research/p_vs_np/pirc_gpei_gate.py'
+      - '.github/workflows/validate-pirc-gpei.yml'
+  pull_request:
+    paths:
+      - 'research/p_vs_np/PIRC_GPEI_CONTRACT.json'
+      - 'research/p_vs_np/PIRC_PREDECESSOR_GATE_MAP_v0.2.json'
+      - 'research/p_vs_np/pirc_gpei_gate.py'
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run finite-trace envelope self-test
+        run: python research/p_vs_np/pirc_gpei_gate.py
+      - name: Verify frozen claim ceilings
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          contract = json.loads(Path('research/p_vs_np/PIRC_GPEI_CONTRACT.json').read_text())
+          gates = json.loads(Path('research/p_vs_np/PIRC_PREDECESSOR_GATE_MAP_v0.2.json').read_text())
+          assert contract['P_VS_NP'] == 'OPEN'
+          assert gates['P_VS_NP'] == 'OPEN'
+          print('PIRC_GPEI_CONTRACT_FIREWALL=PASS')
+          print('P_VS_NP=OPEN')
+          PY
