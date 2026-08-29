@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hawkar-usls.github.io/Demi_Head/schemas/repository-portfolio.schema.json",
+  "title": "JANUS DemiHead repository portfolio",
+  "type": "object",
+  "required": ["schema", "owner", "self_repository", "repositories", "accounting"],
+  "properties": {
+    "schema": {"type": "string", "pattern": "^janus\\.demihead\\.repository_portfolio\\."},
+    "captured_at": {"type": "string"},
+    "generated_at": {"type": "string"},
+    "owner": {"type": "string", "minLength": 1},
+    "self_repository": {"type": "string", "minLength": 3},
+    "source": {"type": "string"},
+    "privacy_boundary": {"type": "object"},
+    "accounting": {"type": "object"},
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "full_name", "default_branch", "visibility", "archived"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "full_name": {"type": "string", "minLength": 3},
+          "default_branch": {"type": "string", "minLength": 1},
+          "visibility": {"enum": ["public", "private", "internal"]},
+          "archived": {"type": "boolean"},
+          "fork": {"type": "boolean"},
+          "html_url": {"type": ["string", "null"]},
+          "description": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
