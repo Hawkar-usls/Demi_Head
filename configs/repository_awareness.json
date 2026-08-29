@@ -1,0 +1,37 @@
+{
+  "schema": "janus.demihead.repository_awareness.config.v1",
+  "owner": "Hawkar-usls",
+  "self_repository": "Hawkar-usls/Demi_Head",
+  "discovery": {
+    "mode": "owner_inventory",
+    "api_url": "https://api.github.com",
+    "token_env_precedence": [
+      "GITHUB_TOKEN",
+      "GH_TOKEN"
+    ],
+    "include_private_when_authenticated": true,
+    "persist_private_metadata_to_git": false,
+    "public_snapshot": "configs/repository_portfolio.public.json",
+    "local_cache": ".janus/repository_portfolio.local.json"
+  },
+  "routing": {
+    "consumer_heads": [
+      "keto",
+      "convergence",
+      "source-graph",
+      "independence",
+      "review",
+      "guardian"
+    ],
+    "authority_delta": 0,
+    "mass_effect_budget_delta": 0
+  },
+  "invariants": [
+    "REPOSITORY_AWARENESS_IS_CONTEXT_NOT_AUTHORITY",
+    "DISCOVERY_DOES_NOT_GRANT_WRITE_PERMISSION",
+    "PRIVATE_METADATA_STAYS_LOCAL_BY_DEFAULT",
+    "MISSING_REPOSITORY_METADATA_IS_UNKNOWN_NOT_FALSE",
+    "ARCHIVED_REPOSITORY_IS_VISIBLE_BUT_NOT_ASSUMED_CURRENT",
+    "FORK_ORIGIN_IS_PROVENANCE_NOT_OWNERSHIP_OF_IDEA"
+  ]
+}

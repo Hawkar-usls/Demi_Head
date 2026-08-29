@@ -23,6 +23,8 @@ logs/
 *.jsonl
 *.log
 
+.janus/repository_portfolio.local.json
+
 .DS_Store
 Thumbs.db
 .idea/
