@@ -1,0 +1,53 @@
+{
+  "schema": "janus.demihead.frontier_first_law.v1",
+  "name": "JANUS Frontier-First Law",
+  "canonical_rule": "If you are working on something, first check whether someone has already done it before you.",
+  "purpose": "Avoid rebuilding solved work and continue from the best verified existing frontier.",
+  "laws": [
+    "SEARCH_BEFORE_CLAIM",
+    "SEARCH_BEFORE_BUILD",
+    "REUSE_SOLVED",
+    "CONTINUE_FROM_FRONTIER"
+  ],
+  "decision_order": [
+    "FREEZE_CURRENT_INTENT",
+    "SEARCH_INTERNAL_PORTFOLIO",
+    "SEARCH_EXTERNAL_PRIOR_WORK",
+    "VERIFY_RELEVANCE_AND_PROVENANCE",
+    "IDENTIFY_SOLVED_COMPONENTS",
+    "IDENTIFY_OPEN_GAPS",
+    "SELECT_BEST_VERIFIED_FRONTIER",
+    "REUSE_SOLVED_COMPONENTS",
+    "ATTACK_OPEN_GAPS",
+    "RECORD_LINEAGE_AND_DELTA"
+  ],
+  "states": [
+    "NO_RELEVANT_PRIOR_WORK_FOUND",
+    "PRIOR_WORK_FOUND_UNVERIFIED",
+    "VERIFIED_FRONTIER_FOUND",
+    "FRONTIER_REUSED",
+    "FRONTIER_EXTENDED",
+    "UNKNOWN_RESOURCE_LIMIT"
+  ],
+  "invariants": [
+    "PRIOR_EXISTENCE_DOES_NOT_IMPLY_PRIOR_KNOWLEDGE",
+    "SIMILARITY_DOES_NOT_IMPLY_PLAGIARISM",
+    "FOUND_PRIOR_WORK_DOES_NOT_MEAN_STOP",
+    "UNVERIFIED_WORK_IS_NOT_A_FRONTIER",
+    "REUSE_REQUIRES_LICENSE_AND_COMPATIBILITY_WHEN_CODE_OR_CONTENT_IS_COPIED",
+    "REUSE_OF_IDEA_DOES_NOT_BYPASS_ATTRIBUTION_OR_LICENSE",
+    "SILENCE_IS_NOT_NEGATIVE_EVIDENCE",
+    "SEARCH_RESULT_COUNT_IS_NOT_EVIDENCE_QUALITY",
+    "FRONTIER_SELECTION_IS_CONTEXT_NOT_AUTHORITY"
+  ],
+  "routing": {
+    "internal_search": ["repository-awareness", "KETO"],
+    "external_search": ["TOPA", "SPIDER"],
+    "structural_comparison": ["CONVERGENCE"],
+    "falsification": ["Fundamentum"],
+    "memory": ["MetaRegistry"],
+    "human_graph": ["HRain"]
+  },
+  "authority_delta": 0,
+  "mass_effect_budget_delta": 0
+}
