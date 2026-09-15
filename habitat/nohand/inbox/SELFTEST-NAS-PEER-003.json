@@ -1,0 +1,28 @@
+{
+  "action": "STARTUP_HANDSHAKE",
+  "authority_requested": false,
+  "context_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "expected_demihead_parent_main_revision": "f2074ca833692f4c2a9f1cb1f5cf723c873d3211",
+  "git_sha256": null,
+  "goldprompt_contract_digest": "3f4af369350710ad18920dfdc866d930c8d42259a51a3f27ce228ea4d5dfc0a8",
+  "goldprompt_version": "0.9.2",
+  "goldprompt_working_faces_bundle_v1_1": "6a8a63d3bebf0b8611df2682d2c38dd6472818190da5e367fbc22467c5717d17",
+  "guard": {
+    "guardian_of_guardian_ok": true,
+    "no_delete": true,
+    "no_move": true,
+    "no_rename": true,
+    "preservation_baseline_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "preservation_sentinel_ok": true,
+    "safety_contract_sha256": "24e7a4d00336bf9ece7e88d072bd01cce2e843cd033fe609aadfde85bcf3be32",
+    "verified_preimage_backup_required": false
+  },
+  "local_sha256": "a7f4545825d98e7c0b91d8260153e4e57bb31b4b0da209a533121eb9cb33c828",
+  "path_sha256": null,
+  "predictor_forecast_receipt_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "request_id": "SELFTEST-NAS-PEER-003",
+  "request_sha256": "51e9d295fd471fe6e70c96cd442ba8e6e0fe073911c1f5c254e12a2d0cb47fb3",
+  "schema": "janus.habitat.nohand.demihead_request.v1",
+  "secret_like": false,
+  "terminal_script_sha256": "a7f4545825d98e7c0b91d8260153e4e57bb31b4b0da209a533121eb9cb33c828"
+}

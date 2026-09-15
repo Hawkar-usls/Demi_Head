@@ -1,0 +1,40 @@
+{
+  "advice": "ACK_CONTRACT_BOUNDARY",
+  "advice_is_permission": false,
+  "authority_weight": 0,
+  "claim_boundaries": [
+    "PEER_ADVICE != NAS_PERMISSION",
+    "PREDICTION != COMMAND",
+    "CALIBRATION != TRUTH",
+    "SHA256_RECEIPT != DIGITAL_SIGNATURE",
+    "GITHUB_PEER_INVOCATION != LIVE_DEMIHEAD_PROCESS_ATTESTATION"
+  ],
+  "face_id": "DEMIHEAD_ARBITER",
+  "face_role": "BICAMERAL_ARBITER",
+  "forecast": {
+    "action": "STARTUP_HANDSHAKE",
+    "calibrated_success_probability": 0.5,
+    "context_sha256": "cda63a8f3d7636f4a542e981f9b9c63d9bb4ae2a019d59ee1d9cfa1947c9d102",
+    "forecast_sha256": "ca8f7cb6a92a3817934bd3142bd62dfbcdb00de1588cfa54e4f69deb3a5fdfb1",
+    "next_action_probability": 0.25,
+    "prediction_is_command": false,
+    "prediction_is_permission": false,
+    "prediction_is_truth": false,
+    "raw_success_probability": 0.5,
+    "request_id": "NASV13-LIVE-NAS-STARTUP-3ee6137b3192e01b7ec9-STARTUP_HAND-cda63a8f3d7636f4",
+    "state_sequence": 1,
+    "uncertainty": 0.3535533905932738
+  },
+  "goldprompt_contract_digest": "3f4af369350710ad18920dfdc866d930c8d42259a51a3f27ce228ea4d5dfc0a8",
+  "goldprompt_parent_main_revision": "f2074ca833692f4c2a9f1cb1f5cf723c873d3211",
+  "goldprompt_version": "0.9.2",
+  "notes": [
+    "LIVE_NAS_RECEIPT_IS_NOT_GITHUB_CI_RECEIPT"
+  ],
+  "peer_module_source_revision": "2962c0b4605321c48a3fea141e9095a1341d8aa1",
+  "prediction_is_permission": false,
+  "request_id": "NASV13-LIVE-NAS-STARTUP-3ee6137b3192e01b7ec9-STARTUP_HAND-cda63a8f3d7636f4",
+  "request_sha256": "8875503c00cb8272a97bb61f6ef18728a1c0209b1d4a78ab39528ebdb3be54fb",
+  "response_sha256": "30ba1ecac081a3630f03db57024cf371aab16977d340594c12224a938ab5fc86",
+  "schema": "janus.habitat.nohand.demihead_response.v1"
+}

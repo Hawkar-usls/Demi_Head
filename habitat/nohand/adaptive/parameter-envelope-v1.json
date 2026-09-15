@@ -1,0 +1,48 @@
+{
+  "schema": "janus.habitat.adaptive.parameter_envelope.v1",
+  "version": "1.0.0",
+  "mode": "BOUNDED_SELF_TUNING",
+  "laws": {
+    "no_delete": true,
+    "no_move": true,
+    "no_rename": true,
+    "gate_root_read_only": true,
+    "authority_weight": 0,
+    "prediction_is_permission": false,
+    "safety_contract_mutable": false,
+    "allowed_operations_mutable": false,
+    "docker_socket_access_mutable": false,
+    "mount_permissions_mutable": false,
+    "release_pins_mutable_by_governor": false
+  },
+  "change_policy": {
+    "max_parameters_per_activation": 1,
+    "minimum_observations": 5,
+    "minimum_calibrated_success_probability": 0.65,
+    "maximum_uncertainty": 0.20,
+    "cooldown_observations": 5,
+    "probation_required": true,
+    "append_only_activation": true,
+    "automatic_rollback": true,
+    "rollback_target": "BEST_KNOWN_GOOD_PARAMETER_SET"
+  },
+  "parameters": {
+    "demihead_timeout_seconds": {"env": "JANUS_DEMIHEAD_TIMEOUT_SECONDS", "type": "int", "min": 30, "max": 900, "default": 180, "max_step": 60},
+    "gate_timeout_seconds": {"env": "JANUS_TERMINAL_GATE_TIMEOUT_SECONDS", "type": "int", "min": 30, "max": 900, "default": 180, "max_step": 60},
+    "terminal_poll_seconds": {"env": "JANUS_TERMINAL_POLL_SECONDS", "type": "int", "min": 5, "max": 300, "default": 30, "max_step": 15},
+    "steward_poll_seconds": {"env": "JANUS_STEWARD_POLL_SECONDS", "type": "int", "min": 5, "max": 120, "default": 15, "max_step": 10},
+    "promotion_samples": {"env": "JANUS_STEWARD_PROMOTION_SAMPLES", "type": "int", "min": 3, "max": 20, "default": 5, "max_step": 2},
+    "rollback_samples": {"env": "JANUS_STEWARD_ROLLBACK_SAMPLES", "type": "int", "min": 2, "max": 10, "default": 3, "max_step": 1},
+    "promotion_score": {"env": "JANUS_STEWARD_PROMOTION_SCORE", "type": "float", "min": 0.85, "max": 0.99, "default": 0.90, "max_step": 0.02},
+    "rollback_hard_floor": {"env": "JANUS_STEWARD_ROLLBACK_HARD_FLOOR", "type": "float", "min": 0.50, "max": 0.85, "default": 0.65, "max_step": 0.05},
+    "rollback_margin": {"env": "JANUS_STEWARD_ROLLBACK_MARGIN", "type": "float", "min": 0.03, "max": 0.20, "default": 0.08, "max_step": 0.03},
+    "health_window": {"env": "JANUS_STEWARD_HEALTH_WINDOW", "type": "int", "min": 10, "max": 100, "default": 20, "max_step": 10}
+  },
+  "claim_boundaries": [
+    "PREDICTION != PERMISSION",
+    "PARAMETER_TUNING != SAFETY_LAW_MUTATION",
+    "LOWER_LOSS != TRUTH",
+    "ADAPTATION != AUTHORITY_ESCALATION",
+    "ROLLBACK != DELETION"
+  ]
+}

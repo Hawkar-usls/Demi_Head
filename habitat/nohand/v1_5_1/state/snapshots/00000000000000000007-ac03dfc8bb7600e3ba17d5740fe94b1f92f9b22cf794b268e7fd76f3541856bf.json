@@ -1,0 +1,117 @@
+{
+  "action_counts": {
+    "GIT_TO_LOCAL_CREATE": 1,
+    "STARTUP_HANDSHAKE": 2
+  },
+  "action_success": {
+    "GIT_TO_LOCAL_CREATE": {
+      "successes": 0,
+      "total": 1
+    },
+    "STARTUP_HANDSHAKE": {
+      "successes": 2,
+      "total": 2
+    }
+  },
+  "authority_delta": 0,
+  "bins": [
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 1,
+      "sum_p": 1.0454545454545454,
+      "total": 2
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 1,
+      "sum_p": 0.7222222222222222,
+      "total": 1
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    }
+  ],
+  "context_action_counts": {
+    "c30a81f5be733f681915ff2e5076c8f7ae1660b4ef61d563b7181fff69ec30ba": {
+      "GIT_TO_LOCAL_CREATE": 1
+    },
+    "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058": {
+      "STARTUP_HANDSHAKE": 2
+    }
+  },
+  "context_action_success": {
+    "c30a81f5be733f681915ff2e5076c8f7ae1660b4ef61d563b7181fff69ec30ba|GIT_TO_LOCAL_CREATE": {
+      "successes": 0,
+      "total": 1
+    },
+    "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058|STARTUP_HANDSHAKE": {
+      "successes": 2,
+      "total": 2
+    }
+  },
+  "global_success": {
+    "successes": 2,
+    "total": 3
+  },
+  "metric_sums": {
+    "cal_brier": 0.6246811549841853,
+    "logloss": 1.8070269413588433,
+    "n": 3,
+    "raw_brier": 0.6246811549841853
+  },
+  "pending": {
+    "v151-ci-seed": {
+      "action": "STARTUP_HANDSHAKE",
+      "calibrated_success_probability": 0.5,
+      "context_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "forecast_sha256": "7116cc587e591afd9e8e4c20f9972d945b975d6d6b238e5cd22ada1763d15e26",
+      "next_action_probability": 0.25,
+      "prediction_is_command": false,
+      "prediction_is_permission": false,
+      "prediction_is_truth": false,
+      "raw_success_probability": 0.5,
+      "request_id": "v151-ci-seed",
+      "state_sequence": 1,
+      "uncertainty": 0.3535533905932738
+    }
+  },
+  "raw_context_persisted": false,
+  "schema": "janus.habitat.nohand.demihead_predictor_state.v1",
+  "sequence": 7,
+  "state_sha256": "ac03dfc8bb7600e3ba17d5740fe94b1f92f9b22cf794b268e7fd76f3541856bf"
+}
