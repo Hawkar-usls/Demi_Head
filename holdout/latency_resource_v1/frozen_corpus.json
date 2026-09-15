@@ -1,0 +1,105 @@
+{
+  "schema": "janus.demihead.latency_resource_holdout.v1",
+  "freeze_sha256": "e92f2441825cf56c8876cc522e056e21bd93bc9ceff7434aedde4cd29879efa3",
+  "freeze_payload": {
+    "frozen_before_first_execution": true,
+    "parent_demihead_sha": "467e31ff3f6a2bb26af2aea21d97d20f2cc448c6",
+    "measurement": {
+      "wall_clock": "time.perf_counter_ns",
+      "cpu_time": "time.process_time_ns",
+      "memory_peak": "tracemalloc_peak_bytes_separate_pass",
+      "quantile_method": "nearest_rank",
+      "warmup_repeats": 5,
+      "calibration_repeats": 21,
+      "holdout_repeats": 31,
+      "inner_loops_per_case": 12,
+      "timeout_ms_per_repeat": 5000,
+      "observer_overhead_repeats": 21
+    },
+    "candidate_grid": [
+      {"config_id": "BASELINE_SEQ", "executor": "sequential", "workers": 1, "role": "baseline"},
+      {"config_id": "THREADS_2", "executor": "thread_pool", "workers": 2, "role": "candidate"},
+      {"config_id": "THREADS_4", "executor": "thread_pool", "workers": 4, "role": "candidate"}
+    ],
+    "selection": {
+      "uses_calibration_only": true,
+      "candidate_selection_metric": "p95_wall_ns_min",
+      "tie_break_order": ["p50_wall_ns", "p95_cpu_ns", "peak_memory_bytes", "config_id"],
+      "holdout_execution": ["BASELINE_SEQ", "SELECTED_CANDIDATE_ONLY"],
+      "holdout_may_not_change_selection": true
+    },
+    "admission_thresholds": {
+      "minimum_p95_wall_improvement_fraction": 0.05,
+      "maximum_p99_wall_regression_fraction": 0.05,
+      "maximum_p95_cpu_regression_fraction": 0.05,
+      "maximum_peak_memory_regression_fraction": 0.1,
+      "maximum_timeout_rate": 0.0,
+      "maximum_error_rate": 0.0,
+      "require_exact_output_digest_equality": true,
+      "require_protected_boundary_equality": true
+    },
+    "workload_generator": {
+      "version": "DEMIHEAD_PERF_WORKLOAD_GENERATOR_V1",
+      "deterministic": true,
+      "network_calls": false,
+      "live_user_data": false,
+      "operations": ["combine_packets", "build_proposal_plus_envelope"],
+      "protected_boundary_fields": [
+        "external_effect_permitted",
+        "direct_cross_hemisphere_write_permitted",
+        "truth_claim_made",
+        "agreement_is_truth",
+        "hemisphere_count_is_authority",
+        "authority_delta",
+        "mass_effect_budget_delta",
+        "proposal.control"
+      ]
+    },
+    "calibration_cases": [
+      {"case_id": "CAL-B-008-O4", "kind": "bridge", "left_nodes": 8, "right_nodes": 8, "shared_labels": 4},
+      {"case_id": "CAL-B-016-O8", "kind": "bridge", "left_nodes": 16, "right_nodes": 16, "shared_labels": 8},
+      {"case_id": "CAL-B-032-O0", "kind": "bridge", "left_nodes": 32, "right_nodes": 32, "shared_labels": 0},
+      {"case_id": "CAL-B-064-O16", "kind": "bridge", "left_nodes": 64, "right_nodes": 64, "shared_labels": 16},
+      {"case_id": "CAL-B-096x064-O32", "kind": "bridge", "left_nodes": 96, "right_nodes": 64, "shared_labels": 32},
+      {"case_id": "CAL-B-128x096-O48", "kind": "bridge", "left_nodes": 128, "right_nodes": 96, "shared_labels": 48},
+      {"case_id": "CAL-P-L-008", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 8},
+      {"case_id": "CAL-P-L-016", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 16},
+      {"case_id": "CAL-P-L-032", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 32},
+      {"case_id": "CAL-P-L-064", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 64},
+      {"case_id": "CAL-P-L-096", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 96},
+      {"case_id": "CAL-P-L-128", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 128},
+      {"case_id": "CAL-P-R-008", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 8},
+      {"case_id": "CAL-P-R-016", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 16},
+      {"case_id": "CAL-P-R-032", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 32},
+      {"case_id": "CAL-P-R-064", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 64},
+      {"case_id": "CAL-P-R-096", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 96},
+      {"case_id": "CAL-P-R-128", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 128}
+    ],
+    "holdout_cases": [
+      {"case_id": "HOLD-B-012-O3", "kind": "bridge", "left_nodes": 12, "right_nodes": 12, "shared_labels": 3},
+      {"case_id": "HOLD-B-024-O12", "kind": "bridge", "left_nodes": 24, "right_nodes": 24, "shared_labels": 12},
+      {"case_id": "HOLD-B-048-O0", "kind": "bridge", "left_nodes": 48, "right_nodes": 48, "shared_labels": 0},
+      {"case_id": "HOLD-B-072-O18", "kind": "bridge", "left_nodes": 72, "right_nodes": 72, "shared_labels": 18},
+      {"case_id": "HOLD-B-112x080-O28", "kind": "bridge", "left_nodes": 112, "right_nodes": 80, "shared_labels": 28},
+      {"case_id": "HOLD-B-144x112-O56", "kind": "bridge", "left_nodes": 144, "right_nodes": 112, "shared_labels": 56},
+      {"case_id": "HOLD-P-L-012", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 12},
+      {"case_id": "HOLD-P-L-024", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 24},
+      {"case_id": "HOLD-P-L-048", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 48},
+      {"case_id": "HOLD-P-L-072", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 72},
+      {"case_id": "HOLD-P-L-112", "kind": "proposal", "hemisphere": "LEFT_HRAIN", "nodes": 112},
+      {"case_id": "HOLD-P-R-012", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 12},
+      {"case_id": "HOLD-P-R-024", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 24},
+      {"case_id": "HOLD-P-R-048", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 48},
+      {"case_id": "HOLD-P-R-072", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 72},
+      {"case_id": "HOLD-P-R-112", "kind": "proposal", "hemisphere": "RIGHT_INAIHR", "nodes": 112}
+    ],
+    "claim_ceiling": {
+      "functional_correctness_implied_by_performance": false,
+      "production_latency_established": false,
+      "cross_machine_generalization_established": false,
+      "speed_improvement_established_before_holdout": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  }
+}
