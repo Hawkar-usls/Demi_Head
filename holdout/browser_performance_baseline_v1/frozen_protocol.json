@@ -1,0 +1,74 @@
+{
+  "schema": "janus.demihead.browser_performance_baseline.v1",
+  "freeze_sha256": "1434413edcc37317a0a1b748e074428b1c1ec9c4c58380871d3860d18a4e0da1",
+  "freeze_payload": {
+    "frozen_before_first_execution": true,
+    "component_revisions": {
+      "DemiHead": "467e31ff3f6a2bb26af2aea21d97d20f2cc448c6",
+      "HRain": "ceb81210c2f70b71d6c941e0b088a68969ead7b9",
+      "iNaiHR": "b27cd8732b3137caea1036024acc1778ea02213a"
+    },
+    "browser": {
+      "engine": "chromium",
+      "playwright_version": "1.55.0",
+      "fixture_origin": "http://127.0.0.1:8766",
+      "headless": true,
+      "live_user_data": false,
+      "external_network_effects": false
+    },
+    "workload": {
+      "warmup_cycles_per_hemisphere": 3,
+      "measured_cycles_per_hemisphere": 20,
+      "observer_roundtrips": 100,
+      "hemispheres": ["LEFT_HRAIN", "RIGHT_INAIHR"],
+      "operation_order": [
+        "sidecar_export",
+        "proposal_build",
+        "proposal_download",
+        "apply_preview",
+        "apply_decline",
+        "apply_repreview",
+        "apply_accept",
+        "reload_verify"
+      ],
+      "full_cycle_metric": "full_validation_cycle",
+      "reset_synthetic_workspace_before_each_cycle": true
+    },
+    "measurement": {
+      "wall_clock_source": "node_process_hrtime_bigint",
+      "quantile_method": "nearest_rank",
+      "report_quantiles": ["p50", "p95", "p99"],
+      "observer_overhead": "100 page.evaluate(performance.now()) roundtrips; report separately; do not subtract",
+      "resource_sampling": {
+        "browser_process_source": "CDP_SystemInfo.getProcessInfo",
+        "cpu_metric": "observed_chromium_process_cpu_time_delta_s_across_samples",
+        "memory_metric": "peak_sum_rss_bytes_for_observed_chromium_processes_via_procfs",
+        "page_heap_metrics": ["JSHeapUsedSize", "JSHeapTotalSize"]
+      }
+    },
+    "admission": {
+      "required_measured_cycles_total": 40,
+      "required_operation_samples_per_operation": 40,
+      "required_full_cycle_samples": 40,
+      "required_error_count": 0,
+      "required_timeout_count": 0,
+      "required_external_network_requests": 0,
+      "required_page_errors": 0,
+      "latency_thresholds": null,
+      "resource_thresholds": null,
+      "candidate_comparison": false,
+      "performance_tuning_permitted_before_baseline": false
+    },
+    "claim_ceiling": {
+      "faster_than_baseline_established": false,
+      "production_network_latency_measured": false,
+      "production_readiness_established": false,
+      "cross_runner_generalization_established": false,
+      "authenticated_human_identity_established": false,
+      "real_user_workspace_touched": false,
+      "truth_or_authority_affected_by_latency": false,
+      "authority_delta": 0,
+      "mass_effect_budget_delta": 0
+    }
+  }
+}
