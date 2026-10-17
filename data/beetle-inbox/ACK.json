@@ -1,0 +1,10 @@
+{
+  "acknowledged_at": "2026-10-17T08:36:50.515627Z",
+  "batch_id": "0e2c65fca08788dd75c1",
+  "last_sequence": 1,
+  "schema": "janus.beetle.inbox_ack.v1",
+  "scientific_authority_delta": 0,
+  "sha256": "30a8f8b01b230807784ef108cf77b0be0997784d7c8fd33b6dd1ab823cb9cfab",
+  "status": "INBOX_DURABLE_UNVERIFIED__NOT_RUNTIME_CONSUMPTION",
+  "target_repository": "Hawkar-usls/Demi_Head"
+}
