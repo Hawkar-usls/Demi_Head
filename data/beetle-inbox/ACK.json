@@ -1,10 +1,10 @@
 {
-  "acknowledged_at": "2026-10-20T10:26:14.057766Z",
-  "batch_id": "7398baa40795c901da00",
-  "last_sequence": 25,
+  "acknowledged_at": "2026-10-20T15:23:13.851768Z",
+  "batch_id": "b2ba7ebe3dc5b7394f72",
+  "last_sequence": 26,
   "schema": "janus.beetle.inbox_ack.v1",
   "scientific_authority_delta": 0,
-  "sha256": "d77c5c81652601d98caa3f15529e8e3a44482f12b62b08b9aa323eb94b106b7b",
+  "sha256": "f3ba908d4e89d43ec8b44dbfdd5509d3ef647ef49531b4a79da39b9421d9bb05",
   "status": "INBOX_DURABLE_UNVERIFIED__NOT_RUNTIME_CONSUMPTION",
   "target_repository": "Hawkar-usls/Demi_Head"
 }
