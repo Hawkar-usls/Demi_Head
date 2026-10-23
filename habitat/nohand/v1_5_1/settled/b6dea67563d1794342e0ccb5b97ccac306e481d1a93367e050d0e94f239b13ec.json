@@ -1,0 +1,16 @@
+{
+  "action": "STARTUP_HANDSHAKE",
+  "authority_delta": 0,
+  "hold_is_permission": false,
+  "hold_receipt_sha256": "884e9d325a71652e0a499723a832a6c3ec7c614e7d33bf152892051258b58be2",
+  "outcome_sha256": "b6dea67563d1794342e0ccb5b97ccac306e481d1a93367e050d0e94f239b13ec",
+  "predictor_mutated": false,
+  "reason": "UNKNOWN_PENDING_REQUEST",
+  "request_id": "NASV142-LIVE-NAS-STARTUP-e39e142c06ae62fb3a96-STARTUP_HAND-eb5ed45edcf9-1d729417393a",
+  "schema": "janus.habitat.nohand.demihead_outcome_hold.v1",
+  "source_outcome_deleted": false,
+  "source_outcome_moved": false,
+  "source_outcome_preserved": true,
+  "source_outcome_renamed": false,
+  "success": false
+}

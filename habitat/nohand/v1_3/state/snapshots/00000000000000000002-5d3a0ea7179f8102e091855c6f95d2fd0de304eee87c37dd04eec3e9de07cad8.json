@@ -1,0 +1,90 @@
+{
+  "action_counts": {
+    "STARTUP_HANDSHAKE": 1
+  },
+  "action_success": {
+    "STARTUP_HANDSHAKE": {
+      "successes": 1,
+      "total": 1
+    }
+  },
+  "authority_delta": 0,
+  "bins": [
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 1,
+      "sum_p": 0.5,
+      "total": 1
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    }
+  ],
+  "context_action_counts": {
+    "cda63a8f3d7636f4a542e981f9b9c63d9bb4ae2a019d59ee1d9cfa1947c9d102": {
+      "STARTUP_HANDSHAKE": 1
+    }
+  },
+  "context_action_success": {
+    "cda63a8f3d7636f4a542e981f9b9c63d9bb4ae2a019d59ee1d9cfa1947c9d102|STARTUP_HANDSHAKE": {
+      "successes": 1,
+      "total": 1
+    }
+  },
+  "global_success": {
+    "successes": 1,
+    "total": 1
+  },
+  "metric_sums": {
+    "cal_brier": 0.25,
+    "logloss": 0.6931471805599453,
+    "n": 1,
+    "raw_brier": 0.25
+  },
+  "pending": {},
+  "raw_context_persisted": false,
+  "schema": "janus.habitat.nohand.demihead_predictor_state.v1",
+  "sequence": 2,
+  "state_sha256": "5d3a0ea7179f8102e091855c6f95d2fd0de304eee87c37dd04eec3e9de07cad8"
+}

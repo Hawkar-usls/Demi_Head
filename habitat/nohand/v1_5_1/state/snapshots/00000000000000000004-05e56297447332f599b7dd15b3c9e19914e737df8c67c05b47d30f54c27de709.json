@@ -1,0 +1,119 @@
+{
+  "action_counts": {
+    "STARTUP_HANDSHAKE": 1
+  },
+  "action_success": {
+    "STARTUP_HANDSHAKE": {
+      "successes": 1,
+      "total": 1
+    }
+  },
+  "authority_delta": 0,
+  "bins": [
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 1,
+      "sum_p": 0.5,
+      "total": 1
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    }
+  ],
+  "context_action_counts": {
+    "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058": {
+      "STARTUP_HANDSHAKE": 1
+    }
+  },
+  "context_action_success": {
+    "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058|STARTUP_HANDSHAKE": {
+      "successes": 1,
+      "total": 1
+    }
+  },
+  "global_success": {
+    "successes": 1,
+    "total": 1
+  },
+  "metric_sums": {
+    "cal_brier": 0.25,
+    "logloss": 0.6931471805599453,
+    "n": 1,
+    "raw_brier": 0.25
+  },
+  "pending": {
+    "NASV142-LIVE-NAS-STARTUP-e39e142c06ae62fb3a96-STARTUP_HAND-eb5ed45edcf9-6cc6c04d79dc": {
+      "action": "STARTUP_HANDSHAKE",
+      "calibrated_success_probability": 0.7222222222222222,
+      "context_sha256": "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058",
+      "forecast_sha256": "40925532ffe907ea80edccd82c27971983f37bbce41a0613ef9159cb173caa54",
+      "next_action_probability": 0.42857142857142855,
+      "prediction_is_command": false,
+      "prediction_is_permission": false,
+      "prediction_is_truth": false,
+      "raw_success_probability": 0.7222222222222222,
+      "request_id": "NASV142-LIVE-NAS-STARTUP-e39e142c06ae62fb3a96-STARTUP_HAND-eb5ed45edcf9-6cc6c04d79dc",
+      "state_sequence": 4,
+      "uncertainty": 0.23606571822188818
+    },
+    "v151-ci-seed": {
+      "action": "STARTUP_HANDSHAKE",
+      "calibrated_success_probability": 0.5,
+      "context_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "forecast_sha256": "7116cc587e591afd9e8e4c20f9972d945b975d6d6b238e5cd22ada1763d15e26",
+      "next_action_probability": 0.25,
+      "prediction_is_command": false,
+      "prediction_is_permission": false,
+      "prediction_is_truth": false,
+      "raw_success_probability": 0.5,
+      "request_id": "v151-ci-seed",
+      "state_sequence": 1,
+      "uncertainty": 0.3535533905932738
+    }
+  },
+  "raw_context_persisted": false,
+  "schema": "janus.habitat.nohand.demihead_predictor_state.v1",
+  "sequence": 4,
+  "state_sha256": "05e56297447332f599b7dd15b3c9e19914e737df8c67c05b47d30f54c27de709"
+}

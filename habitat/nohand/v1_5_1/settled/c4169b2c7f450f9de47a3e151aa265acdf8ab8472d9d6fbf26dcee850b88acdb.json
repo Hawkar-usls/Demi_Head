@@ -1,0 +1,15 @@
+{
+  "outcome_sha256": "c4169b2c7f450f9de47a3e151aa265acdf8ab8472d9d6fbf26dcee850b88acdb",
+  "schema": "janus.habitat.nohand.demihead_settlement.v1",
+  "settlement": {
+    "action": "STARTUP_HANDSHAKE",
+    "calibrated_brier": 0.0771604938271605,
+    "outcome_grants_authority": false,
+    "raw_brier": 0.0771604938271605,
+    "request_id": "NASV142-LIVE-NAS-STARTUP-e39e142c06ae62fb3a96-STARTUP_HAND-eb5ed45edcf9-6cc6c04d79dc",
+    "settlement_sha256": "4d88e0c7417bfd59b338fa88314d6f1ce8ca7dcafcc20675259415605351893d",
+    "state_sequence": 5,
+    "success": true,
+    "success_logloss": 0.325422400434628
+  }
+}

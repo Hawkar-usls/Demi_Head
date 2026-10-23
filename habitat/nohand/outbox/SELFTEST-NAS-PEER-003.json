@@ -1,0 +1,40 @@
+{
+  "advice": "ACK_CONTRACT_BOUNDARY",
+  "advice_is_permission": false,
+  "authority_weight": 0,
+  "claim_boundaries": [
+    "PEER_ADVICE != NAS_PERMISSION",
+    "PREDICTION != COMMAND",
+    "CALIBRATION != TRUTH",
+    "SHA256_RECEIPT != DIGITAL_SIGNATURE",
+    "GITHUB_PEER_INVOCATION != LIVE_DEMIHEAD_PROCESS_ATTESTATION"
+  ],
+  "face_id": "DEMIHEAD_ARBITER",
+  "face_role": "BICAMERAL_ARBITER",
+  "forecast": {
+    "action": "STARTUP_HANDSHAKE",
+    "calibrated_success_probability": 0.5,
+    "context_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "forecast_sha256": "83775232bb1b499d28b87ecbdeac60c7273587c12ebe8251cf48c95dd5b86f3c",
+    "next_action_probability": 0.25,
+    "prediction_is_command": false,
+    "prediction_is_permission": false,
+    "prediction_is_truth": false,
+    "raw_success_probability": 0.5,
+    "request_id": "SELFTEST-NAS-PEER-003",
+    "state_sequence": 3,
+    "uncertainty": 0.3535533905932738
+  },
+  "goldprompt_contract_digest": "3f4af369350710ad18920dfdc866d930c8d42259a51a3f27ce228ea4d5dfc0a8",
+  "goldprompt_parent_main_revision": "f2074ca833692f4c2a9f1cb1f5cf723c873d3211",
+  "goldprompt_version": "0.9.2",
+  "notes": [
+    "LIVE_NAS_RECEIPT_IS_NOT_GITHUB_CI_RECEIPT"
+  ],
+  "peer_module_source_revision": "0ed2b64d888e656da086fa1bbaebdb66fcf8d55f",
+  "prediction_is_permission": false,
+  "request_id": "SELFTEST-NAS-PEER-003",
+  "request_sha256": "51e9d295fd471fe6e70c96cd442ba8e6e0fe073911c1f5c254e12a2d0cb47fb3",
+  "response_sha256": "5a476edb7df05ef418ec242aa4395afae347a6c2cce3095cccefbcbbfb337f6b",
+  "schema": "janus.habitat.nohand.demihead_response.v1"
+}
