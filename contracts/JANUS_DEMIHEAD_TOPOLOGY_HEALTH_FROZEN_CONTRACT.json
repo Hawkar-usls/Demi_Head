@@ -1,0 +1,70 @@
+{
+  "schema": "janus.demihead.topology_health_frozen_contract.v1",
+  "contract_id": "JANUS_DEMIHEAD_TOPOLOGY_HEALTH_FROZEN_CONTRACT",
+  "frozen_before_implementation": true,
+  "created_at_local": "2026-08-20T00:23:00+03:00",
+  "parent": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "sha": "4e5624bc0fcc4bc196934c954e5aa8f0dca119fd",
+    "nexus_v2_9_must_remain_unchanged": true
+  },
+  "goal": "ALL CORE ORGANS HAVE MACHINE-VERIFIABLE PATHS TO THE HEAD",
+  "required_edges": [
+    "SKINGPT_DEMIHEAD_NEXUS_V2_1_RECIPROCAL_EDGE",
+    "SWARM_EDGE_DEMIHEAD_NEXUS_V2_2_RECIPROCAL_EDGE",
+    "AIFC_WITNESS_DEMIHEAD_NEXUS_V2_3_RECIPROCAL_EDGE",
+    "I0_MEASUREMENT_DEMIHEAD_NEXUS_V2_4_RECIPROCAL_EDGE",
+    "JANUS_GENESIS_DEMIHEAD_LIFECYCLE_REFERENCE_V1"
+  ],
+  "verification_dimensions": [
+    "RECIPROCAL_MARKER",
+    "PINNED_SOURCE_BASELINE",
+    "PINNED_PROMOTION_HEAD",
+    "DEMIHEAD_CONTRACT_OR_NEXUS_BINDING",
+    "PAYLOAD_OR_LIFECYCLE_SCHEMA",
+    "ALLOWED_DRIFT_ONLY",
+    "ZERO_AUTHORITY_DELTA",
+    "ZERO_MASS_EFFECT_DELTA",
+    "CI_RECEIPT"
+  ],
+  "modes": {
+    "STRUCTURAL": "May return HOLD when an edge is pending, but must fail on contradiction, drift or authority escalation.",
+    "ADMISSION": "Must fail unless every required edge is promoted and machine-verified."
+  },
+  "source_policy": {
+    "frozen_runtime_or_scientific_source_must_not_be_rewritten_for_connectivity": true,
+    "metadata_only_reciprocal_promotions_may_change_only_allowlisted_paths": true,
+    "private_repository_without_cross_repo_token_must_not_be_assumed_readable": true,
+    "missing_private_source_proof_is_hold_not_pass": true,
+    "source_ci_failure_is_hold_not_silent_override": true
+  },
+  "invariants": [
+    "CONNECTION != AUTHORITY",
+    "ROUTE != DELIVERY",
+    "METADATA_LINK != RUNTIME_EFFECT",
+    "CI_GREEN != WORLD_PERMISSION",
+    "SOURCE_BASELINE != PROMOTION_METADATA_HEAD",
+    "PENDING_EDGE != VERIFIED_EDGE",
+    "PRIVATE_SOURCE_UNAVAILABLE != VERIFIED_SOURCE",
+    "DRIFT_OUTSIDE_ALLOWLIST => FAIL_CLOSED",
+    "AUTHORITY_DELTA = 0",
+    "MASS_EFFECT_BUDGET_DELTA = 0"
+  ],
+  "promotion_gate": {
+    "all_required_edges_promoted": true,
+    "all_reciprocal_markers_verified": true,
+    "all_source_baselines_ancestral_to_promoted_heads": true,
+    "all_source_drift_allowlisted": true,
+    "all_demihead_contract_or_nexus_bindings_verified": true,
+    "all_required_ci_receipts_present": true,
+    "existing_nexus_layers_replay_pass": true,
+    "merge_before_all_green": false
+  },
+  "claim_ceiling": {
+    "live_cross_repository_mesh_established_by_metadata": false,
+    "automatic_write_back_created": false,
+    "external_effect_authority_created": false,
+    "truth_authority_created": false,
+    "production_readiness_established": false
+  }
+}
