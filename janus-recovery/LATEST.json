@@ -1,18 +1,18 @@
 {
-  "artifact_id": 13218779233,
+  "artifact_id": 13309572998,
   "artifact_retention_days": 7,
-  "artifact_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/41611883792/artifacts/13218779233",
-  "bundle_bytes": 138825481,
+  "artifact_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/41805551436/artifacts/13309572998",
+  "bundle_bytes": 137777338,
   "bundle_file": "janus-demiurge.bundle",
-  "bundle_sha256": "59266615ffdaa82f30b1b57e5bf6839f92171b75a483787732c6b0c8fb3b4011",
+  "bundle_sha256": "6a645aa0aee49d59ebd4725f1e14c7f2f5089b4e753f9acb1fed5982e8a23d37",
   "checks": {
     "all_refs_match": true,
     "bundle_sha256_matches": true,
     "bundle_verify": true,
     "git_fsck_full_strict": true,
-    "restored_ref_count": 689
+    "restored_ref_count": 692
   },
-  "created_at": "2026-11-03T09:33:16.714246+00:00",
+  "created_at": "2026-11-04T09:13:02.944736+00:00",
   "excludes": [
     "local Habitat private journal",
     "credentials and runtime secrets",
@@ -27,18 +27,18 @@
     "status": "PASSED",
     "suite": "test_beetle_runtime_consumer.py"
   },
-  "refs_sha256": "1db6f6272d7798d6eae7c1ee0e523604d051abdb84f0fb8aab53fb43e0a23958",
+  "refs_sha256": "c3d13455dfa1e63216889130cc42cb1c30c16f0f1ea22e85adf8339ffa998415",
   "restored_code_executed_on_host": false,
-  "run_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/41611883792",
+  "run_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/41805551436",
   "schema": "janus.repository_recovery.v1",
   "scope": "All fetched Git refs and reachable history, tracked code, configuration, state and model weights",
-  "source_main_sha": "de48dc20403615207eeea617989d464fc064752b",
-  "source_memory_sha": "ef6c9fbb3ed9320e057b90a01747c92cc4335e13",
+  "source_main_sha": "8cda77a9d65c292719332f092a69fc58383347f2",
+  "source_memory_sha": "c0e3148a86180d81af07d56dcba57801c74191c0",
   "source_repository": "Hawkar-usls/Janus-Demiurge",
   "status": "REPOSITORY_RECOVERY_VERIFIED",
   "storage_repository": "Hawkar-usls/Demi_Head",
   "storage_status": "GITHUB_ACTIONS_ARTIFACT_STORED",
-  "tracked_main_file_count": 14444,
+  "tracked_main_file_count": 14601,
   "whole_organism_recovery_verified": false,
   "workflow_sha": "3a419a150c6ae4582c11f0b13909d023d9704e04"
 }
