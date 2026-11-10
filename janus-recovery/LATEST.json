@@ -1,18 +1,18 @@
 {
-  "artifact_id": 13663841620,
+  "artifact_id": 13752138439,
   "artifact_retention_days": 7,
-  "artifact_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/42596193126/artifacts/13663841620",
-  "bundle_bytes": 141103231,
+  "artifact_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/42794028245/artifacts/13752138439",
+  "bundle_bytes": 142997943,
   "bundle_file": "janus-demiurge.bundle",
-  "bundle_sha256": "87e20a3852040e82a1bfe70391d558750708f59e6be9431bf7931f3a73ad4b2c",
+  "bundle_sha256": "09e336f71d56a23a5cf3d459d146ed2835fe1ccae6dd947a83f38f57d7d19ff9",
   "checks": {
     "all_refs_match": true,
     "bundle_sha256_matches": true,
     "bundle_verify": true,
     "git_fsck_full_strict": true,
-    "restored_ref_count": 774
+    "restored_ref_count": 822
   },
-  "created_at": "2026-11-09T09:48:57.279009+00:00",
+  "created_at": "2026-11-10T09:50:40.199954+00:00",
   "excludes": [
     "local Habitat private journal",
     "credentials and runtime secrets",
@@ -27,18 +27,18 @@
     "status": "PASSED",
     "suite": "test_beetle_runtime_consumer.py"
   },
-  "refs_sha256": "c1e92601ced7de5300153a575f9f50e252de3a07f7d02df1e1c1f9c5b5290229",
+  "refs_sha256": "21e2844bf1fd3f9a003724759d85dc951a391f122351b660b1acc3d117fcafd5",
   "restored_code_executed_on_host": false,
-  "run_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/42596193126",
+  "run_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/42794028245",
   "schema": "janus.repository_recovery.v1",
   "scope": "All fetched Git refs and reachable history, tracked code, configuration, state and model weights",
-  "source_main_sha": "597b9a176a4679e5746abfc4d8d05d8c37744523",
+  "source_main_sha": "451fdc04f9c45de9509f3e5b5b0b8b87f19d32bd",
   "source_memory_sha": "47b5b32f3c9c1a7f727246bc837ffbba8ef57a93",
   "source_repository": "Hawkar-usls/Janus-Demiurge",
   "status": "REPOSITORY_RECOVERY_VERIFIED",
   "storage_repository": "Hawkar-usls/Demi_Head",
   "storage_status": "GITHUB_ACTIONS_ARTIFACT_STORED",
-  "tracked_main_file_count": 15477,
+  "tracked_main_file_count": 15701,
   "whole_organism_recovery_verified": false,
   "workflow_sha": "3a419a150c6ae4582c11f0b13909d023d9704e04"
 }
