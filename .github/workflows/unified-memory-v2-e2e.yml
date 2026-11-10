@@ -1,0 +1,132 @@
+name: JANUS memory v2 cross-repository bounded acceptance
+on:
+  pull_request:
+    paths:
+      - 'tools/unified_memory_v2_bridge.py'
+      - 'tests/test_unified_memory_v2_bridge.py'
+      - '.github/workflows/unified-memory-v2-e2e.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: janus-memory-v2-e2e-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  real-current-tree:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout DemiHead candidate (no persistent token)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public Meta Registry source
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: main
+          path: _sources/meta
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Checkout experimental Meta Registry indexer only
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: janus/unified-memory-v2-isolated-pilot-20261110
+          path: _sources/indexer
+          sparse-checkout: |
+            experiments/unified-memory-v2
+          persist-credentials: false
+      - name: Checkout experimental Demiurge consumer and graph query only
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Demiurge
+          ref: janus/unified-memory-v2-consumer-demiurge-20261110
+          path: _sources/demiurge
+          sparse-checkout: |
+            tools
+            restored
+          persist-credentials: false
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build, verify, reconstitute, query and consume pinned real registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/janus-memory-v2"
+          mkdir -p "$OUT"
+          ENGINE="_sources/indexer/experiments/unified-memory-v2/janus_unified_memory.py"
+          META="_sources/meta"
+          python "$ENGINE" build --registry-root "$META" --db "$OUT/index.sqlite" > "$OUT/build.json"
+          python "$ENGINE" verify --registry-root "$META" --db "$OUT/index.sqlite" > "$OUT/verify.json"
+          python "$ENGINE" rebuild-verify --registry-root "$META" --db "$OUT/index.sqlite" > "$OUT/recovery.json"
+          SOURCE_COMMIT="$(python -c 'import json,sys;print(json.load(open(sys.argv[1]))["source_commit"])' "$OUT/verify.json")"
+          MANIFEST_SHA="$(python -c 'import json,sys;print(json.load(open(sys.argv[1]))["source_manifest_sha256"])' "$OUT/verify.json")"
+          python tools/unified_memory_v2_bridge.py \
+            --index "$OUT/index.sqlite" --query SCOBY --limit 8 \
+            --expected-source-commit "$SOURCE_COMMIT" \
+            --expected-manifest-sha256 "$MANIFEST_SHA" \
+            --output "$OUT/demihead-packet.json"
+          python _sources/demiurge/tools/demiurge_unified_memory_v2_consumer.py \
+            --packet "$OUT/demihead-packet.json" \
+            --expect-source-commit "$SOURCE_COMMIT" \
+            --expect-manifest-sha256 "$MANIFEST_SHA" \
+            --output "$OUT/demiurge-context.json"
+          python - <<'PY'
+          import hashlib, importlib.util, json, os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'janus-memory-v2'
+          b=json.loads((root/'build.json').read_text(encoding='utf-8'))
+          v=json.loads((root/'verify.json').read_text(encoding='utf-8'))
+          r=json.loads((root/'recovery.json').read_text(encoding='utf-8'))
+          packet=json.loads((root/'demihead-packet.json').read_text(encoding='utf-8'))
+          context=json.loads((root/'demiurge-context.json').read_text(encoding='utf-8'))
+          assert b['read_only'] and b['coverage_complete'] and b['scientific_authority_granted'] is False
+          assert b['indexed_json']==v['indexed_json']==v['fts_rows']==r['indexed_json']
+          assert b['total_tracked_json']==b['indexed_json']+b['excluded_self_export_json']
+          assert v['sqlite_integrity']=='PASS' and v['sha256_integrity']=='PASS'
+          assert r['recovery']=='PASS' and r['source_manifest_sha256']==v['source_manifest_sha256']
+          assert packet['origin']['source_commit']==v['source_commit']
+          assert packet['origin']['source_manifest_sha256']==v['source_manifest_sha256']
+          assert packet['packet_sha256']==context['input_receipt_sha256']
+          assert packet['matches'] and context['matches']==len(packet['matches'])
+          assert context['routing']['network_dispatch_authorized'] is False
+          assert context['routing']['graph_mutation_authorized'] is False
+          assert context['routing']['self_training_authorized'] is False
+          assert context['claim_ceiling']['scientific_truth_established'] is False
+          p=Path('_sources/demiurge/restored/memory_graph_query.py')
+          sp=importlib.util.spec_from_file_location('graph_query',p)
+          m=importlib.util.module_from_spec(sp)
+          sp.loader.exec_module(m)
+          selected=packet['matches'][0]['path']
+          subgraph=m.related_subgraph(context['graph'],selected,depth=1)
+          assert subgraph['found'] and subgraph['authority']['mutates_graph'] is False
+          report={
+            'schema':'janus.unified_memory.v2.cross_repo_acceptance.v1',
+            'status':'PASS','source_commit':v['source_commit'],
+            'source_manifest_sha256':v['source_manifest_sha256'],
+            'indexed_json':b['indexed_json'],'malformed_json':b['malformed_json'],
+            'explicit_relations':b['explicit_relations'],
+            'demihead_matches':len(packet['matches']),
+            'demiurge_nodes':len(context['graph']['nodes']),
+            'demiurge_edges':len(context['graph']['edges']),
+            'legacy_graph_query_found':subgraph['found'],
+            'permission':'READ_ONLY','live_demiurge_runtime_modified':False,
+            'private_nas_accessed':False,'scientific_claim_promoted':False
+          }
+          (root/'acceptance-report.json').write_text(json.dumps(report,sort_keys=True,indent=2)+'\n',encoding='utf-8')
+          print('JANUS_MEMORY_V2_CROSS_REPO_PASS',json.dumps(report,sort_keys=True))
+          PY
+      - name: Upload bounded verification receipts only
+        uses: actions/upload-artifact@v4
+        with:
+          name: janus-memory-v2-cross-repo-acceptance
+          path: |
+            ${{ runner.temp }}/janus-memory-v2/build.json
+            ${{ runner.temp }}/janus-memory-v2/verify.json
+            ${{ runner.temp }}/janus-memory-v2/recovery.json
+            ${{ runner.temp }}/janus-memory-v2/acceptance-report.json
+          if-no-files-found: error
+          retention-days: 7
