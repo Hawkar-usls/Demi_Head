@@ -6,6 +6,8 @@ on:
       - 'tests/test_unified_memory_v2_bridge.py'
       - '.github/workflows/unified-memory-v2-e2e.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *' # daily read-only verification; never invokes live Demiurge control plane
 permissions:
   contents: read
 concurrency:
@@ -32,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: Hawkar-usls/janus-meta-registry
-          ref: janus/unified-memory-v2-isolated-pilot-20261110
+          ref: main
           path: _sources/indexer
           sparse-checkout: |
             experiments/unified-memory-v2
@@ -41,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: Hawkar-usls/Janus-Demiurge
-          ref: janus/unified-memory-v2-consumer-demiurge-20261110
+          ref: main
           path: _sources/demiurge
           sparse-checkout: |
             tools
