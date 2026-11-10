@@ -4,7 +4,7 @@ This is an operator-invoked, read-only data bridge, not a live agent, a second g
 
 ## Role separation
 
-1. Meta Registry / HRain v2 pilot indexes tracked JSON in the selected **current commit** as a disposable SQLite FTS5 cache with source SHA-256 and explicit JSON-path/URL references. Upstream engine: Hawkar-usls/janus-meta-registry PR #503 (draft).
+1. Meta Registry / HRain v2 pilot indexes tracked JSON in the selected **current commit** as a disposable SQLite FTS5 cache with source SHA-256 and explicit JSON-path/URL references. Upstream engine: Hawkar-usls/janus-meta-registry PR #503 (merged; current index rebuilt on every bounded validation run).
 2. DemiHead tools/unified_memory_v2_bridge.py reads the local snapshot and emits bounded janus.demihead.unified_memory_search.v1 JSON. It requires independently verified source commit and source-manifest SHA256; no GitHub APIs, tokens, private NAS data, network calls, or database writes.
 3. Demiurge tools/demiurge_unified_memory_v2_consumer.py independently checks the packet digest and both source pins. It produces janus.demiurge.unified_memory_context.v1 with a bounded graph compatible with existing read-only restored/memory_graph_query.py. No runtime activation or evidence promotion.
 
@@ -30,9 +30,13 @@ No secret or private files are transmitted. No network delivery to Demiurge or p
 - Output: CONTEXT_CANDIDATE_READ_ONLY (not verified scientific truth).
 - No production HRain or NAS write; no Demiurge control-plane registration.
 
+## Bounded continuous verification
+
+Workflow `.github/workflows/unified-memory-v2-e2e.yml` checks out **current public main commits**, verifies the entire Meta Registry index, exercises DemiHead search and the Demiurge consumer, checks the existing graph-query interface, and saves only a bounded metadata receipt (no database, content snippets, or graph dump). It runs on manual invocation and, after the PR is merged, once daily at 03:17 UTC. Its GITHUB_TOKEN is read-only, source credentials are not persisted, job timeout is 25 minutes and results are retained for 7 days. This workflow does not write to the Demiurge repository or invoke its active agent runtime.
+
 ## Gates
 
 - SHA consistency is not authenticated identity or scientific truth.
 - Textual references are not independent corroboration.
 - No second writable graph owner, automated admission, inference of authority, or auto-publishing.
-- Production and recurring execution remain unapproved until separate review and owner authorization.
+- Production Demiurge runtime wiring, private NAS ingestion and any automatic model-training or effectful execution remain outside scope. The scheduled cloud verification is read-only and bounded.
