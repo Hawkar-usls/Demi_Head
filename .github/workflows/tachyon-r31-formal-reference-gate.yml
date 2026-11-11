@@ -1,0 +1,72 @@
+name: TACHYON R3.1 - formal reference pack and public new-question gate
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r31_reference_gate.py'
+      - 'tests/test_tachyon_r31_reference_gate.py'
+      - 'data/tachyon/r31/formal_reference_pack.json'
+      - 'docs/TACHYON_R31_FORMAL_CORPUS.md'
+      - '.github/workflows/tachyon-r31-formal-reference-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r31-formal-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fixed-formula-r3-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline source and split policy tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_tachyon_r31_reference_gate.py' -v
+          python -m py_compile tachyon/r31_reference_gate.py
+      - name: Evaluate existing R2E guarded formula mechanism on new public parameter cases
+        run: |
+          set -euo pipefail
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+          python -m tachyon.r31_reference_gate \
+            --pack data/tachyon/r31/formal_reference_pack.json \
+            --cards data/tachyon/r2c/science_cards.json \
+            --train-out out/r31-train-formal-only.json \
+            --out out/r31-public-development-eval.json
+      - name: Scientific hold + exact derived-results receipt verification
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from tachyon.r31_reference_gate import sha
+          import json
+          result=json.loads(Path('out/r31-public-development-eval.json').read_text())
+          train=json.loads(Path('out/r31-train-formal-only.json').read_text())
+          assert train['split']=='train'
+          assert train['production_authorization'] is False
+          assert train['receipt_sha256']==sha({k:v for k,v in train.items() if k!='receipt_sha256'})
+          assert result['receipt_sha256']==sha({k:v for k,v in result.items() if k!='receipt_sha256'})
+          assert result['neural_weights_trained'] is False
+          assert result['independently_blind'] is False
+          assert result['scientific_admission']=='HOLD'
+          assert result['public_unseen_numeric_count']==12
+          print('R31_PUBLIC_DEVELOPMENT_SCORE',result['guarded_formula_correct'],
+                '/',result['public_unseen_numeric_count'])
+          print('R31_BASELINE_SCORE',result['mean_training_label_baseline_correct'])
+          print('R31_NEGATIVE_ABSTAIN',result['negative_abstentions'],'/',result['negative_count'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r31-formal-public-development-not-blind
+          path: out/*.json
+          if-no-files-found: error
+          retention-days: 30
