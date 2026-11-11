@@ -52,7 +52,10 @@ class R2H(unittest.TestCase):
         self.assertTrue(all(1<=x<=4096 for x in a))
 
     def test_new_model_can_build_without_using_external_data(self):
-        import torch
+        try:
+            import torch
+        except ModuleNotFoundError:
+            self.skipTest("CPU PyTorch is installed in dedicated R2H training job, not core CI")
         from tachyon.r2h_curriculum import build,vectorize
         net=build()
         out=net(vectorize(["Почему тесто пиццы не поднимается?"]))
