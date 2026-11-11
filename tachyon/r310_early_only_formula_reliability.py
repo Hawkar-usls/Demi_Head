@@ -39,6 +39,8 @@ EARLY_HOURS=4.
 MAX_CAL_REGRESSION=.10
 MIN_COVERAGE=.15
 MIN_CAL_GAIN=.0
+PUBLIC_SOURCE_VOLTAGE_MIN=.5
+PUBLIC_SOURCE_VOLTAGE_MAX=5.5
 
 def git_blob_sha1(p):
     raw=Path(p).read_bytes()
@@ -73,7 +75,10 @@ def validate_config(o):
          and p.get("maximum_accepted_device_level_relative_regression")==
              MAX_CAL_REGRESSION
          and p.get("minimum_calibration_device_gain")==MIN_CAL_GAIN
-         and p.get("choose_threshold_without_heldout_future_labels") is True,
+         and p.get("choose_threshold_without_heldout_future_labels") is True
+         and p.get("public_retro_mixed_chemistry_voltage_range_volts")==
+             [PUBLIC_SOURCE_VOLTAGE_MIN,PUBLIC_SOURCE_VOLTAGE_MAX]
+         and p.get("new_external_R39_contract_modified") is False,
          "R310_CALIBRATION_POLICY_DRIFT")
     g=o.get("governance",{})
     need(g.get("real_neural_training_authorized") is False
@@ -93,7 +98,8 @@ def check_early(early):
              and all(type(v) in (int,float) and math.isfinite(v) for v in x),
              "R310_INVALID_EARLY_ROW")
         t,v=x
-        need(abs(t-i/60.)<1e-5 and 2.<=v<=5.2,
+        need(abs(t-i/60.)<1e-5 and
+             PUBLIC_SOURCE_VOLTAGE_MIN<=v<=PUBLIC_SOURCE_VOLTAGE_MAX,
              "R310_EARLY_TIME_OR_PHYSICAL_VOLTAGE_REJECT")
     return [(float(t),float(v)) for t,v in early]
 
@@ -108,7 +114,8 @@ def evaluate_early_only(early):
     future_times=[i/60. for i in range(EARLY_N,EARLY_N+FUTURE_N)]
     base=[incumbent_predict(incumbent_fit,t) for t in future_times]
     # A physically invalid BASELINE is a genuine reason to abstain.
-    need(all(math.isfinite(v) and 2<=v<=5.2 for v in base),
+    need(all(math.isfinite(v) and PUBLIC_SOURCE_VOLTAGE_MIN<=v<=
+             PUBLIC_SOURCE_VOLTAGE_MAX for v in base),
          "R310_BASELINE_FUTURE_EXTRAPOLATION_OUT_OF_SCOPE")
     early_inc_rmse=math.sqrt(sum(
         (incumbent_predict(incumbent_fit,t)-v)**2 for t,v in early
@@ -116,7 +123,8 @@ def evaluate_early_only(early):
     try:
         challenger_fit=fit_new(early,CANDIDATE)
         cand=[new_predict(challenger_fit,t) for t in future_times]
-        need(all(math.isfinite(v) and 2<=v<=5.2 for v in cand),
+        need(all(math.isfinite(v) and PUBLIC_SOURCE_VOLTAGE_MIN<=v<=
+             PUBLIC_SOURCE_VOLTAGE_MAX for v in cand),
              "R310_CANDIDATE_FUTURE_EXTRAPOLATION_OUT_OF_SCOPE")
         early_cand_rmse=math.sqrt(sum(
             (new_predict(challenger_fit,t)-v)**2 for t,v in early
@@ -154,7 +162,8 @@ def score_future(early_record, gold_future):
     """Only the later holdout evaluator receives the 1200 actual voltages."""
     need(isinstance(gold_future,list) and len(gold_future)==FUTURE_N
          and all(type(x) in (int,float) and math.isfinite(x)
-                 and 2<=x<=5.2 for x in gold_future),
+                 and PUBLIC_SOURCE_VOLTAGE_MIN<=x<=
+                 PUBLIC_SOURCE_VOLTAGE_MAX for x in gold_future),
          "R310_INVALID_HIDDEN_FUTURE_VOLTAGE")
     def mae(x):
         return sum(abs(a-b) for a,b in zip(x,gold_future))/FUTURE_N
