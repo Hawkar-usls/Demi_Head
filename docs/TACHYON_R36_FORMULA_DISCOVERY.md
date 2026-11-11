@@ -30,3 +30,12 @@ Super-K muon timing and Offenburg battery SOC/OCV source checks (R3.2) establish
 Resource gate: one short Python-standard-library Actions job (`contents:read`), fixed candidate grammar, max two coefficients, bounded dataset counts, no multiple runners/retries, no external secrets, no NAS modifications, no auto-merge. Reports are append-only SHA-linked JSON artifacts.
 
 Status: `R36_SYMBOLIC_DISCOVERY_SANDBOX / POSITIVE_AND_NEGATIVE_CONTROLS / PROSPECTIVE_EXTERNAL_LAB_NOT_RUN / SCIENTIFIC_HOLD`.
+
+## External laboratory source candidates triaged (no download or training)
+
+Public dataset metadata sources in `data/tachyon/r36/real_measurement_candidate_sources.json` are **not** accepted physics training datasets:
+
+- [Transient hot-wire records in water, Zenodo 23645337](https://zenodo.org/records/23645337), CC BY 4.0. Experimental platinum-wire voltage traces and separate thermal simulations are published. The source current was verified but **not recorded** as a matched time series, so direct current-resistance-temperature formula fitting is not supported without independent information; its strong heat-transfer effects require appropriate physical baselines.
+- [Battery OCV diagnosis measurements, Zenodo 17227538](https://zenodo.org/records/17227538), CC BY-NC 4.0. It reports experimental time/current/voltage/temperature records, but is a different electrochemical system. A valid model must account for state of charge, hysteresis and dynamic polarization, with a separate source rights check. **It must not be used as synthetic Ohmic correction data.**
+
+Neither record has a signed independent data-curator acceptance, a measured-data train/test isolation receipt or original bytes SHA verified here. They remain candidate metadata quarantined. They may help launch a *separate* real observational comparison after scientific source approval, but are not part of the 99.1% synthetic result.
