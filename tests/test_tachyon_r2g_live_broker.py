@@ -9,7 +9,7 @@ from tachyon.r2f_general_router import load_general_cards
 from tachyon.r2g_live_broker import (
     WIKI_ENDPOINT, OPENALEX_ENDPOINT, BRAVE_ENDPOINT,
     clean, query_terms, safe_public_query, safe_http_url, safe_result_url,
-    wiki_search, openalex_search, brave_search, decide_evidence,
+    wiki_search, openalex_search, brave_search, decide_evidence, common_record,
     route_with_external_search, ProviderUnavailable,
 )
 
@@ -142,6 +142,29 @@ class R2G(unittest.TestCase):
         result=route_with_external_search(q,self.physics,self.general,
             public_approved=True,fetch=self.mock_api)
         self.assertEqual(result["decision"],"EVIDENCE_REQUIRES_FRESHNESS_VERIFICATION")
+        self.assertIsNone(result["answer"])
+
+    def test_saturn_question_cannot_be_answered_from_jupiter_article(self):
+        q="Какие особенности колец планеты Сатурн известны астрономам?"
+        wrong=common_record("wikipedia","Юпитер",
+            "https://ru.wikipedia.org/wiki/Юпитер",
+            "Юпитер является планетой Солнечной системы. У него есть кольца, как и у Сатурна.",
+            q,kind="ENCYCLOPEDIA_EXTRACT_CC_BY_SA")
+        self.assertTrue(wrong["relevance_overlap"]>=2)
+        result=decide_evidence(q,[wrong],False,{})
+        self.assertEqual(result["decision"],"NO_VERIFIABLE_SOURCE")
+        self.assertEqual(result["sources"],[])
+        self.assertIsNone(result["answer"])
+        self.assertEqual(result["discarded_incidental_or_unrelated_source_count"],1)
+
+    def test_planet_title_without_question_predicate_does_not_make_answer(self):
+        q="Какие кратеры есть на поверхности планеты Меркурия?"
+        record=common_record("wikipedia","Меркурий",
+            "https://ru.wikipedia.org/wiki/Меркурий",
+            "Меркурий — самая близкая к Солнцу планета и одна из планет Солнечной системы.",
+            q,kind="ENCYCLOPEDIA_EXTRACT_CC_BY_SA")
+        result=decide_evidence(q,[record],False,{})
+        self.assertEqual(result["decision"],"EVIDENCE_FOUND_REVIEW_REQUIRED")
         self.assertIsNone(result["answer"])
 
     def test_bad_prompt_in_provider_is_not_executed(self):
