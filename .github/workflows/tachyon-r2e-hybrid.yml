@@ -1,0 +1,60 @@
+name: TACHYON R2E guarded hybrid public diagnostic
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r2e_hybrid.py'
+      - 'tests/test_tachyon_r2e_hybrid.py'
+      - 'docs/TACHYON_R2E_*.md'
+      - '.github/workflows/tachyon-r2e-hybrid.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r2e-hybrid-development
+  cancel-in-progress: false
+jobs:
+  safe-hybrid-diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit and non-promotion tests without model execution
+        run: |
+          python -m unittest discover -s tests -p test_tachyon_r2e_hybrid.py -v
+      - name: Split PUBLIC fixture questions only
+        run: |
+          python -m tachyon.r2d_audit split-public \
+            --fixture data/tachyon/r2d/public_dev_challenge.json \
+            --questions artifacts/tachyon-r2e/public-questions.json \
+            --key artifacts/tachyon-r2e/public-scoring-key.json
+      - name: Generate source-cited, deterministic, abstaining explanations
+        run: |
+          python -m tachyon.r2e_hybrid \
+            --questions artifacts/tachyon-r2e/public-questions.json \
+            --cards data/tachyon/r2c/science_cards.json \
+            --out artifacts/tachyon-r2e/public-hybrid-diagnostic.json
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+          obj=json.loads(Path('artifacts/tachyon-r2e/public-hybrid-diagnostic.json').read_text())
+          routes=Counter(x['explanation']['decision'] for x in obj['cases'])
+          assert len(obj['cases'])==18
+          assert routes=={'DETERMINISTIC_FORMULA_WITH_CITED_SOURCE':8,'SOURCE_PARAPHRASE_REQUIRES_REVIEW':6,'ABSTAIN':4}
+          assert obj['candidate_admitted'] is False
+          assert obj['independent_scientific_validation'] is False
+          assert obj['candidate_checkpoint_used'] is False
+          print('TACHYON_R2E_PUBLIC_DIAGNOSTIC_PASS_NOT_SCIENTIFIC_ADMISSION')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tachyon-r2e-guarded-public-research-only
+          path: artifacts/tachyon-r2e/public-hybrid-diagnostic.json
+          retention-days: 14
+          if-no-files-found: warn
