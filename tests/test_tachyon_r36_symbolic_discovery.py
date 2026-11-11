@@ -110,6 +110,17 @@ class R36Discovery(unittest.TestCase):
         self.assertEqual(fit_terms(data,()),())
         self.assertGreater(rmse(data),0)
 
+    def test_real_measurement_inventory_stays_unapproved(self):
+        source=Path('data/tachyon/r36/real_measurement_candidate_sources.json')
+        inventory=json.loads(source.read_text(encoding='utf8'))
+        self.assertEqual(inventory['scientific_admission'],'HOLD')
+        self.assertFalse(inventory['automated_training_on_these_sources_allowed'])
+        self.assertFalse(inventory['curator_signatures_present'])
+        self.assertEqual(len(inventory['candidates']),2)
+        for c in inventory['candidates']:
+            self.assertEqual(c['training_status'],'REVIEW_REQUIRED_DO_NOT_TRAIN')
+            self.assertTrue(c['record_url'].startswith('https://zenodo.org/records/'))
+            self.assertTrue(c['data_fit_warning'])
     def test_full_report_no_overwrite_and_no_promotion(self):
         with tempfile.TemporaryDirectory() as td:
             out=Path(td)/"evidence"
