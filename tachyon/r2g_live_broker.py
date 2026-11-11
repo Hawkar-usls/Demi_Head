@@ -21,7 +21,7 @@ from pathlib import Path
 from tachyon.science_generator import ScienceHold, require, sha
 from tachyon.r2d_audit import read_json, save_new
 from tachyon.r2f_general_router import (
-    load_general_cards, route_question, is_fresh_question, is_sports_question,
+    load_general_cards, route_question, is_fresh_question, is_sports_question, known_sports_context,
 )
 from tachyon.r2e_hybrid import load_cards
 
@@ -236,10 +236,26 @@ def decide_evidence(query,sources,needs_fresh,provider_errors):
         rec["reason"]="SOURCES_NOT_SUFFICIENT_FOR_EXTRACTIVE_ANSWER"
     return rec
 
+def looks_like_sports(question):
+    q=question.casefold().replace("ё","е")
+    return is_sports_question(q) or known_sports_context(q) or any(
+        x in q for x in ("ла лиг", "бундеслиг", "серия а", "примера", "матч",
+                       "евро-202", "чемпионат мира по футболу")
+    )
+
 def route_with_external_search(question,physics_cards,general_cards,*,public_approved=False,
                                providers=("wikipedia","openalex"),brave_key=None,
                                fetch=fetch_json):
     route=route_question(question,physics_cards,general_cards)
+    # Source cards are evergreen: they cannot be authority for new dated events.
+    # Keep exact deterministic formulas local, even if a date appears in context.
+    if is_fresh_question(question) and route["decision"] in (
+        "GENERAL_SOURCE_ANSWER", "PHYSICS_RESEARCH_DRAFT"
+    ) and route.get("physics_decision")!="DETERMINISTIC_FORMULA_WITH_CITED_SOURCE":
+        route=dict(route,decision="EXTERNAL_SEARCH_REQUIRED",
+                   reason="FRESH_QUERY_CANNOT_USE_STATIC_CARD_AS_EVENT_PROOF",
+                   external_lookup_query=question,needs_live_source=True,
+                   answer=None)
     envelope={
         "schema":"janus.tachyon.r2g.external_evidence_result.v1",
         "local_route":route["decision"],
@@ -263,10 +279,10 @@ def route_with_external_search(question,physics_cards,general_cards,*,public_app
             "UNSUPPORTED_PROVIDER")
     results=[];errors={};calls=0
     # Sports/current results require a proper web index, not static Wikipedia.
-    effective=["brave"] if is_sports_question(public_query) and needs_fresh else [
+    effective=["brave"] if looks_like_sports(public_query) and needs_fresh else [
         p for p in ("wikipedia","openalex","brave") if p in opts
     ]
-    if "brave" in effective and not brave_key and needs_fresh and is_sports_question(public_query):
+    if "brave" in effective and not brave_key and needs_fresh and looks_like_sports(public_query):
         return dict(envelope,decision="WEB_PROVIDER_KEY_REQUIRED",
                     reason="LIVE_SPORTS_REQUIRE_BRAVE_SEARCH_OR_OTHER_APPROVED_DATED_PROVIDER",
                     sources=[],answer=None,provider_errors={})
