@@ -1,0 +1,40 @@
+{
+  "schema": "janus.tachyon.r2c.blind_eval_protocol.v1",
+  "status": "PROTOCOL_READY_AWAITING_INDEPENDENT_CUSTODIAN_AND_SECRET_SET",
+  "ownership": "External assessor not selected; no private challenge data has been created or placed in this repository",
+  "candidate_freeze": "freeze commit SHA, checkpoint SHA-256 and source-card SHA-256 before challenge issuance",
+  "public_pre_registration": {
+    "scope": [
+      "unseen conceptual questions",
+      "dimensional and quantitative derivations",
+      "causality and no-signalling adversarial questions"
+    ],
+    "minimum_questions": 60,
+    "per_group_minimum": 20,
+    "sources": "Unseen papers or independently authored prompts, no training-family duplication",
+    "prohibited": "No access to private atomic-clock measurements or secret answers during fitting or tuning",
+    "evaluation_arms": [
+      "R2C neural draft, unverified",
+      "R2C source-grounded text",
+      "R2B frozen model",
+      "lexical retrieval",
+      "theoretical-formula baseline"
+    ],
+    "rubric": {
+      "scientific_correctness": "Independent expert evaluates mechanism, assumptions, units, numerical consistency, citation validity",
+      "citation_grounding": "DOI must actually support the cited claim",
+      "uncertainty": "Penalize unsupported certainty and invented mechanisms",
+      "causal_constraints": "No unqualified superluminal or retrocausal communication claim"
+    },
+    "gate_rule": "No admission without external assessor signoff, zero severe causal/units violations, and demonstrable meaningful improvement vs retrieval; F1 overlap alone never suffices."
+  },
+  "sealed_test_handling": {
+    "location": "Outside this GitHub repository, under external custodian control",
+    "reveal_sequence": "freeze candidate -> assessor commits blinded test SHA256 -> assessor runs all frozen arms -> publish scored receipts and failure cases -> preserve both positive and negative results",
+    "require_dated_lab_clock_sources": true,
+    "allow_model_retraining_after_seal": false,
+    "current_sealed_test_exists": false
+  },
+  "current_scientific_admission": "HOLD",
+  "production_writes_allowed": false
+}

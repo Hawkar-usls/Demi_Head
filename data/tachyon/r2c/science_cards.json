@@ -1,0 +1,166 @@
+{
+  "schema": "janus.tachyon.r2c.source_cards.v1",
+  "created_utc": "2026-11-11",
+  "purpose": "SOURCE_GROUNDED_EXPLANATIONS_AND_TRAIN_ONLY_PUBLIC_PARAPHRASES",
+  "policy": {
+    "copyright": "OWN_NONVERBATIM_RUSSIAN_PARAPHRASES_WITH_PRIMARY_DOI_METADATA",
+    "source_metadata_checked": "2026-11-11",
+    "external_peer_review_of_our_paraphrases": false,
+    "clock_lab_measurements_used": false,
+    "existing_r2b_clock_holdout_used": false,
+    "independent_blind_test_in_repository": false,
+    "auto_deployment": false
+  },
+  "sources": [
+    {
+      "family": "SR_EINSTEIN_1905",
+      "domain": "relativity",
+      "doi": "10.1002/andp.19053221004",
+      "title": "Zur Elektrodynamik bewegter Körper",
+      "year": 1905,
+      "kind": "THEORETICAL_FOUNDATION",
+      "tags": [
+        "специальная относительность",
+        "замедление времени",
+        "собственное время",
+        "лоренц",
+        "скорость",
+        "часы"
+      ],
+      "formula": "dτ = dt sqrt(1-v²/c²) для инерциального движения",
+      "dimensions": "v and c: m/s; dt and dτ: s",
+      "questions": [
+        "Как скорость влияет на темп идеальных часов в специальной теории относительности?",
+        "Почему в инерциальном движении собственное время зависит от отношения скорости к скорости света?"
+      ],
+      "answer": "В специальной теории относительности ход движущихся относительно выбранной инерциальной системы часов определяется собственным временем: dτ = dt sqrt(1-v²/c²). Эта зависимость относится к причинному описанию движения и не создаёт способа передавать сообщения в прошлое.",
+      "url": "https://doi.org/10.1002/andp.19053221004",
+      "provenance_status": "PUBLISHER_METADATA_VERIFIED_AUTHOR_PARAPHRASE_NOT_INDEPENDENTLY_ADJUDICATED"
+    },
+    {
+      "family": "GR_SHAPIRO_1964",
+      "domain": "relativity",
+      "doi": "10.1103/PhysRevLett.13.789",
+      "title": "Fourth Test of General Relativity",
+      "year": 1964,
+      "kind": "THEORETICAL_TEST_PROPOSAL",
+      "tags": [
+        "общая относительность",
+        "время распространения света",
+        "задержка шапиро",
+        "гравитация",
+        "радиосигнал",
+        "свет"
+      ],
+      "formula": "Δt порядка GM/c³ × безразмерный логарифм (геометрия существенна)",
+      "dimensions": "G: m³/(kg s²), M: kg, c: m/s, Δt: s",
+      "questions": [
+        "Чем объясняется дополнительная задержка света при прохождении рядом с массивным телом?",
+        "Является ли гравитационная задержка радиосигнала доказательством ретрокаузальности?"
+      ],
+      "answer": "Гравитационное поле изменяет измеряемое время распространения светового или радиосигнала. В приближении слабого поля задержка Шапиро масштабируется как GM/c³ с безразмерным логарифмом, зависящим от геометрии пути. Увеличение задержки — обычное причинное предсказание общей теории относительности, а не ранний приём сообщения.",
+      "url": "https://doi.org/10.1103/PhysRevLett.13.789",
+      "provenance_status": "PUBLISHER_METADATA_VERIFIED_AUTHOR_PARAPHRASE_NOT_INDEPENDENTLY_ADJUDICATED"
+    },
+    {
+      "family": "BELL_1964",
+      "domain": "quantum_causality",
+      "doi": "10.1103/PhysicsPhysiqueFizika.1.195",
+      "title": "On the Einstein Podolsky Rosen paradox",
+      "year": 1964,
+      "kind": "THEORETICAL_FOUNDATION",
+      "tags": [
+        "неравенства белла",
+        "квантовая запутанность",
+        "локальность",
+        "скрытые параметры",
+        "корреляции",
+        "причинность"
+      ],
+      "formula": "CHSH |S| ≤ 2 для соответствующего класса локальных моделей (производный современный тест)",
+      "dimensions": "S: dimensionless",
+      "questions": [
+        "Что на самом деле ограничивают неравенства Белла в локальных теориях?",
+        "Позволяет ли нарушение неравенства Белла отправить управляемые биты назад во времени?"
+      ],
+      "answer": "Теорема Белла показывает конфликт между квантовыми корреляциями и определённым классом локальных скрытопараметрических описаний. Нарушение неравенств Белла само по себе не является управляемым сверхсветовым каналом и тем более не доказывает передачу битов в прошлое.",
+      "url": "https://doi.org/10.1103/PhysicsPhysiqueFizika.1.195",
+      "provenance_status": "PUBLISHER_METADATA_VERIFIED_AUTHOR_PARAPHRASE_NOT_INDEPENDENTLY_ADJUDICATED"
+    },
+    {
+      "family": "HENSEN_2015",
+      "domain": "quantum_causality",
+      "doi": "10.1038/nature15759",
+      "title": "Loophole-free Bell inequality violation using electron spins separated by 1.3 kilometres",
+      "year": 2015,
+      "kind": "EXPERIMENTAL_BELL_TEST_NOT_CLOCK_HOLDOUT",
+      "tags": [
+        "проверка белла",
+        "запутанность",
+        "электронные спины",
+        "локальность",
+        "эксперимент",
+        "корреляции"
+      ],
+      "formula": "Наблюдаемый статистический тест не является каналом передачи сообщений",
+      "dimensions": "Violation significance: statistical quantity, not signal speed",
+      "questions": [
+        "Что проверял эксперимент Белла с электронными спинами, разделёнными на 1,3 км?",
+        "Какие ограничения у вывода о причинности из бесщелевой проверки неравенства Белла?"
+      ],
+      "answer": "Эксперимент Hensen и соавторов в 2015 году проверял нарушение неравенства Белла при пространственном разделении электронных спинов и контроле основных экспериментальных лазеек. Это свидетельствует против локальных реалистических моделей в рамках допущений теста, но не даёт доказательства управляемой ретрокаузальной связи.",
+      "url": "https://doi.org/10.1038/nature15759",
+      "provenance_status": "PUBLISHER_METADATA_VERIFIED_AUTHOR_PARAPHRASE_NOT_INDEPENDENTLY_ADJUDICATED"
+    },
+    {
+      "family": "GRW_1986",
+      "domain": "quantum_measurement",
+      "doi": "10.1103/PhysRevD.34.470",
+      "title": "Unified dynamics for microscopic and macroscopic systems",
+      "year": 1986,
+      "kind": "PROPOSED_ALTERNATIVE_DYNAMICS",
+      "tags": [
+        "коллапс",
+        "квантовое измерение",
+        "грв",
+        "стохастическая динамика",
+        "волновая функция",
+        "модель"
+      ],
+      "formula": "Стохастическая модификация динамики; конкретные параметры зависят от модели",
+      "dimensions": "Rate parameters: 1/s; localization length: m",
+      "questions": [
+        "Чем GRW отличается от обычной унитарной динамики при обсуждении коллапса?",
+        "Доказывает ли модель спонтанного коллапса передачу информации из будущего?"
+      ],
+      "answer": "Модель GRW предлагает изменённую стохастическую динамику как один из вариантов решения проблемы квантового измерения. Это исследовательская физическая гипотеза, не общепринятое экспериментальное доказательство механизма коллапса; она не устанавливает канал информации из будущего.",
+      "url": "https://doi.org/10.1103/PhysRevD.34.470",
+      "provenance_status": "PUBLISHER_METADATA_VERIFIED_AUTHOR_PARAPHRASE_NOT_INDEPENDENTLY_ADJUDICATED"
+    },
+    {
+      "family": "QBAYES_2002",
+      "domain": "quantum_measurement",
+      "doi": "10.1103/PhysRevA.65.022305",
+      "title": "Quantum probabilities as Bayesian probabilities",
+      "year": 2002,
+      "kind": "INTERPRETATIONAL_APPROACH",
+      "tags": [
+        "борновское правило",
+        "квантовая вероятность",
+        "байесовский подход",
+        "квантовое состояние",
+        "измерение",
+        "интерпретация"
+      ],
+      "formula": "P(i) = tr(ρ E_i) для POVM-измерения (стандартное правило Борна)",
+      "dimensions": "P(i): dimensionless probability; tr(ρ E_i): dimensionless",
+      "questions": [
+        "Как различаются вероятность и динамика коллапса в байесовском подходе к квантовой теории?",
+        "Можно ли из байесовского понимания квантовой вероятности вывести доказательство ретропричинности?"
+      ],
+      "answer": "В байесовском подходе квантовые вероятности интерпретируются как степени уверенности, подчинённые квантовым правилам. Такая интерпретация не добавляет физического механизма отправки информации в прошлое; проверка нового физического эффекта требует независимого эксперимента.",
+      "url": "https://doi.org/10.1103/PhysRevA.65.022305",
+      "provenance_status": "PUBLISHER_METADATA_VERIFIED_AUTHOR_PARAPHRASE_NOT_INDEPENDENTLY_ADJUDICATED"
+    }
+  ]
+}
