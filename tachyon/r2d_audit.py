@@ -26,7 +26,7 @@ MODEL_SCHEMAS = {
     "r2b": "janus.tachyon.r2b.seq2seq_explanation.v1",
     "r2c": "janus.tachyon.r2c.source_grounded_generator.v1",
 }
-SOURCE_CARD_SHA = "21a27ab618d94e1d15d586c20432b8e766cb947b1035a045ef764c8337e"
+SOURCE_CARD_SHA = "21a27ab618d94e1d15d586c20432b8e766cb947eb947b1035a045ef764c8337e"
 CASE_ID = re.compile(r"^[a-z][a-z0-9_]{1,64}$")
 NUMBER = re.compile(r"(?<![\w.])[-+]?(?:\d+[.,]\d+|\d+)(?:[eE][-+]?\d+)?(?![\w.])")
 SPEED = re.compile(r"v\s*/\s*c\s*=\s*(0[.,]\d+)", re.I)
