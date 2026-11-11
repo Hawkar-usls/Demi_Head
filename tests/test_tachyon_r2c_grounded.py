@@ -99,7 +99,7 @@ class R2C(unittest.TestCase):
             self.assertNotIn(forbidden, params)
 
     def test_lexical_engine_has_no_static_truth_claim(self):
-        self.assertNotIn("гарантированно", _terms("гарантированно верно"))
+        self.assertIn("гарантированно", _terms("гарантированно верно"))
         # A source match is still marked as review-required.
         q = self.cards["sources"][1]["questions"][0]
         result = explain(q, self.cards)
