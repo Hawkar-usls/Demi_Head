@@ -101,8 +101,10 @@ class R36Discovery(unittest.TestCase):
 
     def test_bounded_formula_domain_and_coefficients(self):
         data=generate_simulator("PURE_OHM_SYNTHETIC_NEGATIVE_CONTROL","train")
+        adversarial=Observation("over_limit_case",.5,10.,16.,5.,
+                                "SYNTHETIC_GENERATOR_ONLY")
         with self.assertRaisesRegex(ValueError,"R36_CORRECTION_EXCEEDS_SANDBOX_SCOPE"):
-            predict(data[0],("theta",),(.99,))
+            predict(adversarial,("theta",),(.99,))
         with self.assertRaisesRegex(ValueError,"R36_FORMULA_COEFFICIENT_COUNT"):
             predict(data[0],("theta",),())
         self.assertEqual(fit_terms(data,()),())
