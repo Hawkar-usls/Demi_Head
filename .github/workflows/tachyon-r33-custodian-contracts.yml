@@ -1,0 +1,33 @@
+name: TACHYON R3.3 - offline custodian seal contract tests only
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r33_external_custodian.py'
+      - 'tests/test_tachyon_r33_external_custodian.py'
+      - 'docs/TACHYON_R33_CUSTODIAN_HANDOFF.md'
+      - '.github/workflows/tachyon-r33-custodian-contracts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-contracts-no-private-challenges:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic contract tests only; never fetch private answer keys
+        run: |
+          set -euo pipefail
+          python -m py_compile tachyon/r33_external_custodian.py
+          python -m unittest discover -s tests -p 'test_tachyon_r33_external_custodian.py' -v
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+          echo 'R33_NO_REAL_SEALED_CHALLENGES_OPENED_OR_SCORED' >> "$GITHUB_STEP_SUMMARY"
