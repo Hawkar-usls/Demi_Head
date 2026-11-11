@@ -1,0 +1,75 @@
+name: JANUS Tachyon — Beetle + TOPA + published clocks (read-only)
+on:
+  workflow_dispatch:
+    inputs:
+      train_explanations:
+        description: 'Optional bounded CPU experiment; no model promotion'
+        type: boolean
+        required: false
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-lab-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  science:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Tachyon source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout canonical TOPA validator at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/TOPA
+          ref: 98a92e8abb4f05c41aae2921f0d956a210a74429
+          path: external/topa
+          persist-credentials: false
+          sparse-checkout: |
+            integrations/janus-distributed-ai-swarm/topa_epistemic_router.py
+      - name: Checkout Beetle durable processed context only
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Demiurge
+          ref: beetle-memory
+          path: external/beetle
+          persist-credentials: false
+          sparse-checkout: |
+            data/beetle-runtime/CONTEXT.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Contract and non-Torch tests
+        run: |
+          python -m unittest discover -s tests -p 'test_tachyon_research_bridge.py' -v
+          python -m unittest discover -s tests -p 'test_tachyon_explanations.py' -v
+      - name: Published clock aggregate replay
+        run: python -m tachyon.clock_benchmark --out artifacts/tachyon-lab/clock-benchmark.json
+      - name: Beetle to canonical TOPA hypotheses (no promotion)
+        run: |
+          python -m tachyon.research_bridge \
+            --beetle-context external/beetle/data/beetle-runtime/CONTEXT.json \
+            --topa-router external/topa/integrations/janus-distributed-ai-swarm/topa_epistemic_router.py \
+            --out artifacts/tachyon-lab/beetle-topa-assessments.json
+      - name: Record exact provider Git revisions
+        run: |
+          mkdir -p artifacts/tachyon-lab
+          (cd external/topa && git rev-parse HEAD) > artifacts/tachyon-lab/topa-provider-commit.txt
+          (cd external/beetle && git rev-parse HEAD) > artifacts/tachyon-lab/beetle-projection-commit.txt
+      - name: Install CPU PyTorch (optional only)
+        if: ${{ inputs.train_explanations }}
+        run: python -m pip install --disable-pip-version-check -r requirements-tachyon.txt --index-url https://download.pytorch.org/whl/cpu
+      - name: Train explanation candidate (never auto-admit)
+        if: ${{ inputs.train_explanations }}
+        run: python -m tachyon.explanations --epochs 25 --outdir artifacts/tachyon-lab/text-candidate
+      - name: Preserve results; no writeback or automatic deployment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-beetle-topa-lab-receipts
+          path: artifacts/tachyon-lab/
+          if-no-files-found: warn
+          retention-days: 14
