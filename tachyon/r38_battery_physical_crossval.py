@@ -260,6 +260,30 @@ def run(source_manifest_path,config_path,custodian_path,outdir,fetch=official_fe
     folds=score_public_lobo(scores)
     selected_challenger=[f for f in folds if f["challenger_selected"]]
     challenger_success=[f for f in folds if f["candidate_challenger_beats_baseline"]]
+    # Posthoc safety annotation added AFTER reviewing the FIRST public R3.8
+    # run. This is explicitly NOT retroactively a preregistered hypothesis test.
+    regressions=[
+      {"battery":f["heldout_battery"],
+       "selected_model":f["selected_model"],
+       "relative_error_increase_pct":(-100.*f["outer_relative_MAE_gain"])}
+      for f in folds if f["outer_relative_MAE_gain"]<0
+    ]
+    worst_regression=max(
+      (x["relative_error_increase_pct"] for x in regressions),default=0.
+    )
+    worst_group=(max(regressions,key=lambda x:x["relative_error_increase_pct"])["battery"]
+                 if regressions else None)
+    # These alarms cannot make a candidate pass; they only document risk.
+    posthoc_safety_audit={
+      "review_trigger":"Observed negative results on initial public 8-battery R3.8 run",
+      "was_preregistered_before_initial_public_result":False,
+      "is_approval_metric":False,
+      "devices_with_worse_MAE_than_selected_baseline":regressions,
+      "worst_device_relative_MAE_increase_pct":worst_regression,
+      "worst_device":worst_group,
+      "descriptive_regression_alert_over_10_pct":worst_regression>10.,
+      "independent_prospective_evidence_still_required":True,
+    }
     # No independently sealed new source: ALWAYS HOLD despite any LOBO gain.
     summary={
       "schema":RESULT,
@@ -285,6 +309,7 @@ def run(source_manifest_path,config_path,custodian_path,outdir,fetch=official_fe
       "pre_registered_public_crossval_device_consistency_threshold":6,
       "public_retro_crossval_challenger_consistency_pass":
          len(challenger_success)>=6,
+      "posthoc_safety_audit_not_preregistered":posthoc_safety_audit,
       "physical_new_discovery_verified":False,
       "all_new_models_are_existing_or_empirical_relaxation_approximations":True,
       "independent_external_custodian_connected":False,
