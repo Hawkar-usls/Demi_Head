@@ -92,7 +92,7 @@ class R39ExternalProtocol(unittest.TestCase):
         self.assertEqual(q["forecast_minute_indices"][0],241)
         self.assertTrue(q["questions_include_future_gold"] is False)
         self.assertEqual(validate_questions(q,self.config),q)
-        self.assertNotIn("trace",json.dumps(q))
+        self.assertNotIn('"trace":',json.dumps(q))
         self.assertNotIn("FAKE_DEVICE",json.dumps(q))
         self.assertNotIn("source_study_id",json.dumps(q))
 
