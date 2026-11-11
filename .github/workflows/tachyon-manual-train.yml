@@ -1,0 +1,38 @@
+name: JANUS Tachyon bounded research training
+on:
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: "Bounded epochs (1..30); never scheduled"
+        required: false
+        default: "8"
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-manual-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  train:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU-only torch
+        run: python -m pip install --disable-pip-version-check -r requirements-tachyon.txt --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify source and boundaries
+        run: python -m unittest discover -s tests -p 'test_tachyon.py' -v
+      - name: Bounded training
+        env:
+          EPOCHS: ${{ inputs.epochs }}
+        run: python -m tachyon.train --epochs "${EPOCHS:-8}" --outdir artifacts/tachyon
+      - name: Preserve candidate and evidence; no auto-promotion
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-candidate-and-receipt
+          path: artifacts/tachyon/
+          if-no-files-found: warn
+          retention-days: 14
