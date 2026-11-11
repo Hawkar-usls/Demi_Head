@@ -8,7 +8,7 @@ import unittest
 from tachyon.r38_battery_physical_crossval import (
     GROUPS,BASELINES,CHALLENGERS,ALL_MODELS,
     basis,fit_new,new_predict,per_trace,score_public_lobo,
-    verify_config,verify_custodian_slot,sha
+    verify_config,verify_custodian_slot,posthoc_safety,sha
 )
 
 CONF=Path("data/tachyon/r38/eight_battery_cross_validation_manifest.json")
@@ -106,6 +106,24 @@ class TestR38(unittest.TestCase):
         self.assertTrue(all(not f["challenger_selected"] for f in folds))
         self.assertTrue(all(f["selected_model"]=="double_exp" for f in folds))
         self.assertEqual(sum(f["candidate_challenger_beats_baseline"] for f in folds),0)
+
+    def test_posthoc_regression_guard_does_not_fake_preregistration(self):
+        folds=[
+            {"heldout_battery":"LI","selected_model":"diffusion_tail",
+             "outer_relative_MAE_gain":-0.5176},
+            {"heldout_battery":"AR","selected_model":"diffusion_tail",
+             "outer_relative_MAE_gain":-0.0862},
+            {"heldout_battery":"APR","selected_model":"diffusion_tail",
+             "outer_relative_MAE_gain":0.1347}
+        ]
+        risk=posthoc_safety(folds)
+        self.assertEqual(risk["worst_device"],"LI")
+        self.assertAlmostEqual(risk["worst_device_relative_MAE_increase_pct"],51.76)
+        self.assertEqual(len(risk["devices_with_worse_MAE_than_selected_baseline"]),2)
+        self.assertTrue(risk["descriptive_regression_alert_over_10_pct"])
+        self.assertFalse(risk["was_preregistered_before_initial_public_result"])
+        self.assertFalse(risk["is_approval_metric"])
+        self.assertTrue(risk["independent_prospective_evidence_still_required"])
 
     def test_source_unavailable_scores_reject_instead_of_imputing(self):
         scores=score_data()
