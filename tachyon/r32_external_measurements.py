@@ -29,7 +29,7 @@ SOURCES={
  "OFFENBURG_BATTERY_OCV_2024":(
   "BATTERY_SOC_VOLTAGE_CURVE",
   "https://zenodo.org/records/13142016/files/OCV_vs_SOC_curve_fresh_cell.csv?download=1",
-  "6bb24aed4d06fb4df88de4a3f6a37f3",200000,1001,
+  "6bb24aed4d06fb4df88de4a3f6a37f3d",200000,1001,
  )}
 # Single official, exact-path fallback for the small Offenburg CSV if the
 # public web download serves the wrong body (e.g. HTML). Not used on HTTP429.
