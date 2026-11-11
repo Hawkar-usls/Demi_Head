@@ -1,0 +1,99 @@
+name: Tachyon Proof-of-Observation + AIFC eligibility
+on:
+  pull_request:
+    paths:
+      - 'tachyon/observation_aifc_gate.py'
+      - 'tests/test_tachyon_observation_aifc_gate.py'
+      - 'docs/TACHYON_IO_AIFC_GATE.md'
+      - '.github/workflows/tachyon-io-aifc-gate.yml'
+      - 'data/tachyon/ocean/real_009b_early_witness_20261112.json'
+  push:
+    branches: [main]
+    paths:
+      - 'tachyon/observation_aifc_gate.py'
+      - 'tests/test_tachyon_observation_aifc_gate.py'
+      - 'docs/TACHYON_IO_AIFC_GATE.md'
+      - '.github/workflows/tachyon-io-aifc-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tachyon-io-aifc-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ github.token }}
+      IO_SHA: '41b1c9b6af6629a551d2814aa69c5dfcac042620'
+      AIFC_SHA: '86bf957815911658edad330d5948e1bea2ea59b1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout bounded Tachyon source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Exact Proof-of-Observation policy
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-io-public
+          ref: 41b1c9b6af6629a551d2814aa69c5dfcac042620
+          path: external/io
+          persist-credentials: false
+          sparse-checkout: |
+            docs/proof-of-observation-origin-record.json
+      - name: Exact AIFC evidence-grade policy
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/AIFC
+          ref: 86bf957815911658edad330d5948e1bea2ea59b1
+          path: external/aifc
+          persist-credentials: false
+          sparse-checkout: |
+            docs/EVIDENCE_GRADES.md
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check source pins and adversarial safety invariants
+        run: |
+          set -euo pipefail
+          test "$(git -C external/io rev-parse HEAD)" = "$IO_SHA"
+          test "$(git -C external/aifc rev-parse HEAD)" = "$AIFC_SHA"
+          python -m unittest discover -s tests -p 'test_tachyon_observation_aifc_gate.py' -v
+      - name: Recheck original Ocean 009B witness live (read-only)
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/tachyon-io-aifc
+          gh api 'repos/Hawkar-usls/Janus-Demiurge/actions/runs/42878578752' > artifacts/tachyon-io-aifc/run.json
+          gh api 'repos/Hawkar-usls/Janus-Demiurge/actions/runs/42878578752/artifacts?per_page=100' > artifacts/tachyon-io-aifc/artifacts.json
+      - name: Emit evidence eligibility JSON (NOT AIFC scientific admission)
+        run: |
+          set -euo pipefail
+          python -m tachyon.observation_aifc_gate \
+            --witness data/tachyon/ocean/real_009b_early_witness_20261112.json \
+            --io-origin external/io/docs/proof-of-observation-origin-record.json \
+            --aifc-grades external/aifc/docs/EVIDENCE_GRADES.md \
+            --live-run artifacts/tachyon-io-aifc/run.json \
+            --live-artifacts artifacts/tachyon-io-aifc/artifacts.json \
+            --out artifacts/tachyon-io-aifc/eligibility.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('artifacts/tachyon-io-aifc/eligibility.json').read_text())
+          assert r['proof_of_observation']['live_github_artifact_binding_pass']
+          assert r['aifc']['grade']=='NOT_ADMITTED'
+          assert r['topa']['claim_status']=='HYPOTHESIS_ONLY'
+          assert r['eligible_as_gradient_label'] is False
+          assert r['authority_delta']==0
+          print('IO_AIFC_ELIGIBILITY_GATE_PASS')
+          PY
+      - name: Archive immutable-source-bound receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-io-aifc-gate-receipt
+          path: artifacts/tachyon-io-aifc/eligibility.json
+          retention-days: 30
+          if-no-files-found: warn
