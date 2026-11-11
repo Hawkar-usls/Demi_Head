@@ -1,0 +1,29 @@
+{
+  "schema": "janus.tachyon.r2b.external_archive_receipt.v1",
+  "project": "TACHYON-R2B",
+  "archive_status": "GOOGLE_DRIVE_UPLOADED_METADATA_VERIFIED_GITHUB_SOURCE_HASH_VERIFIED",
+  "archiving_date_utc": "2026-11-11",
+  "original_actions_run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/43015290827",
+  "original_artifact_id": 13852457218,
+  "original_artifact_expires_utc": "2026-11-25T11:51:14Z",
+  "original_artifact_sha256": "aa15e1d3794806f69b274e6cf6a8763e9761d6e8f21ad8ba0f1503c199966a0d",
+  "checkpoint_sha256": "3adbf7b11a0f4275ab565ea833c7d415fc0e6727ddddf48e5a27f04346350f9c",
+  "contains": [
+    "candidate/r2b_candidate.pt",
+    "candidate/training_receipt.json",
+    "evaluation.json"
+  ],
+  "archive": {
+    "service": "Google Drive",
+    "folder": "JANUS Research",
+    "folder_id": "1LbZEx3XHdLa7y6oGi0dFXL219OJ_omvb",
+    "file_id": "1dsfinukmbf7e4ZQptZDpbbAzfD5SYYFK",
+    "url": "https://drive.google.com/file/d/1dsfinukmbf7e4ZQptZDpbbAzfD5SYYFK/view?usp=drivesdk",
+    "confirmed_size_bytes": 642391,
+    "mime_type": "application/zip"
+  },
+  "evidence_scope": "Source ZIP hash and internal checkpoint hash checked against original GitHub artifact and CI logs before upload; Drive metadata confirms uploaded ZIP size. Remote downloaded content has not been rehashed.",
+  "scientific_admission": "HOLD",
+  "model_deployed": false,
+  "production_changed": false
+}
