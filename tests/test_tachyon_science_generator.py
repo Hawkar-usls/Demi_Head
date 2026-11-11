@@ -17,6 +17,8 @@ HOLDOUT=Path("data/tachyon/r2b/clock_explanation_holdout.json")
 class R2B(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if not VIDEO.is_file():
+            raise unittest.SkipTest("R2B source-built corpus is available only in its dedicated workflow")
         cls.video,_=load_json(VIDEO)
         cls.papers,_=load_json(PAPERS)
         cls.held,_=load_json(HOLDOUT)
