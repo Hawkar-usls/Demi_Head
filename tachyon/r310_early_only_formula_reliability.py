@@ -309,6 +309,8 @@ def heldout_audit(rows,heldout):
             scored.append({
                 "trace":row["column"],"action":action,
                 "risk_proxy":None,
+                "abstention_reason":f.get("abstention_reason",
+                                       "R310_UNKNOWN_REFUSAL"),
                 "baseline_MAE_V":None,"selected_MAE_V":None
             })
             continue
@@ -365,6 +367,15 @@ def run(source_manifest_path,config_path,outdir,fetch=official_fetch):
     selected=sum(chosen_battery[b] for b in comparable)/len(comparable)
     gain=(base-selected)/base
     regressions=[r for r in folds if r["regression_over_10pct"]]
+    refusals=defaultdict(int)
+    candidate_invalid_with_baseline=0
+    for fold in folds:
+        for trace in fold["per_trace_action_audit"]:
+            if trace["action"]=="ABSTAIN":
+                refusals[trace.get("abstention_reason","R310_UNKNOWN_REFUSAL")]+=1
+    for row in rows:
+        if row["features"]["status"]=="CANDIDATE_UNSAFE_BASELINE_AVAILABLE":
+            candidate_invalid_with_baseline+=1
     summary={
        "schema":OUT_SCHEMA,
        "source_doi":source["original_dataset_doi"],
@@ -382,6 +393,9 @@ def run(source_manifest_path,config_path,outdir,fetch=official_fetch):
        "candidate_accepted_traces_total":sum(x["num_candidate_used"] for x in folds),
        "strong_baseline_fallback_traces_total":sum(x["num_baseline_fallback"] for x in folds),
        "abstentions_total":sum(x["num_abstentions"] for x in folds),
+       "abstention_reasons_aggregated":dict(sorted(refusals.items())),
+       "invalid_candidate_with_valid_2RC_baseline_traces":
+           candidate_invalid_with_baseline,
        "equal_device_baseline_MAE_V":base,
        "equal_device_selective_MAE_V":selected,
        "equal_device_selective_relative_gain":gain,
