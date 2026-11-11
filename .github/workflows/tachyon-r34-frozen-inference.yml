@@ -117,6 +117,75 @@ jobs:
           assert meta['production_promotion'] is False
           print('R34_REAL_CHECKPOINT_CANARY_EXECUTION_PASS 2 FORWARDS + 2 REFUSALS')
           PY
+      - name: Exercise FULL 60-case synthetic private seal to real inference to local score
+        run: |
+          set -euo pipefail
+          CKPT="$(find frozen -name r31b_math_neural_research_only.pt -print -quit)"
+          test -n "$CKPT"
+          TEMP_DIR="$RUNNER_TEMP/r34_synthetic_custody"
+          mkdir -p "$TEMP_DIR"
+          export TEMP_DIR
+          python - <<'PY'
+          import json,os,secrets
+          from pathlib import Path
+          from tachyon.r33_external_custodian import CHALLENGE_SCHEMA
+          d=Path(os.environ['TEMP_DIR'])
+          rows=[]
+          for category in ('NUMERIC','CONCEPTUAL','OOD'):
+              for i in range(20):
+                  case_id=category.lower()+'_'+str(i).zfill(3)
+                  gold=({'kind':'numeric','value':float(i+1),'unit':'m/s'}
+                        if category=='NUMERIC' else
+                        {'kind':'conceptual','rubric':'Externally review the scientific source and dimensional units.'}
+                        if category=='CONCEPTUAL' else {'kind':'abstain'})
+                  item={'case_id':case_id,'category':category,
+                        'family':'NOVEL_SYNTHETIC_EXTERNAL_'+category,
+                        'question':'Synthetic non-training scientific example with no real new-family model solution.',
+                        'gold':gold}
+                  if category!='OOD':
+                      item['source_url']='https://example.org/synthetic-no-science'
+                  rows.append(item)
+          (d/'private_pack.json').write_text(json.dumps({
+              'schema':CHALLENGE_SCHEMA,'items':rows}))
+          (d/'private_salt.hex').write_text(secrets.token_hex(32)+'\n')
+          PY
+          python -m tachyon.r33_external_custodian seal \
+            --private "$TEMP_DIR/private_pack.json" \
+            --salt-file "$TEMP_DIR/private_salt.hex" \
+            --frozen-model "$CKPT" \
+            --public-commitment-out "$TEMP_DIR/sealed.json" \
+            --questions-only-out "$TEMP_DIR/questions_only.json"
+          python -m tachyon.r34_frozen_inference \
+            --questions-only "$TEMP_DIR/questions_only.json" \
+            --frozen-model "$CKPT" \
+            --predictions-out "$TEMP_DIR/frozen_answers.json"
+          python -m tachyon.r33_external_custodian score \
+            --private "$TEMP_DIR/private_pack.json" \
+            --salt-file "$TEMP_DIR/private_salt.hex" \
+            --frozen-model "$CKPT" \
+            --sealed "$TEMP_DIR/sealed.json" \
+            --predictions "$TEMP_DIR/frozen_answers.json" \
+            --public-summary-out "$TEMP_DIR/local_private_score.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ['TEMP_DIR'])
+          summary=json.loads((d/'local_private_score.json').read_text())
+          pred=json.loads((d/'frozen_answers.json').read_text())
+          assert summary['challenge_case_count']==60
+          assert summary['numeric_scored_count']==20
+          assert summary['numeric_correct_count']==0
+          assert summary['ood_scored_count']==20
+          assert summary['ood_correct_abstention_count']==20
+          assert summary['conceptual_pending_independent_manual_review']==20
+          assert pred['research_execution_metadata']['actual_neural_forward_calls']==0
+          assert summary['scientific_admission']=='HOLD'
+          assert summary['production_promotion'] is False
+          print('R34_FULL_60_CASE_SYNTHETIC_SEAL_INFERENCE_SCORE_PASS')
+          print('R34_NEW_FAMILY_NUMERIC_ACCURACY_SYNTHETIC', '0/20')
+          print('R34_NO_EXTERNAL_SCIENTIFIC_CUSTODIAN_USED')
+          PY
+          rm -rf -- "$TEMP_DIR"
       - uses: actions/upload-artifact@v4
         with:
           name: tachyon-r34-public-canary-only-no-custodian-gold
