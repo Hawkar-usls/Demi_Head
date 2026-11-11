@@ -1,0 +1,80 @@
+name: Tachyon R2A media science instruction corpus (research only)
+on:
+  pull_request:
+    paths:
+      - 'tachyon/video_science_corpus.py'
+      - 'tests/test_tachyon_video_science_corpus.py'
+      - 'data/tachyon/explanation_corpus_catalog_v1.json'
+      - 'docs/TACHYON_R2A_VIDEO_SCIENCE_CORPUS.md'
+      - '.github/workflows/tachyon-r2a-video-science-corpus.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r2a-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  science-intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    env:
+      PINNED_META_COMMIT: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout staged Tachyon code and unchanged laboratory holdout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Read exact audited science and caption-index snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+          path: external/registry
+          persist-credentials: false
+          sparse-checkout: |
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check immutable source, old classifier and lab holdout identities
+        run: |
+          set -euo pipefail
+          test "$(git -C external/registry rev-parse HEAD)" = "$PINNED_META_COMMIT"
+          echo 'e466ec34a4dbcc99291de0c04335f8b9b473ee13ae7a93eeefedb207e52ba97c  data/tachyon/explanation_cards_v1.json' | sha256sum --check -
+          echo 'a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f  data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv' | sha256sum --check -
+          python -m unittest discover -s tests -p test_tachyon_video_science_corpus.py -v
+      - name: Prepare 12 training examples from curated secondary science ONLY
+        run: |
+          set -euo pipefail
+          python -m tachyon.video_science_corpus \
+            --science external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json \
+            --captions-index external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json \
+            --registry-commit "$PINNED_META_COMMIT" \
+            --lab-holdout-file data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv \
+            --out artifacts/tachyon-r2a/instruction-corpus.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('artifacts/tachyon-r2a/instruction-corpus.json').read_text())
+          catalog=json.loads(Path('data/tachyon/explanation_corpus_catalog_v1.json').read_text())
+          assert r['count']==12 and len(r['examples'])==12
+          assert r['source']['commit_sha']==catalog['datasets'][1]['source_commit']
+          assert r['lab_holdout']['lab_file_integrity_checked']
+          assert not r['lab_holdout']['lab_data_in_training_examples']
+          assert not r['rights']['may_modify_existing_model_weights']
+          assert not r['rights']['may_train_on_independent_lab_measurements']
+          assert not r['split_policy']['out_of_domain_generalization_measured']
+          assert r['benchmark']['new_independent_lab_accuracy'] is None
+          assert len({x['source_family_id'] for x in r['examples']})==1
+          assert all(x['split']=='TRAIN' for x in r['examples'])
+          print('TACHYON_R2A_CORPUS_SOURCE_PINNED_LAB_HOLDOUT_NOT_TRAINED_PASS')
+          PY
+      - name: Retain only the explanatory candidate corpus (no model weights)
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r2a-audited-explanation-training-corpus
+          path: artifacts/tachyon-r2a/instruction-corpus.json
+          retention-days: 14
+          if-no-files-found: error
