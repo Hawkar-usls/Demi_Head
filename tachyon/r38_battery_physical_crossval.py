@@ -247,19 +247,8 @@ def score_public_lobo(group_maes):
         })
     return folds
 
-def run(source_manifest_path,config_path,custodian_path,outdir,fetch=official_fetch):
-    conf=verify_config(json.loads(Path(config_path).read_text()))
-    cust=verify_custodian_slot(json.loads(Path(custodian_path).read_text()))
-    original=json.loads(Path(source_manifest_path).read_text())
-    manifest_check(original)
-    output=Path(outdir)
-    need(not output.exists() or not any(output.iterdir()),
-         "R38_APPEND_ONLY_NO_OVERWRITE")
-    rows,receipts=source_data(original,fetch)
-    scores=group_scores(rows)
-    folds=score_public_lobo(scores)
-    selected_challenger=[f for f in folds if f["challenger_selected"]]
-    challenger_success=[f for f in folds if f["candidate_challenger_beats_baseline"]]
+def posthoc_safety(folds):
+    """Conservative annotation ONLY: never rewrite original preregistration."""
     # Posthoc safety annotation added AFTER reviewing the FIRST public R3.8
     # run. This is explicitly NOT retroactively a preregistered hypothesis test.
     regressions=[
@@ -284,6 +273,22 @@ def run(source_manifest_path,config_path,custodian_path,outdir,fetch=official_fe
       "descriptive_regression_alert_over_10_pct":worst_regression>10.,
       "independent_prospective_evidence_still_required":True,
     }
+    return posthoc_safety_audit
+
+def run(source_manifest_path,config_path,custodian_path,outdir,fetch=official_fetch):
+    conf=verify_config(json.loads(Path(config_path).read_text()))
+    cust=verify_custodian_slot(json.loads(Path(custodian_path).read_text()))
+    original=json.loads(Path(source_manifest_path).read_text())
+    manifest_check(original)
+    output=Path(outdir)
+    need(not output.exists() or not any(output.iterdir()),
+         "R38_APPEND_ONLY_NO_OVERWRITE")
+    rows,receipts=source_data(original,fetch)
+    scores=group_scores(rows)
+    folds=score_public_lobo(scores)
+    selected_challenger=[f for f in folds if f["challenger_selected"]]
+    challenger_success=[f for f in folds if f["candidate_challenger_beats_baseline"]]
+    posthoc_safety_audit=posthoc_safety(folds)
     # No independently sealed new source: ALWAYS HOLD despite any LOBO gain.
     summary={
       "schema":RESULT,
