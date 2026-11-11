@@ -1,0 +1,91 @@
+name: TACHYON R3.5 - typed SI physics research (curated math sandbox only)
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r35_typed_quantities.py'
+      - 'tachyon/r35_typed_neural.py'
+      - 'tests/test_tachyon_r35_typed_quantities.py'
+      - 'data/tachyon/r35/**'
+      - '.github/workflows/tachyon-r35-typed-physics.yml'
+      - 'docs/TACHYON_R35_TYPED_PHYSICS.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r35-typed-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bound-research-calibrated-model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile safety-critical dimension and training modules
+        run: |
+          python -m py_compile tachyon/r35_typed_quantities.py tachyon/r35_typed_neural.py
+      - name: Install CPU-only Torch (pinned, bounded)
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify typed quantity, split and laboratory admission firewalls
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p test_tachyon_r35_typed_quantities.py -v
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          test ! -e data/tachyon/r35/approved_laboratory_gradients.json
+      - name: Train two actual Torch candidates ONLY on textbook derived SI math
+        run: |
+          set -euo pipefail
+          python -m tachyon.r35_typed_neural \
+            --manifest data/tachyon/r35/typed_quantity_sandbox_manifest.json \
+            --output-dir out/r35
+      - name: Verify SHA of both real model checkpoints and strong exact baseline
+        run: |
+          python - <<'PY'
+          import hashlib,json,math
+          from pathlib import Path
+          from tachyon.r35_typed_quantities import digest
+          p=Path('out/r35/r35_typed_physics_public_development_result.json')
+          o=json.loads(p.read_text())
+          assert o['receipt_sha256']==digest({k:v for k,v in o.items() if k!='receipt_sha256'})
+          assert o['split_counts']=={'train':48,'calibration':16,'public_dev':30}
+          assert o['public_dev_trained_family_cases']==24
+          assert o['public_dev_withheld_new_family_cases']==6
+          assert o['new_family_numeric_predictions']==0
+          assert o['new_family_abstentions']==6
+          assert o['new_family_generalization_proven'] is False
+          assert o['measured_lab_rows_used_as_gradient_labels'] is False
+          assert o['exact_formula_baseline_error']==0.0
+          assert o['scientific_admission']=='HOLD'
+          assert o['production_promotion'] is False
+          assert len(o['candidate_checkpoints'])==2
+          for candidate in o['candidate_checkpoints']:
+              path=Path(candidate['checkpoint_path'])
+              assert path.exists()
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==candidate['checkpoint_sha256']
+          print('R35_ACTUAL_TYPED_TORCH_CANDIDATES_PASS 2')
+          print('R35_PUBLIC_DEV_PER_FAMILY_SI_MAE',json.dumps(o['per_family_SI_metrics'],sort_keys=True))
+          print('R35_UNTRAINED_POWER_FAMILY_ABSTAIN_6_OF_6',o['new_family_abstentions'])
+          print('R35_EXACT_FORMULA_BASELINE_ZERO_ERROR')
+          print('R35_REAL_LAB_GRADIENT_NOT_AUTHORIZED; SCIENTIFIC_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r35-typed-math-two-real-cpu-weights-not-accepted-science
+          path: out/r35/
+          retention-days: 30
+          if-no-files-found: error
