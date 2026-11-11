@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 from pathlib import Path
 
 from tachyon.science_generator import require, sha, ScienceHold
@@ -46,8 +47,8 @@ def load_cards(path):
 def hybrid_explain(question, cards):
     require(isinstance(question,str) and 10<=len(question)<=1000,
             "R2E_QUESTION_LIMIT")
-    speed=SPEED.search(question)
-    rho=RHO.search(question)
+    speed=bool(re.search(r"v\s*/\s*c\s*=",question,re.I))
+    rho=bool(re.search(r"ρ\s*00\s*=",question,re.I))
     base={
         "question":question,
         "model":"TACHYON_R2E_RULE_AND_RETRIEVAL_RESEARCH_ONLY",
