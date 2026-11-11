@@ -56,8 +56,21 @@ def clean(text,limit=260):
     value=re.sub(r"\s+"," ",value).strip()
     return value[:limit]
 
+def modest_russian_stem(word):
+    """Tiny surface normalization for Cyrillic case endings; NOT semantic NLU."""
+    w=word.casefold().replace("ё","е")
+    if re.fullmatch(r"[а-я]+",w) and len(w)>=6:
+        for ending in ("иями","ями","ами","ого","ему","ыми","ими",
+                       "иях","ах","ях","ов","ев","ей","ия","ий",
+                       "ые","ие","ой","ая","ое","ом","ем","ым","им",
+                       "а","я","ы","и","е","у","ю"):
+            if w.endswith(ending) and len(w)-len(ending)>=4:
+                return w[:-len(ending)]
+    return w
+
 def query_terms(text):
-    return set(w.lower() for w in WORD.findall(text) if w.lower() not in STOP)
+    return set(modest_russian_stem(w) for w in WORD.findall(text)
+               if w.casefold().replace("ё","е") not in STOP)
 
 def safe_public_query(q):
     require(isinstance(q,str) and 10<=len(q)<=300,"PUBLIC_QUERY_LENGTH")
