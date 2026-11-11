@@ -44,8 +44,8 @@ class R2G(unittest.TestCase):
         if endpoint==BRAVE_ENDPOINT:
             self.assertEqual(headers["X-Subscription-Token"],"SYNTHETIC-TEST-ONLY")
             return {"web":{"results":[
-                {"title":"Match results Real Madrid La Liga","url":"https://example.org/match",
-                 "description":"A search result that is not independently verified."},
+                {"title":"Реал Мадрид Ла Лига: результат матча","url":"https://example.org/match",
+                 "description":"Реал Мадрид: неподтверждённый результат футбольного матча."},
                 {"title":"Private endpoint","url":"https://127.0.0.1/secrets",
                  "description":"Bad"}
             ]}}
