@@ -1,0 +1,3 @@
+# Optional Tachyon research-only CPU training dependency.
+# GitHub Action installs from the CPU-only PyTorch index.
+torch==2.5.1

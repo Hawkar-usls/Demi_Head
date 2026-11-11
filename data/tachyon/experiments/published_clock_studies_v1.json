@@ -1,0 +1,66 @@
+{
+  "schema": "janus.tachyon.published_clock_studies.v1",
+  "frozen_date_utc": "2026-11-11",
+  "origin": "human-curated literature summaries; NOT raw lab time series",
+  "role": "independent_outside-source_check_not_neural_training",
+  "training_eligible": false,
+  "all_records_heldout_from_model_training": true,
+  "independent_reproduction_verified": false,
+  "studies": [
+    {
+      "id": "CHOU_NIST_2010",
+      "laboratory": "NIST Boulder, Chou et al.",
+      "published": "2010-09-24",
+      "primary_url": "https://doi.org/10.1126/science.1192720",
+      "institution_url": "https://www.nist.gov/news-events/news/2010/09/nist-clock-experiment-demonstrates-your-head-older-your-feet",
+      "type": "gravitational_redshift",
+      "height_m": 0.33,
+      "reported_direction": "higher_clock_runs_faster",
+      "measured_fractional_shift": null,
+      "measured_sigma": null,
+      "raw_time_series_available_in_this_package": false,
+      "status": "SOURCE_SUMMARY_DIRECTION_ONLY_NOT_NUMERICALLY_SCORED"
+    },
+    {
+      "id": "TOKYO_SKYTREE_2020",
+      "laboratory": "University of Tokyo / RIKEN, Takamoto et al.",
+      "published": "2020-04-07",
+      "primary_url": "https://doi.org/10.1038/s41566-020-0619-8",
+      "institution_url": "https://www.t.u-tokyo.ac.jp/en/press/foee/press/setnws_202004071409047419337571.html",
+      "secondary_numeric_source_url": "https://doi.org/10.1103/PhysRevD.102.084064",
+      "type": "gravitational_redshift",
+      "height_m": 452.596,
+      "height_sigma_m": 0.013,
+      "gravity_m_s2": 9.797248,
+      "gravity_sigma_m_s2": 0.000024,
+      "measurement_units": "10^-18 fractional frequency shift; upper minus lower clock",
+      "measured_fractional_shift_in_1e18": 49337.8,
+      "measured_sigma_in_1e18": 4.3,
+      "geodetic_baseline_fractional_shift_in_1e18": 49337.1,
+      "geodetic_baseline_sigma_in_1e18": 1.4,
+      "raw_time_series_available_in_this_package": false,
+      "status": "PUBLISHED_AGGREGATE_NUMERICALLY_SCORABLE"
+    },
+    {
+      "id": "BOTHWELL_JILA_2022",
+      "laboratory": "JILA / NIST / University of Colorado Boulder, Bothwell et al.",
+      "published": "2022-02-16",
+      "primary_url": "https://doi.org/10.1038/s41586-021-04349-7",
+      "institution_url": "https://www.nist.gov/news-events/news/2022/02/jila-atomic-clocks-measure-einsteins-general-relativity-millimeter-scale",
+      "type": "gravitational_redshift",
+      "height_m_approx": 0.001,
+      "reported_shift_order_magnitude": "10^-19",
+      "measured_fractional_shift": null,
+      "measured_sigma": null,
+      "raw_time_series_available_in_this_package": false,
+      "status": "SOURCE_SUMMARY_ORDER_OF_MAGNITUDE_ONLY_NOT_NUMERICALLY_SCORED"
+    }
+  ],
+  "scientific_limits": [
+    "ONE_SCORED_PUBLICATION_AGGREGATE_IS_NOT_AN_INDEPENDENT_RAW_DATA_REPLICATION",
+    "THE_ANALYTIC_EINSTEIN_GRAVITATIONAL_BASELINE_HAS_NO_NEURAL_TACHYON_ADVANTAGE",
+    "NO_RETROCAUSAL_SIGNAL_OR_NEW_PHYSICAL_LAW_IS_ESTABLISHED",
+    "MODEL_NOT_TRAINED_ON_EVALUATION_PUBLICATIONS",
+    "NO_PRODUCTION_ADMISSION"
+  ]
+}

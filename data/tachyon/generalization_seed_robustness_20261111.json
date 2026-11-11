@@ -1,0 +1,64 @@
+{
+  "schema": "janus.demihead.tachyon.seed_robustness.v1",
+  "purpose": "repeat_fixed_predeclared_protocol_without_champion_selection",
+  "source_sha256": "44c1030da28ecea4ca1fc6891dea34a63445f9a981e2387b1e4bf4d189f43409",
+  "weights_are_independent_per_seed": true,
+  "all_synthetic": true,
+  "repetitions": [
+    {
+      "seed": 20261112,
+      "epoch": 15,
+      "gate_passed": true,
+      "iid_reversal_accuracy": 0.9976,
+      "new_beta_band_reversal_accuracy": 0.961,
+      "order_boundary_reversal_accuracy": 1.0,
+      "lightcone_boundary_spacelike_accuracy": 0.998,
+      "source_sweep_correct": 6
+    },
+    {
+      "seed": 20261113,
+      "epoch": 17,
+      "gate_passed": true,
+      "iid_reversal_accuracy": 0.9936,
+      "new_beta_band_reversal_accuracy": 0.992,
+      "order_boundary_reversal_accuracy": 0.997333,
+      "lightcone_boundary_spacelike_accuracy": 0.858667,
+      "source_sweep_correct": 6
+    },
+    {
+      "seed": 20261114,
+      "epoch": 18,
+      "gate_passed": true,
+      "iid_reversal_accuracy": 0.996,
+      "new_beta_band_reversal_accuracy": 0.992,
+      "order_boundary_reversal_accuracy": 0.998,
+      "lightcone_boundary_spacelike_accuracy": 1.0,
+      "source_sweep_correct": 5
+    }
+  ],
+  "aggregate": {
+    "iid_reversal_accuracy": {
+      "mean": 0.995733,
+      "min": 0.9936,
+      "max": 0.9976
+    },
+    "new_beta_band_reversal_accuracy": {
+      "mean": 0.981667,
+      "min": 0.961,
+      "max": 0.992
+    },
+    "order_boundary_reversal_accuracy": {
+      "mean": 0.998444,
+      "min": 0.997333,
+      "max": 1.0
+    },
+    "lightcone_boundary_spacelike_accuracy": {
+      "mean": 0.952222,
+      "min": 0.858667,
+      "max": 1.0
+    }
+  },
+  "all_gates_passed": true,
+  "weights_not_deployed": true,
+  "independent_external_validation": false
+}

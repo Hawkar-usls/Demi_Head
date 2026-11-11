@@ -1,0 +1,111 @@
+{
+  "schema": "janus.demihead.tachyon.semantic_mechanisms.v1",
+  "status": "HAND_CURATED_SYNTHETIC_EXPLANATION_TEMPLATES",
+  "domain": "relativity_and_time_information",
+  "neural_training_uses_real_lab_measurements": false,
+  "splits": "templates indices 0..5 train; 6..7 tune; 8..9 frozen test",
+  "mechanisms": {
+    "gravitational_redshift": {
+      "explanation": "A clock at higher gravitational potential ticks faster relative to a lower clock. The weak-field fractional difference is approximately g times height divided by c squared.",
+      "counterexample": "If a reliably measured height separation produces no redshift after calibration, the model would be contradicted.",
+      "questions": [
+        "Why does a higher atomic clock gain time against a lower clock?",
+        "Explain clock frequency drift due to a change in altitude.",
+        "Which mechanism causes time dilation in a gravitational potential?",
+        "How does gravity affect two optical clocks placed at different heights?",
+        "Clock near the ground lags behind the one up a tower; why?",
+        "What causes the gravitational redshift between two elevations?",
+        "Why is the upper clock quicker in a tower experiment?",
+        "Как гравитация меняет ход часов на разных высотах?",
+        "Why do timekeepers on the roof and basement disagree?",
+        "What connects geopotential difference to atomic tick rate?"
+      ]
+    },
+    "kinematic_time_dilation": {
+      "explanation": "Relative motion changes proper time along worldlines. In flat spacetime a moving ideal clock accumulates less proper time over a specified round trip than the inertial reference.",
+      "counterexample": "If calibrated moving clocks fail the speed-dependent Lorentz prediction, the interpretation must change.",
+      "questions": [
+        "Explain why a moving optical clock ticks slower than a resting clock.",
+        "Why does a fast astronaut age less during a round trip?",
+        "What is the reason for velocity-related time dilation?",
+        "How does the Lorentz factor change elapsed proper time?",
+        "Twin paradox uses different worldlines; what explains aging gap?",
+        "Why does motion at relativistic velocity change clock rates?",
+        "Explain the time shift caused by speed not height.",
+        "Почему движущиеся часы отстают на обратном пути?",
+        "How does acceleration and return trip change time accumulated?",
+        "What happens to elapsed time for a fast space traveler?"
+      ]
+    },
+    "spacelike_coordinate_order": {
+      "explanation": "For spacelike separated events different inertial observers can assign different coordinate ordering. This does not furnish a controllable faster-than-light signal or a causal loop.",
+      "counterexample": "A protocol delivering freely chosen information into the receiver’s causal past would exceed coordinate relabeling.",
+      "questions": [
+        "Why can two inertial frames disagree on which spacelike event happened first?",
+        "Explain coordinate order reversal without backward physical signalling.",
+        "How does Lorentz transformation reorder events outside the light cone?",
+        "Why is simultaneity relative for spacelike separated points?",
+        "Can a negative transformed time interval imply retrocausal communication?",
+        "Explain order reversal in a hypothetical superluminal diagram.",
+        "Which spacetime separation permits different event ordering?",
+        "Почему разные системы отсчёта меняют порядок удалённых событий?",
+        "If observers disagree on first event, has causality been violated?",
+        "What is frame-dependent sequencing for separated observations?"
+      ]
+    },
+    "entropy_arrow": {
+      "explanation": "Macroscopic irreversibility emerges statistically from low-entropy boundary conditions and dynamics. An entropy gradient does not by itself prove that memories are erased by hypothetical time travel.",
+      "counterexample": "A reproducible process contradicting the assumed statistical dynamics or boundary conditions would require a revised explanation.",
+      "questions": [
+        "Why does entropy give a preferred thermodynamic arrow of time?",
+        "Explain why mixing is irreversible macroscopically but microscopic laws can be reversible.",
+        "What does the second law actually say about temporal direction?",
+        "Why does a broken egg not spontaneously reassemble?",
+        "How are memory records linked to thermodynamic irreversibility?",
+        "What role does a low entropy past play in time direction?",
+        "Can entropy alone rule out every mathematical time machine?",
+        "Как энтропия связана со стрелой времени и памятью?",
+        "Why is the arrow of time statistical rather than a simple force?",
+        "Why do thermal processes typically run one way?"
+      ]
+    },
+    "warp_metric": {
+      "explanation": "The Alcubierre metric is a formal general-relativistic geometry. Its superluminal coordinate motion is not an experimentally realized spacecraft and faces energy-condition and stability problems.",
+      "counterexample": "A physical, controllable bubble with quantified stress-energy and measured propagation would be new evidence, unlike a mathematical metric.",
+      "questions": [
+        "How can a warp bubble move coordinates without locally outrunning light?",
+        "Explain the role of exotic energy in Alcubierre spacetime.",
+        "What does a warp drive solution of Einstein equations establish?",
+        "Why is a theoretical warp metric not a tested engine?",
+        "How do energy conditions constrain spacetime bubbles?",
+        "What can numerical relativity say about a hypothetical warp geometry?",
+        "Are negative energy requirements a problem for warp proposals?",
+        "Почему метрика Алькубьерре пока не означает реальный двигатель?",
+        "Why must quantum stability be checked in a warp bubble?",
+        "What is the difference between metric solution and engineering device?"
+      ]
+    },
+    "latency_artifact": {
+      "explanation": "Apparent negative lag can result from asynchronous clocks, postselection, leaked future features, resampling or data processing; source timestamps and blinded preregistered splits are needed.",
+      "counterexample": "A prediction timestamp cryptographically frozen before a later independent random choice, with no leakage and replicated controls, could reject identified artifacts.",
+      "questions": [
+        "Why does an apparently early detector response need clock synchronization checks?",
+        "Explain false prediction success caused by future feature leakage.",
+        "What makes postselection look like a signal sent backward in time?",
+        "How do network delays create apparent out-of-order messages?",
+        "Why freeze forecasts before an independent random outcome?",
+        "How could timestamp drift mimic retrocausal detection?",
+        "Why are blind controls necessary in future-label experiments?",
+        "Как ошибка синхронизации создаёт видимость сигнала из будущего?",
+        "What causes negative latency in digital signal processing?",
+        "Why does a noncausal smoothing filter use data from later samples?"
+      ]
+    }
+  },
+  "limitations": [
+    "CLASSSIFYING_EXPLANATION_TOPIC_IS_NOT_FREEFORM_SCIENTIFIC_REASONING",
+    "TRAIN_AND_TEST_TEMPLATES_SHARE_CONCEPT_FAMILIES",
+    "NO_EXTERNAL_LAB_VALIDATION",
+    "WORDING_TRANSFER_IS_NOT_NEW_PHYSICS"
+  ]
+}
