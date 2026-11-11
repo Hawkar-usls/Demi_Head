@@ -1,0 +1,85 @@
+{
+  "schema": "janus.tachyon.r39.external_new_device_control_contract.v1",
+  "id": "TACHYON-R39-NEW-BATTERY-EXTERNAL-CUSTODIAN-2026-11-11",
+  "preregistered_date": "2026-11-11",
+  "objective": "Prospective new-device 4h to 24h voltage relaxation. Freeze R3.8 candidate before private future experimental values are read.",
+  "frozen": {
+    "candidate_model": "diffusion_tail",
+    "strongest_incumbent": "double_exp",
+    "model_code_git_blob_sha1": {
+      "tachyon/r38_battery_physical_crossval.py": "0f2cbb26e0a827d86b71d8e88798dfe348558697",
+      "tachyon/r37_real_ocv_evaluator.py": "9dd07cc757e6441c0ee94a3bf3fa16c616dbc5ce"
+    },
+    "research_source_pr": "https://github.com/Hawkar-usls/Demi_Head/pull/90",
+    "r38_receipt_sha256": "a3dd9ca1d293bab10dc5fd084600398fc389a44068d65e25c0104f2f39afccdb",
+    "candidate_selection_no_tuning_on_new_data": true
+  },
+  "original_public_cohort": {
+    "source_doi": "10.21227/651q-8v82",
+    "source_name": "24-hour Raw OCV Relaxation Dataset",
+    "prior_device_ids": [
+      "APR",
+      "BSE",
+      "SG",
+      "LG",
+      "OEM",
+      "LI",
+      "AR",
+      "AU"
+    ],
+    "prior_experiment_consumed_by_training_or_model_selection": true,
+    "explicitly_ineligible_as_r39_hidden_holdout": true
+  },
+  "private_data_contract": {
+    "minimum_new_distinct_devices": 12,
+    "maximum_devices": 40,
+    "minimum_distinct_source_studies": 2,
+    "minimum_distinct_battery_chemistries": 2,
+    "expected_per_device_full_trace_minutes": 1441,
+    "early_only_visible_to_model_minutes": 241,
+    "private_future_label_minutes": 1200,
+    "time_units": "hours from disconnection",
+    "voltage_units": "V",
+    "early_window_inclusive": [
+      0,
+      4
+    ],
+    "hidden_window_exclusive_inclusive": [
+      4,
+      24
+    ],
+    "private_device_uids_and_future_voltages_in_GitHub": false,
+    "current_public_r38_data_not_allowed_for_external_holdout": true
+  },
+  "metric_gates": {
+    "loss": "MAE_volts_per_device_on_4_to_24_hours",
+    "aggregation": "equal_device_weight_not_automatic_point_weight",
+    "positive_candidate_mean_relative_gain_min": 0.1,
+    "minimum_win_fraction": 0.8,
+    "minimum_per_source_study_positive_mean_gain": true,
+    "max_worst_device_MAE_regression_fraction": 0.1,
+    "descriptive_robust_uncertainty_check": "device-level paired bootstrap interval, exploratory only",
+    "no_automated_physics_admission": true
+  },
+  "governance": {
+    "actual_external_custodian_connected": false,
+    "private_gold_received": false,
+    "independent_custodian_signature_verified": false,
+    "independent_timestamp_or_registered_protocol_verified": false,
+    "training_on_new_measurements_approved": false,
+    "external_dataset_license_and_sensor_calibration_review_completed": false,
+    "scientific_admission": "HOLD",
+    "automatic_neural_training": false,
+    "automatic_formula_promotion": false,
+    "production_model_changed": false,
+    "run_GitHub_Actions_on_actual_secret_custodian_data": false
+  },
+  "required_external_documents": [
+    "Independently selected new devices and source laboratory/instrument IDs",
+    "Original sensor calibration, measurement uncertainty, units, SOC, rest protocol, and chemistry",
+    "Rights/license consent, provenance and signed independent custody timestamp",
+    "Custodian-held 4h..24h voltage labels with access isolation from candidate runner",
+    "Signed frozen model input and output SHA commitments before answers opened",
+    "Independent expert review with strong paired baseline and per-device degradation record"
+  ]
+}
