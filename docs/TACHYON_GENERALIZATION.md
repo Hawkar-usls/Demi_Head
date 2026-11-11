@@ -59,3 +59,24 @@ Three further complete CPU runs used seeds `20261112`, `20261113`, `20261114`, t
 | Close lightcone boundary | 85.87% | 95.22% | 100.00% |
 
 These repetitions improve confidence in the numerical approximation across random initializations. They do not constitute external experimental validation or proof of any anomalous signal. See `data/tachyon/generalization_seed_robustness_20261111.json` for every score, including the weakest cases. The first seed's weights remain the reference candidate; there is no post-hoc selection of the strongest run.
+
+## Reproducible pinned checkpoint in DemiHead
+
+The reference seed 20261111 checkpoint is stored as compressed base64 text in
+`data/tachyon/weights/tachyon_v02_seed_20261111.pt.gz.b64`, with explicit SHA-256
+and scientific-admission restrictions in `tachyon_v02_manifest.json`. The
+representation is for GitHub UTF-8-file compatibility only. It is decoded and
+checked before being loaded with PyTorch's `weights_only=True`:
+
+```python
+import torch
+from tachyon.load_causal import load_candidate
+model = load_candidate()  # research only; offline
+with torch.no_grad():
+    # q = cΔt/Δx; beta = v/c
+    result = torch.sigmoid(model(torch.tensor([[0.5, 0.8]], dtype=torch.float32)))
+    print(result)  # [coordinate-order-reversal probability, spacelike probability]
+```
+
+Do **not** interpret a model probability as a measurement or an FTL transport
+instruction. For real decisions, use the analytic Lorentz formula directly.
