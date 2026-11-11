@@ -1,5 +1,11 @@
 name: JANUS Tachyon — Beetle + TOPA + published clocks (read-only)
 on:
+  pull_request:
+    paths:
+      - 'tachyon/**'
+      - 'data/tachyon/**'
+      - 'docs/TACHYON_BEETLE_TOPA_CLOCKS.md'
+      - '.github/workflows/tachyon-lab-research.yml'
   workflow_dispatch:
     inputs:
       train_explanations:

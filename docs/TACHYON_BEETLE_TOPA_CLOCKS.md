@@ -6,7 +6,7 @@
 - Validator: `Hawkar-usls/TOPA` `integrations/janus-distributed-ai-swarm/topa_epistemic_router.py` at pinned commit `98a92e8abb4f05c41aae2921f0d956a210a74429` (v1.3 strict science).
 - Consumer: `Hawkar-usls/Demi_Head` `tachyon/research_bridge.py`, read-only.
 
-The manual workflow `.github/workflows/tachyon-lab-research.yml` checks out only the existing context projection, checks its canonical SHA-256, bounds/routes and original capabilities, then constructs **HYPOTHESIS_ONLY** TOPA envelopes. It invokes the *actual* pinned TOPA Python validator without altering it. A provider-free local invocation reports `NOT_CHECKED` rather than pretending TOPA accepted the claim.
+The PR-path-scoped and manually dispatchable workflow `.github/workflows/tachyon-lab-research.yml` checks out only the existing context projection, checks its canonical SHA-256, bounds/routes and original capabilities, then constructs **HYPOTHESIS_ONLY** TOPA envelopes. It invokes the *actual* pinned TOPA Python validator without altering it. A provider-free local invocation reports `NOT_CHECKED` rather than pretending TOPA accepted the claim.
 
 `TRIAGED_TO_RESEARCH_CONTEXT_NOT_VERIFIED != SOURCE_FACT`. Beetle `score` is not a confidence for truth. `hypothesis_routes` are untrusted text: never treated as instructions, gradients, training labels, external effect authority, independent witnesses, or automatic source URLs to fetch. No echo of private receiver data.
 
@@ -38,7 +38,7 @@ python -m unittest discover -s tests -p 'test_tachyon_explanations.py' -v
 python -m tachyon.clock_benchmark --out artifacts/tachyon-lab/clocks.json
 ```
 
-Manual GitHub Action optionally installs Torch on a CPU runner; it has `contents: read`, no cron, no deployment token, no workflow dispatch from fetched text, no automatic mutation of Beetle, TOPA or Meta Registry, and no model promotion. Provider pinned, Beetle projection commit recorded. Failed input or failed test blocks it.
+PR-path-scoped or manually invoked GitHub Action optionally installs Torch on a CPU runner only when the manual input is explicitly enabled; it has `contents: read`, no cron, no deployment token, no workflow dispatch from fetched text, no automatic mutation of Beetle, TOPA or Meta Registry, and no model promotion. Provider pinned, Beetle projection commit recorded. Failed input or failed test blocks it.
 
 ## Limits
 
