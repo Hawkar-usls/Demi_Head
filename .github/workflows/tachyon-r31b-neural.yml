@@ -70,7 +70,7 @@ jobs:
           assert result['receipt_sha256']==sha({k:v for k,v in result.items() if k!='receipt_sha256'})
           assert result['neural_weights_actually_trained'] is True
           assert result['train_gradient_used_public_unseen_labels'] is False
-          assert result['test_first_read_after_checkpoint_written'] is True
+          assert result['test_predictions_scored_after_checkpoint_written'] is True
           assert result['independent_external_blind_assessor'] is False
           assert result['production_model_promotion'] is False
           assert result['scientific_admission']=='HOLD'
