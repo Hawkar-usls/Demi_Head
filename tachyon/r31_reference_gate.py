@@ -156,19 +156,40 @@ def score_guarded(pack, cards):
             "observations":results,
             "negative_observations":neg}
 
+def exported_training_pack(pack):
+    """Separate reviewed-source TRAIN inputs; no dev/calibration examples leaked."""
+    rows=make_rows(pack,"train")
+    return {
+        "schema":"janus.tachyon.r31.formula_router_training_examples.v1",
+        "source_reference_pack_sha256":sha(pack),
+        "split":"train",
+        "examples":rows,
+        "external_blind_labels_used":False,
+        "lab_measurements_used":False,
+        "admission":"EXPERIMENTAL_CURATOR_REVIEW_REQUIRED",
+        "production_authorization":False,
+    }
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--pack",required=True)
     p.add_argument("--cards",required=True)
     p.add_argument("--out",required=True)
+    p.add_argument("--train-out",required=True)
     args=p.parse_args()
     pack=validate_pack(json.loads(Path(args.pack).read_text(encoding="utf8")))
     from tachyon.r2e_hybrid import load_cards
     cards=load_cards(args.cards)
     record=score_guarded(pack,cards)
-    out=Path(args.out)
-    require(not out.exists(),"REFUSE_OVERWRITE_EXPERIMENT")
+    out=Path(args.out);train=Path(args.train_out)
+    require(not out.exists() and not train.exists()
+            and out!=train,"REFUSE_OVERWRITE_EXPERIMENT")
     out.parent.mkdir(parents=True,exist_ok=True)
+    train.parent.mkdir(parents=True,exist_ok=True)
+    train_obj=exported_training_pack(pack)
+    train_obj["receipt_sha256"]=sha(train_obj)
+    train.write_text(json.dumps(train_obj,ensure_ascii=False,
+                                sort_keys=True,indent=2)+"\n",encoding="utf8")
     record["receipt_sha256"]=sha(record)
     out.write_text(json.dumps(record,ensure_ascii=False,sort_keys=True,indent=2)+"\n",
                    encoding="utf8")
