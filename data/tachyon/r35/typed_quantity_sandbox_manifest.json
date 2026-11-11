@@ -1,0 +1,109 @@
+{
+  "schema": "janus.tachyon.r35.author_verified_formula_sandbox.v1",
+  "id": "TACHYON-R35-TYPED-SI-QUANTITIES-EDUCATIONAL-2026-11-11",
+  "created_utc_date": "2026-11-11",
+  "training_source_class": "AUTHOR_DERIVED_EDUCATIONAL_FORMULAS_ONLY",
+  "research_authorization": "MATH_SANDBOX_ONLY_NO_UNREVIEWED_LAB",
+  "model_training_permitted_for_educational_sandbox": true,
+  "curated_external_laboratory_data_training_permitted": false,
+  "scientific_admission": "HOLD",
+  "production_promotion": false,
+  "independent_blind_evaluation": false,
+  "numeric_labels_are_independent_instrument_measurements": false,
+  "source_references": [
+    {
+      "family": "SR_PROPER_TIME_RATIO",
+      "url": "https://openstax.org/books/university-physics-volume-3/pages/5-3-time-dilation",
+      "identity": "time-dilation proper-time ratio in inertial SR",
+      "target_unit": "1",
+      "training_lane": "AUTHOR_MATH_ONLY"
+    },
+    {
+      "family": "TWO_LEVEL_BORN_PROBABILITY",
+      "url": "https://quantum.cloud.ibm.com/learning/en/courses/general-formulation-of-quantum-information/general-measurements/formulations-of-measurements",
+      "identity": "projective qubit Born probability",
+      "target_unit": "1",
+      "training_lane": "AUTHOR_MATH_ONLY"
+    },
+    {
+      "family": "OHMIC_VOLTAGE",
+      "url": "https://openstax.org/books/college-physics-2e/pages/20-2-ohms-law-resistance-and-simple-circuits",
+      "identity": "Ohmic circuit V=I×R",
+      "target_unit": "V",
+      "training_lane": "AUTHOR_MATH_ONLY"
+    },
+    {
+      "family": "CONSTANT_VELOCITY_DISPLACEMENT",
+      "url": "https://openstax.org/books/college-physics-2e/pages/2-3-time-velocity-and-speed",
+      "identity": "1D constant velocity displacement v×dt",
+      "target_unit": "m",
+      "training_lane": "AUTHOR_MATH_ONLY"
+    },
+    {
+      "family": "ELECTRIC_POWER_IV",
+      "url": "https://openstax.org/books/college-physics-2e/pages/20-section-summary",
+      "identity": "electric power P=I×V",
+      "target_unit": "W",
+      "training_lane": "WITHHELD_NEW_FAMILY_TEST_ONLY"
+    }
+  ],
+  "split_blueprint": {
+    "seed": 20261111,
+    "experimental_train_families": [
+      "SR_PROPER_TIME_RATIO",
+      "TWO_LEVEL_BORN_PROBABILITY",
+      "OHMIC_VOLTAGE",
+      "CONSTANT_VELOCITY_DISPLACEMENT"
+    ],
+    "heldout_untrained_family": "ELECTRIC_POWER_IV",
+    "per_training_family": {
+      "train": 12,
+      "calibration": 4,
+      "public_dev": 6
+    },
+    "heldout_family_public_cases": 6,
+    "family_holdout_policy": "MODEL_ABSTAIN_EXACT_TEXTBOOK_BASELINE_ALLOWED",
+    "units_variants": [
+      "1",
+      "%",
+      "A",
+      "mA",
+      "Ω",
+      "kΩ",
+      "V",
+      "mV",
+      "m/s",
+      "km/h",
+      "s",
+      "ms",
+      "m",
+      "cm",
+      "W"
+    ],
+    "all_examples_generated_from_source_formula_by_code": true,
+    "public_holdout_is_visible_to_model_author": true,
+    "never_reuse_hidden_external_blind_labels": true
+  },
+  "known_public_lab_measurements": {
+    "verified_external_origins": [
+      "https://zenodo.org/records/15081911",
+      "https://zenodo.org/records/13142016"
+    ],
+    "source_integrity_receipt": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/43064750107",
+    "permitted_use": "READ_ONLY_TYPED_SOURCE_METADATA_AND_GATED_ADMISSION_AUDIT",
+    "licensed_raw_measurement_samples_embedded": false,
+    "curator_approval_receipt_present": false,
+    "independent_rights_and_source_family_review_complete": false,
+    "allowed_as_neural_gradient_labels": false
+  },
+  "safety_controls": {
+    "SI_dimension_check_required": true,
+    "unknown_units_fail_closed": true,
+    "unsupported_families_abstain": true,
+    "invalid_physical_domain_abstain": true,
+    "exact_formula_baseline_reported": true,
+    "holdout_family_no_gradient": true,
+    "all_training_attempts_preserved": true,
+    "production_model_auto_promotion": false
+  }
+}
