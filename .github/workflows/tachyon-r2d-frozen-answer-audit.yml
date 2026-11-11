@@ -22,7 +22,7 @@ jobs:
       PYTHONDONTWRITEBYTECODE: '1'
       R2B_CKPT_SHA: 3adbf7b11a0f4275ab565ea833c7d415fc0e6727ddddf48e5a27f04346350f9c
       R2C_CKPT_SHA: 4fde3d9c46dd7a11913de97348e97eb11d6b48cbed4a14cee17963c040b8aae8
-      R2C_CARDS_SHA: 21a27ab618d94e1d15d586c20432b8e766cb947b1035a045ef764c8337e
+      R2C_CARDS_SHA: 21a27ab618d94e1d15d586c20432b8e766cb947eb947b1035a045ef764c8337e
     steps:
       - name: Checkout evaluator only without persisted credentials
         uses: actions/checkout@v4
