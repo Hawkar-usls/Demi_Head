@@ -78,13 +78,22 @@ class R310Reliability(unittest.TestCase):
 
     def test_out_of_domain_early_signal_explicit_abstention(self):
         bad=[list(x) for x in artificial_curve()[:241]]
-        bad[0][1]=1.5
+        bad[0][1]=0.2
         with self.assertRaisesRegex(ValueError,"R310_EARLY_TIME_OR_PHYSICAL_VOLTAGE_REJECT"):
             evaluate_early_only(bad)
         f={"status":"ABSTAIN_UNPHYSICAL_OR_UNRELIABLE_EARLY_SIGNAL",
            "risk_proxy":None}
         self.assertEqual(decide(f,{"candidate_allowed":True,"threshold":.16}),
                          "ABSTAIN")
+
+    def test_normal_lower_voltage_chemistry_is_not_falsely_refused(self):
+        # Original published AR/AU measurements include 0.902–1.471 V;
+        # do not reject them with a Li-ion-only 2 V floor.
+        low=[[t,1.22+.05*math.exp(-t/.8)] for t,v
+             in artificial_curve()[:241]]
+        parsed=check_early(low)
+        self.assertTrue(all(.5<=v<=5.5 for t,v in parsed))
+        self.assertEqual(len(parsed),241)
 
     def test_bad_optional_formula_falls_back_to_healthy_baseline(self):
         early=artificial_curve()[:241]
