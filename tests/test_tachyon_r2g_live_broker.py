@@ -9,7 +9,7 @@ from tachyon.r2f_general_router import load_general_cards
 from tachyon.r2g_live_broker import (
     WIKI_ENDPOINT, OPENALEX_ENDPOINT, BRAVE_ENDPOINT,
     clean, query_terms, safe_public_query, safe_http_url, safe_result_url,
-    wiki_search, openalex_search, brave_search, decide_evidence, common_record,
+    wiki_search, openalex_search, brave_search, decide_evidence, common_record, wiki_query_with_subject_anchor,
     route_with_external_search, ProviderUnavailable,
 )
 
@@ -143,6 +143,14 @@ class R2G(unittest.TestCase):
             public_approved=True,fetch=self.mock_api)
         self.assertEqual(result["decision"],"EVIDENCE_REQUIRES_FRESHNESS_VERIFICATION")
         self.assertIsNone(result["answer"])
+
+    def test_wikipedia_subject_search_is_not_full_generic_query(self):
+        query="Какие особенности колец планеты Сатурн известны астрономам?"
+        transformed=wiki_query_with_subject_anchor(query)
+        self.assertTrue(transformed.startswith("intitle:Сатурн "))
+        self.assertIn("колец",transformed)
+        self.assertTrue(wiki_query_with_subject_anchor("Какие известны морские бактерии?").startswith(
+            "Какие известны"))
 
     def test_saturn_question_cannot_be_answered_from_jupiter_article(self):
         q="Какие особенности колец планеты Сатурн известны астрономам?"
