@@ -1,0 +1,74 @@
+name: TACHYON R3.6 - dimension-safe formula discovery and conditional research fit
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r36_symbolic_discovery.py'
+      - 'tests/test_tachyon_r36_symbolic_discovery.py'
+      - 'data/tachyon/r36/**'
+      - 'docs/TACHYON_R36_FORMULA_DISCOVERY.md'
+      - '.github/workflows/tachyon-r36-formula-discovery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r36-formula-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  frozen-synthetic-symbolic-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Enforce closed research grammar and independent negative controls
+        run: |
+          set -euo pipefail
+          python -m py_compile tachyon/r36_symbolic_discovery.py
+          python -m unittest discover -s tests -p test_tachyon_r36_symbolic_discovery.py -v
+          test ! -e data/tachyon/r35/approved_laboratory_gradients.json
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+      - name: Run automatic candidate search and fit, freeze before future test
+        run: |
+          set -euo pipefail
+          python -m tachyon.r36_symbolic_discovery \
+            --manifest data/tachyon/r36/symbolic_discovery_sandbox_manifest.json \
+            --outdir out/r36
+      - name: Reject any source admission or false physics claim
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tachyon.r36_symbolic_discovery import sha
+          p=Path('out/r36/r36_symbolic_formula_discovery.json')
+          r=json.loads(p.read_text())
+          assert r['receipt_sha256']==sha({k:v for k,v in r.items() if k!='receipt_sha256'})
+          assert r['scientific_admission']=='HOLD' and r['production_promotion'] is False
+          assert r['synthetic_positive_control_detected'] is True
+          assert r['synthetic_negative_control_rejected'] is True
+          assert r['real_experimental_measured_data_scored'] is False
+          assert r['independent_sealed_physical_test_scored'] is False
+          assert r['self_generated_predictions_used_as_gold'] is False
+          plus,minus=r['scenarios']
+          assert plus['future_test_relative_RMSE_improvement']>.15
+          assert minus['synthetic_independent_future_test_pass'] is False
+          assert all(x['scientific_admission']=='HOLD' for x in r['scenarios'])
+          print('R36_RESEARCH_FORMULA',plus['selected_formula'])
+          print('R36_SYNTHETIC_INCOMPLETE_OHM_BASELINE_RMSE',plus['baseline_ohm_future_test_RMSE_volts'])
+          print('R36_SYNTHETIC_NEW_FORMULA_RMSE',plus['candidate_future_test_RMSE_volts'])
+          print('R36_ORIGINAL_EXACT_OHM_NEGATIVE_CONTROL_REJECTED',minus['selected_formula'])
+          print('R36_SOURCE_REVIEW_REQUIRED_SCIENTIFIC_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r36-synthetic-symbolic-formula-discovery-no-science-promotion
+          path: out/r36/r36_symbolic_formula_discovery.json
+          retention-days: 30
+          if-no-files-found: error
