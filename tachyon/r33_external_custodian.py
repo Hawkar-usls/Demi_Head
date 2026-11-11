@@ -51,6 +51,7 @@ def read_obj(path):
 
 def validate(pack):
     need(pack.get("schema")==CHALLENGE_SCHEMA,"R33_CHALLENGE_SCHEMA")
+    need(set(pack)=={"schema","items"},"R33_PRIVATE_PACK_EXTRA_KEYS")
     items=pack.get("items")
     need(isinstance(items,list) and len(items)>=60 and len(items)<=300,
          "R33_CHALLENGE_SIZE")
@@ -58,6 +59,10 @@ def validate(pack):
     ids=set()
     for row in items:
         need(isinstance(row,dict),"R33_BAD_ITEM")
+        need(set(row).issubset({"case_id","category","family","question",
+                                "source_url","gold"}) and
+             {"case_id","category","family","question","gold"}.issubset(row),
+             "R33_HIDDEN_FIELD_LEAK_RISK")
         case_id=row.get("case_id")
         need(isinstance(case_id,str) and
              re.fullmatch(r"[A-Za-z0-9_-]{6,80}",case_id) is not None and
@@ -75,6 +80,7 @@ def validate(pack):
         gold=row.get("gold")
         need(isinstance(gold,dict),"R33_MISSING_GOLD")
         if category=="NUMERIC":
+            need(set(gold)=={"kind","value","unit"},"R33_NUMERIC_GOLD_EXTRA_KEYS")
             need(gold.get("kind")=="numeric" and
                  type(gold.get("value")) in (int,float) and
                  math.isfinite(gold["value"]) and
@@ -83,6 +89,7 @@ def validate(pack):
         elif category=="OOD":
             need(gold=={"kind":"abstain"},"R33_OOD_GOLD_MUST_ABSTAIN")
         else:
+            need(set(gold)=={"kind","rubric"},"R33_CONCEPTUAL_GOLD_EXTRA_KEYS")
             need(gold.get("kind")=="conceptual" and
                  isinstance(gold.get("rubric"),str) and
                  15<=len(gold["rubric"])<=3000,"R33_CONCEPTUAL_REQUIRES_HUMAN_RUBRIC")
@@ -137,14 +144,17 @@ def questions_only(pack,model_digest):
         "frozen_candidate_weights_sha256":model_digest,
         "case_count":sum(counts.values()),
         "items":[
-            {k:v for k,v in item.items() if k!="gold"}
+            {k:item[k] for k in ("case_id","category","family","question",
+                                 "source_url") if k in item}
             for item in pack["items"]
         ],
         "gold_answers_excluded":True,
         "not_to_publish_to_public_repo":True,
     }
-    need(all("gold" not in v for v in result["items"]),
-         "R33_QUESTION_GOLD_LEAK")
+    need(all("gold" not in v and set(v).issubset({
+        "case_id","category","family","question","source_url"})
+        for v in result["items"]),"R33_QUESTION_GOLD_LEAK")
+    result["questions_sha256"]=sha(result)
     return result
 
 def evaluate_private(pack,salt,sealed,predictions,weights_digest):
@@ -162,6 +172,9 @@ def evaluate_private(pack,salt,sealed,predictions,weights_digest):
     need(predictions.get("schema")==PREDICTIONS_SCHEMA
          and predictions.get("candidate_weights_sha256")==weights_digest,
          "R33_PREDICTION_MODEL_MISMATCH")
+    expected_questions_sha=questions_only(pack,weights_digest)["questions_sha256"]
+    need(predictions.get("questions_sha256")==expected_questions_sha,
+         "R33_PREDICTION_QUESTION_TRANSPORT_MISMATCH")
     out=predictions.get("items")
     need(isinstance(out,list) and len(out)==len(pack["items"]),
          "R33_MISSING_PREDICTIONS")
@@ -199,6 +212,7 @@ def evaluate_private(pack,salt,sealed,predictions,weights_digest):
         "sealed_commitment_receipt_sha256":sealed["receipt_sha256"],
         "model_weights_sha256":weights_digest,
         "predictions_sha256":sha(predictions),
+        "questions_only_sha256":expected_questions_sha,
         "private_challenge_sha256_omitted_to_avoid_key_disclosure":True,
         "challenge_case_count":len(pack["items"]),
         "numeric_scored_count":numeric_total,
