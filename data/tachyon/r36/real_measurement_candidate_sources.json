@@ -1,0 +1,72 @@
+{
+  "schema": "janus.tachyon.r36.real_data_candidate_inventory.v1",
+  "recorded_date_utc": "2026-11-11",
+  "source_class": "PUBLIC_ORIGINAL_LAB_RECORD_METADATA_NOT_TRAINING",
+  "scientific_admission": "HOLD",
+  "production_model_promotion": false,
+  "source_files_downloaded_in_this_screen": false,
+  "curator_signatures_present": false,
+  "license_and_measurement_fit_review_complete": false,
+  "automated_training_on_these_sources_allowed": false,
+  "candidates": [
+    {
+      "family": "TRANSIENT_HOT_WIRE_THERMAL_CONDUCTIVITY",
+      "record_url": "https://zenodo.org/records/23645337",
+      "doi": "10.5281/zenodo.23645337",
+      "publisher_dataset_title": "Transient hot-wire records in water (2016) and reduction/model code",
+      "reported_date": "2026-10-25",
+      "publisher_rights_claim": "CC BY 4.0",
+      "source_file": "THW_2016_dataset_v1.zip",
+      "published_md5": "01a7fa75b701460f26109866c0eeabfa",
+      "approximate_download_bytes": 44700000,
+      "described_observables": [
+        "platinum wire terminal voltage time series",
+        "experimental session conditions",
+        "nominal source current but not recorded as time series"
+      ],
+      "data_fit_warning": "Source current was verified but not recorded, and fluid heat-transfer effects are present; cannot straightforwardly infer simultaneous I-R-temperature correction or declare a new Ohm law.",
+      "training_status": "REVIEW_REQUIRED_DO_NOT_TRAIN",
+      "recommended_future_use": "Independent physical thermal sensor model only after curator checks units/calibration and time-group split, under suitable heat-transfer baseline.",
+      "missing": [
+        "signed independent curator approval",
+        "actual downloaded file digest",
+        "aligned current/time values",
+        "instrument noise and source uncertainty model"
+      ]
+    },
+    {
+      "family": "BATTERY_DYNAMIC_CURRENT_VOLTAGE_TEMPERATURE",
+      "record_url": "https://zenodo.org/records/17227538",
+      "doi": "10.5281/zenodo.17227538",
+      "publisher_dataset_title": "Diagnosis of the open-circuit voltage curve of batteries with voltage-controlled models",
+      "reported_date": "2026-03-17",
+      "publisher_rights_claim": "CC BY-NC 4.0 with both publication and repository attribution required",
+      "source_file": "ExperimentalData_CellA_Protocol1_Protocol9.csv",
+      "published_md5": "NOT_YET_VERIFIED_BY_JANUS",
+      "described_observables": [
+        "time-resolved battery current",
+        "battery voltage",
+        "battery temperature",
+        "charge-discharge protocols"
+      ],
+      "data_fit_warning": "Battery electrochemical voltage depends on SOC, state history, hysteresis and polarization; do not fit a plain resistor temperature formula or claim novel physics from improved V=IR RMSE.",
+      "training_status": "REVIEW_REQUIRED_DO_NOT_TRAIN",
+      "recommended_future_use": "Novel electrochemical model family with proper SOC/OCV baseline, device-protocol holdout and independent rights review.",
+      "missing": [
+        "independent rights review for CC BY-NC",
+        "file exact SHA and schema audit",
+        "SOC and chronological leakage policy",
+        "external gold custodian"
+      ]
+    }
+  ],
+  "all_sources_outside_current_formula_training": true,
+  "model_checkpoints_unchanged": true,
+  "forbidden_actions": [
+    "auto-import raw records into the model",
+    "use dataset DOI as training authorization",
+    "convert public metadata into true physics labels",
+    "declare independent blind experiment without third party"
+  ],
+  "registry_status": "CANDIDATE_METADATA_QUARANTINED"
+}
