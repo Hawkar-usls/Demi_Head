@@ -47,3 +47,11 @@ No real new measurements received; no external custodian witness or signatures, 
 The GitHub Actions job runs isolated negative-policy tests, downloads only the exact original public CC BY source CSVs with pinned Git blob SHA, recomputes early-only predictions on all 30 real traces, calibrates thresholds on the other seven device groups and reports all eight heldout decisions. Resource limits are one runner and 15 minutes with source raw files excluded from artifacts. There is no repeated auto-tuning until it passes.
 
 Expected: `R310_EARLY_ONLY_RISK_POLICY / VALIDATION_ON_PUBLIC_PRESEEN_DEVICES / SCIENCE_HOLD / R39_FROZEN_AND_UNTOUCHED`.
+
+## First real run and transparent corrective change (not a new blind trial)
+
+The first public R3.10 check, [Actions #43103537561](https://github.com/Hawkar-usls/Demi_Head/actions/runs/43103537561), passed 10/10 tests and evaluated the 30 original published voltage curves. The conservative calibrator accepted **0/30 candidate** forecasts, fell back to 2RC on **26/30**, and abstained on **4/30**. On scored cases its device-equal MAE was **0.009283682467 V**, exactly the 2RC comparison, with **0% gain**. This was an engineering negative result, and the original run is retained.
+
+Upon inspecting this initial outcome, we corrected a safety design flaw **after the first public evaluation**: an invalid *optional candidate* prediction should not cause full abstention if the strong incumbent 2RC remains physically valid. The protected baseline is now fit and range-checked first. If only diffusion-tail fails, output `CANDIDATE_UNSAFE_BASELINE_AVAILABLE` and use 2RC; abstain when the early inputs or even the fallback baseline are invalid. Added a dedicated injected-failure unit test and preserved the initial 10-test receipt. This is a posthoc engineering correction, **not** an unbiased prospective improvement or an alteration of R3.9.
+
+Calibration thresholds and original source formulas remain unchanged. No new candidate has earned scientific admission; even a zero-regression baseline fallback is not evidence that the neural/symbolic formula learned better physics.
