@@ -1,0 +1,18 @@
+{
+  "schema": "janus.tachyon.r2d.questions_only.v1",
+  "scope": "PUBLIC_DEVELOPMENT",
+  "cases": [
+    {
+      "case_id": "saturn_rings",
+      "question": "Какие особенности колец планеты Сатурн известны астрономам?"
+    },
+    {
+      "case_id": "mercury_craters",
+      "question": "Какие кратеры есть на поверхности планеты Меркурий?"
+    },
+    {
+      "case_id": "marine_bacteria",
+      "question": "Какие известны исследования морских бактерий и их биоплёнок?"
+    }
+  ]
+}
