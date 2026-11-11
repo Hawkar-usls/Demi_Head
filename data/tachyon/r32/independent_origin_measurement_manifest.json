@@ -43,7 +43,7 @@
       "doi": "10.5281/zenodo.13142016",
       "related_publication_doi": "10.1149/1945-7111/ad6938",
       "data_path": "OCV_vs_SOC_curve_fresh_cell.csv",
-      "expected_md5": "6bb24aed4d06fb4df88de4a3f6a37f3",
+      "expected_md5": "6bb24aed4d06fb4df88de4a3f6a37f3d",
       "max_bytes": 200000,
       "expected_measurement_count": 1001,
       "provenance_scope": "Experimental open-circuit voltage as a function of state of charge from a fresh lithium-ion cell.",
