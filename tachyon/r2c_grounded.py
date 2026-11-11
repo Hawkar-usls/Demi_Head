@@ -47,6 +47,9 @@ def new_source_rows(cards_path):
                 for s in sources), "R2C_CLOCK_SOURCE_LEAK")
     rows = []
     for s in sources:
+        require(set(s) == {"family","domain","doi","title","year","kind","tags","formula",
+                           "dimensions","questions","answer","url","provenance_status"},
+                "R2C_UNKNOWN_SOURCE_FIELD")
         require(s.get("url") == "https://doi.org/" + s["doi"], "R2C_DOI_URL")
         require(s.get("domain") in ALLOWED_DOMAINS, "R2C_DOMAIN")
         require(s.get("provenance_status") ==
