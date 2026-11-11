@@ -45,7 +45,14 @@
     "fallback": "2RC",
     "abstention": "explicit reject if early signals invalid, unphysical or out of fitted input scope",
     "choose_threshold_without_heldout_future_labels": true,
-    "no_unknown_data_calibration": true
+    "no_unknown_data_calibration": true,
+    "public_retro_mixed_chemistry_voltage_range_volts": [
+      0.5,
+      5.5
+    ],
+    "source_range_update_status": "POSTHOC_CORRECTION_AFTER_CI_REVEALED_4_REJECTIONS",
+    "source_range_justification": "Exact pinned original AR/AU original charge/discharge CSVs show normal early voltages 0.902–1.471 V; old 2–5.2 V bound was lithium-oriented and wrongly rejected four original physically measured curves.",
+    "new_external_R39_contract_modified": false
   },
   "report": {
     "compare_to_research_r38_raw_diffusion_tail": true,
