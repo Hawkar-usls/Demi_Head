@@ -28,13 +28,16 @@ class R32Measurement(unittest.TestCase):
         official='6bb24aed4d06fb4df88de4a3f6a37f3d'
         self.assertEqual(len(official),32)
         for source in self.manifest['public_measurement_sources']:
-            self.assertEqual(len(source['expected_md5']),32)
-            self.assertRegex(source['expected_md5'],r'^[0-9a-f]{32}
-        bad=copy.deepcopy(self.manifest)
-        bad["public_measurement_sources"][0]["expected_md5"]="0"*32
-        with self.assertRaisesRegex(ValueError,"R32_UNPINNED_SOURCE"):
-            manifest_check(bad)
+            actual=source['expected_md5']
+            self.assertEqual(len(actual),32)
+            self.assertTrue(all(c in '0123456789abcdef' for c in actual))
+        self.assertEqual(self.manifest['public_measurement_sources'][1]['expected_md5'],official)
 
+    def test_source_md5_rewrite_denied(self):
+        bad=copy.deepcopy(self.manifest)
+        bad['public_measurement_sources'][0]['expected_md5']='0'*32
+        with self.assertRaisesRegex(ValueError,'R32_UNPINNED_SOURCE'):
+            manifest_check(bad)
     def test_candidate_checkpoint_identity_cannot_move(self):
         bad=copy.deepcopy(self.manifest)
         bad["candidate"]["reference_checkpoint_sha256"]="f"*64
