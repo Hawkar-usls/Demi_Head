@@ -1,0 +1,89 @@
+name: TACHYON R3.10 - early-only formula reliability and R3.9 isolation
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r310_early_only_formula_reliability.py'
+      - 'tests/test_tachyon_r310_early_only_formula_reliability.py'
+      - 'data/tachyon/r310/**'
+      - 'docs/TACHYON_R310_EARLY_ONLY_FORMULA_RELIABILITY.md'
+      - '.github/workflows/tachyon-r310-reliability.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r310-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  frozen-formula-early-only-public-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assert public source, frozen R3.8/R3.7 dependencies and R3.9 isolation
+        run: |
+          set -euo pipefail
+          python -m py_compile tachyon/r310_early_only_formula_reliability.py
+          test ! -e data/tachyon/r39/private_external_new_device_gold.json
+          test ! -e data/tachyon/r39/approved_real_training_gradients.json
+          python -m unittest discover -s tests -p test_tachyon_r310_early_only_formula_reliability.py -v
+      - name: Audit real 16 pinned CC BY4 source files and all eight battery-heldout risk decisions
+        run: |
+          set -euo pipefail
+          python -m tachyon.r310_early_only_formula_reliability \
+            --source-manifest data/tachyon/r37/real_ocv_group_holdout_manifest.json \
+            --config data/tachyon/r310/formula_reliability_risk_manifest.json \
+            --output-dir out/r310
+      - name: Require grounded risk annotations, complete disclosures and science HOLD
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          from tachyon.r37_real_ocv_evaluator import sha
+          r=json.loads(Path('out/r310/r310_public_early_only_reliability_audit.json').read_text())
+          assert r['receipt_sha256']==sha({k:v for k,v in r.items() if k!='receipt_sha256'})
+          assert r['source_file_count']==16 and r['real_trace_count']==30
+          assert r['distinct_public_battery_groups']==8
+          assert len(r['folds'])==8
+          assert r['candidate_accepted_traces_total']+r['strong_baseline_fallback_traces_total']+r['abstentions_total']==30
+          assert r['original_r37_r38_dependencies_sha_verified'] is True
+          assert r['selection_uses_heldout_battery_future_labels'] is False
+          assert r['prior_R38_results_were_seen_before_development'] is True
+          assert r['public_retro_check_not_independent_blind'] is True
+          assert r['r39_frozen_branch_changed'] is False
+          assert r['r39_hidden_private_gold_used'] is False
+          assert r['neural_weights_updated'] is False
+          assert r['scientific_admission']=='HOLD'
+          assert r['production_model_promotion'] is False
+          assert r['policy_is_safe_for_production'] is False
+          assert all(len(f['calibration_batteries'])==7 and
+                     f['heldout_battery'] not in f['calibration_batteries']
+                     for f in r['folds'])
+          print('R310_RESEARCH_16_SOURCE_SHA_30_TRACES_PASS')
+          print('R310_CANDIDATE_DECISIONS',r['candidate_accepted_traces_total'])
+          print('R310_STRONG_2RC_FALLBACKS',r['strong_baseline_fallback_traces_total'])
+          print('R310_ABSTENTIONS',r['abstentions_total'])
+          print('R310_DEVICE_EQUAL_SELECTIVE_MAE_VOLTS',r['equal_device_selective_MAE_V'])
+          print('R310_DEVICE_EQUAL_2RC_MAE_VOLTS',r['equal_device_baseline_MAE_V'])
+          print('R310_DEVICE_EQUAL_GAIN',r['equal_device_selective_relative_gain'])
+          print('R310_WORST_DEVICE_REGRESSION',r['worst_heldout_relative_MAE_regression'])
+          print('R310_FORMULA_RELIABILITY_PUBLIC_RETRO_ONLY_R39_FROZEN_SCIENCE_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tachyon-r310-early-only-risk-30-trace-public-audit
+          path: out/r310/*.json
+          if-no-files-found: warn
+          retention-days: 30
