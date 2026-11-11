@@ -1,0 +1,96 @@
+name: TACHYON R2G real public source search (bounded, read-only)
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r2g_live_broker.py'
+      - 'tests/test_tachyon_r2g_live_broker.py'
+      - 'data/tachyon/r2g/**'
+      - '.github/workflows/tachyon-r2g-live-evidence.yml'
+      - 'docs/TACHYON_R2G_*.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r2g-live-evidence
+  cancel-in-progress: false
+jobs:
+  public-source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout isolated research branch without persisted token
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit security regression with mocked providers
+        run: |
+          python -m unittest discover -s tests -p test_tachyon_r2g_live_broker.py -v
+      - name: Live public API smoke - report actual source status
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tachyon.r2g_live_broker import wiki_search,openalex_search,ProviderUnavailable
+          checks=[
+              ('wikipedia-neptune',wiki_search,'Нептун'),
+              ('wikipedia-saturn',wiki_search,'Сатурн'),
+              ('openalex-quantum',openalex_search,'quantum entanglement'),
+          ]
+          counts={};errors={}
+          for name,fn,query in checks:
+              try:
+                  result=fn(query)
+                  counts[name]=len(result)
+                  assert all(x['url'].startswith('https://') for x in result)
+                  assert all(x['independently_fact_checked'] is False for x in result)
+              except ProviderUnavailable as exc:
+                  counts[name]=0
+                  errors[name]=str(exc)
+          Path('artifacts/tachyon-r2g').mkdir(parents=True,exist_ok=True)
+          receipt={'schema':'janus.tachyon.r2g.provider_smoke.v1',
+                   'source_counts':counts,'unavailable':errors,
+                   'all_providers_ready':not bool(errors),
+                   'independent_scientific_proof':False}
+          Path('artifacts/tachyon-r2g/provider-smoke.json').write_text(
+              json.dumps(receipt,indent=2,ensure_ascii=False)+'\n')
+          assert sum(counts.values())>=1, 'ALL_EXTERNAL_PROVIDERS_UNAVAILABLE'
+          print('R2G_LIVE_PROVIDER_STATUS',receipt)
+          PY
+      - name: Execute public-only general-question broker against real APIs
+        run: |
+          python -m tachyon.r2g_live_broker \
+            --questions data/tachyon/r2g/public_live_smoke_questions.json \
+            --physics-cards data/tachyon/r2c/science_cards.json \
+            --general-cards data/tachyon/r2f/general_source_cards.json \
+            --public-network-approved \
+            --providers wikipedia,openalex \
+            --out artifacts/tachyon-r2g/live-public-evidence.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('artifacts/tachyon-r2g/live-public-evidence.json').read_text())
+          assert v['scope']=='PUBLIC_DEVELOPMENT' and v['case_count']==3
+          assert v['external_provider_opt_in'] is True
+          assert v['model_training_performed'] is False
+          assert v['scientifically_admitted'] is False
+          handled=[r['response'] for r in v['results']]
+          assert all('sources' in x or x['decision']=='LOCAL_ROUTE_HANDLED' for x in handled)
+          assert all(x.get('scientific_admission') is False for x in handled)
+          print('R2G_PUBLIC_REAL_SEARCH_SUCCESS',[(x['decision'],len(x.get('sources',[]))) for x in handled])
+          PY
+      - name: Preserve bounded public evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r2g-real-public-source-evidence-research-only
+          path: |
+            artifacts/tachyon-r2g/live-public-evidence.json
+            artifacts/tachyon-r2g/provider-smoke.json
+          retention-days: 14
+          if-no-files-found: warn
