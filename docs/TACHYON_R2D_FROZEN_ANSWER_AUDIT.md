@@ -8,7 +8,7 @@ R2C generated scientific explanations but its previous equation sanity tests did
 
 - R2B checkpoint SHA-256: `3adbf7b11a0f4275ab565ea833c7d415fc0e6727ddddf48e5a27f04346350f9c` (run #43015290827).
 - R2C checkpoint SHA-256: `4fde3d9c46dd7a11913de97348e97eb11d6b48cbed4a14cee17963c040b8aae8` (run #43020959937).
-- R2C public source cards SHA-256: `21a27ab618d94e1d15d586c20432b8e766cb947b1035a045ef764c8337e`.
+- R2C public source cards SHA-256: `21a27ab618d94e1d15d586c20432b8e766cb947eb947b1035a045ef764c8337e`.
 - CI downloads each archived checkpoint from its *original* run and refuses execution if SHA-256 differs.
 
 ## Transparent public diagnostic (NOT a blind test)
