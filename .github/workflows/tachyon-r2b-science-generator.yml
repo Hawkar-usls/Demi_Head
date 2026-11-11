@@ -1,0 +1,106 @@
+name: Tachyon R2B isolated generative physics training and source-family holdout
+on:
+  pull_request:
+    paths:
+      - 'tachyon/science_generator.py'
+      - 'tests/test_tachyon_science_generator.py'
+      - 'data/tachyon/r2b/**'
+      - 'docs/TACHYON_R2B_GENERATIVE_PHYSICS.md'
+      - '.github/workflows/tachyon-r2b-science-generator.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r2b-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  candidate-research:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    env:
+      META_SHA: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+      PYTHONDONTWRITEBYTECODE: '1'
+      TACHYON_R2B_VIDEO_CORPUS: artifacts/tachyon-r2b/video-corpus.json
+    steps:
+      - name: Checkout staged Tachyon candidate only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout exact audited Meta Registry record
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+          path: external/registry
+          persist-credentials: false
+          sparse-checkout: |
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact source and clock data exclusion
+        run: |
+          set -euo pipefail
+          test "$(git -C external/registry rev-parse HEAD)" = "$META_SHA"
+          echo 'e466ec34a4dbcc99291de0c04335f8b9b473ee13ae7a93eeefedb207e52ba97c  data/tachyon/explanation_cards_v1.json' | sha256sum --check -
+          echo 'a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f  data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv' | sha256sum --check -
+      - name: Build vetted R2A secondary-video claim corpus
+        run: |
+          python -m tachyon.video_science_corpus \
+            --science external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json \
+            --captions-index external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json \
+            --registry-commit "$META_SHA" \
+            --lab-holdout-file data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv \
+            --out "$TACHYON_R2B_VIDEO_CORPUS"
+      - name: Install bounded CPU training dependency
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate corpus and regression tests (no future labels)
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p test_tachyon_science_generator.py -v
+      - name: Phase A - fit candidate without holdout-file access
+        run: |
+          set -euo pipefail
+          python -m tachyon.science_generator train \
+            --video "$TACHYON_R2B_VIDEO_CORPUS" \
+            --papers data/tachyon/r2b/primary_papers_train.json \
+            --outdir artifacts/tachyon-r2b/candidate \
+            --epochs 35
+          test -s artifacts/tachyon-r2b/candidate/r2b_candidate.pt
+      - name: Phase B - holdout evaluation after frozen checkpoint
+        run: |
+          set -euo pipefail
+          python -m tachyon.science_generator evaluate \
+            --checkpoint artifacts/tachyon-r2b/candidate/r2b_candidate.pt \
+            --video "$TACHYON_R2B_VIDEO_CORPUS" \
+            --papers data/tachyon/r2b/primary_papers_train.json \
+            --holdout data/tachyon/r2b/clock_explanation_holdout.json \
+            --out artifacts/tachyon-r2b/evaluation.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          train=json.loads(Path('artifacts/tachyon-r2b/candidate/training_receipt.json').read_text())
+          test=json.loads(Path('artifacts/tachyon-r2b/evaluation.json').read_text())
+          assert train['training_pairs']==24 and train['training_source_families']==7
+          assert train['clock_lab_measurements_read_during_training'] is False
+          assert test['test_source_families']==3 and test['test_n']==6
+          assert test['model_checkpoint_sha256']==train['checkpoint_sha256']
+          assert test['candidate_admitted'] is False
+          assert test['independent_physical_time_prediction'] is False
+          assert test['model_deployed'] is False and test['authority_delta']==0
+          print('TACHYON_R2B_REAL_TRAINING_AND_HOLDOUT_FINISHED_NOT_SCIENTIFICALLY_ADMITTED')
+          PY
+      - name: Preserve exact neural weights and results for independent replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r2b-science-explanation-candidate-not-admitted
+          path: |
+            artifacts/tachyon-r2b/candidate/r2b_candidate.pt
+            artifacts/tachyon-r2b/candidate/training_receipt.json
+            artifacts/tachyon-r2b/evaluation.json
+          retention-days: 14
+          if-no-files-found: warn
