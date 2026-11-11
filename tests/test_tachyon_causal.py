@@ -72,3 +72,24 @@ class TachyonCausalTests(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+class PinnedCheckpointTests(unittest.TestCase):
+    def test_checksummed_reference_model_restores_and_matches_known_sweep(self):
+        from tachyon.load_causal import load_candidate
+        model=load_candidate()
+        self.assertFalse(model.training)
+        with torch.no_grad():
+            x=torch.tensor([[0.5,0.3],[0.5,0.8],[1.2,0.95]],dtype=torch.float32)
+            z=torch.sigmoid(model(x))
+        self.assertEqual(tuple(z.shape),(3,2))
+        self.assertEqual([int(v>=0.5) for v in z[:,0].tolist()],[0,1,0])
+
+    def test_manifest_checksum_fail_closed(self):
+        from tachyon.load_causal import load_candidate, MANIFEST
+        with tempfile.TemporaryDirectory() as td:
+            item=json.loads(MANIFEST.read_text(encoding='utf8'))
+            item['checkpoint_unpacked_sha256']='0'*64
+            tmp=Path(td,'tampered_manifest.json')
+            tmp.write_text(json.dumps(item),encoding='utf8')
+            with self.assertRaises(ValueError):
+                load_candidate(tmp)
