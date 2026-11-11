@@ -1,0 +1,86 @@
+name: TACHYON R3.1B - bounded real neural learning from source-verified math
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r31b_neural_formula.py'
+      - 'tests/test_tachyon_r31b_neural.py'
+      - '.github/workflows/tachyon-r31b-neural.yml'
+      - 'docs/TACHYON_R31B_NEURAL_LIMITS.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r31b-neural-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fixed-train-only-neural-fitter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned CPU-only torch
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify source and train/test isolation
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p test_tachyon_r31_reference_gate.py -v
+          python -m unittest discover -s tests -p test_tachyon_r31b_neural.py -v
+      - name: Export TRAIN-only data and static reference diagnostics
+        run: |
+          set -euo pipefail
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          python -m tachyon.r31_reference_gate \
+            --pack data/tachyon/r31/formal_reference_pack.json \
+            --cards data/tachyon/r2c/science_cards.json \
+            --train-out out/r31_formal_train_only.json \
+            --out out/r31_explicit_formula_baseline.json
+      - name: Actually fit tiny Torch network, calibrate separately, freeze before public holdout
+        run: |
+          set -euo pipefail
+          python -m tachyon.r31b_neural_formula \
+            --pack data/tachyon/r31/formal_reference_pack.json \
+            --train out/r31_formal_train_only.json \
+            --outdir out/neural
+      - name: Verify exact checkpoint SHA and scientific nonpromotion
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from tachyon.r31_reference_gate import sha
+          base=Path('out/neural')
+          result=json.loads((base/'r31b_neural_math_public_dev_receipt.json').read_text())
+          checkpoint=base/'r31b_math_neural_research_only.pt'
+          assert hashlib.sha256(checkpoint.read_bytes()).hexdigest()==result['checkpoint_sha256']
+          assert result['receipt_sha256']==sha({k:v for k,v in result.items() if k!='receipt_sha256'})
+          assert result['neural_weights_actually_trained'] is True
+          assert result['train_gradient_used_public_unseen_labels'] is False
+          assert result['test_predictions_scored_after_checkpoint_written'] is True
+          assert result['independent_external_blind_assessor'] is False
+          assert result['production_model_promotion'] is False
+          assert result['scientific_admission']=='HOLD'
+          print('TACHYON_R31B_PUBLIC_DEV_NEURAL_MAE',result['neural_mae'])
+          print('TACHYON_R31B_TRAIN_MEAN_MAE',result['train_mean_baseline_mae'])
+          print('TACHYON_R31B_NEURAL_BEATS_TRAIN_MEAN',result['neural_beats_train_mean_on_public_dev'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r31b-trained-neural-public-only-not-admitted
+          path: out/
+          retention-days: 30
+          if-no-files-found: error
