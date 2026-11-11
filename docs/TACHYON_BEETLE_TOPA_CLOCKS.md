@@ -50,3 +50,16 @@ Manual GitHub Action optionally installs Torch on a CPU runner; it has `contents
 `BEETLE_CONTEXT != GRADIENT_SIGNAL`;
 `RETROCAUSALITY_NOT_SHOWN`;
 `AUTHORITY_DELTA=0`.
+
+## Added exact external processed measurements: Wisconsin 2023
+
+[Zheng et al., Nature Communications 2023](https://doi.org/10.1038/s41467-023-40629-8) deposited their process-data figures in [Zenodo 8184043](https://doi.org/10.5281/zenodo.8184043). We retain **Fig3.csv** exactly: 958 bytes, published MD5 `257eab6f29cf3480c536cac73ed3998a`, SHA-256 `a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f`. This is authors' published *processed figure data*, not primary raw instrument logs. No data were invented or imputed.
+
+`python -m tachyon.clock_process_replay --out artifacts/tachyon-lab/wisconsin-fig3-replay.json` replays the 14 reported run-level gradient estimates:
+
+- inverse-variance weighted gradient **-12.362409 ± 0.680959** in `10^-19 / cm` (statistical)
+- journal published rounded **-12.4 ± 0.7 (stat) ± 2.5 (sys)**
+- weak-field GR predicted signed gradient **approximately -10.9**, deviation **about 0.56 sigma** when treating the published systematic term as one independent uncertainty contribution
+- four height points have exploratory through-origin fit **-11.931498 ± 0.561679** (diagonal-only, covariance unknown), **not an independent measurement**.
+
+Now we can genuinely replay multiple data entries from an independent experiment, unlike the single 2020 Tokyo aggregate. The dataset was published in 2023, so this is retrospective reproduction, **not a preregistered forecast**. The model did not train on it and its neural predictions are not evaluated by these numbers. TOPA receives a source-bound *claim about the reported publication* plus a distinct falsifiable hypothesis, never an automatic physical discovery.

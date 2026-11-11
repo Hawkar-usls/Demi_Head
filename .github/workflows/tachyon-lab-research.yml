@@ -48,11 +48,16 @@ jobs:
           python -m unittest discover -s tests -p 'test_tachyon_explanations.py' -v
       - name: Published clock aggregate replay
         run: python -m tachyon.clock_benchmark --out artifacts/tachyon-lab/clock-benchmark.json
+      - name: Replay Wisconsin published processed clock data (exact Zenodo MD5)
+        run: |
+          python -m unittest discover -s tests -p 'test_tachyon_clock_process.py' -v
+          python -m tachyon.clock_process_replay --out artifacts/tachyon-lab/wisconsin-fig3-replay.json
       - name: Beetle to canonical TOPA hypotheses (no promotion)
         run: |
           python -m tachyon.research_bridge \
             --beetle-context external/beetle/data/beetle-runtime/CONTEXT.json \
             --topa-router external/topa/integrations/janus-distributed-ai-swarm/topa_epistemic_router.py \
+            --clock-receipt artifacts/tachyon-lab/wisconsin-fig3-replay.json \
             --out artifacts/tachyon-lab/beetle-topa-assessments.json
       - name: Record exact provider Git revisions
         run: |

@@ -135,6 +135,7 @@ def main() -> None:
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--beetle-context',type=Path,required=True)
     p.add_argument('--topa-router',type=Path)
+    p.add_argument('--clock-receipt',type=Path,help='Previously validated published-clock replay receipt')
     p.add_argument('--out',type=Path,required=True)
     args=p.parse_args()
     snapshot=validate_beetle_context(args.beetle_context.read_bytes())
@@ -149,8 +150,32 @@ def main() -> None:
             row['topa_receipt']=canonical_topa_assessment(envelope,args.topa_router)
             row['topa_provider_status']='CANONICAL_ROUTER_ACCEPTED_HYPOTHESIS_ONLY'
         hypotheses.append(row)
+    clock_claims=[]
+    if args.clock_receipt:
+        if args.clock_receipt.stat().st_size>100_000:
+            raise ValueError('CLOCK_RECEIPT_TOO_LARGE')
+        receipt=json.loads(args.clock_receipt.read_text(encoding='utf-8'))
+        if (receipt.get('schema')!='janus.tachyon.clock_process_replay.v1' or
+            receipt.get('source',{}).get('sha256')!='a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f' or
+            receipt.get('scientific_limits',{}).get('tachyon_neural_evaluation') is not False or
+            receipt.get('scientific_limits',{}).get('raw_instrument_data_replicated') is not False):
+            raise ValueError('CLOCK_RECEIPT_AUTHORITY_OR_SOURCE_REJECTED')
+        paper='https://doi.org/10.1038/s41467-023-40629-8'
+        fact=make_topa_claim(claim_id='TACHYON-WISCONSIN-PUBLISHED-DATA-2023',
+           statement='Published Fig3 processed data contain 14 signed redshift-gradient measurements and uncertainty estimates; not raw instrument records.',
+           source_urls=[paper],category='SOURCE_FACT')
+        hypothesis=make_topa_claim(claim_id='TACHYON-WISCONSIN-GR-CONSISTENCY-2023',
+           statement='The 2023 reported clock frequency gradient is statistically compatible with ordinary weak-field GR within its reported systematic uncertainty.',
+           source_urls=[paper],alternative='Unmodelled instrumental systematic or shared calibration error',
+           falsifier='Independent raw clock reanalysis with predeclared nuisance-parameter model and blind replication')
+        for envelope in (fact,hypothesis):
+            row={'envelope':envelope,'topa_provider_status':'NOT_CHECKED'}
+            if args.topa_router:
+                row['topa_receipt']=canonical_topa_assessment(envelope,args.topa_router)
+                row['topa_provider_status']='CANONICAL_ROUTER_ACCEPTED_'+envelope['evidence_class']
+            clock_claims.append(row)
     result={'schema':'janus.demihead.tachyon.topa_beetle_bridge.v1',
-            'beetle':snapshot,'topa':hypotheses,'model_training_occured':False,
+            'beetle':snapshot,'topa':hypotheses,'clock_topa':clock_claims,'model_training_occured':False,
             'external_fetches':False,'authority_delta':0,'publication_enabled':False}
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(result,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
