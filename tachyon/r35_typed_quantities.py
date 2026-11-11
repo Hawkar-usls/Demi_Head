@@ -21,6 +21,7 @@ DS=(0,0,1,0)
 DL=(0,1,0,0)
 DVEL=(0,1,-1,0)
 DW=(1,2,-3,0)
+DP=(1,1,-1,0)  # linear momentum; MeV/c, NOT energy
 # factor to SI base; no implicit conversion on unknown units
 UNITS={
  "1":(1.,D0),"%":(.01,D0),
@@ -30,7 +31,8 @@ UNITS={
  "s":(1.,DS),"ms":(.001,DS),"µs":(1e-6,DS),
  "m":(1.,DL),"cm":(.01,DL),
  "m/s":(1.,DVEL),"km/h":(1/3.6,DVEL),
- "W":(1.,DW)
+ "W":(1.,DW),
+ "MeV/c":(1.602176634e-13/299792458.,DP)
 }
 FAMILIES={
  "SR_PROPER_TIME_RATIO":{"inputs":(("beta",D0),),"target":D0,"target_unit":"1","scale":1.0,"source":"https://openstax.org/books/university-physics-volume-3/pages/5-3-time-dilation"},
@@ -251,6 +253,68 @@ def check_splits(doc):
              for name in ("train","calibration")
              for x in dataset(doc,name)),"R35_WITHHELD_FAMILY_LEAK")
     return result
+
+MEASURED_SOURCE_CONTRACT={
+ "MUON_STOP_DECAY_AND_NEUTRON_CAPTURE":{
+   "url":"https://zenodo.org/records/15081911",
+   "sha256":"b6bb10270e6c604935b47687293470caeafd01172288170d83349043566cd05a",
+   "input":("electron_momentum",DP),
+   "output":("tagged_delay",DS)
+ },
+ "BATTERY_SOC_VOLTAGE_CURVE":{
+   "url":"https://zenodo.org/records/13142016",
+   "sha256":"d7dd665e6d356721ceb08bbbbd3e9f7401bc3cfac0a1b3fbea8df74637a506ea",
+   "input":("soc",D0),
+   "output":("ocv",DV)
+ }
+}
+
+def typed_lab_observation(record):
+    """Represent measured physics with units/provenance, NEVER grant gradient rights.
+
+    Does not fetch public observations or copy underlying licensed files.
+    Pure unit converter with exact source-id and dataset SHA identity.
+    """
+    need(isinstance(record,dict) and
+         set(record)=={"family","dataset_url","dataset_sha256",
+                       "observation_id","input","measured_target",
+                       "original_license_review_complete",
+                       "independent_curator_approved_for_training"},
+         "R35_LAB_OBSERVATION_SCHEMA")
+    fam=record["family"]
+    need(fam in MEASURED_SOURCE_CONTRACT,"R35_LAB_FAMILY_UNKNOWN")
+    expected=MEASURED_SOURCE_CONTRACT[fam]
+    need(record["dataset_url"]==expected["url"]
+         and record["dataset_sha256"]==expected["sha256"],
+         "R35_LAB_DATASET_SHA_OR_ORIGIN_MISMATCH")
+    need(isinstance(record["observation_id"],str) and
+         3<=len(record["observation_id"])<=100,
+         "R35_LAB_OBSERVATION_ID_INVALID")
+    need(record["original_license_review_complete"] is False
+         and record["independent_curator_approved_for_training"] is False,
+         "R35_UNSUPPORTED_TRAINING_APPROVAL_CLAIM")
+    inp=quantity(record["input"],*expected["input"])
+    output=quantity(record["measured_target"],*expected["output"])
+    if fam=="BATTERY_SOC_VOLTAGE_CURVE":
+        need(0<=inp.si<=1.0 and 0<output.si<10,
+             "R35_BATTERY_SOC_VOLTAGE_DOMAIN")
+    else:
+        need(inp.si>=0 and 0<=output.si<=0.001,
+             "R35_MUON_MOMENTUM_DELAY_DOMAIN")
+    return {
+       "family":fam,
+       "original_dataset_url":record["dataset_url"],
+       "original_dataset_sha256":record["dataset_sha256"],
+       "observation_id":record["observation_id"],
+       "input_SI":inp.si,"input_dimensions":inp.dims,
+       "observed_target_SI":output.si,
+       "target_dimensions":output.dims,
+       "measurement_provenance_verified_by_source_sha":True,
+       "physical_instrument_uncertainty_known":False,
+       "raw_laboratory_data_copied":False,
+       "eligible_for_neural_gradient":False,
+       "scientific_admission":"HOLD",
+    }
 
 def load_manifest(path):
     doc=json.loads(Path(path).read_text(encoding="utf8"))
