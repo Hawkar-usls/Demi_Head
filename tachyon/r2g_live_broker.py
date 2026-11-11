@@ -130,6 +130,8 @@ def fetch_json(endpoint,params,headers=None,timeout=7):
             if not isinstance(obj,dict):
                 raise ProviderUnavailable("UPSTREAM_RESPONSE_NOT_OBJECT")
             return obj
+    except urllib.error.HTTPError as exc:
+        raise ProviderUnavailable("UPSTREAM_HTTP_"+str(exc.code)) from None
     except (urllib.error.URLError,TimeoutError,ValueError,UnicodeError,OSError) as exc:
         raise ProviderUnavailable("UPSTREAM_REQUEST_FAILED_"+type(exc).__name__) from None
 
@@ -150,9 +152,22 @@ def common_record(provider,title,url,excerpt,query,date_published=None,kind="SOU
         "instructions_from_source_executed":False,
     }
 
+def wiki_query_with_subject_anchor(query):
+    """CirrusSearch intitle requires the query subject, avoiding off-topic pages."""
+    proper=[w for w in re.findall(r"(?u)\b[А-ЯЁ][а-яё]{3,}\b",query)
+            if w.casefold() not in QUESTION_INITIALS]
+    if not proper:
+        return query
+    entity=proper[-1]
+    other=[w for w in WORD.findall(query)
+           if modest_russian_stem(w) not in subject_anchors(query)
+           and modest_russian_stem(w) not in GENERIC_CONCEPTS
+           and w.casefold() not in STOP]
+    return "intitle:"+entity+(" "+other[0] if other else "")
+
 def wiki_search(query,fetch=fetch_json):
     params={
-        "action":"query","generator":"search","gsrsearch":query,
+        "action":"query","generator":"search","gsrsearch":wiki_query_with_subject_anchor(query),
         "gsrnamespace":"0","gsrlimit":str(MAX_RESULTS),
         "prop":"extracts|info","inprop":"url","exintro":"1",
         "explaintext":"1","exsentences":"3","format":"json","formatversion":"2",
