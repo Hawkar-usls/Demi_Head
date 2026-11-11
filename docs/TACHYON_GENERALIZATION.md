@@ -46,3 +46,16 @@ Four test distributions, specified ahead of evaluation:
 The `RESEARCH_NUMERIC_GATE_PASS_NO_EXTERNAL_VALIDATION` gate reports accuracy of reproducing an exact mathematical rule in **synthetic** cases; it is NOT evidence of useful natural-language generalization, causal anomalies, real-world signal propagation, or time travel. Deployment and auto-promotion remain off. Keep v0.1 as a negative-control historical result. Do not compare a synthetic numerical task's 98% with the prior narrative task's 50% as if they were the same metric.
 
 **Next:** a separately frozen natural-language paraphrase/hypothesis reasoning benchmark and real publicly dated physical measurements, with causal baselines, error bars and provenance. Do not retrain on test failures.
+
+## Robustness audit (three additional unselected training seeds)
+
+Three further complete CPU runs used seeds `20261112`, `20261113`, `20261114`, the same frozen protocol and independent heldout sampling per seed; **no champion was picked**. All three passed the predeclared research numeric gate:
+
+| Metric | Minimum | Mean | Maximum |
+| --- | ---: | ---: | ---: |
+| IID coordinate reversal | 99.36% | 99.57% | 99.76% |
+| Unseen 0.85–0.98c reversal | 96.10% | 98.17% | 99.20% |
+| Close order boundary | 99.73% | 99.84% | 100.00% |
+| Close lightcone boundary | 85.87% | 95.22% | 100.00% |
+
+These repetitions improve confidence in the numerical approximation across random initializations. They do not constitute external experimental validation or proof of any anomalous signal. See `data/tachyon/generalization_seed_robustness_20261111.json` for every score, including the weakest cases. The first seed's weights remain the reference candidate; there is no post-hoc selection of the strongest run.
