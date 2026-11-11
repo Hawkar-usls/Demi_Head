@@ -1,0 +1,67 @@
+{
+  "schema": "janus.tachyon.r32.external_measurement_families.v1",
+  "protocol_id": "TACHYON-R32-FROZEN-CHECKPOINT-NOVEL-LAB-FAMILY-2026-11-11",
+  "author_date_utc": "2026-11-11",
+  "scientific_admission": "HOLD",
+  "production_deployment": false,
+  "real_measurements_acquired_at_manifest_creation": false,
+  "independent_custodian_connected": false,
+  "independent_blind_evaluation": false,
+  "role": "EXTERNAL_SOURCE_FAMILY_HOLDOUT_NOT_TRAINING",
+  "candidate": {
+    "architecture": "TACHYON-R31B-2-INPUT-FORMULA-FAMILY-REGRESSOR",
+    "reference_checkpoint_sha256": "b3b36dfb3e8c1d0d4a1ae1b867978cfa5f8f28d6768d1a42efac02a4d2e47f01",
+    "historical_run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/43057568871",
+    "training_families": [
+      "SR_PROPER_TIME_RATIO",
+      "TWO_LEVEL_BORN_PROBABILITY"
+    ],
+    "pretrained_or_updated_with_external_measurements": false
+  },
+  "public_measurement_sources": [
+    {
+      "id": "SKVI_MUON_CAPTURE_TIMING_2025",
+      "family": "MUON_STOP_DECAY_AND_NEUTRON_CAPTURE",
+      "original_experiment": "Super-Kamiokande Collaboration",
+      "dataset_url": "https://zenodo.org/records/15081911",
+      "doi": "10.5281/zenodo.15081911",
+      "data_path": "decayes_and_neutrons.csv",
+      "expected_md5": "59056d97657ed04b3d19c7766a976519",
+      "max_bytes": 30000000,
+      "expected_measurement_count": 1986465,
+      "provenance_scope": "Decay electron momentum (MeV), electron detection delay (microseconds), optionally tagged neutron delays, each row one stopping muon, SK-VI 2020–2022.",
+      "observable": "COUNT_AND_MEAN_POSITIVE_TAGGED_ELECTRON_DELAY_MICROSECONDS_NOT_A_LIFETIME_ESTIMATOR",
+      "raw_data_license_verified": false,
+      "raw_data_republished": false,
+      "independent_from_training_families": true
+    },
+    {
+      "id": "OFFENBURG_BATTERY_OCV_2024",
+      "family": "BATTERY_SOC_VOLTAGE_CURVE",
+      "original_experiment": "Wolfgang G. Bessler, Offenburg University",
+      "dataset_url": "https://zenodo.org/records/13142016",
+      "doi": "10.5281/zenodo.13142016",
+      "related_publication_doi": "10.1149/1945-7111/ad6938",
+      "data_path": "OCV_vs_SOC_curve_fresh_cell.csv",
+      "expected_md5": "6bb24aed4d06fb4df88de4a3f6a37f3d",
+      "max_bytes": 200000,
+      "expected_measurement_count": 1001,
+      "provenance_scope": "Experimental open-circuit voltage as a function of state of charge from a fresh lithium-ion cell.",
+      "observable": "COUNT_BOUNDED_SOC_AND_OCV_RANGE_NO_MODEL_FIT",
+      "source_license": "CC-BY-NC-4.0; underlying algorithms may have intellectual property restrictions",
+      "raw_data_republished": false,
+      "independent_from_training_families": true
+    }
+  ],
+  "score_policy": {
+    "original_candidate_families_supported": 2,
+    "novel_family_count": 2,
+    "unsupported_families_require": "ABSTAIN_NOT_HALLUCINATED_NUMERIC_PREDICTION",
+    "training_on_external_holdout": false,
+    "lookahead_training_contamination_prohibited": true,
+    "file_integrity_required": "EXACT_MD5_FROM_ZENODO_AND_RECORDED_SHA256",
+    "independent_blind_claim_requires": "SEPARATE_EXTERNAL_CUSTODIAN_SEALED_UNKNOWN_ANSWERS_COMMITTED_AFTER_FREEZE",
+    "journal_article_measured_summary_is_not_raw_validation": true,
+    "all_losses_and_provider_errors_must_be_logged": true
+  }
+}
