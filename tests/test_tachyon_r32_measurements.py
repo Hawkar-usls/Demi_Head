@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from tachyon.r32_external_measurements import (
     SOURCES, FROZEN_CHECKPOINT_SHA, manifest_check,
-    muon_summary,battery_summary,evaluate_manifest
+    muon_summary,battery_summary,evaluate_manifest,BATTERY_API_FILE
 )
 
 MANIFEST_PATH=Path("data/tachyon/r32/independent_origin_measurement_manifest.json")
@@ -64,6 +64,39 @@ class R32Measurement(unittest.TestCase):
     def test_refuse_nonnumeric_and_unphysical_ocv(self):
         with self.assertRaisesRegex(ValueError,"R32_OCV_OUT_OF_RANGE"):
             battery_summary(b"0,1.1\n0.5,10.01\n1,4.2\n",3)
+
+    def test_official_battery_api_content_fallback_requires_exact_md5(self):
+        muon=b"momentum,delay\n10,2.4\n2,0\n11,4.0\n"
+        ocv=b"soc;V\n0;3\n0,5;3,7\n1;4,2\n"
+        samples={
+            "SKVI_MUON_CAPTURE_TIMING_2025":muon,
+            "OFFENBURG_BATTERY_OCV_2024":ocv
+        }
+        fake=copy.deepcopy(self.manifest)
+        updates={}
+        for source in fake["public_measurement_sources"]:
+            data=samples[source["id"]]
+            source["expected_md5"]=hashlib.md5(
+                data,usedforsecurity=False).hexdigest()
+            source["expected_measurement_count"]=3
+            fam,url,md5,limit,n=SOURCES[source["id"]]
+            updates[source["id"]]=(fam,url,source["expected_md5"],limit,3)
+        with patch.dict(SOURCES,updates):
+            requests=[]
+            def fetch(url,limit):
+                requests.append(url)
+                if url==BATTERY_API_FILE:return ocv
+                if url==SOURCES["OFFENBURG_BATTERY_OCV_2024"][1]:
+                    return b"<html>PROXY-ERROR</html>"
+                if url==SOURCES["SKVI_MUON_CAPTURE_TIMING_2025"][1]:
+                    return muon
+                raise ValueError("R32_NOT_ALLOWLISTED")
+            o=evaluate_manifest(fake,fetch)
+        self.assertEqual(o["external_measurement_sources_verified"],2)
+        self.assertIn(BATTERY_API_FILE,requests)
+        self.assertEqual(o["observations"][1]["download_endpoint_used"],
+                         "OFFICIAL_RECORD_API_CONTENT")
+        self.assertFalse(o["new_family_numeric_generalization_demonstrated"])
 
     def test_both_real_sources_unavailable_must_be_visible(self):
         def unavailable(url,budget):
