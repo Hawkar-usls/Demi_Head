@@ -31,6 +31,12 @@ SOURCES={
   "https://zenodo.org/records/13142016/files/OCV_vs_SOC_curve_fresh_cell.csv?download=1",
   "6bb24aed4d06fb4df88de4a3f6a37f3",200000,1001,
  )}
+# Single official, exact-path fallback for the small Offenburg CSV if the
+# public web download serves the wrong body (e.g. HTML). Not used on HTTP429.
+BATTERY_API_FILE=(
+ "https://zenodo.org/api/records/13142016/files/"
+ "OCV_vs_SOC_curve_fresh_cell.csv/content"
+)
 KNOWN_TRAINED_FAMILIES=frozenset({
  "SR_PROPER_TIME_RATIO","TWO_LEVEL_BORN_PROBABILITY",
 })
@@ -86,7 +92,8 @@ class HostRestrictedRedirect(HTTPRedirectHandler):
         return super().redirect_request(req,fp,code,msg,headers,newurl)
 
 def fetch_official(url,limit):
-    require(url in [src[1] for src in SOURCES.values()],"R32_UNTRUSTED_URL")
+    require(url in ([src[1] for src in SOURCES.values()]+[BATTERY_API_FILE]),
+            "R32_UNTRUSTED_URL")
     opener=build_opener(HostRestrictedRedirect())
     req=Request(url,headers={
         "User-Agent":"JANUS-R32-research-holdout/1.0 (read-only scientific audit)",
@@ -198,6 +205,15 @@ def evaluate_manifest(manifest,fetch=fetch_official,checkpoint=None):
             require(isinstance(raw,bytes) and 0<len(raw)<=budget,
                     "R32_DOWNLOAD_TOO_LARGE")
             actual_md5=hashlib.md5(raw,usedforsecurity=False).hexdigest()
+            endpoint_used="PUBLISHED_RECORD_FILE"
+            if actual_md5!=expected_md5 and entry["id"]=="OFFENBURG_BATTERY_OCV_2024":
+                # A single alternative *official* Zenodo API file path, allowed
+                # only for unexpected content (not 429, 404 or transport errors).
+                raw=fetch(BATTERY_API_FILE,budget)
+                require(isinstance(raw,bytes) and 0<len(raw)<=budget,
+                        "R32_DOWNLOAD_TOO_LARGE")
+                actual_md5=hashlib.md5(raw,usedforsecurity=False).hexdigest()
+                endpoint_used="OFFICIAL_RECORD_API_CONTENT"
             require(actual_md5==expected_md5,"R32_SOURCE_MD5_MISMATCH")
             summary=(muon_summary(raw,count) if entry["id"].startswith("SKVI")
                      else battery_summary(raw,count))
@@ -206,6 +222,7 @@ def evaluate_manifest(manifest,fetch=fetch_official,checkpoint=None):
                 "download_size_bytes":len(raw),
                 "source_raw_sha256":hashlib.sha256(raw).hexdigest(),
                 "source_publisher_md5":actual_md5,
+                "download_endpoint_used":endpoint_used,
                 "descriptive_measurement_summary":summary
             })
         except (ValueError,HTTPError,URLError,TimeoutError,OSError,UnicodeError) as e:
