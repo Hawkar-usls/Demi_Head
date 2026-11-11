@@ -1,0 +1,204 @@
+{
+  "schema": "janus.tachyon.r37.real_ocv_group_holdout_v1",
+  "id": "TACHYON-R37-REAL-OCV-RELAXATION-GROUP-HOLDOUT-2026-11-11",
+  "source_repo": "BulyK47/battery-datasets",
+  "source_dataset": "24-hour Raw OCV Relaxation Dataset",
+  "original_dataset_doi": "10.21227/651q-8v82",
+  "source_repository_url": "https://github.com/BulyK47/battery-datasets",
+  "source_license": "CC BY 4.0",
+  "source_attribution": "Iulian-Teodor Voicila; Bogdan-Adrian Enache; Irina Vilciu; George-Calin Seritan, National University of Science and Technology POLITEHNICA Bucharest.",
+  "linked_paper": "https://www.mdpi.com/2313-0105/11/5/186",
+  "data_kind": "REAL_PUBLISHED_BATTERY_OCV_RELAXATION_MEASUREMENTS_AFTER_DISCONNECTION",
+  "input_observables": [
+    "time_hours",
+    "voltage_volts"
+  ],
+  "measured_ambient_conditions": "23±2 degC, reported by source",
+  "source_blob_ids_from_github_public_api_pinned_at_manifest_creation": true,
+  "input_files": [
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_apr.csv",
+      "github_blob_sha1": "a1c379994f26d77781582b555e4130c7e1ba248a",
+      "size_bytes": 68599,
+      "battery_group": "APR",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_ar.csv",
+      "github_blob_sha1": "1d9cb1da261e8b81b6877593f3f0d32355e20003",
+      "size_bytes": 28204,
+      "battery_group": "AR",
+      "group_role": "TEST",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_au.csv",
+      "github_blob_sha1": "7808ad80a0bc76ad1cc3d108120e7756056a2bae",
+      "size_bytes": 28081,
+      "battery_group": "AU",
+      "group_role": "TEST",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_bse.csv",
+      "github_blob_sha1": "97aaca87c80662fcbc08e3b78d1b458021bf1ad6",
+      "size_bytes": 45785,
+      "battery_group": "BSE",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_lg.csv",
+      "github_blob_sha1": "54d60c466ad3c40ccaf789bd79da6af4c8bfbaf3",
+      "size_bytes": 28287,
+      "battery_group": "LG",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_li.csv",
+      "github_blob_sha1": "12f109d8dc0c8473b232babbd81c26a7c5470c41",
+      "size_bytes": 27961,
+      "battery_group": "LI",
+      "group_role": "VALIDATION",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_oem.csv",
+      "github_blob_sha1": "064355805fceaee4e59f5eb4c837d6627d8e9c29",
+      "size_bytes": 28360,
+      "battery_group": "OEM",
+      "group_role": "VALIDATION",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_charge_sg.csv",
+      "github_blob_sha1": "d86966e2a4b77a55d32936ec54eb4de8ed728884",
+      "size_bytes": 28222,
+      "battery_group": "SG",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_apr.csv",
+      "github_blob_sha1": "20d0a6bb3b62556062c217555453fe55571981d5",
+      "size_bytes": 77260,
+      "battery_group": "APR",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_ar.csv",
+      "github_blob_sha1": "a5630e844284dd99d6c280550b978e933e8a94f9",
+      "size_bytes": 28111,
+      "battery_group": "AR",
+      "group_role": "TEST",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_au.csv",
+      "github_blob_sha1": "f3cc20b4cca462caa8a8b77dd3ed71c2fcd4e5e6",
+      "size_bytes": 29087,
+      "battery_group": "AU",
+      "group_role": "TEST",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_bse.csv",
+      "github_blob_sha1": "547110452eba1c659ecdd714112de087e7c486f3",
+      "size_bytes": 45530,
+      "battery_group": "BSE",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_lg.csv",
+      "github_blob_sha1": "8da2d7552295197daa6ef82d9041fa6b31c8210d",
+      "size_bytes": 28306,
+      "battery_group": "LG",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_li.csv",
+      "github_blob_sha1": "613cf6d0bfb5301a70f4bb3cb2ff77927e1c229d",
+      "size_bytes": 28369,
+      "battery_group": "LI",
+      "group_role": "VALIDATION",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_oem.csv",
+      "github_blob_sha1": "d2cb1442b0d70b44194b2237395e27b6905d404e",
+      "size_bytes": 28369,
+      "battery_group": "OEM",
+      "group_role": "VALIDATION",
+      "media_type": "text/csv"
+    },
+    {
+      "path": "ocv-relaxation-24h/csv/ocv_relaxation_24h__24h_discharge_sg.csv",
+      "github_blob_sha1": "f45ba212f6264ed8de1b3008e5a6061b2e8f6f91",
+      "size_bytes": 28341,
+      "battery_group": "SG",
+      "group_role": "TRAIN",
+      "media_type": "text/csv"
+    }
+  ],
+  "experiment_pre_registration": {
+    "data_partition": "BATTERY_GROUP_HOLDOUT_NO_SHARED_CELLS_ACROSS_SELECTION_AND_TEST",
+    "train_batteries": [
+      "APR",
+      "BSE",
+      "SG",
+      "LG"
+    ],
+    "validation_batteries": [
+      "OEM",
+      "LI"
+    ],
+    "test_batteries": [
+      "AR",
+      "AU"
+    ],
+    "per_trace_early_fit_window_hours": 4,
+    "later_forecast_hours": "(4,24]",
+    "parametric_models": [
+      "constant_last",
+      "single_exp",
+      "double_exp",
+      "log_relax",
+      "exp_plus_drift"
+    ],
+    "model_structure_choice": "VALIDATION_ONLY_NO_TEST_LOOK",
+    "candidate_vs_baseline": "Compare proposed log_relax and exp_plus_drift against best of persistence, single and double exponential; allow no promotion if strongest comparator not beaten",
+    "evaluation_unit": "PER_TRACE_MAE_VOLTS_AND_RMSE_VOLTS_WITH_PER_BATTERY_AGGREGATION",
+    "selection_criterion": "UNWEIGHTED_MEAN_TRACE_MAE_VOLTS_ON_VALIDATION_BATTERIES",
+    "future_test_commitment": "SEAL_MODEL_CHOICE_AND_HYPERPARAMETERS_BEFORE_DOWNLOADING_TEST_GROUP_BYTES",
+    "practical_user_goal": "FORECAST_24H_OPEN_CIRCUIT_VOLTAGE_RELAXATION_FROM_4H_EARLY_RECORD",
+    "zero_synthetic_labels": true,
+    "scientific_claim_scope": "EMPIRICAL_FORECAST_METHOD_ONLY_NOT_NEW_FUNDAMENTAL_LAW",
+    "not_independently_blind": true
+  },
+  "rights_and_security": {
+    "source_ccby4_reuse_claim_checked_against_repo_license": true,
+    "acknowledgment_required": true,
+    "real_source_sha1_git_blob_must_match": true,
+    "downloaded_raw_bytes_sha256_recorded": true,
+    "bounded_files_16_max_bytes_per_file": 120000,
+    "no_raw_data_committed_to_repo": true,
+    "no_raw_data_in_action_artifacts": true,
+    "external_custodian_attested": false,
+    "independent_source_quality_curator_signed": false,
+    "neural_weight_training_authorized": false,
+    "neural_weight_auto_promotion": false,
+    "scientific_admission": "HOLD"
+  },
+  "governance": {
+    "symbolic_fit_on_early_lab_time_series_allowed_research_only": true,
+    "neural_gradient_training_on_real_lab_data": false,
+    "require_independent_review_for_real_neural_training": true,
+    "signed_curator_and_external_lab_blind_gate_pending": true,
+    "all_failures_and_non_gains_must_be_persisted": true
+  }
+}
