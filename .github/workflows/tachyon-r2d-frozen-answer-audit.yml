@@ -1,0 +1,113 @@
+name: TACHYON R2D frozen answer audit public development only
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r2d_audit.py'
+      - 'tests/test_tachyon_r2d_audit.py'
+      - 'data/tachyon/r2d/**'
+      - 'docs/TACHYON_R2D_*.md'
+      - '.github/workflows/tachyon-r2d-frozen-answer-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tachyon-r2d-frozen-public-dev
+  cancel-in-progress: false
+jobs:
+  frozen-public-dev:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      R2B_CKPT_SHA: 3adbf7b11a0f4275ab565ea833c7d415fc0e6727ddddf48e5a27f04346350f9c
+      R2C_CKPT_SHA: 4fde3d9c46dd7a11913de97348e97eb11d6b48cbed4a14cee17963c040b8aae8
+      R2C_CARDS_SHA: 21a27ab618d94e1d15d586c20432b8e766cb947eb947b1035a045ef764c8337e
+    steps:
+      - name: Checkout evaluator only without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify immutable source cards
+        run: |
+          echo "$R2C_CARDS_SHA  data/tachyon/r2c/science_cards.json" | sha256sum --check -
+      - name: Fetch FROZEN R2B weights from original run
+        uses: actions/download-artifact@v4
+        with:
+          name: tachyon-r2b-science-explanation-candidate-not-admitted
+          repository: Hawkar-usls/Demi_Head
+          run-id: 43015290827
+          github-token: ${{ github.token }}
+          path: artifacts/tachyon-r2d/frozen-r2b
+      - name: Fetch FROZEN R2C weights from original run
+        uses: actions/download-artifact@v4
+        with:
+          name: tachyon-r2c-candidate-not-admitted
+          repository: Hawkar-usls/Demi_Head
+          run-id: 43020959937
+          github-token: ${{ github.token }}
+          path: artifacts/tachyon-r2d/frozen-r2c
+      - name: Verify both original checkpoints exactly
+        run: |
+          set -euo pipefail
+          R2B="$(find artifacts/tachyon-r2d/frozen-r2b -type f -name r2b_candidate.pt -print -quit)"
+          R2C="$(find artifacts/tachyon-r2d/frozen-r2c -type f -name r2c_research_only.pt -print -quit)"
+          test -n "$R2B" && test -n "$R2C"
+          echo "$R2B_CKPT_SHA  $R2B" | sha256sum --check -
+          echo "$R2C_CKPT_SHA  $R2C" | sha256sum --check -
+          echo "R2B_CKPT_PATH=$R2B" >> "$GITHUB_ENV"
+          echo "R2C_CKPT_PATH=$R2C" >> "$GITHUB_ENV"
+      - name: Install bounded CPU PyTorch
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify scorer and no authority escalation
+        run: |
+          python -m unittest discover -s tests -p test_tachyon_r2d_audit.py -v
+      - name: Split public fixture into questions-only and PUBLIC key
+        run: |
+          python -m tachyon.r2d_audit split-public \
+            --fixture data/tachyon/r2d/public_dev_challenge.json \
+            --questions artifacts/tachyon-r2d/public-questions.json \
+            --key artifacts/tachyon-r2d/public-scoring-key.json
+      - name: Generate from frozen models only, no training
+        run: |
+          python -m tachyon.r2d_audit predict \
+            --questions artifacts/tachyon-r2d/public-questions.json \
+            --cards data/tachyon/r2c/science_cards.json \
+            --r2b "$R2B_CKPT_PATH" --r2c "$R2C_CKPT_PATH" \
+            --out artifacts/tachyon-r2d/public-predictions.json
+      - name: Score PUBLIC diagnostic only
+        run: |
+          set -euo pipefail
+          KEY_SHA="$(sha256sum artifacts/tachyon-r2d/public-scoring-key.json | cut -d' ' -f1)"
+          python -m tachyon.r2d_audit score \
+            --predictions artifacts/tachyon-r2d/public-predictions.json \
+            --key artifacts/tachyon-r2d/public-scoring-key.json \
+            --committed-key-sha256 "$KEY_SHA" \
+            --out artifacts/tachyon-r2d/public-score.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          score=json.loads(Path("artifacts/tachyon-r2d/public-score.json").read_text())
+          assert score["scope"]=="PUBLIC_DEVELOPMENT"
+          assert score["question_count"]==18
+          assert score["not_an_independently_verified_scientific_result"] is True
+          assert score["scientifically_admitted"] is False and score["authority_delta"]==0
+          assert score["metrics"]["formula_baseline"]["numeric_exact_text_match"]==8
+          print("R2D_FROZEN_PUBLIC_DEV_COMPLETE_NOT_BLIND_NOT_SCIENTIFICALLY_ADMITTED")
+          PY
+      - name: Preserve public questions and model outputs for audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r2d-public-development-audit-not-blind
+          path: |
+            artifacts/tachyon-r2d/public-questions.json
+            artifacts/tachyon-r2d/public-predictions.json
+            artifacts/tachyon-r2d/public-score.json
+          retention-days: 14
+          if-no-files-found: warn

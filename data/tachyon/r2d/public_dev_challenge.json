@@ -1,0 +1,145 @@
+{
+  "schema": "janus.tachyon.r2d.public_dev_fixture.v1",
+  "status": "PUBLIC_POSTHOC_DEVELOPMENT_ONLY_NOT_INDEPENDENT_BLIND",
+  "created_after_candidate_checkpoint": true,
+  "source_checkpoint_sha256_r2c": "4fde3d9c46dd7a11913de97348e97eb11d6b48cbed4a14cee17963c040b8aae8",
+  "source_checkpoint_sha256_r2b": "3adbf7b11a0f4275ab565ea833c7d415fc0e6727ddddf48e5a27f04346350f9c",
+  "candidate_trained_on_these_questions": false,
+  "caution": "Source authors cannot certify independent scientific generalization. The numeric formula baseline is exact by construction. No clock lab measurement or secret answer is used.",
+  "cases": [
+    {
+      "case_id": "speed03",
+      "question": "Чему равно dτ/dt для инерциальных часов, если v/c=0.3? Дай численное отношение.",
+      "kind": "numeric",
+      "gold_family": "SR_EINSTEIN_1905",
+      "expected_numeric": 0.953939201,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "speed05",
+      "question": "Рассчитай отношение собственного времени dτ/dt, если v/c=0.5 в специальной относительности.",
+      "kind": "numeric",
+      "gold_family": "SR_EINSTEIN_1905",
+      "expected_numeric": 0.866025404,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "speed08",
+      "question": "При v/c=0.8 какое dτ/dt показывают движущиеся идеальные часы?",
+      "kind": "numeric",
+      "gold_family": "SR_EINSTEIN_1905",
+      "expected_numeric": 0.6,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "speed09",
+      "question": "Для скорости v/c=0.9 оцени собственное время dτ/dt по формуле Лоренца.",
+      "kind": "numeric",
+      "gold_family": "SR_EINSTEIN_1905",
+      "expected_numeric": 0.435889894,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "born02",
+      "question": "Для ρ00=0.2 и проектора |0><0| какова вероятность P(0) по правилу Борна?",
+      "kind": "numeric",
+      "gold_family": "QBAYES_2002",
+      "expected_numeric": 0.2,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "born04",
+      "question": "В двухуровневой системе с ρ00=0.4 измеряем |0><0|. Найди P(0).",
+      "kind": "numeric",
+      "gold_family": "QBAYES_2002",
+      "expected_numeric": 0.4,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "born065",
+      "question": "У квантового состояния диагональный элемент ρ00=0.65. Какова вероятность P(0) для проектора |0><0|?",
+      "kind": "numeric",
+      "gold_family": "QBAYES_2002",
+      "expected_numeric": 0.65,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "born085",
+      "question": "В состоянии ρ00=0.85 измерение проектором |0><0|. Чему равна P(0)?",
+      "kind": "numeric",
+      "gold_family": "QBAYES_2002",
+      "expected_numeric": 0.85,
+      "absolute_tolerance": 0.015
+    },
+    {
+      "case_id": "relativity",
+      "question": "Почему показания часов в движении зависят от относительной скорости, но не дают способа передать сигнал в прошлое?",
+      "kind": "conceptual",
+      "gold_family": "SR_EINSTEIN_1905",
+      "human_scientific_correctness_required": true
+    },
+    {
+      "case_id": "shapiro",
+      "question": "Откуда появляется дополнительное время пролёта света у массивного тела и почему это обычная причинная задержка?",
+      "kind": "conceptual",
+      "gold_family": "GR_SHAPIRO_1964",
+      "human_scientific_correctness_required": true
+    },
+    {
+      "case_id": "bell",
+      "question": "Как нарушение неравенств Белла связано с локальными скрытыми переменными и почему оно не передаёт биты в прошлое?",
+      "kind": "conceptual",
+      "gold_family": "BELL_1964",
+      "human_scientific_correctness_required": true
+    },
+    {
+      "case_id": "hensen",
+      "question": "Какие лазейки контролировала проверка неравенства Белла с разделёнными электронными спинами?",
+      "kind": "conceptual",
+      "gold_family": "HENSEN_2015",
+      "human_scientific_correctness_required": true
+    },
+    {
+      "case_id": "grw",
+      "question": "Что меняет стохастическая модель GRW в динамике волновой функции и доказана ли физическая ретрокаузальность?",
+      "kind": "conceptual",
+      "gold_family": "GRW_1986",
+      "human_scientific_correctness_required": true
+    },
+    {
+      "case_id": "qbayes",
+      "question": "Чем байесовская интерпретация квантовой вероятности отличается от физического механизма ретрокаузального сигнала?",
+      "kind": "conceptual",
+      "gold_family": "QBAYES_2002",
+      "human_scientific_correctness_required": true
+    },
+    {
+      "case_id": "nas",
+      "question": "Как оптимизировать расходы моего NAS на электричество при постоянной нагрузке?",
+      "kind": "out_of_domain",
+      "gold_family": null,
+      "expected_action": "ABSTAIN"
+    },
+    {
+      "case_id": "garden",
+      "question": "Как лучше выбрать зимний сорт яблони для сада?",
+      "kind": "out_of_domain",
+      "gold_family": null,
+      "expected_action": "ABSTAIN"
+    },
+    {
+      "case_id": "cooking",
+      "question": "Почему тесто для пиццы плохо поднимается без дрожжей?",
+      "kind": "out_of_domain",
+      "gold_family": null,
+      "expected_action": "ABSTAIN"
+    },
+    {
+      "case_id": "football",
+      "question": "Как сыграла последняя футбольная команда чемпионата?",
+      "kind": "out_of_domain",
+      "gold_family": null,
+      "expected_action": "ABSTAIN"
+    }
+  ]
+}
