@@ -84,6 +84,13 @@ jobs:
           assert cases['r35b_power_000']['kind']=='abstain'
           assert cases['r35b_battery_000']['kind']=='abstain'
           assert cases['r35b_ohm_000']['unit']=='V'
+          import math
+          assert math.isclose(cases['r35b_sr_000']['value'],math.sqrt(.75),abs_tol=1e-10)
+          assert math.isclose(cases['r35b_ohm_000']['value'],10.,abs_tol=1e-10)
+          assert cases['r35b_sr_000']['answer_method']=='DETERMINISTIC_TEXTBOOK_FORMULA_PRIORITY'
+          assert cases['r35b_ohm_000']['neural_prediction_is_authoritative'] is False
+          assert cases['r35b_ohm_000']['raw_neural_absolute_error_vs_formula']>0.01
+          assert p['research_execution']['exact_formula_priority_answers']==2
           s=p['research_execution']
           assert s['real_torch_forward_calls']==2
           assert s['abstentions']==2
@@ -93,6 +100,7 @@ jobs:
           assert s['scientific_admission']=='HOLD'
           assert s['production_promotion'] is False
           print('R35B_REAL_TYPED_CHECKPOINT_2_FORWARD_2_ABSTAIN_PASS')
+          print('R35B_EXACT_FORMULAS_PRIORITIZED_AND_RAW_NEURAL_ERRORS_RECORDED')
           print('R35B_EXTERNAL_INDEPENDENT_CUSTODIAN_NOT_CONNECTED')
           PY
       - uses: actions/upload-artifact@v4
