@@ -109,7 +109,7 @@ def to_float(raw):
 def muon_summary(raw,count_expected):
     # First 2 fields: decay electron momentum MeV and delay microseconds.
     n=0;n_delay=0;sum_delay=0.;min_delay=None;max_delay=None
-    reader=csv.reader(io.StringIO(raw.decode("utf8-sig")))
+    reader=csv.reader(io.StringIO(raw.decode("utf-8-sig")))
     header_skipped=False
     for cols in reader:
         if not cols:continue
@@ -139,7 +139,7 @@ def muon_summary(raw,count_expected):
 
 def battery_summary(raw,count_expected):
     # OCV vs SOC; accept comma/semicolon/tab, with a possible header line.
-    rows=raw.decode("utf8-sig").splitlines()
+    rows=raw.decode("utf-8-sig").splitlines()
     n=0;xmin=math.inf;xmax=-math.inf;ymin=math.inf;ymax=-math.inf
     first=None;last=None
     for line in rows:
