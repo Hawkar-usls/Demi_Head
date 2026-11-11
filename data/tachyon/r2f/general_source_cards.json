@@ -1,0 +1,119 @@
+{
+  "schema": "janus.tachyon.r2f.general_source_cards.v1",
+  "role": "OUT_OF_PHYSICS_SOURCE_GROUNDED_ROUTING_NOT_MODEL_TRAINING",
+  "provenance": {
+    "compiled_utc": "2026-11-11",
+    "method": "Short original Russian paraphrases of publicly accessible institutional guidance, not full-text copies",
+    "validation": "URLs and source descriptions checked against public pages; author-prepared answers are not independent expert assessments",
+    "independent_assessor": false
+  },
+  "cards": [
+    {
+      "id": "NAS_ENERGY_BASICS",
+      "domain": "storage_energy",
+      "required_any": [
+        "nas",
+        "нас",
+        "сервер",
+        "накопител",
+        "сетев хранилищ"
+      ],
+      "supports_any": [
+        "электр",
+        "энерг",
+        "потребл",
+        "ватт",
+        "расход",
+        "затрат",
+        "эконом"
+      ],
+      "title": "Энергопотребление NAS",
+      "answer_ru": "Для постоянно работающего NAS сначала измерь потребление из розетки и вычисли расход как мощность в кВт × часы работы × тариф. Затем проверь загрузку CPU, активность дисков, настройки питания и избыточные фоновые задачи. Изменять режим дисков и контейнеров следует только после проверки требований к доступности и резервному копированию; частые циклы остановки дисков могут быть невыгодны. Без фактической мощности и тарифа точную экономию назвать нельзя.",
+      "citations": [
+        {
+          "title": "U.S. Department of Energy: energy-efficient data center storage",
+          "url": "https://www.energy.gov/cmei/femp/purchasing-energy-efficient-data-center-storage",
+          "type": "GOVERNMENT_GUIDANCE"
+        },
+        {
+          "title": "ENERGY STAR: efficient data storage measures",
+          "url": "https://www.energystar.gov/products/data_center_equipment/16-more-ways-cut-energy-waste-data-center/implement-efficient-data-storage-measures",
+          "type": "PUBLIC_ENERGY_GUIDANCE"
+        }
+      ],
+      "caveats": [
+        "General energy/storage principles, not a diagnosis or measured power figure for any specific NAS",
+        "Do not modify or restart containers without explicit authorization"
+      ],
+      "time_sensitive": false
+    },
+    {
+      "id": "APPLE_WINTER_CULTIVAR",
+      "domain": "horticulture",
+      "required_any": [
+        "яблон",
+        "яблок"
+      ],
+      "supports_any": [
+        "зимн",
+        "сорт",
+        "сад",
+        "выбор",
+        "выбрат",
+        "посад",
+        "хранен"
+      ],
+      "title": "Как выбрать зимнюю яблоню",
+      "answer_ru": "Выбирай позднеспелый сорт яблони по зимостойкости для местной климатической зоны, устойчивости к парше и другим болезням, срокам созревания и лежкости плодов. Важны подходящий подвой и совместимый сорт-опылитель. Для долгого хранения нужны подходящие холодные условия. Без региона, почвы и целей нельзя надежно назвать один лучший сорт.",
+      "citations": [
+        {
+          "title": "University of Missouri Extension: Home Fruit Production — Apples",
+          "url": "https://extension.missouri.edu/publications/g6021",
+          "type": "UNIVERSITY_EXTENSION"
+        },
+        {
+          "title": "University of Maryland Extension: Apples",
+          "url": "https://www.extension.umd.edu/resource/apples",
+          "type": "UNIVERSITY_EXTENSION"
+        }
+      ],
+      "caveats": [
+        "Local cultivar suitability requires local weather, pollination and disease context"
+      ],
+      "time_sensitive": false
+    },
+    {
+      "id": "PIZZA_WITHOUT_YEAST",
+      "domain": "baking",
+      "required_any": [
+        "пицц",
+        "тест"
+      ],
+      "supports_any": [
+        "дрожж",
+        "поднима",
+        "разрыхл",
+        "брожен",
+        "пышн"
+      ],
+      "title": "Почему тесто без дрожжей почти не поднимается",
+      "answer_ru": "Обычное дрожжевое тесто увеличивается в объёме из-за газа, который образуется во время брожения. Если нет дрожжей и нет другого разрыхлителя, газовых пузырьков для подъёма обычно недостаточно. Для бездрожжевой основы подойдут более тонкая лепешка или рецепт с разрыхлителем; закваска тоже содержит микроорганизмы и не является вариантом совсем без брожения.",
+      "citations": [
+        {
+          "title": "King Arthur Baking: How to make bread without yeast",
+          "url": "https://www.kingarthurbaking.com/blog/2020/05/25/how-to-make-bread-without-yeast",
+          "type": "SPECIALIST_BAKING_GUIDANCE"
+        },
+        {
+          "title": "King Arthur Baking: Pizza Crust",
+          "url": "https://www.kingarthurbaking.com/recipes/pizza-crust-recipe",
+          "type": "SPECIALIST_BAKING_RECIPE"
+        }
+      ],
+      "caveats": [
+        "Specific dough formulation, hydration and oven heat also affect puffiness"
+      ],
+      "time_sensitive": false
+    }
+  ]
+}
