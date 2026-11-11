@@ -1,0 +1,85 @@
+name: TACHYON R3.7 - real CC BY4 OCV battery-disjoint forecast audit
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r37_real_ocv_evaluator.py'
+      - 'tests/test_tachyon_r37_real_ocv_evaluator.py'
+      - 'data/tachyon/r37/**'
+      - '.github/workflows/tachyon-r37-real-ocv.yml'
+      - 'docs/TACHYON_R37_REAL_OCV_EVALUATION.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r37-real-ocv-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  pinned-real-public-measurement-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate deterministic source hashes, group isolation, and sealed selection
+        run: |
+          set -euo pipefail
+          python -m py_compile tachyon/r37_real_ocv_evaluator.py
+          python -m unittest discover -s tests -p 'test_tachyon_r37_real_ocv_evaluator.py' -v
+          test ! -e data/tachyon/r35/approved_laboratory_gradients.json
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+      - name: Fetch exact 16 CC BY4 original raw CSVs, verify Git blob SHA and compare group-heldout forecasts
+        run: |
+          set -euo pipefail
+          python -m tachyon.r37_real_ocv_evaluator \
+            --manifest data/tachyon/r37/real_ocv_group_holdout_manifest.json \
+            --outdir out/r37
+      - name: Confirm test groups fetched after model-selection seal and scientific gate remains closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tachyon.r37_real_ocv_evaluator import sha,MODEL_TYPES
+          p=Path('out/r37/r37_real_ocv_forecast_evaluation.json')
+          o=json.loads(p.read_text())
+          seal=json.loads(Path('out/r37/r37_pretest_selection_seal.json').read_text())
+          assert o['receipt_sha256']==sha({k:v for k,v in o.items() if k!='receipt_sha256'})
+          assert seal['pretest_selection_receipt_sha256']==sha({k:v for k,v in seal.items() if k!='pretest_selection_receipt_sha256'})
+          assert o['model_family_selection_sha256']==seal['pretest_selection_receipt_sha256']
+          assert o['raw_source_files_received']==16
+          assert o['total_traces_train']>=8
+          assert o['total_traces_validation']>=4
+          assert o['total_traces_test']==4
+          assert o['test_batteries_loaded_after_validation_selection_seal'] is True
+          assert o['no_test_battery_used_to_choose_formula_structure'] is True
+          assert set(o['test_mean_trace_MAE_V'])==set(MODEL_TYPES)
+          assert all(x['raw_sha256'] and x['publisher_mirror_git_blob_sha1']
+                     for x in o['raw_source_file_sha256_receipts'])
+          assert o['neural_weights_trained'] is False
+          assert o['neural_training_authorized'] is False
+          assert o['scientific_admission']=='HOLD'
+          assert o['production_model_promoted'] is False
+          print('R37_REAL_OCV_ALL_16_ORIGINAL_SOURCE_SHA_VERIFIED')
+          print('R37_SELECTED_VALIDATION_ONLY',o['selected_model'])
+          print('R37_STRONGEST_STANDARD',o['strongest_standard_baseline_on_validation'])
+          print('R37_TEST_MAE_BY_MODEL',json.dumps(o['test_mean_trace_MAE_V'],sort_keys=True))
+          print('R37_TEST_GAIN',o['selected_challenger_relative_gain_vs_strongest_baseline_on_test'])
+          print('R37_NEW_FORMULA_OUT_OF_GROUP_GAIN',o['positive_new_symbolic_forecast_gain_both_batteries'])
+          print('R37_RESEARCH_ONLY_NO_NEURAL_TRAINING_SCIENTIFIC_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tachyon-r37-real-ocv-group-split-research-receipts-only
+          path: out/r37/*.json
+          if-no-files-found: warn
+          retention-days: 30
