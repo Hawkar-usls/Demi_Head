@@ -1,0 +1,70 @@
+{
+  "schema": "janus.tachyon.r36.symbolic_residual_science_gate.v1",
+  "id": "TACHYON-R36-DIMENSIONAL-SYMBOLIC-RESIDUAL-DISCOVERY-2026-11-11",
+  "date": "2026-11-11",
+  "baseline_law": "V = I * R",
+  "source_reference": "https://openstax.org/books/college-physics-2e/pages/20-2-ohms-law-resistance-and-simple-circuits",
+  "kind": "SYNTHETIC_INSTRUMENT_LIKE_SIMULATOR",
+  "scientific_admission": "HOLD",
+  "production_model_promotion": false,
+  "source_rights_curator_approved_real_lab_data": false,
+  "third_party_blind_assessor_connected": false,
+  "real_measurements_used_for_gradients": false,
+  "target_dimension_si": "V",
+  "current_dimension_si": "A",
+  "resistance_dimension_si": "Ω",
+  "temperature_difference_unit": "K",
+  "reference_temperature_difference_kelvin": 20,
+  "reference_current_ampere": 1,
+  "candidate_terms": [
+    "theta",
+    "theta_squared",
+    "normalized_current",
+    "normalized_current_squared",
+    "theta_times_normalized_current"
+  ],
+  "maximum_new_terms": 2,
+  "candidate_selection": "validation_only_with_penalty_for_extra_coefficients",
+  "estimation": "bounded_normal_equations_ridge_then_refit_on_train_plus_validation_after_candidate_structure_sealed",
+  "train_records": 84,
+  "validation_records": 42,
+  "future_test_records": 54,
+  "test_visibility_policy": "test_examples_not_generated_until_after_expression_structure_and_coefficients_frozen",
+  "scientific_success_requires": "new independent measured source family, blinded future control, laws of thermodynamics and measurement error uncertainty; none currently present",
+  "scenarios": [
+    {
+      "id": "TEMPERATURE_DEPENDENT_RESISTOR_SYNTHETIC",
+      "truth_generation_only": "V = I * R * (1 + 0.004/K * ΔT) + bounded instrument-like noise",
+      "truth_coefficient_kelvin_inverse": 0.004,
+      "noise_relative_scale": 0.001,
+      "scientific_independent": false,
+      "source": "SYNTHETIC_GENERATOR_ONLY"
+    },
+    {
+      "id": "PURE_OHM_SYNTHETIC_NEGATIVE_CONTROL",
+      "truth_generation_only": "V = I * R + bounded instrument-like noise",
+      "truth_coefficient_kelvin_inverse": 0,
+      "noise_relative_scale": 0.001,
+      "scientific_independent": false,
+      "source": "SYNTHETIC_GENERATOR_ONLY"
+    }
+  ],
+  "release_rule": {
+    "minimum_validation_relative_RMSE_reduction": 0.2,
+    "minimum_future_test_relative_RMSE_reduction": 0.15,
+    "coefficient_interpretability_required": true,
+    "no_self_generated_training_labels": true,
+    "all_candidate_attempts_logged": true,
+    "disable_if_dimensionally_invalid": true,
+    "no_real_laboratory_promotion_without_external_signed_review": true,
+    "research_formula_candidate_saved_only": true
+  },
+  "forbidden_training_inputs": [
+    "Super-Kamiokande SK-VI published muon delays",
+    "Offenburg OCV/SOC experimental samples",
+    "GDELT source content",
+    "TACHYON R33/R34 private custodian gold",
+    "Unapproved real experimental measurement",
+    "Own model predictions treated as new ground truth"
+  ]
+}
