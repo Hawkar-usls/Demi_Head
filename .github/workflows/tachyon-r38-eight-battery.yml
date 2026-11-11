@@ -1,0 +1,88 @@
+name: TACHYON R3.8 - eight real batteries, physical relaxation models, public LOBO
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r38_battery_physical_crossval.py'
+      - 'tests/test_tachyon_r38_battery_physical_crossval.py'
+      - 'data/tachyon/r38/**'
+      - 'docs/TACHYON_R38_EIGHT_BATTERY_PHYSICAL_CROSSVAL.md'
+      - '.github/workflows/tachyon-r38-eight-battery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r38-eight-group-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  public-eight-battery-group-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: No-neural-training/public-LOBO/external-custodian-negative-control tests
+        run: |
+          set -euo pipefail
+          python -m py_compile tachyon/r38_battery_physical_crossval.py
+          python -m unittest discover -s tests -p 'test_tachyon_r38_battery_physical_crossval.py' -v
+          test ! -e data/tachyon/r38/external_custodian_private_answers.json
+          test ! -e data/tachyon/r35/approved_laboratory_gradients.json
+      - name: Download and verify 16 original public CC BY source CSVs, score 8 distinct batteries
+        run: |
+          set -euo pipefail
+          python -m tachyon.r38_battery_physical_crossval \
+            --source-manifest data/tachyon/r37/real_ocv_group_holdout_manifest.json \
+            --config data/tachyon/r38/eight_battery_cross_validation_manifest.json \
+            --external-custodian data/tachyon/r38/external_custodian_control_not_provided.json \
+            --output-dir out/r38
+      - name: Audit all eight LOBO trials, file integrity, external blind and training gates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from tachyon.r38_battery_physical_crossval import sha
+          p=Path('out/r38/r38_public_eight_battery_cross_validation.json')
+          r=json.loads(p.read_text())
+          assert r['receipt_sha256']==sha({k:v for k,v in r.items() if k!='receipt_sha256'})
+          assert r['total_real_raw_source_files']==16
+          assert r['total_real_ocv_voltage_curves']==30
+          assert r['num_public_lobo_folds']==8
+          assert r['num_distinct_public_device_groups_evaluated']==8
+          assert len(r['lobo_fold_selection_and_test_results'])==8
+          assert r['public_data_r37_reused_no_true_blind'] is True
+          assert r['external_independent_control_set_status']=='NOT_PROVIDED_BY_INDEPENDENT_LAB'
+          assert r['independent_external_custodian_connected'] is False
+          assert r['new_independent_experimental_dataset_evaluated'] is False
+          assert r['model_neural_weights_changed'] is False
+          assert r['real_measurements_used_for_neural_gradient'] is False
+          assert r['automatic_formula_or_weight_promotion'] is False
+          assert r['scientific_admission']=='HOLD'
+          assert all(len(f['selection_batteries'])==7 and
+                     f['heldout_battery'] not in f['selection_batteries']
+                     for f in r['lobo_fold_selection_and_test_results'])
+          print('R38_ALL_16_SOURCE_BLOBS_PASS')
+          print('R38_EIGHT_DISTINCT_BATTERY_LOBO_PASS')
+          print('R38_PER_GROUP_MAE_VOLTS',json.dumps(r['battery_group_mean_trace_MAE_volts'],sort_keys=True))
+          print('R38_CANDIDATE_SELECTED_FOLDS',r['challenger_selected_in_n_folds'])
+          print('R38_CANDIDATE_STRONG_BASELINE_WIN_FOLDS',r['challenger_beats_baseline_n_folds'])
+          print('R38_PUBLIC_RETROSPECTIVE_CONSISTENCY',r['public_retro_crossval_challenger_consistency_pass'])
+          print('R38_EXTERNAL_INDEPENDENT_HOLDOUT_NOT_PROVIDED_NEURAL_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tachyon-r38-public-8battery-LOBO-no-blind-or-neural-training
+          path: out/r38/*.json
+          retention-days: 30
+          if-no-files-found: warn

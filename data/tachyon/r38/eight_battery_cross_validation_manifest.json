@@ -1,0 +1,97 @@
+{
+  "schema": "janus.tachyon.r38.battery_groups_cross_validation_v1",
+  "id": "JANUS-TACHYON-R38-8-BATTERY-REAL-OCV-2026-11-11",
+  "source_r37_manifest_path": "data/tachyon/r37/real_ocv_group_holdout_manifest.json",
+  "source_doi": "10.21227/651q-8v82",
+  "license": "CC BY 4.0 attribution required",
+  "audit_level": "PUBLIC_RETROSPECTIVE_EIGHT_BATTERY_LEAVE_ONE_BATTERY_OUT",
+  "battery_groups": [
+    "APR",
+    "BSE",
+    "SG",
+    "LG",
+    "OEM",
+    "LI",
+    "AR",
+    "AU"
+  ],
+  "prior_evaluated_in_r37": [
+    "APR",
+    "BSE",
+    "SG",
+    "LG",
+    "OEM",
+    "LI",
+    "AR",
+    "AU"
+  ],
+  "prior_R37_test_batteries": [
+    "AR",
+    "AU"
+  ],
+  "model_families": {
+    "incumbents": [
+      "constant_last",
+      "single_exp",
+      "double_exp"
+    ],
+    "challengers": [
+      "triple_exp",
+      "stretched_exp",
+      "diffusion_tail"
+    ]
+  },
+  "candidate_selection": {
+    "strategy": "outer leave-one-battery-out, select best incumbent and challenger on seven other battery groups only",
+    "measure": "mean per-trace MAE volts first averaged within battery, then across battery groups",
+    "early_voltage_fit_hours": 4,
+    "forecast_hours_start_exclusive": 4,
+    "forecast_hours_end_inclusive": 24,
+    "challenger_minimum_inner_relative_gain": 0.05,
+    "challenger_minimum_outer_relative_gain": 0.05,
+    "independent_reproducible_gain_threshold_batteries": 6,
+    "historical_previous_r37_exposure": true,
+    "no_global_hyperparameter_selection_from_outer_scores": true
+  },
+  "scientific_references": [
+    {
+      "title": "Fast Characterization Method for Modeling Battery Relaxation Voltage",
+      "url": "https://www.mdpi.com/2313-0105/2/2/7",
+      "type": "multi_RC_baseline"
+    },
+    {
+      "title": "Isolation of relaxation times under open-circuit conditions",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10182328/",
+      "type": "two_relaxation_times"
+    },
+    {
+      "title": "An exact solution for rest-period voltage relaxation in Li-ion batteries",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12639891/",
+      "type": "diffusion_motivation"
+    },
+    {
+      "title": "Time-domain system identification using fractional models",
+      "url": "https://doi.org/10.1016/j.arcontrol.2025.101017",
+      "type": "fractional_motivation"
+    }
+  ],
+  "caveats": [
+    "A time-domain diffusion_tail shape is a simple empirical surrogate, not the exact electrochemical diffusion PDE.",
+    "Triple exponential is a three-timescale RC-inspired approximation, not validated equivalent-circuit parameters.",
+    "R3.8 reuses the previously public R3.7 dataset; this is NOT new independent blind science.",
+    "No new batteries beyond the same eight original devices; independent refers to distinct devices, not distinct sources.",
+    "Model coefficients may use first 4 hours of each heldout device; subsequent 20h must never be fitted."
+  ],
+  "governance": {
+    "source_data_permissions_verified_publisher_repository": "CC BY 4.0",
+    "source_hashes_required": true,
+    "original_raw_data_committed_to_JANUS": false,
+    "original_raw_data_in_Action_artifacts": false,
+    "actual_independent_external_custodian_connected": false,
+    "original_lab_source_curation_signed": false,
+    "scientific_admission": "HOLD",
+    "neural_retraining_permitted": false,
+    "automatic_formula_promotion": false,
+    "JANUS_Ocean_promotion": false
+  }
+}

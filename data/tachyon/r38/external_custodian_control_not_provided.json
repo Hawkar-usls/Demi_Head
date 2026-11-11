@@ -1,0 +1,38 @@
+{
+  "schema": "janus.tachyon.r38.external_custodian_control_slot_v1",
+  "id": "JANUS-R38-EXTERNAL-BATTERY-CUSTODIAN-UNPOPULATED-2026-11-11",
+  "intended_use": "PROSPECTIVE_3RD_PARTY_NEW_DEVICE_OCV_RELAXATION_4H_TO_24H",
+  "status": "NOT_PROVIDED_BY_INDEPENDENT_LAB",
+  "independent_custodian_id": null,
+  "independent_identity_signature": null,
+  "new_original_dataset_doi": null,
+  "source_new_device_ids_sha256_commitment": null,
+  "private_gold_source_manifest_sha256": null,
+  "private_question_only_bundle_sha256": null,
+  "frozen_candidate_model_selection_sha256": null,
+  "blinded_result_signature": null,
+  "independent_timestamp_receipt": null,
+  "pre_registration": "Only accept data from newly independently selected device cohort, never reuse BulyK47 prior evaluated public eight batteries as secret data.",
+  "current_public_R37_R38_batteries_ineligible": [
+    "APR",
+    "BSE",
+    "SG",
+    "LG",
+    "OEM",
+    "LI",
+    "AR",
+    "AU"
+  ],
+  "private_correct_answers_in_GitHub": false,
+  "independent_raw_experimental_values_in_GitHub": false,
+  "independent_external_holdout_completed": false,
+  "scientific_admission": "HOLD",
+  "release_gates": [
+    "Independent custodian identity and data provenance verified before any challenge answer disclosure",
+    "Original device IDs, instruments, units, traces and measurement uncertainty reviewed by third party",
+    "Non-overlapping source/device groups and signed SHA commitment before inference",
+    "No model tuning on independent test errors or repeated attempts",
+    "Strong physically motivated comparison using predefined paired device-level uncertainty",
+    "Independent scientific signature and separate explicitly approved training/promotion gates"
+  ]
+}
