@@ -97,7 +97,7 @@ def fetch_official(url,limit):
     opener=build_opener(HostRestrictedRedirect())
     req=Request(url,headers={
         "User-Agent":"JANUS-R32-research-holdout/1.0 (read-only scientific audit)",
-        "Accept":"text/csv,application/octet-stream"
+        "Accept":"*/*"
     })
     with opener.open(req,timeout=40) as response:
         require(response.status==200,"R32_UNEXPECTED_HTTP_STATUS")
