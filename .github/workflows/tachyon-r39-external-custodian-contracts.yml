@@ -1,0 +1,48 @@
+name: TACHYON R3.9 - external custodian protocol contracts (synthetic only)
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r39_external_battery_custodian.py'
+      - 'tests/test_tachyon_r39_external_battery_custodian.py'
+      - 'data/tachyon/r39/**'
+      - 'docs/TACHYON_R39_EXTERNAL_BATTERY_CUSTODIAN.md'
+      - '.github/workflows/tachyon-r39-external-custodian-contracts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tachyon-r39-external-contracts-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fake-cohort-contracts-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit no private source or gold on public runner
+        run: |
+          set -euo pipefail
+          test ! -e data/tachyon/r39/real_external_private_gold.json
+          test ! -e data/tachyon/r39/custodian_salt.hex
+          test ! -e data/tachyon/r39/approved_real_measurement_gradients.json
+          test ! -e data/tachyon/r38/external_custodian_private_answers.json
+          python -m py_compile tachyon/r39_external_battery_custodian.py
+      - name: Run SOURCE SHA pinned offline synthetic 12-device sealed challenge tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_tachyon_r39_external_battery_custodian.py' -v
+          echo 'R39_OFFLINE_SYNTHETIC_ONLY_REAL_EXTERNAL_CUSTODIAN_ABSENT' >> "$GITHUB_STEP_SUMMARY"
+          echo 'R39_ACTUAL_PRIVATE_SOURCE_AND_HIDDEN_FUTURE_LABELS_NEVER_READ_BY_ACTIONS' >> "$GITHUB_STEP_SUMMARY"
+          echo 'R39_SCIENTIFIC_HOLD_NO_NEURAL_WEIGHT_TRAINING' >> "$GITHUB_STEP_SUMMARY"
