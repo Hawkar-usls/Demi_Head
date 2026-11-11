@@ -165,6 +165,37 @@ class R2G(unittest.TestCase):
         self.assertIsNone(result["answer"])
         self.assertEqual(result["discarded_incidental_or_unrelated_source_count"],1)
 
+    def test_planet_mercury_uses_its_craters_not_moon_namesake(self):
+        q="Какие кратеры есть на поверхности планеты Меркурия?"
+        wrong=common_record("wikipedia","Меркурий (лунный кратер)",
+            "https://ru.wikipedia.org/wiki/Меркурий_(лунный_кратер)",
+            "Кратер Меркурий расположен в северо-восточной области видимой стороны Луны.",
+            q,kind="ENCYCLOPEDIA_EXTRACT_CC_BY_SA")
+        right=common_record("wikipedia","Список кратеров Меркурия",
+            "https://ru.wikipedia.org/wiki/Список_кратеров_Меркурия",
+            "Это список кратеров на Меркурии. Кратеры названы в честь людей искусства.",
+            q,kind="ENCYCLOPEDIA_EXTRACT_CC_BY_SA")
+        result=decide_evidence(q,[wrong,right],False,{})
+        self.assertEqual(result["decision"],"ATTRIBUTED_EXTRACT_AVAILABLE")
+        self.assertIn("Список_кратеров_Меркурия",result["answer_source_url"])
+        self.assertNotIn("Луны",result["answer"])
+        self.assertEqual(result["discarded_incidental_or_unrelated_source_count"],1)
+
+    def test_saturn_rings_article_preferred_to_generic_saturn_mentions(self):
+        q="Какие особенности колец планеты Сатурн известны астрономам?"
+        jupiter=common_record("wikipedia","Юпитер",
+             "https://ru.wikipedia.org/wiki/Юпитер",
+             "Юпитер — планета, у которой есть кольца. Сатурн тоже имеет кольца.",
+             q,kind="ENCYCLOPEDIA_EXTRACT_CC_BY_SA")
+        saturn=common_record("wikipedia","Кольца Сатурна",
+             "https://ru.wikipedia.org/wiki/Кольца_Сатурна",
+             "Кольца Сатурна — система плоских концентрических образований из льда и пыли.",
+             q,kind="ENCYCLOPEDIA_EXTRACT_CC_BY_SA")
+        result=decide_evidence(q,[jupiter,saturn],False,{})
+        self.assertEqual(result["decision"],"ATTRIBUTED_EXTRACT_AVAILABLE")
+        self.assertIn("Кольца_Сатурна",result["answer_source_url"])
+        self.assertEqual(result["discarded_incidental_or_unrelated_source_count"],1)
+
     def test_planet_title_without_question_predicate_does_not_make_answer(self):
         q="Какие кратеры есть на поверхности планеты Меркурия?"
         record=common_record("wikipedia","Меркурий",
