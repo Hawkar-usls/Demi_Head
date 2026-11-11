@@ -1,0 +1,182 @@
+name: TACHYON R2H bounded parallel CPU research training
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r2h_curriculum.py'
+      - 'tachyon/r2h_generator_eval.py'
+      - 'tests/test_tachyon_r2h_curriculum.py'
+      - 'docs/TACHYON_R2H_*.md'
+      - '.github/workflows/tachyon-r2h-parallel-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: janus-tachyon-r2h-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-train:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - { lane: tachyon, seed: 117, epochs: 22 }
+          - { lane: tachyon, seed: 223, epochs: 30 }
+          - { lane: evidence-router, seed: 337, epochs: 25 }
+          - { lane: evidence-router, seed: 449, epochs: 25 }
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    env:
+      META_SHA: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+      VIDEO: artifacts/tachyon-r2h/video-corpus.json
+      PYTHONDONTWRITEBYTECODE: '1'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - name: Checkout isolated candidate without write credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout SHA-pinned public media source (Tachyon only)
+        if: matrix.lane == 'tachyon'
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+          path: external/registry
+          persist-credentials: false
+          sparse-checkout: |
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify provenance and deny blind-lab inputs
+        run: |
+          set -euo pipefail
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+          echo 'a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f  data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv' | sha256sum --check -
+      - name: Build pinned video paraphrase corpus for Tachyon only
+        if: matrix.lane == 'tachyon'
+        run: |
+          set -euo pipefail
+          test "$(git -C external/registry rev-parse HEAD)" = "$META_SHA"
+          python -m tachyon.video_science_corpus \
+            --science external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json \
+            --captions-index external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json \
+            --registry-commit "$META_SHA" \
+            --lab-holdout-file data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv \
+            --out "$VIDEO"
+      - name: Install CPU-only PyTorch (no GPU use)
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Source and budget isolation tests
+        run: python -m unittest discover -s tests -p test_tachyon_r2h_curriculum.py -v
+      - name: Train TACHYON from source-verified 36 examples with new seed
+        if: matrix.lane == 'tachyon'
+        env:
+          SEED: ${{ matrix.seed }}
+          EPOCHS: ${{ matrix.epochs }}
+        run: |
+          python - <<'PY'
+          import os
+          from tachyon.r2c_grounded import train
+          r=train("artifacts/tachyon-r2h/video-corpus.json",
+                  "data/tachyon/r2b/primary_papers_train.json",
+                  "data/tachyon/r2c/science_cards.json",
+                  "artifacts/tachyon-r2h/candidate",
+                  epochs=int(os.environ["EPOCHS"]),seed=int(os.environ["SEED"]))
+          assert r["scientifically_admitted"] is False
+          assert r["lab_clock_measurements_read"] is False
+          print("R2H_TACHYON_CANDIDATE",r["checkpoint_sha256"])
+          PY
+          python -m tachyon.r2h_generator_eval \
+            --checkpoint artifacts/tachyon-r2h/candidate/r2c_research_only.pt \
+            --fixture data/tachyon/r2d/public_dev_challenge.json \
+            --out artifacts/tachyon-r2h/candidate/public_dev_eval.json
+      - name: Train supervised source/formula routing model
+        if: matrix.lane == 'evidence-router'
+        run: |
+          python -m tachyon.r2h_curriculum \
+            --cards data/tachyon/r2c/science_cards.json \
+            --general data/tachyon/r2f/general_source_cards.json \
+            --dev data/tachyon/r2d/public_dev_challenge.json \
+            --seed ${{ matrix.seed }} --epochs ${{ matrix.epochs }} \
+            --outdir artifacts/tachyon-r2h/candidate
+      - name: Verify all results remain read-only / scientific HOLD
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          p=Path("artifacts/tachyon-r2h/candidate")
+          receipts=list(p.glob("*receipt*.json"))
+          assert len(receipts)==1,receipts
+          r=json.loads(receipts[0].read_text())
+          assert r["scientifically_admitted"] is False
+          assert r["auto_deployed"] is False
+          filename="r2h_router_research.pt" if "router" in r["schema"] else "r2c_research_only.pt"
+          assert sha256((p/filename).read_bytes()).hexdigest()==r["checkpoint_sha256"]
+          print("R2H_HOLD_SHA256",r["checkpoint_sha256"])
+          PY
+      - name: Preserve per-seed checkpoint and public diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r2h-${{ matrix.lane }}-seed-${{ matrix.seed }}-not-admitted
+          path: artifacts/tachyon-r2h/candidate/
+          retention-days: 14
+          if-no-files-found: warn
+  compare-receipts:
+    needs: bounded-train
+    if: always() && needs.bounded-train.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    permissions:
+      contents: read
+    steps:
+      - name: Collect isolated CPU artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: r2h-*-not-admitted
+          path: artifacts/research-candidates
+      - name: Compare four PUBLIC developer results without deploying
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path("artifacts/research-candidates")
+          results=[]
+          for folder in sorted(p for p in base.iterdir() if p.is_dir()):
+              rs=list(folder.rglob("*receipt*.json"))
+              assert len(rs)==1,(folder,rs)
+              r=json.loads(rs[0].read_text())
+              assert r["scientifically_admitted"] is False and r["auto_deployed"] is False
+              row={"candidate":folder.name,"checkpoint_sha256":r["checkpoint_sha256"]}
+              if r["schema"].endswith("router_receipt.v1"):
+                  row["public_dev_route_accuracy"]=r["public_dev_route_accuracy"]
+                  row["public_dev_live_false_positive"]=r["public_dev_live_false_positive"]
+              else:
+                  e=list(folder.rglob("public_dev_eval.json"))
+                  assert len(e)==1
+                  ev=json.loads(e[0].read_text())
+                  row["public_dev_numeric_hits"]=ev["numeric_text_hits"]
+                  row["numeric_total"]=ev["numeric_count"]
+              results.append(row)
+          assert len(results)==4,results
+          summary={"schema":"janus.tachyon.r2h.parallel_comparison.v1",
+                   "jobs":results,"selection":"NO_AUTO_PROMOTION",
+                   "evidence":"PUBLIC_DEVELOPMENT_ONLY_NOT_EXTERNAL_BLIND",
+                   "lab_clock_training_data_used":False,
+                   "scientifically_admitted":False,"janus_ocean_modified":False}
+          Path("comparison.json").write_text(json.dumps(summary,indent=2,sort_keys=True)+"\n")
+          print("R2H_BOUNDED_TRAINING_SUMMARY",json.dumps(summary,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r2h-public-dev-comparison-not-admitted
+          path: comparison.json
+          retention-days: 14
