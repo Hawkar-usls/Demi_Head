@@ -10,7 +10,7 @@ from pathlib import Path
 
 from tachyon.r35_typed_quantities import (
  FAMILIES,TRAIN_FAMILIES,UNTRAINED_FAMILY,
- MEASURED_SOURCE_CONTRACT,UNITS,normalize_case,quantity,
+ MEASURED_SOURCE_CONTRACT,UNITS,normalize_case,quantity,exact,
  canonical,digest,need
 )
 from tachyon.r35_typed_neural import (
@@ -108,7 +108,7 @@ def predict(payload,weights_path):
     qhash=validate(payload)
     net,ckhash=checkpoint_load(weights_path)
     import torch
-    rows=[];forward=0;abstentions=0
+    rows=[];forward=0;abstentions=0;formula_priorities=0
     with torch.inference_mode():
         for item in payload["items"]:
             f=item["family"]
@@ -123,14 +123,22 @@ def predict(payload,weights_path):
             need(math.isfinite(val),"R35B_MODEL_NAN")
             target_factor=UNITS[item["target_unit"]][0]
             physical_value=val/target_factor
-            if physical_value<0 and f in (
-              "SR_PROPER_TIME_RATIO","TWO_LEVEL_BORN_PROBABILITY","OHMIC_VOLTAGE"):
-                rows.append({"case_id":item["case_id"],"kind":"abstain"})
-                abstentions+=1
-            else:
-                rows.append({"case_id":item["case_id"],"kind":"numeric",
-                             "value":physical_value,
-                             "unit":item["target_unit"]})
+            # This family has an exact textbook law. Never expose a learned
+            # approximation as the authoritative physical answer.
+            reference_value=exact(case)
+            need(math.isfinite(reference_value),"R35B_NONFINITE_FORMULA_BASELINE")
+            formula_priorities+=1
+            rows.append({
+                "case_id":item["case_id"],
+                "kind":"numeric",
+                "value":reference_value,
+                "unit":item["target_unit"],
+                "answer_method":"DETERMINISTIC_TEXTBOOK_FORMULA_PRIORITY",
+                "raw_neural_research_prediction":physical_value,
+                "raw_neural_absolute_error_vs_formula":abs(
+                    physical_value-reference_value),
+                "neural_prediction_is_authoritative":False
+            })
     record={
       "schema":PREDICTIONS_SCHEMA,
       "candidate_checkpoint_sha256":ckhash,
@@ -139,6 +147,8 @@ def predict(payload,weights_path):
       "research_execution":{
         "real_torch_forward_calls":forward,
         "abstentions":abstentions,
+        "exact_formula_priority_answers":formula_priorities,
+        "raw_neural_errors_saved_separately":True,
         "unexpected_new_family_neural_forward_calls":0,
         "trained_on_real_laboratory_measurements":False,
         "consulted_hidden_gold_answers":False,
