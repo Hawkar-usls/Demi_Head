@@ -1,0 +1,14 @@
+{
+  "schema": "janus.tachyon.checkpoint_manifest.v1",
+  "model_id": "tachyon-v0.2-causal-numerical",
+  "checkpoint_encoding": "gzip_base64_of_pytorch_checkpoint",
+  "checkpoint_path": "data/tachyon/weights/tachyon_v02_seed_20261111.pt.gz.b64",
+  "checkpoint_unpacked_size_bytes": 41693,
+  "checkpoint_unpacked_sha256": "4670ccc8c07b3d455da8c1d5e3550b06bb49f86a47d51aedc41cd9441b488584",
+  "checkpoint_gzip_sha256": "b8409322bbfa57a5c2dd18b81d61f49e0c4e015bd67096196b6ef6cc79848053",
+  "sha256_source_json": "44c1030da28ecea4ca1fc6891dea34a63445f9a981e2387b1e4bf4d189f43409",
+  "training_seed": 20261111,
+  "status": "RESEARCH_ONLY_NO_AUTO_PROMOTION",
+  "pickle_security": "only_load_repo_controlled_checksum_verified_checkpoint_using_torch_load_weights_only_true",
+  "deployment_authorized": false
+}
