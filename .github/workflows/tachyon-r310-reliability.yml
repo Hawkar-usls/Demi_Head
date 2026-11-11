@@ -81,6 +81,15 @@ jobs:
           print('R310_DEVICE_EQUAL_2RC_MAE_VOLTS',r['equal_device_baseline_MAE_V'])
           print('R310_DEVICE_EQUAL_GAIN',r['equal_device_selective_relative_gain'])
           print('R310_WORST_DEVICE_REGRESSION',r['worst_heldout_relative_MAE_regression'])
+          for fold in r['folds']:
+              print('R310_DEVICE_FOLD',json.dumps({
+                'battery':fold['heldout_battery'],
+                'candidate_used':fold['num_candidate_used'],
+                'fallback':fold['num_baseline_fallback'],
+                'abstain':fold['num_abstentions'],
+                'relative_gain':fold['selected_relative_gain'],
+                'calibration_candidate_allowed':fold['calibration_candidate_allowed']
+              },sort_keys=True))
           print('R310_FORMULA_RELIABILITY_PUBLIC_RETRO_ONLY_R39_FROZEN_SCIENCE_HOLD')
           PY
       - uses: actions/upload-artifact@v4
