@@ -105,24 +105,43 @@ def evaluate_early_only(early):
     """
     early=check_early(early)
     incumbent_fit=fit_on_early(early,INCUMBENT)
-    challenger_fit=fit_new(early,CANDIDATE)
     future_times=[i/60. for i in range(EARLY_N,EARLY_N+FUTURE_N)]
     base=[incumbent_predict(incumbent_fit,t) for t in future_times]
-    cand=[new_predict(challenger_fit,t) for t in future_times]
-    need(all(math.isfinite(v) and 2<=v<=5.2 for v in base+cand),
-         "R310_FUTURE_MODEL_EXTRAPOLATION_OUT_OF_SCOPE")
-    denom=sum(v for t,v in early)/len(early)
-    disagreement=sum(abs(a-b) for a,b in zip(base,cand))/FUTURE_N/denom
+    # A physically invalid BASELINE is a genuine reason to abstain.
+    need(all(math.isfinite(v) and 2<=v<=5.2 for v in base),
+         "R310_BASELINE_FUTURE_EXTRAPOLATION_OUT_OF_SCOPE")
     early_inc_rmse=math.sqrt(sum(
         (incumbent_predict(incumbent_fit,t)-v)**2 for t,v in early
     )/len(early))
-    early_cand_rmse=math.sqrt(sum(
-        (new_predict(challenger_fit,t)-v)**2 for t,v in early
-    )/len(early))
-    score=disagreement+max(0.,early_cand_rmse-early_inc_rmse)/denom
-    need(math.isfinite(score) and score>=0,"R310_INVALID_RISK_SCORE")
+    try:
+        challenger_fit=fit_new(early,CANDIDATE)
+        cand=[new_predict(challenger_fit,t) for t in future_times]
+        need(all(math.isfinite(v) and 2<=v<=5.2 for v in cand),
+             "R310_CANDIDATE_FUTURE_EXTRAPOLATION_OUT_OF_SCOPE")
+        early_cand_rmse=math.sqrt(sum(
+            (new_predict(challenger_fit,t)-v)**2 for t,v in early
+        )/len(early))
+        denom=sum(v for t,v in early)/len(early)
+        disagreement=sum(abs(a-b) for a,b in zip(base,cand))/FUTURE_N/denom
+        score=disagreement+max(0.,early_cand_rmse-early_inc_rmse)/denom
+        need(math.isfinite(score) and score>=0,"R310_INVALID_RISK_SCORE")
+    except ValueError as exc:
+        # A bad *optional* formula must not suppress a healthy 2RC forecast.
+        return {
+            "status":"CANDIDATE_UNSAFE_BASELINE_AVAILABLE",
+            "candidate_failure_reason":str(exc)[:120],
+            "risk_proxy":None,
+            "early_incumbent_RMSE_V":early_inc_rmse,
+            "early_candidate_RMSE_V":None,
+            "normalized_model_disagreement":None,
+            "incumbent_future_predictions":base,
+            "candidate_future_predictions":None,
+            "future_truth_read":False,
+        }
     return {
+        "status":"EARLY_ONLY_MODELS_COMPUTED",
         "risk_proxy":score,
+        "candidate_failure_reason":None,
         "early_incumbent_RMSE_V":early_inc_rmse,
         "early_candidate_RMSE_V":early_cand_rmse,
         "normalized_model_disagreement":disagreement,
@@ -140,7 +159,9 @@ def score_future(early_record, gold_future):
     def mae(x):
         return sum(abs(a-b) for a,b in zip(x,gold_future))/FUTURE_N
     return {"baseline_MAE_V":mae(early_record["incumbent_future_predictions"]),
-            "candidate_MAE_V":mae(early_record["candidate_future_predictions"])}
+            "candidate_MAE_V":(mae(early_record["candidate_future_predictions"])
+              if early_record["candidate_future_predictions"] is not None
+              else None)}
 
 def audit_one_trace(points):
     need(isinstance(points,list) and len(points)==EARLY_N+FUTURE_N,
@@ -159,7 +180,8 @@ def audit_one_trace(points):
     future=[v for t,v in points[EARLY_N:]]
     vals=score_future(early_model,future)
     return {
-        "status":"EARLY_ONLY_MODELS_COMPUTED",
+        "status":early_model["status"],
+        "candidate_failure_reason":early_model["candidate_failure_reason"],
         "risk_proxy":early_model["risk_proxy"],
         "normalized_model_disagreement":
             early_model["normalized_model_disagreement"],
@@ -175,10 +197,12 @@ def threshold_score(rows,groups,threshold):
     bygroup=defaultdict(list)
     for r in chosen:
         a=r["features"]
-        if a["status"]!="EARLY_ONLY_MODELS_COMPUTED":
+        if a["status"] not in ("EARLY_ONLY_MODELS_COMPUTED",
+                              "CANDIDATE_UNSAFE_BASELINE_AVAILABLE"):
             continue
         available+=1
-        use_candidate=a["risk_proxy"]<=threshold
+        use_candidate=(a["status"]=="EARLY_ONLY_MODELS_COMPUTED"
+                       and a["risk_proxy"]<=threshold)
         coverage_total+=int(use_candidate)
         bygroup[r["battery"]].append({
             "baseline":a["baseline_MAE_V"],
@@ -238,6 +262,8 @@ def calibrate_without_heldout(rows,heldout):
 
 def decide(early_features,calibration):
     """No actual future labels, heldout device ID or score is an argument."""
+    if early_features["status"]=="CANDIDATE_UNSAFE_BASELINE_AVAILABLE":
+        return "FALLBACK_DOUBLE_EXP"
     if early_features["status"]!="EARLY_ONLY_MODELS_COMPUTED":
         return "ABSTAIN"
     if calibration["candidate_allowed"] and (
