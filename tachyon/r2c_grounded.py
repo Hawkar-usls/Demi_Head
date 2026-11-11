@@ -155,6 +155,40 @@ def retrieve(question, cards, top_k=2):
              "matched_query_terms": terms, "lexical_support_score": round(score, 6)}
             for score, _, s, terms in candidates[:top_k]]
 
+def physics_sanity(hits):
+    """Independent deterministic checks of elementary identities, NOT peer review."""
+    from itertools import product
+    results = []
+    for hit in hits:
+        family = hit["family"]
+        if family == "SR_EINSTEIN_1905":
+            gamma_inverse = math.sqrt(1 - 0.6**2)
+            result = {"test": "proper_time_ratio_beta_0.6", "actual": gamma_inverse,
+                      "expected": 0.8, "passed": abs(gamma_inverse-0.8) < 1e-12}
+        elif family == "GR_SHAPIRO_1964":
+            # [G] [M] / [c]^3 = (m^3 kg^-1 s^-2)(kg)/(m s^-1)^3 = s.
+            dim = {"metres": 3-3, "kilograms": -1+1, "seconds": -2+3}
+            result = {"test": "shapiro_GM_over_c_cubed_dimensions",
+                      "actual": dim, "expected": {"metres": 0, "kilograms": 0, "seconds": 1},
+                      "passed": dim == {"metres": 0, "kilograms": 0, "seconds": 1}}
+        elif family == "BELL_1964":
+            vals = [abs(a0*b0+a0*b1+a1*b0-a1*b1)
+                    for a0,a1,b0,b1 in product((-1,1), repeat=4)]
+            result = {"test": "local_deterministic_CHSH_algebra",
+                      "actual": max(vals), "expected": 2,
+                      "passed": max(vals) == 2}
+        elif family == "QBAYES_2002":
+            p = 0.3*1.0 + 0.7*0.0
+            result = {"test": "born_rule_two_level_projector_example",
+                      "actual": p, "expected": 0.3, "passed": abs(p-0.3)<1e-12}
+        else:
+            result = {"test": "no_claim_specific_numeric_or_dimensional_test",
+                      "actual": None, "expected": None, "passed": None}
+        result["family"] = family
+        result["scope"] = "ELEMENTARY_SANITY_ONLY_NOT_PHYSICAL_VERIFICATION"
+        results.append(result)
+    return results
+
 def review_gate(question, matches):
     """Fail-closed; even matched statements remain non-independent paraphrases."""
     if not matches:
@@ -166,7 +200,7 @@ def review_gate(question, matches):
 def explain(question, cards, checkpoint_path=None):
     hits = retrieve(question, cards)
     gate = review_gate(question, hits)
-    result = {"question": question, "gate": gate, "sources": [
+    result = {"question": question, "gate": gate, "physics_sanity": physics_sanity(hits), "sources": [
         {k: hit[k] for k in ("family","doi","url","title","matched_query_terms",
                              "lexical_support_score","formula","dimensions")}
         for hit in hits],
