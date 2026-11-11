@@ -1,0 +1,49 @@
+{
+  "schema": "janus.tachyon.explanation_corpus_catalog.v1",
+  "status": "RESEARCH_CANDIDATES_NOT_MODEL_PROMOTED",
+  "model_context": "Demi_Head/Tachyon",
+  "datasets": [
+    {
+      "id": "TACHYON-V03-LEGACY-CLASSIFIER",
+      "path": "data/tachyon/explanation_cards_v1.json",
+      "training_format": "SIX_CLASS_TEMPLATE_QUESTION_CLASSIFICATION",
+      "training_code": "tachyon/explanations.py",
+      "source_sha256": "e466ec34a4dbcc99291de0c04335f8b9b473ee13ae7a93eeefedb207e52ba97c",
+      "baseline_holdout_status": "HOLD_NO_TEXT_GENERALIZATION_GAIN",
+      "notes": "Original v0.3 candidates remain unchanged. Neither their split nor source hash is rewritten."
+    },
+    {
+      "id": "TACHYON-R2A-VIDEO-SCIENCE",
+      "training_format": "INSTRUCTION_RESPONSE_WITH_SCIENTIFIC_QUALIFICATION",
+      "status": "PREPARE_TRAINING_EXAMPLES_ONLY",
+      "builder": "tachyon/video_science_corpus.py",
+      "source_repository": "Hawkar-usls/janus-meta-registry",
+      "source_commit": "a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d",
+      "source_video_id": "PwOk0GKDv9c",
+      "source_files": [
+        "data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json",
+        "data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json"
+      ],
+      "source_family_count": 1,
+      "claim_count": 12,
+      "training_split": "TRAIN_ONLY_NO_VIDEO_SOURCE_HOLDOUT",
+      "not_compatible_with_legacy_classifier_without_new_head": true,
+      "external_lab_measurements_in_training": false,
+      "lab_holdout_file": "data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv",
+      "lab_holdout_sha256": "a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f",
+      "caveats": [
+        "SECONDARY_SCIENCE_MEDIA_NOT_INDEPENDENT_OBSERVATION",
+        "COPYRIGHT_VERBATIM_TRANSCRIPT_NOT_REHOSTED",
+        "UNVERIFIED_180_SECOND_SUBTITLE_TIMELINE_DISCREPANCY",
+        "NO_NEW_MODEL_WEIGHTS_OR_GENERALIZATION_METRICS"
+      ]
+    }
+  ],
+  "authority": {
+    "may_train_existing_classifier": false,
+    "may_promote_model": false,
+    "may_modify_lab_holdout": false,
+    "may_overwrite_historical_receipts": false,
+    "source_truth_inherited_from_registry": false
+  }
+}
