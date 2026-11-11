@@ -221,32 +221,71 @@ def brave_search(query,api_key,fetch=fetch_json,needs_fresh=False):
             output.append(rec)
     return output
 
+QUESTION_INITIALS={"что","как","какие","какой","какая","почему","зачем","когда",
+                   "где","для","расскажи","сколько","чему","кто","каквы"}
+GENERIC_CONCEPTS={"особенност","известн","планет","планеты","планета",
+                  "описыв","астроном","какие","котор","данн","современ",
+                  "изуча","исследован","научн","работ","году"}
+
+def subject_anchors(query):
+    """Capitalized entity nouns; cautious rule for titles, not named-entity AI."""
+    capitals=re.findall(r"(?u)\b[А-ЯЁ][а-яё]{3,}\b",query)
+    return {modest_russian_stem(w) for w in capitals
+            if w.casefold() not in QUESTION_INITIALS}
+
+def grounded_topic_check(query,source):
+    """Reject incidental mentions of the entity in an unrelated article."""
+    qterms=query_terms(query)
+    titleterms=query_terms(source["title"])
+    excerptterms=query_terms(source.get("excerpt",""))
+    anchors=subject_anchors(query)
+    if anchors and not (anchors & titleterms):
+        return False,False,0
+    if not anchors and not (titleterms & qterms):
+        return False,False,0
+    concepts={x for x in qterms-anchors if x not in GENERIC_CONCEPTS}
+    supported=concepts & excerptterms
+    # The article subject can be relevant even when its short lead does not
+    # answer the specific predicate. In that case show a citation for review,
+    # but NEVER promote the excerpt as an answer.
+    enough=bool(supported) if anchors else bool(supported) and len(qterms & excerptterms)>=2
+    return True,enough,len(supported)
+
 def decide_evidence(query,sources,needs_fresh,provider_errors):
-    ordered=sorted(sources,key=lambda x:(-x["relevance_overlap"],x["provider"],x["title"]))
-    eligible=[x for x in ordered if x["relevance_overlap"]>=1]
+    candidates=[]
+    for item in sources:
+        title_relevant,answers_question,support=grounded_topic_check(query,item)
+        if item.get("relevance_overlap",0)>=1 and title_relevant:
+            record=dict(item,topic_supported_by_excerpt=answers_question,
+                        predicate_support_terms=support,
+                        title_subject_checked=True)
+            candidates.append(record)
+    ordered=sorted(candidates,key=lambda x:(
+        -int(x["topic_supported_by_excerpt"]),-x["predicate_support_terms"],
+        -x["relevance_overlap"],x["provider"],x["title"]))
     rec={
         "source_count":len(ordered),"sources":ordered[:MAX_RESULTS],
+        "discarded_incidental_or_unrelated_source_count":len(sources)-len(ordered),
         "answer":None,"answer_source_url":None,
         "scientifically_admitted":False,
         "verified_independent_fact":False,
         "provider_errors":provider_errors,
         "source_evidence_only":True,
     }
-    if not eligible:
+    if not ordered:
         rec["decision"]="NO_VERIFIABLE_SOURCE"
-        rec["reason"]="ZERO_RELEVANT_PROVIDER_RESULTS"
+        rec["reason"]="NO_MATCH_TO_QUESTION_SUBJECT"
     elif needs_fresh:
-        # Date of retrieval never substitutes for date of an event/publication.
         rec["decision"]="EVIDENCE_REQUIRES_FRESHNESS_VERIFICATION"
         rec["reason"]="NO_INDEPENDENT_DATED_EVENT_CONFIRMATION"
-    elif eligible[0]["provider"]=="wikipedia" and eligible[0]["excerpt"] and eligible[0]["relevance_overlap"]>=2:
+    elif ordered[0]["provider"]=="wikipedia" and ordered[0]["excerpt"] and ordered[0]["topic_supported_by_excerpt"]:
         rec["decision"]="ATTRIBUTED_EXTRACT_AVAILABLE"
-        rec["reason"]="ENCYCLOPEDIA_SUMMARY_NOT_INDEPENDENT_SCIENCE_REVIEW"
-        rec["answer"]=eligible[0]["excerpt"]
-        rec["answer_source_url"]=eligible[0]["url"]
+        rec["reason"]="TITLE_SUBJECT_AND_QUESTION_PREDICATE_MATCHED_NOT_INDEPENDENTLY_VERIFIED"
+        rec["answer"]=ordered[0]["excerpt"]
+        rec["answer_source_url"]=ordered[0]["url"]
     else:
         rec["decision"]="EVIDENCE_FOUND_REVIEW_REQUIRED"
-        rec["reason"]="SOURCES_NOT_SUFFICIENT_FOR_EXTRACTIVE_ANSWER"
+        rec["reason"]="TITLE_MATCH_WITHOUT_ANSWER_SUPPORT_OR_NONENCYCLOPEDIA_METADATA"
     return rec
 
 def looks_like_sports(question):
