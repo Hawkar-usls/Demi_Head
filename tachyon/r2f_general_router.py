@@ -94,8 +94,9 @@ def is_sports_question(question):
 
 def is_fresh_question(question):
     s=question.casefold().replace("ё","е")
-    return any(t in s for t in ("последн","сегодня","вчера","сейчас",
-                                "на данный момент","прямо сейчас","актуальн","текущ"))
+    return bool(re.search(r"\b20\d{2}\b",s)) or any(t in s for t in (
+        "последн","сегодня","вчера","сейчас",
+        "на данный момент","прямо сейчас","актуальн","текущ"))
 
 def known_sports_context(question):
     s=question.casefold()
