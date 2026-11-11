@@ -39,6 +39,7 @@ def fake_preds(pack):
             out.append({"case_id":item["case_id"],"kind":"abstain"})
     return {"schema":PREDICTIONS_SCHEMA,
             "candidate_weights_sha256":MODEL_SHA256,
+            "questions_sha256":questions_only(pack,MODEL_SHA256)["questions_sha256"],
             "items":out}
 
 class CustodianProtocol(unittest.TestCase):
@@ -64,6 +65,18 @@ class CustodianProtocol(unittest.TestCase):
         self.assertEqual(q["case_count"],60)
         self.assertTrue(q["gold_answers_excluded"])
         self.assertTrue(all("gold" not in v for v in q["items"]))
+
+    def test_unknown_private_fields_fail_closed_instead_of_leaking(self):
+        bad=copy.deepcopy(self.pack)
+        bad["items"][0]["solution_steps"]="secret gold=1.0"
+        with self.assertRaisesRegex(ValueError,"R33_HIDDEN_FIELD_LEAK_RISK"):
+            questions_only(bad,MODEL_SHA256)
+
+    def test_prediction_must_match_exact_question_transport_sha(self):
+        p=fake_preds(self.pack)
+        p["questions_sha256"]="0"*64
+        with self.assertRaisesRegex(ValueError,"R33_PREDICTION_QUESTION_TRANSPORT_MISMATCH"):
+            evaluate_private(self.pack,SALT,self.seal,p,MODEL_SHA256)
 
     def test_private_gold_mismatch_after_seal_is_rejected(self):
         pack=copy.deepcopy(self.pack)

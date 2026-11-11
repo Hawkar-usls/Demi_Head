@@ -1,0 +1,194 @@
+name: TACHYON R3.4 - frozen candidate real question-only inference proof
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r33_external_custodian.py'
+      - 'tachyon/r34_frozen_inference.py'
+      - 'tests/test_tachyon_r33_external_custodian.py'
+      - 'tests/test_tachyon_r34_frozen_inference.py'
+      - '.github/workflows/tachyon-r34-frozen-inference.yml'
+      - 'docs/TACHYON_R34_FROZEN_EXECUTION_HANDOFF.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: tachyon-r34-inference-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  real-checkpoint-public-canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check offline private-custodian guards without Torch
+        run: |
+          set -euo pipefail
+          python -m py_compile tachyon/r33_external_custodian.py tachyon/r34_frozen_inference.py
+          python -m unittest discover -s tests -p test_tachyon_r33_external_custodian.py -v
+          python -m unittest discover -s tests -p test_tachyon_r34_frozen_inference.py -v
+      - name: Install pinned CPU Torch only for genuine model forward passes
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fetch real R31B frozen checkpoint from pinned original Actions run
+        uses: actions/download-artifact@v4
+        with:
+          name: tachyon-r31b-trained-neural-public-only-not-admitted
+          run-id: 43057568871
+          github-token: ${{ github.token }}
+          path: frozen
+      - name: Make public artificial canary questions only, no custodian data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tachyon.r33_external_custodian import QUESTIONS_SCHEMA,MODEL_SHA256,sha
+          cases=[
+           {'case_id':'canary_sr_001','category':'NUMERIC',
+            'family':'SR_PROPER_TIME_RATIO',
+            'question':'Для инерциальных часов при v/c=0.50 вычисли dτ/dt по СТО.',
+            'source_url':'https://openstax.org/books/university-physics-volume-3/pages/5-3-time-dilation'},
+           {'case_id':'canary_born_001','category':'NUMERIC',
+            'family':'TWO_LEVEL_BORN_PROBABILITY',
+            'question':'При измерении |0><0| двухуровневой системы с ρ00=0.50 вычисли P(0).',
+            'source_url':'https://quantum.cloud.ibm.com/learning'},
+           {'case_id':'canary_muon_001','category':'NUMERIC',
+            'family':'MUON_STOP_DECAY_AND_NEUTRON_CAPTURE',
+            'question':'Estimate the physical muon lifetime from an unrelated detector experiment.',
+            'source_url':'https://zenodo.org/records/15081911'},
+           {'case_id':'canary_ood_001','category':'OOD',
+            'family':'GENERAL_LANGUAGE_QUERY',
+            'question':'What will the stock market do tomorrow?'}
+          ]
+          qs={'schema':QUESTIONS_SCHEMA,'frozen_candidate_weights_sha256':MODEL_SHA256,
+              'case_count':len(cases),'items':cases,'gold_answers_excluded':True,
+              'not_to_publish_to_public_repo':True}
+          qs['questions_sha256']=sha(qs)
+          p=Path('out/public_canary_questions_only.json');p.parent.mkdir(exist_ok=True)
+          p.write_text(json.dumps(qs,sort_keys=True,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Execute real frozen weights on exact question-only canary input
+        run: |
+          set -euo pipefail
+          CKPT="$(find frozen -name r31b_math_neural_research_only.pt -print -quit)"
+          test -n "$CKPT"
+          echo 'b3b36dfb3e8c1d0d4a1ae1b867978cfa5f8f28d6768d1a42efac02a4d2e47f01  '"$CKPT" | sha256sum --check -
+          python -m tachyon.r34_frozen_inference \
+            --questions-only out/public_canary_questions_only.json \
+            --frozen-model "$CKPT" \
+            --predictions-out out/public_canary_frozen_predictions.json
+      - name: Assert forward execution, linked transport hashes and no fake scientific gain
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tachyon.r33_external_custodian import sha,MODEL_SHA256
+          p=json.loads(Path('out/public_canary_frozen_predictions.json').read_text())
+          q=json.loads(Path('out/public_canary_questions_only.json').read_text())
+          assert p['candidate_weights_sha256']==MODEL_SHA256
+          assert p['questions_sha256']==q['questions_sha256']
+          assert p['predictions_receipt_sha256']==sha({
+              k:v for k,v in p.items() if k!='predictions_receipt_sha256'})
+          got={x['case_id']:x for x in p['items']}
+          assert got['canary_sr_001']['kind']=='numeric'
+          assert got['canary_born_001']['kind']=='numeric'
+          assert got['canary_muon_001']['kind']=='abstain'
+          assert got['canary_ood_001']['kind']=='abstain'
+          meta=p['research_execution_metadata']
+          assert meta['actual_neural_forward_calls']==2
+          assert meta['unsupported_or_non_numeric_abstentions']==2
+          assert meta['gold_or_salt_read'] is False
+          assert meta['new_family_predictive_generalization_demonstrated'] is False
+          assert meta['scientific_admission']=='HOLD'
+          assert meta['production_promotion'] is False
+          print('R34_REAL_CHECKPOINT_CANARY_EXECUTION_PASS 2 FORWARDS + 2 REFUSALS')
+          PY
+      - name: Exercise FULL 60-case synthetic private seal to real inference to local score
+        run: |
+          set -euo pipefail
+          CKPT="$(find frozen -name r31b_math_neural_research_only.pt -print -quit)"
+          test -n "$CKPT"
+          TEMP_DIR="$RUNNER_TEMP/r34_synthetic_custody"
+          mkdir -p "$TEMP_DIR"
+          export TEMP_DIR
+          python - <<'PY'
+          import json,os,secrets
+          from pathlib import Path
+          from tachyon.r33_external_custodian import CHALLENGE_SCHEMA
+          d=Path(os.environ['TEMP_DIR'])
+          rows=[]
+          for category in ('NUMERIC','CONCEPTUAL','OOD'):
+              for i in range(20):
+                  case_id=category.lower()+'_'+str(i).zfill(3)
+                  gold=({'kind':'numeric','value':float(i+1),'unit':'m/s'}
+                        if category=='NUMERIC' else
+                        {'kind':'conceptual','rubric':'Externally review the scientific source and dimensional units.'}
+                        if category=='CONCEPTUAL' else {'kind':'abstain'})
+                  item={'case_id':case_id,'category':category,
+                        'family':'NOVEL_SYNTHETIC_EXTERNAL_'+category,
+                        'question':'Synthetic non-training scientific example with no real new-family model solution.',
+                        'gold':gold}
+                  if category!='OOD':
+                      item['source_url']='https://example.org/synthetic-no-science'
+                  rows.append(item)
+          (d/'private_pack.json').write_text(json.dumps({
+              'schema':CHALLENGE_SCHEMA,'items':rows}))
+          (d/'private_salt.hex').write_text(secrets.token_hex(32)+'\n')
+          PY
+          python -m tachyon.r33_external_custodian seal \
+            --private "$TEMP_DIR/private_pack.json" \
+            --salt-file "$TEMP_DIR/private_salt.hex" \
+            --frozen-model "$CKPT" \
+            --public-commitment-out "$TEMP_DIR/sealed.json" \
+            --questions-only-out "$TEMP_DIR/questions_only.json"
+          python -m tachyon.r34_frozen_inference \
+            --questions-only "$TEMP_DIR/questions_only.json" \
+            --frozen-model "$CKPT" \
+            --predictions-out "$TEMP_DIR/frozen_answers.json"
+          python -m tachyon.r33_external_custodian score \
+            --private "$TEMP_DIR/private_pack.json" \
+            --salt-file "$TEMP_DIR/private_salt.hex" \
+            --frozen-model "$CKPT" \
+            --sealed "$TEMP_DIR/sealed.json" \
+            --predictions "$TEMP_DIR/frozen_answers.json" \
+            --public-summary-out "$TEMP_DIR/local_private_score.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ['TEMP_DIR'])
+          summary=json.loads((d/'local_private_score.json').read_text())
+          pred=json.loads((d/'frozen_answers.json').read_text())
+          assert summary['challenge_case_count']==60
+          assert summary['numeric_scored_count']==20
+          assert summary['numeric_correct_count']==0
+          assert summary['ood_scored_count']==20
+          assert summary['ood_correct_abstention_count']==20
+          assert summary['conceptual_pending_independent_manual_review']==20
+          assert pred['research_execution_metadata']['actual_neural_forward_calls']==0
+          assert summary['scientific_admission']=='HOLD'
+          assert summary['production_promotion'] is False
+          print('R34_FULL_60_CASE_SYNTHETIC_SEAL_INFERENCE_SCORE_PASS')
+          print('R34_NEW_FAMILY_NUMERIC_ACCURACY_SYNTHETIC', '0/20')
+          print('R34_NO_EXTERNAL_SCIENTIFIC_CUSTODIAN_USED')
+          PY
+          rm -rf -- "$TEMP_DIR"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r34-public-canary-only-no-custodian-gold
+          path: out/public_canary_*.json
+          if-no-files-found: error
+          retention-days: 14
