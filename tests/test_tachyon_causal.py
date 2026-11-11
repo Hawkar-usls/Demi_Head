@@ -2,11 +2,15 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import math
 import tempfile
 import unittest
 from pathlib import Path
+
+if importlib.util.find_spec("torch") is None:
+    raise unittest.SkipTest("Optional Torch research tests run in dedicated Tachyon workflow")
 
 import torch
 
