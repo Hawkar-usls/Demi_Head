@@ -5,6 +5,7 @@ import math
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from tachyon.r38_battery_physical_crossval import GROUPS
 from tachyon.r310_early_only_formula_reliability import (
@@ -84,6 +85,29 @@ class R310Reliability(unittest.TestCase):
            "risk_proxy":None}
         self.assertEqual(decide(f,{"candidate_allowed":True,"threshold":.16}),
                          "ABSTAIN")
+
+    def test_bad_optional_formula_falls_back_to_healthy_baseline(self):
+        early=artificial_curve()[:241]
+        with patch(
+            "tachyon.r310_early_only_formula_reliability.new_predict",
+            side_effect=ValueError("synthetic_unsafe_optional_tail")
+        ):
+            state=evaluate_early_only(early)
+            self.assertEqual(state["status"],
+                             "CANDIDATE_UNSAFE_BASELINE_AVAILABLE")
+            self.assertIsNone(state["candidate_future_predictions"])
+            self.assertIsNone(state["risk_proxy"])
+            self.assertEqual(len(state["incumbent_future_predictions"]),1200)
+            self.assertEqual(decide(state,{"candidate_allowed":True,
+                                           "threshold":.16}),
+                             "FALLBACK_DOUBLE_EXP")
+            s=score_future(state,[v for t,v in artificial_curve()[241:]])
+            self.assertGreater(s["baseline_MAE_V"],0)
+            self.assertIsNone(s["candidate_MAE_V"])
+            audit=audit_one_trace(artificial_curve())
+            self.assertEqual(audit["status"],
+                             "CANDIDATE_UNSAFE_BASELINE_AVAILABLE")
+            self.assertIsNotNone(audit["baseline_MAE_V"])
 
     def test_risk_threshold_fit_uses_only_seven_batteries(self):
         development=seven_development_rows()
