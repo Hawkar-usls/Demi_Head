@@ -1,0 +1,111 @@
+name: TACHYON R3.5B - real frozen typed candidate no-gold inference
+
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r35b_frozen_typed_inference.py'
+      - 'tests/test_tachyon_r35b_typed_inference.py'
+      - 'docs/TACHYON_R35B_EXTERNAL_TYPED_HANDOFF.md'
+      - '.github/workflows/tachyon-r35b-typed-inference.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: tachyon-r35b-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  frozen-typed-public-canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run strict no-gold unit/source/secret SHA safety tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p test_tachyon_r35b_typed_inference.py -v
+          python -m py_compile tachyon/r35b_frozen_typed_inference.py
+      - name: Install CPU-only Torch pinned
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Download ACTUAL prior frozen R35 model weights (not retraining)
+        uses: actions/download-artifact@v4
+        with:
+          name: tachyon-r35-typed-math-two-real-cpu-weights-not-accepted-science
+          run-id: 43073429418
+          github-token: ${{ github.token }}
+          path: frozen
+      - name: Create four PUBLIC artificial typed canaries, no hidden source answers
+        run: |
+          python - <<'PY'
+          import json,runpy
+          from pathlib import Path
+          cases=runpy.run_path('tests/test_tachyon_r35b_typed_inference.py')['canaries']()
+          path=Path('out/public_r35b_questions_only.json')
+          path.parent.mkdir(parents=True,exist_ok=True)
+          path.write_text(json.dumps(cases,ensure_ascii=False,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Run verified exact bytes frozen model only on questions
+        run: |
+          set -euo pipefail
+          CKPT="$(find frozen -name r35_typed_neural_seed_20261111.pt -print -quit)"
+          test -n "$CKPT"
+          echo 'b631748974acd786f8ede06c5e016cbb5e41015f362e03fa3288b2c95d01234a  '"$CKPT" | sha256sum --check -
+          python -m tachyon.r35b_frozen_typed_inference \
+            --questions-only out/public_r35b_questions_only.json \
+            --frozen-checkpoint "$CKPT" \
+            --output out/public_r35b_predictions_only.json
+      - name: Verify two real forward passes and out-of-family refusals with no blind claims
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from tachyon.r35_typed_quantities import digest
+          p=json.loads(Path('out/public_r35b_predictions_only.json').read_text())
+          q=json.loads(Path('out/public_r35b_questions_only.json').read_text())
+          assert p['receipt_sha256']==digest({k:v for k,v in p.items() if k!='receipt_sha256'})
+          assert p['questions_sha256']==q['questions_sha256']
+          cases={x['case_id']:x for x in p['items']}
+          assert cases['r35b_sr_000']['kind']=='numeric'
+          assert cases['r35b_ohm_000']['kind']=='numeric'
+          assert cases['r35b_power_000']['kind']=='abstain'
+          assert cases['r35b_battery_000']['kind']=='abstain'
+          assert cases['r35b_ohm_000']['unit']=='V'
+          import math
+          assert math.isclose(cases['r35b_sr_000']['value'],math.sqrt(.75),abs_tol=1e-10)
+          assert math.isclose(cases['r35b_ohm_000']['value'],10.,abs_tol=1e-10)
+          assert cases['r35b_sr_000']['answer_method']=='DETERMINISTIC_TEXTBOOK_FORMULA_PRIORITY'
+          assert cases['r35b_ohm_000']['neural_prediction_is_authoritative'] is False
+          assert cases['r35b_ohm_000']['raw_neural_absolute_error_vs_formula']>0.01
+          assert p['research_execution']['exact_formula_priority_answers']==2
+          s=p['research_execution']
+          assert s['real_torch_forward_calls']==2
+          assert s['abstentions']==2
+          assert s['unexpected_new_family_neural_forward_calls']==0
+          assert s['trained_on_real_laboratory_measurements'] is False
+          assert s['consulted_hidden_gold_answers'] is False
+          assert s['scientific_admission']=='HOLD'
+          assert s['production_promotion'] is False
+          print('R35B_REAL_TYPED_CHECKPOINT_2_FORWARD_2_ABSTAIN_PASS')
+          print('R35B_EXACT_FORMULAS_PRIORITIZED_AND_RAW_NEURAL_ERRORS_RECORDED')
+          print('R35B_EXTERNAL_INDEPENDENT_CUSTODIAN_NOT_CONNECTED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r35b-public-typed-inference-no-hidden-answers
+          path: out/public_r35b_*.json
+          retention-days: 30
+          if-no-files-found: error
