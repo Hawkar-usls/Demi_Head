@@ -151,7 +151,7 @@ def train(pack_path,train_path,outdir):
         "neural_within_0p015_count":numeric_score,
         "neural_beats_train_mean_on_public_dev":neural_mae<baseline_mae,
         "neural_outperforms_exact_formula":False,
-        "test_first_read_after_checkpoint_written":True,
+        "test_predictions_scored_after_checkpoint_written":True,
         "neural_weights_actually_trained":True,
         "train_gradient_used_public_unseen_labels":False,
         "independent_external_blind_assessor":False,
