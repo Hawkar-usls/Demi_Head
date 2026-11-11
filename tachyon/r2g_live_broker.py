@@ -59,6 +59,11 @@ def clean(text,limit=260):
 def modest_russian_stem(word):
     """Tiny surface normalization for Cyrillic case endings; NOT semantic NLU."""
     w=word.casefold().replace("ё","е")
+    irregular={"колец":"кольц","кольца":"кольц","кратеров":"кратер",
+               "кратеры":"кратер","кратера":"кратер",
+               "меркурия":"меркур","меркурий":"меркур"}
+    if w in irregular:
+        return irregular[w]
     if re.fullmatch(r"[а-я]+",w) and len(w)>=6:
         for ending in ("иями","ями","ами","ого","ему","ыми","ими",
                        "иях","ах","ях","ов","ев","ей","ия","ий",
@@ -258,6 +263,16 @@ def grounded_topic_check(query,source):
         return False,False,0
     if not anchors and not (titleterms & qterms):
         return False,False,0
+    # Disambiguation: a lunar crater named Mercury is not a crater on the
+    # planet Mercury. Likewise a prize or film named Saturn is not the planet.
+    if "планет" in qterms:
+        title=source["title"].casefold()
+        if any(x in title for x in ("лунный кратер","спутник","премия",
+                                     "фильм","значения","песня","музыка")):
+            return False,False,0
+        if "луны" in source.get("excerpt","").casefold() and (
+            "лунный" in title or "кратер" in title):
+            return False,False,0
     concepts={x for x in qterms-anchors if x not in GENERIC_CONCEPTS}
     supported=concepts & excerptterms
     # The article subject can be relevant even when its short lead does not
@@ -275,8 +290,15 @@ def decide_evidence(query,sources,needs_fresh,provider_errors):
                         predicate_support_terms=support,
                         title_subject_checked=True)
             candidates.append(record)
+    # Prefer title matches for the predicate (rings/craters) over incidental
+    # mentions of an entity in a different article's first paragraph.
+    qterms=query_terms(query)
+    anchors=subject_anchors(query)
+    concepts={x for x in qterms-anchors if x not in GENERIC_CONCEPTS}
     ordered=sorted(candidates,key=lambda x:(
-        -int(x["topic_supported_by_excerpt"]),-x["predicate_support_terms"],
+        -int(x["topic_supported_by_excerpt"]),
+        -len(concepts & query_terms(x["title"])),
+        -x["predicate_support_terms"],
         -x["relevance_overlap"],x["provider"],x["title"]))
     rec={
         "source_count":len(ordered),"sources":ordered[:MAX_RESULTS],
