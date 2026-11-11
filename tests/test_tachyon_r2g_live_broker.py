@@ -8,7 +8,7 @@ from tachyon.r2e_hybrid import load_cards
 from tachyon.r2f_general_router import load_general_cards
 from tachyon.r2g_live_broker import (
     WIKI_ENDPOINT, OPENALEX_ENDPOINT, BRAVE_ENDPOINT,
-    clean, safe_public_query, safe_http_url, safe_result_url,
+    clean, query_terms, safe_public_query, safe_http_url, safe_result_url,
     wiki_search, openalex_search, brave_search, decide_evidence,
     route_with_external_search, ProviderUnavailable,
 )
@@ -50,6 +50,14 @@ class R2G(unittest.TestCase):
                  "description":"Bad"}
             ]}}
         raise AssertionError("unexpected endpoint")
+
+    def test_russian_inflection_relevance(self):
+        self.assertIn("сатурн",query_terms("Какие особенности Сатурна?"))
+        self.assertIn("сатурн",query_terms("Сатурн"))
+        self.assertIn("меркур",query_terms("Кратеры Меркурия"))
+        self.assertIn("меркур",query_terms("Меркурий"))
+        self.assertIn("нептун",query_terms("Нептуна"))
+        self.assertIn("нептун",query_terms("Нептун"))
 
     def test_no_private_data_sent_to_public_source(self):
         for secret in ("NAS 192.168.1.1 uptime","my password is xyz123",
