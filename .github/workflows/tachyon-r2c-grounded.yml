@@ -1,0 +1,109 @@
+name: TACHYON R2C source-grounded research candidate
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r2c_grounded.py'
+      - 'data/tachyon/r2c/**'
+      - 'tests/test_tachyon_r2c_grounded.py'
+      - 'docs/TACHYON_R2C_*.md'
+      - '.github/workflows/tachyon-r2c-grounded.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r2c-single-research-candidate
+  cancel-in-progress: false
+jobs:
+  bounded-research:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    env:
+      META_SHA: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+      TACHYON_R2B_VIDEO_CORPUS: artifacts/tachyon-r2c/video-corpus.json
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout isolated candidate with no write credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout pinned public Meta Registry source only
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: a7f77b02ba6f66efc3a0df5d275de7e57eb0e28d
+          path: external/registry
+          persist-credentials: false
+          sparse-checkout: |
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json
+            data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify provenance and protected clock input
+        run: |
+          set -euo pipefail
+          test "$(git -C external/registry rev-parse HEAD)" = "$META_SHA"
+          echo 'a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f  data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv' | sha256sum --check -
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+      - name: Build pinned nonverbatim R2A training corpus
+        run: |
+          python -m tachyon.video_science_corpus \
+            --science external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-SCIENCE-CHAPTERS-CLAIMS-2026-11-11.json \
+            --captions-index external/registry/data/experiments/JANUS-VIDEO-PWOK0GKDv9c-RU-CAPTIONS-HASH-INDEX-2026-11-11.json \
+            --registry-commit "$META_SHA" \
+            --lab-holdout-file data/tachyon/experiments/WISCONSIN_ZHENG_2023_Fig3.csv \
+            --out "$TACHYON_R2B_VIDEO_CORPUS"
+      - name: Install bounded CPU dependency
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir \
+            torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fail-closed source, DOI, exclusion tests
+        run: |
+          python -m unittest discover -s tests -p test_tachyon_r2c_grounded.py -v
+      - name: Train separate R2C checkpoint without holdout
+        run: |
+          python -m tachyon.r2c_grounded train \
+            --video "$TACHYON_R2B_VIDEO_CORPUS" \
+            --papers data/tachyon/r2b/primary_papers_train.json \
+            --cards data/tachyon/r2c/science_cards.json \
+            --outdir artifacts/tachyon-r2c/candidate --epochs 30
+      - name: PUBLIC diagnostic only, not independent benchmark
+        run: |
+          set -euo pipefail
+          python -m tachyon.r2c_grounded explain \
+            --cards data/tachyon/r2c/science_cards.json \
+            --question 'Как скорость влияет на темп идеальных часов в специальной теории относительности?' \
+            --checkpoint artifacts/tachyon-r2c/candidate/r2c_research_only.pt \
+            --out artifacts/tachyon-r2c/public_diagnostic.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          p=Path("artifacts/tachyon-r2c/candidate")
+          train=json.loads((p/"training_receipt.json").read_text())
+          diag=json.loads(Path("artifacts/tachyon-r2c/public_diagnostic.json").read_text())
+          assert train["training_pairs"]==36 and train["training_families"]==13
+          assert train["new_primary_source_families"]==6
+          assert train["checkpoint_sha256"]==sha256((p/"r2c_research_only.pt").read_bytes()).hexdigest()
+          assert train["lab_clock_labels_read"] is False
+          assert train["lab_clock_measurements_read"] is False
+          assert train["scientifically_admitted"] is False
+          assert train["auto_deployed"] is False and train["authority_delta"]==0
+          assert diag["gate"]["decision"]=="SOURCE_GROUNDED_DRAFT"
+          assert diag["gate"]["review_required"] is True
+          assert diag["gate"]["claim_proven"] is False
+          assert diag["model_scientifically_admitted"] is False
+          print("TACHYON_R2C_RESEARCH_TRAINING_ONLY_EXTERNAL_BLIND_GATE_STILL_HOLD")
+          PY
+      - name: Preserve candidate and diagnostics for reviewer
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r2c-candidate-not-admitted
+          path: |
+            artifacts/tachyon-r2c/candidate/r2c_research_only.pt
+            artifacts/tachyon-r2c/candidate/training_receipt.json
+            artifacts/tachyon-r2c/public_diagnostic.json
+          retention-days: 14
+          if-no-files-found: warn
