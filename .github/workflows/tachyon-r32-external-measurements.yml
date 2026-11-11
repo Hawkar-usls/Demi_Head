@@ -1,0 +1,86 @@
+name: TACHYON R3.2 - independent-origin laboratory data source family challenge
+
+on:
+  pull_request:
+    paths:
+      - 'data/tachyon/r32/**'
+      - 'tachyon/r32_external_measurements.py'
+      - 'tests/test_tachyon_r32_measurements.py'
+      - 'docs/TACHYON_R32_EXTERNAL_LAB_AND_BLIND_PROTOCOL.md'
+      - '.github/workflows/tachyon-r32-external-measurements.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: tachyon-r32-external-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  external-lab-witness:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run adversarial manifest and parser tests WITHOUT network or Torch
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_tachyon_r32_measurements.py' -v
+          python -m py_compile tachyon/r32_external_measurements.py
+          test ! -e data/tachyon/r2c/private_blind_answers.json
+          test ! -e data/tachyon/r2c/private_clock_measurements.json
+      - name: Download frozen R31B checkpoint from exact completed prior research run
+        uses: actions/download-artifact@v4
+        with:
+          name: tachyon-r31b-trained-neural-public-only-not-admitted
+          run-id: 43057568871
+          github-token: ${{ github.token }}
+          path: frozen/r31b
+      - name: Verify frozen research candidate SHA before touching external data
+        run: |
+          set -euo pipefail
+          CKPT="$(find frozen/r31b -type f -name r31b_math_neural_research_only.pt -print -quit)"
+          test -n "$CKPT"
+          echo 'b3b36dfb3e8c1d0d4a1ae1b867978cfa5f8f28d6768d1a42efac02a4d2e47f01  '"$CKPT" | sha256sum --check -
+          echo "R32_FROZEN_CANDIDATE=$CKPT" >> "$GITHUB_ENV"
+      - name: Try both bounded PRIMARY real measurement sources (no training)
+        run: |
+          set -euo pipefail
+          python -m tachyon.r32_external_measurements \
+            --manifest data/tachyon/r32/independent_origin_measurement_manifest.json \
+            --checkpoint "$R32_FROZEN_CANDIDATE" \
+            --output out/r32-external-measurement-witness.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tachyon.r32_external_measurements import sha
+          p=Path('out/r32-external-measurement-witness.json')
+          o=json.loads(p.read_text())
+          assert o['receipt_sha256']==sha({k:v for k,v in o.items() if k!='receipt_sha256'})
+          assert o['actual_candidate_checkpoint_sha256_verified'] is True
+          assert o['source_families_unseen_by_training'] is True
+          assert o['scientific_admission']=='HOLD'
+          assert o['production_promotion'] is False
+          assert o['model_weights_updated'] is False
+          assert o['independently_blind'] is False
+          assert o['unsupported_family_decisions']==2
+          for obs in o['observations']:
+              assert obs['candidate_numeric_prediction'] is None
+              print('R32_PUBLIC_LAB_SOURCE_STATUS',obs['source_id'],obs['source_status'],
+                    obs.get('source_failure_reason',''))
+          print('R32_EXTERNAL_LAB_FILES_VERIFIED',o['external_measurement_sources_verified'],'/2')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tachyon-r32-external-lab-no-blind-no-training-receipt
+          path: out/r32-external-measurement-witness.json
+          if-no-files-found: warn
+          retention-days: 30
