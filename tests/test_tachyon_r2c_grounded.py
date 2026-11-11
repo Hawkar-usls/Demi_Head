@@ -91,6 +91,23 @@ class R2C(unittest.TestCase):
         self.assertFalse(result["claim_of_retrocausal_signal"])
         self.assertIsNone(result["neural_unverified_draft"])
 
+    def test_independent_algebraic_and_dimension_probes(self):
+        from tachyon.r2c_grounded import physics_sanity
+        for family in ("SR_EINSTEIN_1905", "GR_SHAPIRO_1964",
+                       "BELL_1964", "QBAYES_2002"):
+            q = next(s["questions"][0] for s in self.cards["sources"] if s["family"] == family)
+            hits = retrieve(q, self.cards)
+            test = next((x for x in physics_sanity(hits) if x["family"] == family), None)
+            self.assertIsNotNone(test)
+            self.assertTrue(test["passed"])
+            self.assertEqual(test["scope"], "ELEMENTARY_SANITY_ONLY_NOT_PHYSICAL_VERIFICATION")
+
+    def test_extra_untrusted_test_label_field_is_rejected(self):
+        bad = copy.deepcopy(self.cards)
+        bad["sources"][0]["hidden_clock_answer"] = "not allowed"
+        with self.assertRaisesRegex(ScienceHold, "R2C_UNKNOWN_SOURCE_FIELD"):
+            new_source_rows(self._tamper(bad))
+
     def test_no_clock_or_secret_input_to_train_api(self):
         from inspect import signature
         from tachyon.r2c_grounded import train
