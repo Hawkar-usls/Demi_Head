@@ -1,8 +1,12 @@
 """Tachyon source and leakage boundaries; no extra action permission."""
 import sys
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
+
+if importlib.util.find_spec("torch") is None:
+    raise unittest.SkipTest("Optional Torch research tests run in dedicated Tachyon workflow")
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
