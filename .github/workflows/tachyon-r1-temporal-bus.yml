@@ -1,0 +1,60 @@
+name: Tachyon R1 temporal evidence contract (research only)
+on:
+  pull_request:
+    paths:
+      - 'tachyon/temporal_evidence.py'
+      - 'tachyon/__init__.py'
+      - 'tests/test_temporal_evidence.py'
+      - 'contracts/TACHYON_TEMPORAL_EVIDENCE_V1.json'
+      - 'docs/TACHYON_R1_TEMPORAL_BUS.md'
+      - '.github/workflows/tachyon-r1-temporal-bus.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r1-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  evidence-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run local fail-closed evidence tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_temporal_evidence.py' -v
+          python -m json.tool contracts/TACHYON_TEMPORAL_EVIDENCE_V1.json > /dev/null
+      - name: Emit synthetic-only research receipt
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/tachyon-r1
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'tests')
+          from test_temporal_evidence import make
+          Path('artifacts/tachyon-r1/fixture.json').write_text(json.dumps(make('FORECAST')))
+          PY
+          python -m tachyon.temporal_evidence --record artifacts/tachyon-r1/fixture.json --out artifacts/tachyon-r1/review.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('artifacts/tachyon-r1/review.json').read_text())
+          assert x['status']=='STRUCTURAL_TIME_ORDER_PASS'
+          assert x['source_bytes_authenticated'] is False
+          assert x['outcome_admitted_for_training'] is False
+          assert x['authority_delta']==0
+          print('TACHYON_R1_SYNTHETIC_CONTRACT_PASS_NO_MODEL_PROMOTION')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r1-synthetic-review
+          path: artifacts/tachyon-r1/review.json
+          retention-days: 14
+          if-no-files-found: error
