@@ -74,6 +74,9 @@ jobs:
           print('R310_CANDIDATE_DECISIONS',r['candidate_accepted_traces_total'])
           print('R310_STRONG_2RC_FALLBACKS',r['strong_baseline_fallback_traces_total'])
           print('R310_ABSTENTIONS',r['abstentions_total'])
+          print('R310_ABSTENTION_REASON_COUNTS',json.dumps(r['abstention_reasons_aggregated'],sort_keys=True))
+          print('R310_BAD_CANDIDATE_WITH_SAFE_BASELINE',r['invalid_candidate_with_valid_2RC_baseline_traces'])
+          assert sum(r['abstention_reasons_aggregated'].values())==r['abstentions_total']
           print('R310_DEVICE_EQUAL_SELECTIVE_MAE_VOLTS',r['equal_device_selective_MAE_V'])
           print('R310_DEVICE_EQUAL_2RC_MAE_VOLTS',r['equal_device_baseline_MAE_V'])
           print('R310_DEVICE_EQUAL_GAIN',r['equal_device_selective_relative_gain'])
