@@ -30,3 +30,11 @@ Only the four already trained textbook families can generate a numeric neural es
 Legacy R31B had source-family-specific high-beta error. R3.5 remains a numerical approximator and still errs by about 0.149 at beta 0.96. Exact SR formula must be preferred for real user answers; no neural auto-promotion and no application to live medical/laboratory/power systems.
 
 Status: `R35B_REAL_FROZEN_TYPED_INFERENCE / STRICT_NO_GOLD_TRANSPORT / SCIENCE_HOLD / EXTERNAL_ASSISTANT_PENDING`.
+
+## Numerical safety correction after inspecting actual canary outputs
+
+The first R3.5B public canary on `OHMIC_VOLTAGE` had I=0.5 A and R=20 Ω. The raw frozen neural prediction was approximately **13.887882 V**, while the exact Ohm-law answer is **10 V**, an error about 3.887882 V. The originally emitted raw number was research-only but should not be mistaken for a reliable physical answer. This is preserved as a negative outcome, not erased.
+
+R3.5B now always routes a **known-source exact formula** to the authoritative `value` field, with `answer_method=DETERMINISTIC_TEXTBOOK_FORMULA_PRIORITY`, and keeps the network's actual separate `raw_neural_research_prediction`, `raw_neural_absolute_error_vs_formula` and `neural_prediction_is_authoritative=false`. The old neural weight SHA remains unchanged. Unknown electric-power / lab families continue to ABSTAIN with no guess or exact fallback unless their source family is independently implemented. The formula runner is a bounded exact-equation verifier, not evidence that neural transfer to new physics improved.
+
+The external evaluator must score these output modes SEPARATELY: the deterministic baseline cannot be counted as success by the neural model. Train-mean baseline and per-family errors stay visible in R3.5 research receipts; no mixed-unit aggregate determines the scientific outcome.
