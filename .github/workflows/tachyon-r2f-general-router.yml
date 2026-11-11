@@ -1,0 +1,65 @@
+name: TACHYON R2F cross-domain source routing regression (research only)
+on:
+  pull_request:
+    paths:
+      - 'tachyon/r2f_general_router.py'
+      - 'tests/test_tachyon_r2f_general_router.py'
+      - 'data/tachyon/r2f/**'
+      - 'docs/TACHYON_R2F_*.md'
+      - '.github/workflows/tachyon-r2f-general-router.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tachyon-r2f-public-routing
+  cancel-in-progress: false
+jobs:
+  isolated-source-routing:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate source cards and four former OOD prompts
+        run: |
+          python -m unittest discover -s tests -p test_tachyon_r2f_general_router.py -v
+      - name: Construct public questions-only set
+        run: |
+          python -m tachyon.r2d_audit split-public \
+            --fixture data/tachyon/r2d/public_dev_challenge.json \
+            --questions artifacts/tachyon-r2f/public-questions.json \
+            --key artifacts/tachyon-r2f/public-key-not-uploaded.json
+      - name: Run multi-domain router without neural model or external web
+        run: |
+          python -m tachyon.r2f_general_router \
+            --questions artifacts/tachyon-r2f/public-questions.json \
+            --physics-cards data/tachyon/r2c/science_cards.json \
+            --general-cards data/tachyon/r2f/general_source_cards.json \
+            --out artifacts/tachyon-r2f/public-routing-results.json
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+          data=json.loads(Path('artifacts/tachyon-r2f/public-routing-results.json').read_text())
+          d={x['case_id']:x['response'] for x in data['cases']}
+          assert len(d)==18 and not data['model_training_performed']
+          assert [d[x]['decision'] for x in ('nas','garden','cooking')]==['GENERAL_SOURCE_ANSWER']*3
+          assert d['football']['decision']=='NEEDS_CLARIFICATION'
+          for x in ('nas','garden','cooking'):
+              assert d[x]['answer'] and d[x]['citations']
+          assert d['football']['answer'] is None
+          assert all(not x['response']['scientifically_admitted'] for x in data['cases'])
+          print('R2F_GENERAL_ROUTING_PASS_3_CITED_1_NEEDS_DETAILS_NOT_BLIND')
+          PY
+      - name: Upload only outputs, not public gold or training models
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-r2f-public-general-source-routing-research-only
+          path: artifacts/tachyon-r2f/public-routing-results.json
+          retention-days: 14
+          if-no-files-found: warn
