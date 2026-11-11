@@ -80,3 +80,13 @@ with torch.no_grad():
 
 Do **not** interpret a model probability as a measurement or an FTL transport
 instruction. For real decisions, use the analytic Lorentz formula directly.
+
+## Standard repository CI compatibility
+
+The general DemiHead `Validate repository contracts` job does not install the
+optional PyTorch dependency. In general CI, checksum and provenance tests in
+`tests/test_tachyon_artifacts.py` run using standard library only, and Torch-only
+test modules explicitly skip when the dependency is absent. The dedicated
+manual Tachyon workflow installs the pinned PyTorch CPU package and runs all
+16 Tachyon tests. This keeps the repository's general verification lightweight
+without silently treating a Torch-free run as a model training pass.
