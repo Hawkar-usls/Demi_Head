@@ -1,6 +1,15 @@
 {
   "schema": "janus.essence.innovations/0.1",
   "repository": "Hawkar-usls/Demi_Head",
-  "entries": [],
+  "entries": [
+    {
+      "id": "idea-nexus-wal-failclosed-00",
+      "role": "recovery",
+      "idea": "Before microcore recovery, validate present WAL physical envelope and refuse replay of damaged sidecars; never auto-repair or infer production readiness.",
+      "evidence_sha256": "73d3884deb3d04d47504cb7209a9e472f89172959e404a8d3bf011567f3d3fe6",
+      "precommit_sha256": "4725f98fffcd09fa18ba7f78326b75165905c3facc259402a2d3b06fe75f78b0",
+      "origin_receipt_sha256": "4702d208b197db846bcba800bd3b0f433c6d33bcff2853567db086a08aaa0d5e"
+    }
+  ],
   "authority": "RESEARCH_PROPOSAL_ONLY"
 }
