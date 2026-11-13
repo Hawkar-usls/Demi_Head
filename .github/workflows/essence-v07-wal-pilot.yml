@@ -29,7 +29,7 @@ jobs:
       - name: Run real SQLite faults with negative controls
         run: |
           python -m py_compile tools/essence_v07_wal_fault_pilot.py
-          python -m unittest -v discover -s tests -p 'test_essence_v07_wal_fault_pilot.py'
+          python -m unittest discover -v -s tests -p 'test_essence_v07_wal_fault_pilot.py'
       - name: Generate research-only 64-case real SQLite WAL audit report
         run: |
           python tools/essence_v07_wal_fault_pilot.py --cycles 8 --out "essence-v07-wal-smoke.json"
