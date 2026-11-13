@@ -1,0 +1,44 @@
+{
+  "artifact_id": 14025107809,
+  "artifact_retention_days": 7,
+  "artifact_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/43402025385/artifacts/14025107809",
+  "bundle_bytes": 142855419,
+  "bundle_file": "janus-demiurge.bundle",
+  "bundle_sha256": "e9542d6c80ab407e63e83e646db2a0e0acd216aaaada5b45504b64c69f8baedf",
+  "checks": {
+    "all_refs_match": true,
+    "bundle_sha256_matches": true,
+    "bundle_verify": true,
+    "git_fsck_full_strict": true,
+    "restored_ref_count": 940
+  },
+  "created_at": "2026-11-13T09:32:01.860906+00:00",
+  "excludes": [
+    "local Habitat private journal",
+    "credentials and runtime secrets",
+    "untracked files",
+    "external databases and NAS files",
+    "Git LFS objects and submodule repositories"
+  ],
+  "functional_drill": {
+    "host_execution": false,
+    "network": "none",
+    "read_only_source": true,
+    "status": "PASSED",
+    "suite": "test_beetle_runtime_consumer.py"
+  },
+  "refs_sha256": "ae14ec1b9e0cc1c0193e071a0a0375a408ea68637b4db07243a17f4bb6a6477f",
+  "restored_code_executed_on_host": false,
+  "run_url": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/43402025385",
+  "schema": "janus.repository_recovery.v1",
+  "scope": "All fetched Git refs and reachable history, tracked code, configuration, state and model weights",
+  "source_main_sha": "31a3dc8c0e9a2cce996bc797ffa6f1da638e7e73",
+  "source_memory_sha": "47b5b32f3c9c1a7f727246bc837ffbba8ef57a93",
+  "source_repository": "Hawkar-usls/Janus-Demiurge",
+  "status": "REPOSITORY_RECOVERY_VERIFIED",
+  "storage_repository": "Hawkar-usls/Demi_Head",
+  "storage_status": "GITHUB_ACTIONS_ARTIFACT_STORED",
+  "tracked_main_file_count": 16240,
+  "whole_organism_recovery_verified": false,
+  "workflow_sha": "c4d6a11864e3fccc27afcf6389492286c0e1be8b"
+}
