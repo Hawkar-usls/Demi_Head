@@ -33,6 +33,7 @@ jobs:
           python -m py_compile .janus/essence/peer_mailbox_v10.py
           python -m unittest discover -v -s tests -p 'test_essence_peer_mailbox_v10.py'
       - name: Read reviewed immutable origin reply from JANUS Meta Registry
+        if: github.event_name != 'pull_request'
         env:
           ESSENCE_REPO: ${{ github.repository }}
           ESSENCE_RECEIPT: ${{ runner.temp }}/essence-v10-inbound-peer-reply.json
@@ -52,6 +53,7 @@ jobs:
           print("ESSENCE_V10_REAL_CROSS_REPO_MAIL_RECEIVED",r["repository"],r["registry_round_git_blob_sha1"])
           PY
       - name: Preserve short-lived receipt, not model mutations
+        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: essence-v10-peer-inbox-${{ github.run_id }}
