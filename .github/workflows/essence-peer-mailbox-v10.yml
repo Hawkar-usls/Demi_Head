@@ -1,0 +1,60 @@
+name: ESSENCE v1.0 receive peer replies through shared public Meta Registry
+
+on:
+  pull_request:
+    paths:
+      - '.janus/essence/peer_mailbox_v10.py'
+      - 'tests/test_essence_peer_mailbox_v10.py'
+      - '.github/workflows/essence-peer-mailbox-v10.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '23 9 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: essence-peer-mailbox-v10-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  read-only-peer-replies:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify local provenance and remote code execution stay denied
+        run: |
+          python -m py_compile .janus/essence/peer_mailbox_v10.py
+          python -m unittest discover -v -s tests -p 'test_essence_peer_mailbox_v10.py'
+      - name: Read reviewed immutable origin reply from JANUS Meta Registry
+        env:
+          ESSENCE_REPO: ${{ github.repository }}
+          ESSENCE_RECEIPT: ${{ runner.temp }}/essence-v10-inbound-peer-reply.json
+        run: |
+          python .janus/essence/peer_mailbox_v10.py \
+            --repo "$ESSENCE_REPO" --out "$ESSENCE_RECEIPT"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path(os.environ["ESSENCE_RECEIPT"]).read_text())
+          assert r["cross_repository_reply_received"] is True
+          assert r["message_count_addressed"]==1
+          assert r["source_code_executed"] is False
+          assert r["production_authority"] is False
+          assert r["generation_advanced"] is False
+          assert r["outbound_messages_sent"] is False
+          print("ESSENCE_V10_REAL_CROSS_REPO_MAIL_RECEIVED",r["repository"],r["registry_round_git_blob_sha1"])
+          PY
+      - name: Preserve short-lived receipt, not model mutations
+        uses: actions/upload-artifact@v4
+        with:
+          name: essence-v10-peer-inbox-${{ github.run_id }}
+          path: ${{ runner.temp }}/essence-v10-inbound-peer-reply.json
+          retention-days: 14
+          if-no-files-found: error
