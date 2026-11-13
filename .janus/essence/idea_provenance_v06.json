@@ -1,0 +1,23 @@
+{
+  "schema": "janus.essence.idea_origin/0.6",
+  "repository": "Hawkar-usls/Demi_Head",
+  "candidate_id": "idea-nexus-wal-failclosed-00",
+  "role": "recovery",
+  "idea": "Before microcore recovery, validate present WAL physical envelope and refuse replay of damaged sidecars; never auto-repair or infer production readiness.",
+  "source_path": "docs/NEXUS_WAL_SIDECAR_GATE.md",
+  "source_git_blob_sha1": "f91ec9d4d9522164e7948360ede2746195ecb935",
+  "source_document_sha256": "73d3884deb3d04d47504cb7209a9e472f89172959e404a8d3bf011567f3d3fe6",
+  "precommit_anchor": {
+    "schema": "janus.essence.proposal_anchor/0.6",
+    "repository": "Hawkar-usls/Demi_Head",
+    "source_path": "docs/NEXUS_WAL_SIDECAR_GATE.md",
+    "source_git_blob_sha1": "f91ec9d4d9522164e7948360ede2746195ecb935",
+    "source_document_sha256": "73d3884deb3d04d47504cb7209a9e472f89172959e404a8d3bf011567f3d3fe6",
+    "candidate_id": "idea-nexus-wal-failclosed-00",
+    "evaluation_phase": "PRECOMMITTED_FOR_FUTURE_UNSEEN_TRIALS_ONLY"
+  },
+  "precommit_anchor_sha256": "4725f98fffcd09fa18ba7f78326b75165905c3facc259402a2d3b06fe75f78b0",
+  "precommit_hash_method": "SHA256_SORTED_CANONICAL_JSON",
+  "independent_performance_gain": "NOT_MEASURED",
+  "claimed_production_authority": false
+}
