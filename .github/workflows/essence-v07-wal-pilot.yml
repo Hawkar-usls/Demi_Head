@@ -1,0 +1,52 @@
+name: ESSENCE v0.7 SQLite WAL empirical research pilot (fault injected)
+
+on:
+  pull_request:
+    paths:
+      - 'tools/essence_v07_wal_fault_pilot.py'
+      - 'tests/test_essence_v07_wal_fault_pilot.py'
+      - '.github/workflows/essence-v07-wal-pilot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wal-empirical-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Ensure exact baseline and candidate source are immutable
+        run: |
+          test "$(git hash-object tools/nexus_storage_fault_gate.py)" = "8cb257dbb65d34f095610a60ea9d491d940b09bc"
+          test "$(git hash-object tools/nexus_wal_sidecar_gate.py)" = "0305c55cf2987480beb94275a71eab3d34963bc5"
+      - name: Run real SQLite faults with negative controls
+        run: |
+          python -m py_compile tools/essence_v07_wal_fault_pilot.py
+          python -m unittest -v discover -s tests -p 'test_essence_v07_wal_fault_pilot.py'
+      - name: Generate research-only 64-case real SQLite WAL audit report
+        run: |
+          python tools/essence_v07_wal_fault_pilot.py --cycles 8 --out "essence-v07-wal-smoke.json"
+          python - <<'PY'
+          import json
+          r=json.load(open("essence-v07-wal-smoke.json"))
+          assert r["total_trials"] == 64
+          assert r["candidate"]["false_accept_corrupt_wal"] > 0
+          assert r["already_existing_stronger_checksum_gate"]["false_accept_corrupt_wal"] < r["candidate"]["false_accept_corrupt_wal"]
+          assert r["production_authority"] is False
+          assert r["externally_independent_verifier"] is False
+          print("ESSENCE_V07_WAL_DEVELOPMENT_ONLY_PASS_WITH_NEGATIVE_EVIDENCE")
+          PY
+      - name: Save non-authoritative research evidence only
+        uses: actions/upload-artifact@v4
+        with:
+          name: essence-v07-wal-development-${{ github.run_id }}
+          path: essence-v07-wal-smoke.json
+          retention-days: 14
+          if-no-files-found: error
