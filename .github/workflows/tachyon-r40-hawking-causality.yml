@@ -1,0 +1,42 @@
+name: TACHYON R4.0 Hawking Causality Toy Gate
+
+on:
+  pull_request:
+    paths:
+      - 'research/time_physics/**'
+      - 'tests/test_tachyon_r40_hawking_causality.py'
+      - 'docs/TACHYON_R40_HAWKING_CAUSALITY_AUDIT.md'
+      - '.github/workflows/tachyon-r40-hawking-causality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  toy-quantum-causality-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pure bounded causal toy checks (not a physical experiment)
+        run: |
+          python -m unittest discover -s tests -p 'test_tachyon_r40_hawking_causality.py' -v
+      - name: Verify index and no scientific admission
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('research/time_physics/r40_meta_registry_inventory.json')
+          data = json.loads(p.read_text())
+          assert data['tree_truncated'] is False
+          assert data['item_count'] == len(data['items'])
+          assert len({item['path'] for item in data['items']}) == data['item_count']
+          assert data['physical_retrocausality_proven'] is False
+          assert data['production_unchanged'] is True
+          print("TACHYON_R40_TOY_ONLY_HOLD", data['item_count'])
+          PY
