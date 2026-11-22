@@ -1,0 +1,47 @@
+{
+  "schema": "janus.demihead.tachyon.r5f_negative999_budget_protocol.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-NEGATIVE999-OPERATIONS-2026-11-22",
+  "date": "2026-11-22",
+  "frozen_before_first_ci": true,
+  "request": "Set available graph-search operations to -999 and rerun TACHYON R5F.",
+  "requested_available_operations": -999,
+  "interpretation": "-999 is an invalid resource capacity, not a physically meaningful negative computation. Reject it before dispatch, with zero counted graph traversals and no causal claims.",
+  "scope": "RESEARCH_ONLY_INVALID_INPUT_FAIL_CLOSED_CONTROL",
+  "source_R5F": "tools/tachyon_r5f_causal_memory_audit.py",
+  "prior_X100": "https://github.com/Hawkar-usls/Demi_Head/pull/115",
+  "isolation": "Branch from main; do not change R5F source, R5F-X100 50,000 budget, core head or production model weights.",
+  "dataset": "Frozen original R5F developer-generated synthetic heldout: 40 families * 15 scenarios = 600 cases.",
+  "arms": [
+    "A_FORWARD_ONLY_EXHAUSTIVE",
+    "B_REVERSE_ONLY_UNVERIFIED",
+    "C_REVERSE_PLUS_FORWARD_REPLAY",
+    "D_STRONG_EXHAUSTIVE_PROVENANCE",
+    "E_ALWAYS_ABSTAIN"
+  ],
+  "trial_matrix": "600 cases * 5 named research algorithms = 3000 guarded dispatch attempts; all expected INVALID_NEGATIVE_OPERATION_BUDGET before any algorithm invocation.",
+  "hard_outcomes": {
+    "expected_invalid_budget_requests": 3000,
+    "expected_graph_operations_performed": 0,
+    "expected_algorithms_invoked": 0,
+    "expected_causal_claims": 0,
+    "expected_abstentions": 3000,
+    "expected_scored_accuracy": null,
+    "reason_no_accuracy": "No inference occurs; an invalid-input rejection is not successful causal classification.",
+    "expected_effective_positive_budget": null,
+    "normalization_prohibited": true
+  },
+  "negative_controls": [
+    "Injected sentinel algorithm must not be invoked.",
+    "Input with forbidden field access must not be examined.",
+    "Budget -1, -10 and -9999 also rejected.",
+    "boolean, float and string budgets rejected rather than silently coerced.",
+    "Budget invalid != budget exhausted: record separate error status.",
+    "Valid positive budget delegates without changing source algorithm.",
+    "No hidden gold label accessed; do not claim 100% causal reconstruction.",
+    "No biological, clinical or physical time reversal claim."
+  ],
+  "evaluation": "GitHub Actions standard Python unit tests, original DemiHead core tests, R5F core tests and 28 new N999 tests; publish JSON receipt with per-arm counts and SHA256 of casebank.",
+  "scientific_status": "ENGINEERING_NEGATIVE_INPUT_GATE_ONLY__SCIENTIFIC_HOLD",
+  "physically_reversed_time_observed": false,
+  "production_models_changed": false
+}
