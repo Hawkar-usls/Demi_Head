@@ -1,0 +1,76 @@
+{
+  "schema": "janus.demihead.tachyon.r5f_negative999_budget_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-NEGATIVE999-BUDGET-GUARD-RESULT-2026-11-22",
+  "as_of_date": "2026-11-22",
+  "status": "ENGINEERING_CI_PASS__NEGATIVE_BUDGET_REJECTED_PRE_DISPATCH__NO_INFERENCE__SCIENTIFIC_HOLD",
+  "source_repository": "Hawkar-usls/Demi_Head",
+  "research_branch": "research/tachyon-r5f-negative-999-gate-20261122",
+  "pull_request": "https://github.com/Hawkar-usls/Demi_Head/pull/116",
+  "first_successful_ci": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45044511725",
+  "workflow_artifact": {
+    "id": 14762228615,
+    "name": "demihead-tachyon-r5f-negative999-budget",
+    "digest": "sha256:f0a9040d6ed958a3f6d9b27891430d19d16b4c58e4182c124a023b2632b34d34",
+    "bytes": 1318
+  },
+  "experiment_protocol": "research/tachyon/r5f_negative999_budget_protocol_20261122.json",
+  "implementation": "tools/tachyon_r5f_negative999_budget_guard.py",
+  "tests": "tests/test_tachyon_r5f_negative999_budget_guard.py",
+  "original_source_blob_sha1": "ea3ebbbd14594291adcde4f403a7e040d65f76a3",
+  "method": "Guarded inference dispatcher validates requested operation-budget before invoking R5F causal algorithms.",
+  "requested_available_operations": -999,
+  "error_status": "INVALID_NEGATIVE_OPERATION_BUDGET",
+  "operation_budget_valid": false,
+  "negative_budget_coerced": false,
+  "trials": {
+    "cases": 600,
+    "arms": 5,
+    "attempted_dispatches": 3000,
+    "rejected_pre_dispatch": 3000,
+    "algorithms_invoked": 0,
+    "actual_graph_operations": 0,
+    "causal_claims": 0,
+    "abstentions": 3000,
+    "measured_accuracy": null,
+    "accuracy_note": "Undefined: no inference executed; rejecting invalid request must never be interpreted as successfully reconstructing histories.",
+    "case_source": "Frozen original synthetic R5F developer-heldout, not externally blind",
+    "human_cases": 0
+  },
+  "arms": [
+    "A_FORWARD_ONLY_EXHAUSTIVE",
+    "B_REVERSE_ONLY_UNVERIFIED",
+    "C_REVERSE_PLUS_FORWARD_REPLAY",
+    "D_STRONG_EXHAUSTIVE_PROVENANCE",
+    "E_ALWAYS_ABSTAIN"
+  ],
+  "unit_tests": {
+    "original_DemiHead_reference_passed": 7,
+    "original_R5F_passed": 29,
+    "new_N999_guard_passed": 28,
+    "CI_conclusion": "success",
+    "sentinel_prohibits_algorithm_invocation": true,
+    "sentinel_prohibits_graph_input_access": true,
+    "negative_types_and_values_checked": true,
+    "unchanged_positive_budget_functionality_checked": true
+  },
+  "prior_results_preserved": {
+    "original_R5F_budget_per_case": 500,
+    "R5F_X100_original_request_budget_per_case": 50000,
+    "R5F_X100_pr": "https://github.com/Hawkar-usls/Demi_Head/pull/115",
+    "R5F_X100_branch_not_changed": true,
+    "original_R5F_code_not_changed": true,
+    "production_model_weights_not_changed": true,
+    "no_fabricated_time_data": true
+  },
+  "interpretation_ru": "Эксперимент -999 проверил отказоустойчивость для недопустимого отрицательного бюджета операций. На 600 синтетических задачах и 5 алгоритмах 3000 запросов были отклонены до чтения графов и до причинного поиска. Это инженерный PASS защитной функции, а не оценка качества причинного анализа JANUS или обратного восприятия времени.",
+  "limitations": {
+    "real_external_witnesses": false,
+    "external_blind_generalization": false,
+    "scientific_proof_of_neural_gain": false,
+    "physical_time_reversal": false,
+    "causal_memory_reconstruction_performed": false,
+    "clinical_data_used": false,
+    "scientific_gate": "HOLD_INVALID_INPUT_GUARD_ONLY"
+  },
+  "next": "If testing a meaningful negative-time coordinate rather than an operation budget, define separate signed temporal coordinates with positive computational resource budget and independent timestamped observation controls; do not conflate negative time displacement with a negative available-operation count."
+}

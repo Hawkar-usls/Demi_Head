@@ -1,0 +1,86 @@
+name: DemiHead TACHYON R5F N999 - Invalid Negative Operations Gate
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5f_negative999_budget_guard.py'
+      - 'tests/test_tachyon_r5f_negative999_budget_guard.py'
+      - 'research/tachyon/r5f_negative999_budget_protocol_20261122.json'
+      - 'research/tachyon/r5f_negative999_budget_result_20261122.json'
+      - '.github/workflows/tachyon-r5f-negative999-gate.yml'
+  push:
+    branches:
+      - research/tachyon-r5f-negative-999-gate-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5f_negative999_budget_guard.py'
+      - 'tests/test_tachyon_r5f_negative999_budget_guard.py'
+      - 'research/tachyon/r5f_negative999_budget_protocol_20261122.json'
+      - 'research/tachyon/r5f_negative999_budget_result_20261122.json'
+      - '.github/workflows/tachyon-r5f-negative999-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  negative-budget-fail-closed:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install validated project dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Check original DemiHead and unchanged R5F
+        run: |
+          python tools/validate_repository.py
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+          python -m unittest discover -s tests -p 'test_tachyon_r5f_causal_memory_audit.py' -v
+          test "$(git hash-object tools/tachyon_r5f_causal_memory_audit.py)" = "ea3ebbbd14594291adcde4f403a7e040d65f76a3"
+      - name: Test negative -999 guard invariants
+        run: python -m unittest discover -s tests -p 'test_tachyon_r5f_negative999_budget_guard.py' -v
+      - name: Execute guarded -999 budget across 600 cases and five algorithms
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5f_negative999_budget_guard --audit > out/tachyon/r5f_negative999_budget_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          protocol=json.loads(Path("research/tachyon/r5f_negative999_budget_protocol_20261122.json").read_text())
+          r=json.loads(Path("out/tachyon/r5f_negative999_budget_receipt.json").read_text())
+          assert protocol["requested_available_operations"]==r["requested_available_operations"]==-999
+          assert r["budget_valid"] is False
+          assert r["budget_error"]=="INVALID_NEGATIVE_OPERATION_BUDGET"
+          assert not r["negative_budget_normalized_to_positive_or_zero"]
+          assert r["heldout_cases"]==600 and r["arms_count"]==5
+          assert r["total_algorithm_dispatch_attempts"]==3000
+          assert r["total_algorithm_invocations"]==0
+          assert r["total_graph_operations_performed"]==0
+          assert r["total_causal_claims_issued"]==0
+          assert r["total_abstentions"]==3000
+          assert r["all_requests_rejected_before_graph_search"]
+          assert r["no_scored_accuracy"]
+          assert all(v["accuracy"] is None and v["graph_operations_performed"]==0 and v["causal_claims"]==0
+                     for v in r["arms"].values())
+          assert not r["science_limits"]["production_weights_changed"]
+          assert not r["science_limits"]["physical_reverse_time_proven"]
+          print("R5F_NEGATIVE_BUDGET=-999")
+          print("R5F_INVALID_REQUESTS_REJECTED="+str(r["total_algorithm_dispatch_attempts"]))
+          print("R5F_ALGORITHM_INVOCATIONS="+str(r["total_algorithm_invocations"]))
+          print("R5F_GRAPH_OPERATIONS="+str(r["total_graph_operations_performed"]))
+          print("R5F_CAUSAL_CLAIMS="+str(r["total_causal_claims_issued"]))
+          print("R5F_ABSTENTIONS="+str(r["total_abstentions"]))
+          print("R5F_N999_FAIL_CLOSED_ENGINEERING_PASS__SCIENTIFIC_HOLD")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5f-negative999-budget
+          path: out/tachyon/r5f_negative999_budget_receipt.json
+          if-no-files-found: error
+          retention-days: 60
