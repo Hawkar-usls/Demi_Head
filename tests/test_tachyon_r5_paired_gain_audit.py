@@ -16,6 +16,11 @@ UPSTREAM = ROOT / "_pinned_simptomat"
 class R5PairedGainTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if not (UPSTREAM / "tools/temporal_recurrence_r4_train.py").is_file():
+            raise unittest.SkipTest(
+                "Cross-repo R5 requires pinned Simptomat checkout; "
+                "dedicated R5 GitHub Actions executes full test."
+            )
         cls.receipt = benchmark(UPSTREAM)
 
     def test_real_demihead_is_invoked_for_all_arms(self):
