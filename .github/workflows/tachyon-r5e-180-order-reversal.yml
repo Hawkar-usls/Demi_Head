@@ -1,0 +1,76 @@
+name: DemiHead TACHYON R5E - Subjective 180 Order Reversal
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5e_180_order_reversal.py'
+      - 'tests/test_tachyon_r5e_180_order_reversal.py'
+      - 'research/tachyon/r5e_subjective_180_order_reversal_protocol_20261122.json'
+      - 'research/tachyon/r5e_subjective_180_order_reversal_result_20261122.json'
+      - '.github/workflows/tachyon-r5e-180-order-reversal.yml'
+  push:
+    branches:
+      - research/tachyon-r5e-subjective-180-reversal-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5e_180_order_reversal.py'
+      - 'tests/test_tachyon_r5e_180_order_reversal.py'
+      - 'research/tachyon/r5e_subjective_180_order_reversal_protocol_20261122.json'
+      - 'research/tachyon/r5e_subjective_180_order_reversal_result_20261122.json'
+      - '.github/workflows/tachyon-r5e-180-order-reversal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-inversion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing repo validation requirements
+        run: python -m pip install -r requirements-dev.txt
+      - name: Check original DemiHead and existing R5B controls
+        run: |
+          python tools/validate_repository.py
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+          python -m unittest discover -s tests -p 'test_tachyon_r5b_witness_audit.py' -v
+      - name: Synthetic R5E 180-order reversal tests
+        run: python -m unittest discover -s tests -p 'test_tachyon_r5e_180_order_reversal.py' -v
+      - name: Run full deterministic 180-order reversal audit
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5e_180_order_reversal --audit > out/tachyon/r5e_180_order_reversal_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('research/tachyon/r5e_subjective_180_order_reversal_protocol_20261122.json').read_text())
+          r=json.loads(Path('out/tachyon/r5e_180_order_reversal_receipt.json').read_text())
+          assert p['synthetic_experiment']['cases'] == r['cases'] == 384
+          assert len(r['scenario_names']) == p['synthetic_experiment']['scenario_count'] == 16
+          assert r['arms']['verified']['exact_correct'] == 384
+          assert r['arms']['verified']['false_180_reversal_claims'] == 0
+          assert r['arms']['naive']['false_180_reversal_claims'] > 0
+          assert r['not_reversed_physical_history']
+          assert r['not_phenomenal_experience_proven']
+          assert not r['independent_real_witnesses_authenticated']
+          assert not r['production_models_changed']
+          print('R5E_SYNTHETIC_CASES='+str(r['cases']))
+          print('R5E_VERIFIED_COVERAGE='+str(r['arms']['verified']['coverage']))
+          print('R5E_VERIFIED_SELECTIVE_ACC='+str(r['arms']['verified']['selective_accuracy']))
+          print('R5E_NAIVE_FALSE_180='+str(r['arms']['naive']['false_180_reversal_claims']))
+          print('R5E_ORDER_180_SYNTHETIC_PASS__PHENOMENOLOGY_SCIENTIFIC_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5e-180-subjective-order
+          path: out/tachyon/r5e_180_order_reversal_receipt.json
+          retention-days: 60
+          if-no-files-found: error
