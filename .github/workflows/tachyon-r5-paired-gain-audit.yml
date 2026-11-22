@@ -40,6 +40,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install the checked-in DemiHead validation dependencies
+        run: python -m pip install -r requirements-dev.txt
       - name: Confirm upstream is pinned, not mutable branch
         run: |
           test "$(git -C _pinned_simptomat rev-parse HEAD)" = "5c1daed7f728d671ed2139b3448bd612ea0a4f58"
