@@ -78,10 +78,11 @@ def negative_cases() -> list[dict]:
     def modified(fam: int, label: str, **overrides) -> dict:
         original = make_case(fam, label)
         return {**original, **overrides, "target": "ABSTAIN_INVALID_PROVENANCE"}
-    ref = make_case(1, "OBSERVED_REPEAT")["reference_time"]
+    ref_plan = make_case(1, "FUTURE_PLAN")["reference_time"]
+    ref_observed = make_case(2, "OBSERVED_REPEAT")["reference_time"]
     return [
-        modified(1, "FUTURE_PLAN", event_b_time=ref-timedelta(days=1)),
-        modified(2, "OBSERVED_REPEAT", event_b_time=ref+timedelta(days=1)),
+        modified(1, "FUTURE_PLAN", event_b_time=ref_plan-timedelta(days=1)),
+        modified(2, "OBSERVED_REPEAT", event_b_time=ref_observed+timedelta(days=1)),
         modified(3, "MEMORY_OF_EVENT", event_b_id="unrelated-episode"),
         modified(4, "CONTINUING_EVENT", event_b_id="unrelated-episode"),
         modified(5, "SAME_EVENT", content_b="impossible-other-content"),
