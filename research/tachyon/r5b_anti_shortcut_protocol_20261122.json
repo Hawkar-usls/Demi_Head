@@ -1,0 +1,74 @@
+{
+  "schema": "janus.demihead.tachyon.r5b.anti_shortcut_protocol.v1",
+  "artifact_id": "DEMIHEAD_TACHYON_R5B_WITNESS_ONLY_2026-11-22",
+  "date": "2026-11-22",
+  "status": "FROZEN_PROTOCOL_BEFORE_FIRST_CI_EXECUTION",
+  "source_R5": "https://github.com/Hawkar-usls/Demi_Head/blob/main/research/tachyon/r5_paired_gain_result_20261122.json",
+  "question": "Can frozen TACHYON R4 responsibly interpret incomplete event witnesses without fabricating known event IDs/status or inventing observations?",
+  "source_manifest": "research/tachyon/r5b_time_retro_archive_sources_20261122.json",
+  "generation": {
+    "locked_seed": 2026112251,
+    "dev_families": "0..7 per each of 10 scenarios",
+    "holdout_families": "100..131 per each of 10 scenarios",
+    "dev_cases": 80,
+    "heldout_cases": 320,
+    "human_participants": 0,
+    "labels_separate_from_public_input": true,
+    "prohibited_input_fields": [
+      "event_a_id",
+      "event_b_id",
+      "b_status",
+      "gold",
+      "target",
+      "scenario"
+    ],
+    "evidence": "Per-report narrative slot, recorded-or-schedule source medium, content signature, simulated root, captured time, receipt time, and clock quality",
+    "root_authentication": "SIMULATED_ONLY",
+    "mandatory_abstention_scenarios": [
+      "same_window_identity_unknown",
+      "timestamp_missing",
+      "contradictory_clocks",
+      "duplicate_source_roots",
+      "unsynchronized_clocks",
+      "one_root_only"
+    ]
+  },
+  "arms": {
+    "A": "Unmodified reference DemiHead KETO, no temporal label",
+    "B": "Frozen R4: abstain out-of-domain when required known event ID/status features unavailable, never backfill",
+    "C": "Transparent corroboration rule with two distinct roots and synchronized timing",
+    "D": "Weak single-source clock baseline",
+    "E": "Always abstain baseline"
+  },
+  "primary_metrics": [
+    "Attempted coverage",
+    "Accuracy conditional on attempted",
+    "Unsupported assertions for mandatory abstention cases",
+    "Correct abstentions",
+    "Unmodified DemiHead reference outputs"
+  ],
+  "secondary_metrics": [
+    "Raw match rate including abstentions",
+    "Wrong nonabstentions",
+    "Uncalibrated single-worker median latency",
+    "Challenge digest and root split"
+  ],
+  "scientific_gates": {
+    "engineering": "Tests and observed casebank outcomes pass; no forbidden feature backfill, no production changes or unsupported assertions from C",
+    "learned_gain": "Requires model with valid witness-only inference, genuinely external hidden tasks, positive paired gain vs C including all compute costs and zero unsafe false claims",
+    "model_adoption": "HOLD_NO_AUTOMATIC_ADOPTION"
+  },
+  "epistemic_limits": [
+    "Developer holdout is not an external blinded or real-world validation",
+    "Matching content is not physical event identity",
+    "Two same-window reports cannot uniquely identify physical occurrence",
+    "Logs and materialization order differ from cause order",
+    "Future schedules are not observed future events",
+    "Source root names do not establish real independent authenticated witnesses",
+    "No clinical or subjective consciousness inference"
+  ],
+  "human_data": false,
+  "physical_retrocausality_proven": false,
+  "production_weights_modified": false,
+  "independent_custodian": false
+}
