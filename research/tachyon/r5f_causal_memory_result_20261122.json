@@ -1,0 +1,116 @@
+{
+  "schema": "janus.demihead.tachyon.r5f.causal_memory_reconstruction_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-CAUSAL-MEMORY-RECONSTRUCTION-2026-11-22",
+  "as_of": "2026-11-22",
+  "status": "SYNTHETIC_ENGINEERING_CI_PASS__REVERSE_REPLAY_NO_GAIN_OVER_STRONG_RULES__SCIENTIFIC_HOLD",
+  "source_repo": "Hawkar-usls/Demi_Head",
+  "source_method": {
+    "repository": "Hawkar-usls/janus-meta-registry",
+    "path": "data/JANUS-DOUGAN-FREESTYLER-REVERSE-ROAD-CAUSAL-TRACE-2026-08-18-v1.4.json",
+    "blob_sha1": "4b21b5abc6e2741bcbea562d80f3079b8ab2ce22",
+    "principle": "FREEZE_C -> ASK_PREDECESSOR -> WALK_TO_B -> FREEZE_A_TO_C_RULES -> FORWARD_REPLAY -> CONTROL",
+    "strict_scope": "Backward causal inference from fixed later evidence, NOT information physically traveling backward."
+  },
+  "experiment": {
+    "seed": 20261122,
+    "protocol": "research/tachyon/r5f_causal_memory_protocol_20261122.json",
+    "script": "tools/tachyon_r5f_causal_memory_audit.py",
+    "tests": "tests/test_tachyon_r5f_causal_memory_audit.py",
+    "new_tests_pass": 29,
+    "prior_R5B_tests_pass": 26,
+    "original_DemiHead_reference_tests_pass": 7,
+    "development_cases": 300,
+    "validation_cases": 150,
+    "developer_heldout_cases": 600,
+    "independent_heldout_author": false,
+    "fully_separate_source_root_namespaces": true,
+    "same_synthetic_generator_across_all_splits": true,
+    "causal_graph_scenarios": 15,
+    "operation_budget_per_case": 500,
+    "data_origin": "SYNTHETIC_ONLY",
+    "gold_definition": "Unique history identifiable from all authoritative graph edges and corroborated observed-source constraints. Not an independently measured historical ground truth.",
+    "gold_oracle_scope": "Gold defined by same deterministic exhaustive graph semantics as strongest forward control; this makes strong baseline exact by design. This is a methods/consistency exam, not a test of unseen causal laws.",
+    "independent_real_sensor_custodian": false,
+    "primary_budgets": "All arms receive same graph, terminal, witnesses, and maximal budget. Some arms require completeness certificate for their reverse proposal index; missing certificate forces abstention."
+  },
+  "ci": {
+    "first_successful_run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45043113884",
+    "workflow_artifact_name": "demihead-tachyon-r5f-causal-memory-reconstruction",
+    "workflow_artifact_id": 14762841001,
+    "workflow_artifact_digest": "sha256:4fad46087829e8644fb1e7140e1ba8ba740e7b7b36c5f711e3bdf22d9d7dc99b",
+    "result_source": "GitHub Actions job logs after first CI-only timing-assertion repair; all 29 tests PASS, paired audit PASS.",
+    "initial_ci_failure": "Initial unit test accidentally compared separate uncalibrated runtime medians for identical forward routines; corrected the test to compare deterministic outputs and operations, not fluctuating microseconds. Protocol and algorithms not tuned to test labels."
+  },
+  "paired_result": {
+    "A_FORWARD_ONLY_EXHAUSTIVE": {
+      "answered": 200,
+      "total": 600,
+      "coverage": 0.333333,
+      "selective_accuracy": 1,
+      "unsupported_assertions": 0,
+      "incorrect_assertions": 0,
+      "mean_counted_graph_operations_per_case": 8.6667,
+      "median_decision_microseconds_single_ci_worker": 6.7905
+    },
+    "B_REVERSE_ONLY_UNVERIFIED": {
+      "answered": 120,
+      "total": 600,
+      "coverage": 0.2,
+      "selective_accuracy": 1,
+      "unsupported_assertions": 0,
+      "incorrect_assertions": 0,
+      "mean_counted_graph_operations_per_case": 5.6667,
+      "median_decision_microseconds_single_ci_worker": 5.7465
+    },
+    "C_REVERSE_PLUS_FORWARD_REPLAY": {
+      "answered": 160,
+      "total": 600,
+      "coverage": 0.266667,
+      "selective_accuracy": 1,
+      "unsupported_assertions": 0,
+      "incorrect_assertions": 0,
+      "mean_counted_graph_operations_per_case": 10.3333,
+      "median_decision_microseconds_single_ci_worker": 5.9235
+    },
+    "D_STRONG_EXHAUSTIVE_PROVENANCE": {
+      "answered": 200,
+      "total": 600,
+      "coverage": 0.333333,
+      "selective_accuracy": 1,
+      "unsupported_assertions": 0,
+      "incorrect_assertions": 0,
+      "mean_counted_graph_operations_per_case": 8.6667,
+      "median_decision_microseconds_single_ci_worker": 6.785
+    },
+    "E_ALWAYS_ABSTAIN": {
+      "answered": 0,
+      "total": 600,
+      "coverage": 0,
+      "selective_accuracy": null,
+      "unsupported_assertions": 0,
+      "incorrect_assertions": 0,
+      "mean_counted_graph_operations_per_case": 0,
+      "median_decision_microseconds_single_ci_worker": 0.5155
+    },
+    "ambiguous_cases_gold_abstain": 400,
+    "validated_reverse_replay_vs_reverse_only_answer_count_gain": 40,
+    "validated_reverse_replay_vs_strong_baseline_answer_count_delta": -40,
+    "validated_reverse_replay_vs_strong_baseline_coverage_delta_pp": -6.6666,
+    "validated_reverse_replay_vs_strong_baseline_counted_operation_delta_per_case": 1.6666,
+    "neural_gain_claim": false,
+    "algorithmic_superiority_over_strong_baseline": false
+  },
+  "interpretation_ru": "Обратный поиск с прямым воспроизведением выявляет 40 дополнительных уникально обоснованных путей по сравнению с обратным поиском без replay (в сценах с ложным обратным ребром), но уступает на 40 кейсов точному прямому/сильному baseline вследствие консервативного отказа при неполном обратном индексе. На этом генераторе strong baseline точен по определению oracle. Результат инженерный, не доказательство реальной причинной силы, нейросетевого буста или физической обратимости времени.",
+  "safety": {
+    "clinical_data_used": false,
+    "real_memory_measured": false,
+    "subjective_time_inversion_proven": false,
+    "retrocausality_proven": false,
+    "physical_reverse_time_measured": false,
+    "source_roots_authenticated": false,
+    "independent_external_custodian": false,
+    "production_model_weights_modified": false,
+    "science_gate": "SCIENTIFIC_HOLD_UNTIL_EXTERNAL_CAUSAL_GRAPH_CHALLENGE"
+  },
+  "next_experiment": "R5G: externally authored hidden causal graphs with independently adjudicated multiple histories, independent timestamps/provenance and calibrated evidence, paired against optimized exact forward and constraint-satisfaction baselines with equal wall-clock/operation budget. Require actual reproducible gain not design-induced heuristic advantage."
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "janus.demihead.tachyon.r5f.causal_memory_reconstruction_protocol.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-REVERSE-ROAD-FORWARD-REPLAY-2026-11-22",
+  "date": "2026-11-22",
+  "status": "FROZEN_BEFORE_FIRST_R5F_CI_RUN",
+  "source_of_method": {
+    "repo": "Hawkar-usls/janus-meta-registry",
+    "path": "data/JANUS-DOUGAN-FREESTYLER-REVERSE-ROAD-CAUSAL-TRACE-2026-08-18-v1.4.json",
+    "git_blob_sha1": "4b21b5abc6e2741bcbea562d80f3079b8ab2ce22",
+    "method": "FREEZE_C / ASK_PREDECESSOR / WALK_TO_B / FREEZE_A_TO_C_RULES / FORWARD_REPLAY / CONTROL",
+    "status": "METHODOLOGY_ONLY_NOT_PHYSICS_THEOREM"
+  },
+  "hypothesis": "Searching backward from a fixed observed C using witness constraints, then replaying A→B→C with frozen authoritative edges, can recover more defensible causal paths or reduce cost relative to forward exhaustive and provenance-aware baselines.",
+  "experimental_design": {
+    "implementation": "tools/tachyon_r5f_causal_memory_audit.py",
+    "generator": "build_case(family,scenario)",
+    "seed": 20261122,
+    "splits": {
+      "development": "20 families 0..19 ×15 scenarios =300 cases",
+      "validation": "10 families 50..59 ×15 scenarios =150 cases",
+      "heldout": "40 families 100..139 ×15 scenarios =600 cases"
+    },
+    "dataset_status": "DEVELOPER-GENERATED SYNTHETIC ONLY. Same graph template/scenario types across splits; not externally blind or independent physical observations.",
+    "input_contract": "Visible graph A→B→C authoritative transitions; reverse proposals with explicit completeness certificate; terminal C, synthetic source reports with roots/capture times/clock quality. No scenario label, hidden true path or gold in input.",
+    "reference_label": "Identify a UNIQUE possible past path ONLY if all other compatible paths are eliminated by two independent, consistent, time-valid simulated witness roots or graph structure. Multiple compatible worlds => ABSTAIN.",
+    "witness_root_limit": "Simulated strings are not authenticated physical instruments. Correlated copies or missing/contradictory timestamps do not constrain provenance.",
+    "backward_index_limit": "A simulated 'complete_certified' reverse-proposal index is supplied. If incomplete, reverse arms MUST abstain; the completeness certificate would require external validation in deployment.",
+    "budget": "Hard 500 counted graph-edge/proposal/replay operations per case for each arm; if exceeded, abstain.",
+    "scenarios": [
+      "unique_A_and_B",
+      "unique_B_only",
+      "unique_A_only",
+      "ambiguous_terminal",
+      "collider_shared_B",
+      "duplicate_witness_root",
+      "conflicting_reports",
+      "missing_timestamps",
+      "unsynchronized_clock",
+      "decoy_reverse_edge",
+      "incomplete_reverse_index",
+      "future_plan",
+      "single_source",
+      "identical_content_ambiguity",
+      "unsynchronized_terminal"
+    ]
+  },
+  "paired_arms": {
+    "A_FORWARD_ONLY_EXHAUSTIVE": "Enumerate all authoritative A→B→C edges and filter corroborated constraints, exact path-set output.",
+    "B_REVERSE_ONLY_UNVERIFIED": "Enumerate C→B→A proposed predecessor pointers WITHOUT replay (negative control); abstain if predecessor index incomplete.",
+    "C_REVERSE_PLUS_FORWARD_REPLAY": "Backtrace C→B→A proposals, require index completeness and corroborated constraints; verify each candidate on A→B→C frozen actual edges.",
+    "D_STRONG_EXHAUSTIVE_PROVENANCE": "Strong transparent exhaustive baseline with identical observations and graph budget; method must show gain over this arm, not only the weak reverse-only control.",
+    "E_ALWAYS_ABSTAIN": "Null control for selective-accuracy and non-assertion metrics."
+  },
+  "primary_metrics": [
+    "Full gold-label matches including abstention",
+    "Coverage (answers/total) and conditional selective accuracy among answered",
+    "Unsupported positive assertions in oracle-ambiguous cases",
+    "Incorrect nonabstaining claims",
+    "Correct abstentions in unidentifiable cases",
+    "Paired gains against strong D at equal safety and equal operation budget",
+    "Mean graph-operation count and uncalibrated median decision μs; no unmeasured energy claims"
+  ],
+  "critical_controls": [
+    "Ambiguous many-to-one causality (A1→B1→C and A2→B1→C), collider shared intermediate",
+    "Duplicate/correlated witness roots; incompatible statements; missing timestamps; clock uncertainty",
+    "Future plan distinguished from observed terminal; uncertain terminal not promoted",
+    "Identical content lacking event identity does not resolve a history",
+    "Spurious reverse proposal requires forward replay; incomplete reverse index forces abstention",
+    "Hard budget must fail closed, not guess; route remains unchanged by retrospective inference",
+    "No model/production changes, no real people or patient records."
+  ],
+  "epistemic_gates": {
+    "engineering_pass": "CI passes 29 tests and all five arms complete 600 holdout cases with original DemiHead unaffected, zero over-budget unsupported claims.",
+    "synthetic_gain": "Descriptive only if reverse+forward yields strictly greater safe coverage than strong baseline at no higher unsafe errors and accounted cost; no automatic model promotion.",
+    "scientific_external_pass": "Impossible here: independent data provider and external hidden challenge absent.",
+    "neural_gain": "NOT_TESTED: R5F is algorithmic causal search, not a trained neural model.",
+    "physical_retrocausality": "NOT_TESTED / NOT_ESTABLISHED",
+    "production_adoption": false
+  },
+  "external_status": "NO_INDEPENDENT_CUSTODIAN",
+  "next_if_no_gain": "R5G cost-matched adversarial graph families with real source-provenance blind examination, and demonstrate any computational advantage over optimized exact causal inference, not over deliberately handicapped heuristics."
+}
