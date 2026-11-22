@@ -1,0 +1,124 @@
+{
+  "schema": "janus.demihead.tachyon.r5f.stock_mirrored_reverse_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-STOCK-MIRROR-REVERSE-2026-11-22",
+  "date": "2026-11-22",
+  "status": "ENGINEERING_CI_PASS__STOCK_MIRROR_LOGICAL_INVARIANCE_PASS__NO_GAIN_OVER_STRONG_MIRROR__SCIENTIFIC_HOLD",
+  "repo": "Hawkar-usls/Demi_Head",
+  "research_branch": "research/tachyon-r5f-stock-mirror-reverse-20261122",
+  "pull_request": "https://github.com/Hawkar-usls/Demi_Head/pull/117",
+  "ci_success": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45045026973",
+  "ci_artifact": {
+    "name": "demihead-tachyon-r5f-stock-mirror-reverse",
+    "id": 14763405934,
+    "sha256": "8a18394b89f6172f511f96b77a3be2c37dadc8f5d5f37c2cff63acdfa0d6bc73",
+    "size_bytes": 1390
+  },
+  "source": {
+    "original_R5F_script": "tools/tachyon_r5f_causal_memory_audit.py",
+    "original_R5F_script_git_blob_sha1": "ea3ebbbd14594291adcde4f403a7e040d65f76a3",
+    "mirror_script": "tools/tachyon_r5f_stock_mirror_audit.py",
+    "test_script": "tests/test_tachyon_r5f_stock_mirror_audit.py",
+    "preregistered_protocol": "research/tachyon/r5f_stock_mirror_protocol_20261122.json",
+    "method_origin": "Hawkar-usls/janus-meta-registry/data/JANUS-DOUGAN-FREESTYLER-REVERSE-ROAD-CAUSAL-TRACE-2026-08-18-v1.4.json"
+  },
+  "stock_parameters": {
+    "operation_budget_per_case": 500,
+    "graph_authoritative_edges": 9,
+    "heldout_cases": 600,
+    "scenarios": 15,
+    "generator_seed": 20261122,
+    "negative_999_budget_not_applied": true,
+    "prior_x100_replication_not_applied": true,
+    "R5F_original_source_unchanged": true,
+    "working_DemiHead_weights_unchanged": true
+  },
+  "mirroring": {
+    "transformation": "Original authoritative DAG A→B→C is transposed into C→B→A, with original observed C fixed as starting anchor. Return path normalized back to A|B|C for per-case paired comparison.",
+    "source_reversal_method": "Math representation and direction of graph traversal only. Every original physical capture_utc timestamp and witness root preserved verbatim.",
+    "synthetic_layer_coordinates": "A=0,B=1,C=2 becomes C=0,B=1,A=2; no UTC reversal",
+    "physical_time_reversal_tested": false,
+    "physical_history_modified": false,
+    "observed_source_witnesses_added": 0,
+    "independent_external_custodian": false
+  },
+  "tests": {
+    "new_mirror_tests_pass": 33,
+    "previous_R5F_tests_pass": 29,
+    "original_DemiHead_reference_tests_pass": 7,
+    "ci_status": "success",
+    "exact_forward_original_vs_mirror_agreement_cases": 600,
+    "original_reverse_replay_vs_mirror_replay_agreement_cases": 600,
+    "physical_UTC_preservation_cases": 600,
+    "unsupported_confident_assertions_all_arms": 0
+  },
+  "paired_scores": {
+    "A_MIRROR_FORWARD_EXACT": {
+      "answered": 200,
+      "total": 600,
+      "coverage": 0.333333,
+      "selective_accuracy": 1,
+      "mean_counted_operations_per_case": 6.0667,
+      "median_runtime_microseconds_single_runner": 12.8385,
+      "unsupported_assertions": 0
+    },
+    "B_MIRROR_PROPOSALS_UNVERIFIED": {
+      "answered": 120,
+      "total": 600,
+      "coverage": 0.2,
+      "selective_accuracy": 1,
+      "mean_counted_operations_per_case": 5.6667,
+      "median_runtime_microseconds_single_runner": 11.6465,
+      "unsupported_assertions": 0
+    },
+    "C_MIRROR_PROPOSALS_PLUS_REPLAY": {
+      "answered": 160,
+      "total": 600,
+      "coverage": 0.266667,
+      "selective_accuracy": 1,
+      "mean_counted_operations_per_case": 10.3333,
+      "median_runtime_microseconds_single_runner": 12.233,
+      "unsupported_assertions": 0
+    },
+    "D_STRONG_EXACT_MIRROR": {
+      "answered": 200,
+      "total": 600,
+      "coverage": 0.333333,
+      "selective_accuracy": 1,
+      "mean_counted_operations_per_case": 6.0667,
+      "median_runtime_microseconds_single_runner": 11.3965,
+      "unsupported_assertions": 0
+    },
+    "E_ALWAYS_ABSTAIN": {
+      "answered": 0,
+      "total": 600,
+      "coverage": 0,
+      "selective_accuracy": null,
+      "mean_counted_operations_per_case": 0,
+      "median_runtime_microseconds_single_runner": 1.011,
+      "unsupported_assertions": 0
+    }
+  },
+  "comparison_with_original": {
+    "original_forward_answers": 200,
+    "original_reverse_only_answers": 120,
+    "original_reverse_forward_answers": 160,
+    "original_forward_mean_counted_ops": 8.6667,
+    "mirrored_exact_mean_counted_ops": 6.0667,
+    "approx_counted_ops_reduction_percent": 30,
+    "qualification": "Changing orientation from exhaustive A→B→C to target-conditioned indexed C→B→A excludes irrelevant branches, reducing a defined edge-traversal proxy. Strong exact mirror achieves same result and cost by construction; NOT a new algorithmic gain over optimized strong baseline.",
+    "reverse_replay_answer_delta_vs_strong_mirror": -40,
+    "reverse_replay_mean_ops_vs_strong_mirror_delta": 4.2666,
+    "performance_note": "Single-worker uncalibrated Python timing does not demonstrate lower wall-clock performance; counted graph traversals exclude index construction and other overhead."
+  },
+  "scientific_limits": {
+    "data_source": "Only original developer-generated synthetic R5F cases",
+    "outside_authored_blind_experiment": false,
+    "real_timestamped_witnesses": false,
+    "human_memory_measurements": false,
+    "retrocausal_communication": false,
+    "neural_training_or_production_gain": false,
+    "physical_time_flow_reversal": false,
+    "scientific_gate": "SCIENTIFIC_HOLD_SYNTHETIC_DAG_ISOMORPHISM_ONLY"
+  },
+  "interpretation_ru": "При возврате к базовым 500 операциям и девятирёберному графу 600 зеркальных синтетических задач демонстрируют полную логическую эквивалентность исходному R5F после замены порядка обхода и нормализации пути. Сильный зеркальный точный baseline полностью повторяет результаты и требует те же 6.0667 подсчитанных операций; новая нейросетевая или физическая закономерность не обнаружена."
+}
