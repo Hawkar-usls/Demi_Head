@@ -1,0 +1,88 @@
+{
+  "schema": "janus.demihead.tachyon.r5.paired_gain_protocol.v1",
+  "artifact_id": "DEMIHEAD_TACHYON_R5_PAIRED_CAPABILITY_AUDIT_2026-11-22",
+  "date": "2026-11-22",
+  "status": "FROZEN_DEVELOPMENT_ONLY_BEFORE_CI",
+  "question_ru": "Добавляет ли TACHYON R4 воспроизводимую полезную функцию временного связывания к реальному референсному DemiHead, превосходит ли простой детерминированный baseline и какова её вычислительная стоимость?",
+  "scientific_scope": "INTEGRATION_CAPABILITY_CHECK_NOT_GENERAL_INTELLIGENCE_BENCHMARK",
+  "heads": {
+    "A": "Actual DemiHead main tools.keto_reference.summarize_case, no temporal labels",
+    "B": "Exactly the same unchanged DemiHead plus Simptomat R4 learned softmax sidecar, weights deterministically replayed from pinned source commit, not an original signed fixed model checkpoint",
+    "C": "Exactly the same DemiHead plus transparently defined hand-coded temporal recurrence rules"
+  },
+  "pinned_sources": {
+    "DEMIHEAD": "main baseline at PR creation (GitHub Actions checkout, not a production deployment)",
+    "SIMPTOMAT_R4": "Hawkar-usls/Simptomat@5c1daed7f728d671ed2139b3448bd612ea0a4f58",
+    "source_path": "tools/temporal_recurrence_r4_train.py",
+    "original_upstream_synthetic_training_heldout_accuracy": 1,
+    "original_upstream_accuracy_must_not_be_used_as_DemiHead_gain": true
+  },
+  "predeclared_challenge": {
+    "origin": "New deterministic evaluator cases; NOT imported from Simptomat training generator or patient data",
+    "seed": 20261127,
+    "case_count": 230,
+    "families": 32,
+    "classes": [
+      "AMBIGUOUS_REFERENCE",
+      "CONTINUING_EVENT",
+      "DISTINCT_CONTENT",
+      "FUTURE_PLAN",
+      "MEMORY_OF_EVENT",
+      "OBSERVED_REPEAT",
+      "SAME_EVENT"
+    ],
+    "matched_valid_examples_per_class": 32,
+    "negative_provenance_examples": 6,
+    "evaluation": "Each of 230 inputs passed through actual DemiHead for A, B and C; B/C classify same temporal meta attributes; A abstains from classification because no such output in main.",
+    "note": "New challenge author knows the algorithm contracts. This is NOT a cryptographically sealed external blind exam; absolute ID/status features directly expose most labels.",
+    "sources_of_holdout_independence": "Separate authoring and distinct family IDs; still synthetically similar schema from shared task definition.",
+    "same_inputs_across_arms": true,
+    "participant_level_data": false
+  },
+  "metrics": {
+    "primary": [
+      "B minus C paired valid-case accuracy difference in percentage points; zero/negative is NOT a learned gain over rules",
+      "B and C invalid-provenance false-accept counts; required 0",
+      "Equality of actual DemiHead source-evidence outcomes across A, B, C; required all",
+      "A temporal coverage is structural, NOT general intelligence accuracy"
+    ],
+    "secondary": [
+      "R4 synthetic replay self-check",
+      "R4 replay CPU train cost separate from per-case overhead",
+      "per-arm exploratory median per-case microseconds on one CI runner, not standardized latency",
+      "challenge SHA256 and class-wise failure indices, no post-hoc data selection"
+    ],
+    "minimum_for_engineering_pass": "Comparator executes in CI with all three real source heads invoked, zero privacy/temporal provenance false accept and all baseline DemiHead evidence states unchanged",
+    "required_for_scientific_gain": "Separate trustworthy hidden external tasks, independent custodian/third-party holdout, prespecified clinically appropriate calibration and measured TACHYON advantage over strong rule baseline, full costs, repeat seeds and confidence intervals.",
+    "statistical_status": "Descriptive paired benchmark only; no p-values or new human cognitive hypothesis tests; 230 synthetic cases are not independent patients.",
+    "multiplicity": "No clinical inferential hypothesis tested here; future multiple primary endpoints and familywise correction must be preregistered independently."
+  },
+  "negative_controls": [
+    "same content but different event ids => separate episodes",
+    "one event id shared by memory reference is not physical recurrence",
+    "today's plan for tomorrow is not an observed event",
+    "false future observation timestamp => abstain",
+    "false past plan timestamp => abstain",
+    "event-id/content conflicts => abstain",
+    "missing IDs and self-contradictory continuation/memory links => abstain"
+  ],
+  "runtime": {
+    "python": "3.11",
+    "runner": "ubuntu-24.04 GitHub Actions",
+    "permissions": "contents:read",
+    "external_checkout": "Pinned public upstream Simptomat repository and commit; no arbitrary branch",
+    "production_model_updated": false,
+    "medical_screening_changed": false,
+    "human_data_ingested": false,
+    "user_external_actions": false,
+    "cross_repo_write": false,
+    "automatic_training_or_update": false
+  },
+  "scientific_gate": "HOLD_NO_INDEPENDENT_REAL_WORLD_DEMIHEAD_GAIN_EVIDENCE",
+  "expected_possible_outcomes": [
+    "ENGINEERING_PASS__NO_LEARNED_ADVANTAGE_OVER_RULE_BASELINE",
+    "ENGINEERING_PASS__SYNTHETIC_ABLATION_ADVANTAGE__EXTERNAL_HOLD",
+    "ENGINEERING_FAIL__SAFETY_OR_CORRECTNESS",
+    "NO_RESULT__DEPENDENCY_UNAVAILABLE"
+  ]
+}

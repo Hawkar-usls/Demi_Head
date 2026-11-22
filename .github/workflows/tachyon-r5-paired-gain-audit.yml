@@ -1,0 +1,93 @@
+name: DemiHead TACHYON R5 - Paired A B C Gain Audit
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5_paired_gain_audit.py'
+      - 'tests/test_tachyon_r5_paired_gain_audit.py'
+      - 'research/tachyon/r5_paired_gain_protocol_20261122.json'
+      - '.github/workflows/tachyon-r5-paired-gain-audit.yml'
+  push:
+    branches:
+      - research/tachyon-demihead-r5-paired-gain-audit-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5_paired_gain_audit.py'
+      - 'tests/test_tachyon_r5_paired_gain_audit.py'
+      - 'research/tachyon/r5_paired_gain_protocol_20261122.json'
+      - '.github/workflows/tachyon-r5-paired-gain-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paired-reference-ablation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout actual DemiHead reference head
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout pinned Simptomat trained R4 source in isolated directory
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Simptomat
+          ref: 5c1daed7f728d671ed2139b3448bd612ea0a4f58
+          path: _pinned_simptomat
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install the checked-in DemiHead validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Confirm upstream is pinned, not mutable branch
+        run: |
+          test "$(git -C _pinned_simptomat rev-parse HEAD)" = "5c1daed7f728d671ed2139b3448bd612ea0a4f58"
+      - name: Validate DemiHead contracts and reference invariants
+        run: |
+          python tools/validate_repository.py
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+      - name: Paired synthetic A/B/C benchmark tests
+        run: |
+          python -m unittest discover -s tests -p 'test_tachyon_r5_paired_gain_audit.py' -v
+      - name: Freeze complete R5 paired results with engineering versus scientific boundaries
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5_paired_gain_audit --audit --simptomat-root _pinned_simptomat > out/tachyon/r5_paired_gain_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("out/tachyon/r5_paired_gain_receipt.json").read_text())
+          p=json.loads(Path("research/tachyon/r5_paired_gain_protocol_20261122.json").read_text())
+          assert p["scientific_gate"] == r["scientific_gate"]
+          assert r["challenge_count"] == 230
+          assert r["valid_case_count"] == 224
+          assert r["all_head_outcomes_preserved"] is True
+          assert r["unchanged_head_outcomes"] == r["challenge_count"]
+          assert not r["head_temporal_classification_supported_in_A"]
+          assert not r["trained_model_replaces_demihead"]
+          assert not r["clinical_data_used"]
+          assert not r["human_memory_or_consciousness_validated"]
+          assert not r["core_weights_changed"]
+          assert not r["physical_timelessness_proven"]
+          assert r["general_intelligence_gain_claim"] == "NOT_ESTABLISHED"
+          assert all(row["invalid_provenance_false_accepts"] == 0
+                     for row in r["comparisons"].values())
+          print("R5_B_VALID_ACCURACY=" + str(r["comparisons"]["B_TACHYON"]["valid_accuracy"]))
+          print("R5_C_VALID_ACCURACY=" + str(r["comparisons"]["C_SIMPLE_RULE"]["valid_accuracy"]))
+          print("R5_B_MINUS_C_PERCENTAGE_POINTS=" + str(r["B_minus_C_accuracy_points"]))
+          print("R5_A_HEAD_COVERAGE=" + str(r["head_temporal_classification_supported_in_A"]))
+          print("R5_PAIRED_MEDIAN_MICROSECONDS=" + str(r["paired_median_total_per_case_microseconds"]))
+          print("R5_CHALLENGE_SHA256=" + r["challenge_sha256"])
+          print("DEMIHEAD_R5_ENGINEERING_PAIRED_ABLATION_PASS")
+          print("DEMIHEAD_R5_GENERAL_INTELLIGENCE_SCIENTIFIC_HOLD")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5-paired-gain-no-clinical-receipt
+          path: out/tachyon/r5_paired_gain_receipt.json
+          if-no-files-found: error
+          retention-days: 60
