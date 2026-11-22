@@ -1,0 +1,96 @@
+name: TACHYON RETROBOUND R1 Mathematical Validation
+
+on:
+  push:
+    branches:
+      - research/tachyon-retrobound-r1-integration-20261123
+    paths:
+      - 'tools/tachyon_retrobound_r1.py'
+      - 'tools/tachyon_retrobound_r1_paired_validation.py'
+      - 'tools/tachyon_experiment_router.py'
+      - 'tests/test_tachyon_retrobound_r1*.py'
+      - 'research/tachyon/retrobound_r1_*'
+      - '.github/workflows/tachyon-retrobound-r1-validation.yml'
+  pull_request:
+    paths:
+      - 'tools/tachyon_retrobound_r1.py'
+      - 'tools/tachyon_retrobound_r1_paired_validation.py'
+      - 'tools/tachyon_experiment_router.py'
+      - 'tests/test_tachyon_retrobound_r1*.py'
+      - 'research/tachyon/retrobound_r1_*'
+      - '.github/workflows/tachyon-retrobound-r1-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  retrobound-r1-validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile TACHYON port, controls and tests
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            tools/tachyon_retrobound_r1.py \
+            tools/tachyon_retrobound_r1_paired_validation.py \
+            tools/tachyon_experiment_router.py \
+            tests/test_tachyon_retrobound_r1.py \
+            tests/test_tachyon_retrobound_r1_port_parity.py
+      - name: Compare port with independently frozen original reference
+        run: |
+          python -m unittest discover -s tests \
+            -p 'test_tachyon_retrobound_r1*.py' -v
+      - name: Paired same-choice validation of three synthetic arms
+        run: |
+          set -euo pipefail
+          mkdir -p out/retrobound
+          python -m tools.tachyon_retrobound_r1_paired_validation \
+            --steps 8 --rho 0.85 --eta 0.9 --trials 40000 --seed 20261123 \
+            > out/retrobound/paired_default.json
+          python -m tools.tachyon_retrobound_r1_paired_validation \
+            --steps 5 --rho 0.65 --eta 0.7 --trials 10000 --seed 20261124 \
+            > out/retrobound/paired_control.json
+          python -m tools.tachyon_experiment_router run \
+            --lane retrobound-r1 --steps 8 --rho 0.85 --eta 0.9 \
+            --trials 40000 --seed 20261123 \
+            > out/retrobound/port_golden_replay.json
+      - name: Fail closed on physics promotion and false retrospective claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('out/retrobound')
+          reports = [json.loads((p/f).read_text()) for f in (
+              'paired_default.json', 'paired_control.json'
+          )]
+          for result in reports:
+              assert result["all_checks_passed"] and all(result["checks"].values())
+              assert result["scientific_boundary"]["physical_retrocausal_effect_measured"] is False
+              assert result["scientific_boundary"]["future_choice_is_independent_physical_late_entropy"] is False
+              assert result["scientific_boundary"]["postselection_excluded"] is False
+              assert result["theory"]["two_boundary_equals_postselection_in_exact_path_distribution"] is True
+              counts = [row["choice_n"] for row in result["arms"].values()]
+              assert all(v == counts[0] for v in counts)
+              choices = [row["common_late_choice_schedule_sha256"] for row in result["arms"].values()]
+              assert len(set(choices)) == 1
+          baseline = json.loads((p/'port_golden_replay.json').read_text())
+          assert baseline["all_checks_passed"]
+          assert baseline["tachyon_gate"]["model_adoption"] == "HOLD"
+          assert baseline["tachyon_gate"]["physical_retrocausality"] == "NOT_TESTED_NOT_ESTABLISHED"
+          assert baseline["tachyon_gate"]["conventional_postselection_mathematically_equivalent"]
+          print("TACHYON_RETROBOUND_R1_MATH_AND_PAIRED_CONTROL_PASS__PHYSICS_HOLD")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-retrobound-r1-validation
+          path: out/retrobound/*.json
+          if-no-files-found: error
+          retention-days: 60

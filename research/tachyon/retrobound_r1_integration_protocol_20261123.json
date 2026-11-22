@@ -1,0 +1,90 @@
+{
+  "schema": "janus.demihead.tachyon.retrobound_r1.integration_protocol.v1",
+  "artifact_id": "TACHYON-RETROBOUND-R1-INTEGRATION-2026-11-23",
+  "created_utc_date": "2026-11-23",
+  "status": "IMPLEMENTATION_PROPOSED__NO_NEW_EXPERIMENT_EXECUTED__SCIENCE_HOLD",
+  "user_goal_ru": "Встроить классический RETROBOUND R1 в JANUS TACHYON для последующей проверки различия математической двухграничной условности и физически наблюдаемого ретроэффекта. На этапе интеграции эксперимент не проводить.",
+  "integration": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "branch": "research/tachyon-retrobound-r1-integration-20261123",
+    "independent_module": "tools/tachyon_retrobound_r1.py",
+    "opt_in_router": "tools/tachyon_experiment_router.py",
+    "legacy_unchanged": "tools/tachyon_r5f_causal_memory_audit.py",
+    "existing_r5f_source_git_blob_sha1": "ea3ebbbd14594291adcde4f403a7e040d65f76a3",
+    "original_local_retrobound_r1_sha256": "690e6d8fd4ca21f0b2a3cc1784ae1d265ce08c6817624efc9cbbab1a7157c3b8",
+    "original_r1_archive_sha256": "5dd340abe60a7ed05fb24078598684869e6a7392053584498301d2db5e83f9ba",
+    "standalone_reference_mathematics": "P_b(x[0:T])=0.5 product K_rho(x[t+1]|x[t]) (1+eta*b*x[T])",
+    "frozen_rule001_path": "Hawkar-usls/janus-meta-registry/data/JANUS-TACHYON-RULE-001-TEMPORAL-PERCEPTION-ALGORITHM-2026-11-22-v1.0.json",
+    "rule001_source_git_blob_sha1": "4da741d02020a2beccb115bce993264c618cf8b1",
+    "previous_experiments_unchanged": true,
+    "autonomous_or_production_impact": false
+  },
+  "model": {
+    "kind": "CLASSICAL_OFFLINE_CONDITIONAL_PATH_SAMPLING__NOT_QUANTUM_MECHANICS",
+    "spins": "x[t] in {-1,+1}",
+    "boundary": "b in {-1,+1}; supplied before offline trajectory calculation",
+    "parameters": {
+      "steps": 8,
+      "rho": 0.85,
+      "eta": 0.9,
+      "trials_per_arm": 40000,
+      "seed": 20261123
+    },
+    "three_arms": {
+      "two_boundary": "Alpha/beta transfer messages condition entire sampled history on known b",
+      "causal_null": "Sample all early states before drawing b; no dependence",
+      "postselection": "Generate causal forward paths and accept with (1+eta*b*x[T])/(1+eta), exact same conditional law"
+    },
+    "early_public_observation": "Consecutive spin products only: y[t]=x[t]*x[t+1]. Restricted model choice, NOT a generic instrument class.",
+    "hidden_information": "x[0] must never be disclosed as physically available before b; conditional guess probability does not confer real prediction.",
+    "analytic_claims": {
+      "hidden_correlation": "E[b*x[0]]=eta*rho^T",
+      "early_hidden_guess_accuracy_if_fictionally_available": "(1+eta*rho^T)/2",
+      "parity_record_total_variation_distance": "0, by global sign symmetry for the specified public record",
+      "postselection_equivalence": "exact within the model, not a fitted discovery"
+    }
+  },
+  "preregistered_verification_for_later": {
+    "phase": "NOT_STARTED",
+    "code_identity_required": "Exact commit SHA and test source SHA before trial evaluation",
+    "math_checks": [
+      "Normalization of alpha/beta and path distribution",
+      "Exact hidden correlation formula",
+      "Exhaustive parity distribution invariance for 1..12 steps",
+      "Exact forward postselection reweighting identity"
+    ],
+    "controls": [
+      "Future b sampled AFTER causal_null path",
+      "All postselection forward draws counted, not only accepted paths",
+      "Parameter extremes and malformed inputs fail closed",
+      "No model-selection on future heldout results"
+    ],
+    "deterministic_monte_carlo": [
+      "Matching theoretical correlations within preregistered Monte Carlo uncertainty",
+      "No statistically significant b dependence in specified public early record",
+      "Postselection conditional sample matches two_boundary within statistical error"
+    ],
+    "not_run_in_this_pr": true,
+    "automatic_scientific_promotion": false,
+    "required_for_real_physics": [
+      "Prospective signed public early-record freeze before an independently operated late random choice",
+      "Externally witnessed timestamps with calibrated clock error and no hidden pre-generation or access",
+      "Append-only record of ALL initiated and terminated trials; no conditional inclusion, optional stopping or retroactive tuning",
+      "Precommitted strong forward-causal, postselection and leakage baselines with cost and multiplicity accounting",
+      "A specific retrocausal physical hypothesis predicting something different from the admitted ordinary alternatives",
+      "Blinded physical-data holdout under independent external custodian and unrelated data source",
+      "Separate claim-admission review: even a small p value does not identify a causal mechanism"
+    ]
+  },
+  "epistemic_boundaries": {
+    "model_dependency_is_physical_evidence": false,
+    "physical_retrocausality_established": false,
+    "future_information_channel_established": false,
+    "r5f_neural_gain_established": false,
+    "subjective_time_experience_measured": false,
+    "productive_routing_enabled": false,
+    "exact_public_observable_invariance_is_constructed_not_empirical": true,
+    "scientific_status": "HOLD_EXTERNAL_PHYSICAL_EVIDENCE_AND_IDENTIFIABLE_PREDICTION"
+  },
+  "next_step": "After PR review/merge, explicitly run model unit tests and Monte Carlo in isolation, then design an independently witnessed prospective physical benchmark; do not treat the R1 simulation as that benchmark."
+}
