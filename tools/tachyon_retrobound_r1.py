@@ -269,8 +269,23 @@ def gated_research_receipt(report: dict) -> dict:
     checks = report.get("checks")
     if not isinstance(checks, dict) or not checks or any(type(x) is not bool for x in checks.values()):
         raise ValueError("missing or malformed checks")
-    if report.get("scientific_boundary", {}).get("late_choice_created_independently_after_frozen_early_record") is not False:
-        raise ValueError("cannot admit claimed external future choice from R1")
+    boundary = report.get("scientific_boundary", {})
+    if not isinstance(boundary, dict):
+        raise ValueError("missing scientific boundary")
+    mandatory_false = (
+        "late_choice_created_independently_after_frozen_early_record",
+        "physical_retrocausality_established",
+        "operational_information_from_future_established",
+        "human_consciousness_or_memory_measured",
+        "original_R5F_model_or_production_changed",
+    )
+    if any(boundary.get(key) is not False for key in mandatory_false):
+        raise ValueError("R1 offline receipt may not certify physical/human/production effects")
+    if boundary.get("postselection_explanation_not_excluded") is not True:
+        raise ValueError("postselection alternative must remain admitted")
+    theory = report.get("theory", {})
+    if not isinstance(theory, dict) or theory.get("postselection_exactly_equivalent") is not True:
+        raise ValueError("R1 requires its exact conventional conditioning baseline")
     return {
         "schema": "janus.demihead.tachyon.retrobound.r1.gate.v1",
         "experiment_schema": SCHEMA,
