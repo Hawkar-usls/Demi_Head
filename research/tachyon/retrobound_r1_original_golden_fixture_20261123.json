@@ -1,0 +1,55 @@
+{
+  "schema": "janus.demihead.tachyon.retrobound_r1.original_golden_fixture.v1",
+  "captured_on": "2026-11-23",
+  "origin": "ORIGINAL_USER_SESSION_RETROBOUND_R1_STANDALONE_PYTHON_REPLAY_BEFORE_DEMIHEAD_PORT_VALIDATION",
+  "original_python_sha256": "690e6d8fd4ca21f0b2a3cc1784ae1d265ce08c6817624efc9cbbab1a7157c3b8",
+  "original_archive_sha256": "5dd340abe60a7ed05fb24078598684869e6a7392053584498301d2db5e83f9ba",
+  "original_unittest": {
+    "passed": 8,
+    "total": 8
+  },
+  "source": "standalone retrobound.py, seed_for arm-specific SHA256, samples deterministic standard-library PRNG",
+  "config": {
+    "steps": 8,
+    "rho": 0.85,
+    "eta": 0.9,
+    "trials": 40000,
+    "seed": 20261123
+  },
+  "theoretical_hidden_correlation": 0.2452414725351562,
+  "arms": {
+    "two_boundary": {
+      "hidden_past_future_correlation": 0.24045,
+      "future_endpoint_correlation": 0.90215,
+      "visible_early_parity_difference": -0.0002835019164729724,
+      "mean_forward_draws_per_accepted": 1,
+      "choices": {
+        "1": 19948,
+        "-1": 20052
+      }
+    },
+    "causal_null": {
+      "hidden_past_future_correlation": -0.00225,
+      "future_endpoint_correlation": -0.0034,
+      "visible_early_parity_difference": -0.003297202903907337,
+      "mean_forward_draws_per_accepted": 1,
+      "choices": {
+        "1": 20007,
+        "-1": 19993
+      }
+    },
+    "postselection": {
+      "hidden_past_future_correlation": 0.2492,
+      "future_endpoint_correlation": 0.8987,
+      "visible_early_parity_difference": 0.00345752250864384,
+      "mean_forward_draws_per_accepted": 1.90785,
+      "choices": {
+        "1": 20001,
+        "-1": 19999
+      }
+    }
+  },
+  "scientific_status": "ORIGINAL_MATHEMATICAL_REFERENCE_ONLY_NOT_PHYSICAL_MEASUREMENT",
+  "clock_and_entropy_external": false,
+  "note": "Frozen numeric fixture for regression comparison; identical-seed reproducibility checks do not replace distributional or external validation."
+}
