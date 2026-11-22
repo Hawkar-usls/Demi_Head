@@ -147,7 +147,7 @@ def accepts(path, constraints_):
 
 def pack_result(paths,operations,budget=BUDGET):
     unique=sorted(set(paths))
-    predicted="|".join(unique[0]) if len(unique)==1 else ABSTAIN
+    predicted="|".join(unique[0]) if len(unique)==1 and operations<=budget else ABSTAIN
     return {"prediction":predicted,"compatible_paths":len(unique),
             "operations":operations,"budget_exceeded":operations>budget}
 
