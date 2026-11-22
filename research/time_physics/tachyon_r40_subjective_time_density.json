@@ -1,0 +1,77 @@
+{
+  "schema": "janus.tachyon.subjective_time_density.hypothesis.v1",
+  "date": "2026-11-22",
+  "title_ru": "TACHYON — субъективная плотность времени: новизна, события, память и внимание",
+  "origin": "User-supplied hypothesis: repetition compresses remembered time, diversity enriches/lengthens remembered time.",
+  "status": "PREREGISTRATION_DRAFT__NOT_EXPERIMENTALLY_TESTED_BY_JANUS",
+  "domain": "COGNITIVE_TIME_PERCEPTION__NOT_SPACETIME_OR_RETROCAUSALITY",
+  "hypotheses": {
+    "H1_retrospective": "At fixed objective duration, a greater number of independently recalled contextual/event boundaries predicts a longer retrospective remembered duration compared with homogeneous activity, after adjusting for affect/attention.",
+    "H2_prospective": "During the interval, reported passage-of-time speed or prospective duration need not follow H1, because attention, boredom, arousal and engagement may cause the reverse or mixed pattern.",
+    "H3_event_structure": "Event boundaries recalled may outperform unstructured count of remembered details as predictor of retrospective duration; empirically compare models.",
+    "H4_not_physical": "External physical clock readings are unchanged. This model cannot verify changes to relativity, entropy production, spacetime metrics, or retrocausal communication."
+  },
+  "operational_definitions": {
+    "objective_elapsed_seconds": "Measured independent monotonic clock duration.",
+    "density_proxy": "Number of distinct meaningful remembered context transitions (blind-coded event boundaries) per objective minute. Not a physical dimension of time.",
+    "novelty": "Prespecified self-rated subjective novelty plus blinded categorical manipulation check, not equated with raw random sensory stimulation.",
+    "prospective_report": "During or immediately after timed exposure: rate felt speed of passing, estimate duration where prospectively instructed.",
+    "retrospective_report": "Without forewarning in designated sessions, estimate interval duration from memory after delay (e.g., 24h), plus structured recall of contextual changes.",
+    "boredom_attention_affect": "Pre-specified covariates and manipulation checks; fatigue, sleep or emotional state tracked without inferring them from labels."
+  },
+  "pilot_design": {
+    "structure": "Within-participant randomized repeated sessions; alternate homogeneous vs varied-but-comparable activities.",
+    "sessions": "Suggested minimum pilot: 8 sessions per person, each 20 objective minutes, four homogeneous and four varied, random order counterbalanced. This is feasibility/power-planning only, not a calibrated sample size for significance.",
+    "separation": "Prospective and retrospective judgment conditions must be separated/randomized to avoid making unwarned participants watch the clock.",
+    "controls": [
+      "Same objective duration and measurement hardware",
+      "similar physical exertion and effort where feasible",
+      "record novelty/interest/boredom/affect without post hoc selection",
+      "randomized conditions and counterbalanced sequence",
+      "blind memory event-boundary coding",
+      "prespecified exclusion for interruptions and missing reports",
+      "negative controls for rehearsal, clock checks and demand characteristics"
+    ],
+    "analysis": "Participant-level paired comparisons and hierarchical models; confidence intervals; predeclared outcome and multiplicity; no post hoc optimizer on test reports.",
+    "failure_conditions": [
+      "H1 estimate indistinguishable from zero with informative interval",
+      "H1 effect reverses after adjustment or reproducibility checks",
+      "Prospective and retrospective measures cannot be separated experimentally",
+      "Result depends on retrospectively selected novelty categories",
+      "No difference in event-boundary recall despite predicted effect"
+    ]
+  },
+  "scientific_boundaries": {
+    "physical_time_acceleration": false,
+    "time_density_as_new_physical_quantity": false,
+    "retrocausal_signaling_evidence": false,
+    "proof_of_neural_time_mechanism": false,
+    "human_experiment_performed": false,
+    "model_weight_update": false,
+    "production_changes": false,
+    "relation_to_R40_Hawking_CTC": "Independent cognitive research lane. Cannot upgrade Hawking chronology/QFT gates."
+  },
+  "references": [
+    {
+      "title": "Retrospective duration judgments of naturalistic events depend on memories of event boundaries",
+      "year": 2026,
+      "doi": "10.3758/s13423-025-02833-z",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41491329/"
+    },
+    {
+      "title": "Routine and the perception of time",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14640847/",
+      "note": "Routine effects differ for prospective versus retrospective judgments."
+    },
+    {
+      "title": "Judgment of duration and passage of time in prospective and retrospective conditions",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9789145/"
+    },
+    {
+      "title": "Event perception and event memory in real-world experience",
+      "year": 2024,
+      "url": "https://www.nature.com/articles/s44159-024-00367-0"
+    }
+  ],
+  "next_gate": "Freeze specific participant/sample-size/power and conditions before collecting any user diary or participants' reports. Explicit opt-in for human data and separate custodianship if later blind data are used."
+}
