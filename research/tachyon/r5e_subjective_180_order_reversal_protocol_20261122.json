@@ -1,0 +1,80 @@
+{
+  "schema": "janus.demihead.tachyon.r5e.subjective_180_order_reversal_protocol.v1",
+  "id": "DEMIHEAD-TACHYON-R5E-SUBJECTIVE-180-ORDER-REVERSAL-2026-11-22",
+  "date": "2026-11-22",
+  "status": "FROZEN_BEFORE_CI",
+  "intent_ru": "Исследовать точное обратное упорядочение в сообщённом субъективном суждении о времени событий (условный «разворот на 180°»), сохраняя физические события, их уникальные идентификаторы и независимые отметки времени неизменными.",
+  "definition": {
+    "operational_180": "For externally anchored A->B->C, a participant-style *reported temporal judgment* C->B->A, not a literal 180° physical rotation nor a direct observation of consciousness.",
+    "physical_chronology": "Immutable UTC aware event timestamps, event_id and per-event distinct source roots",
+    "reported_order": "Self-report/temporal judgment stored as reported refs; different from reverse retelling and reverse stimulus presentation",
+    "related_non180": "cyclic rotation, local adjacent swap, same-content ambiguity, unstable or absent clocks, planned future event",
+    "same_content_distinct_event": "Matching content_signature is not physical event identity; unique independently corroborated event IDs distinguish synthetic episodes",
+    "time_labels": "Calendar TODAY/YESTERDAY computed independently from reference date and Europe/Kyiv timezone and never modify UTC event"
+  },
+  "synthetic_experiment": {
+    "generator": "tools/tachyon_r5e_180_order_reversal.py::generate_case",
+    "seed": 20261122,
+    "case_families": "100..123",
+    "scenario_count": 16,
+    "cases": 384,
+    "independent_external_author": false,
+    "witness_independence": "TWO_SIMULATED_ROOTS_PER_EVENT_ONLY_NOT_AUTHENTICATED_REAL_WORLD",
+    "categories": [
+      "REPORTED_TEMPORAL_JUDGMENT_REVERSED_180",
+      "REPORTED_TEMPORAL_JUDGMENT_ALIGNED",
+      "REVERSED_RECALL_NARRATIVE_ONLY",
+      "REVERSED_STIMULUS_PRESENTATION_ONLY",
+      "OTHER_ORDER_MISMATCH_NOT_180",
+      "ABSTAIN_INSUFFICIENT_EVIDENCE"
+    ],
+    "controls": [
+      "reversed_three",
+      "aligned_three",
+      "recall_reverse",
+      "presentation_reverse",
+      "rotation_not_reversal",
+      "partial_order_error",
+      "identical_content_anchor_ids",
+      "identical_content_no_ids",
+      "future_plan_not_observed",
+      "timestamp_missing",
+      "clock_conflict",
+      "duplicate_source_root",
+      "unknown_report_mode",
+      "two_events_reversed",
+      "local_midnight",
+      "duplicate_report_reference"
+    ],
+    "baselines": [
+      "verified conservative temporal-anchor rule",
+      "naive reversal detector ignoring report modality",
+      "always abstain"
+    ],
+    "primary_metrics": [
+      "Exact label match with synthetic gold",
+      "Selective accuracy among answers",
+      "Coverage",
+      "False 180-reversal reports on nonreversed/underdetermined cases",
+      "External physical chronology untouched"
+    ],
+    "acceptance": "0 false 180 labels by conservative rule, all synthetic gold contracts deterministic, 29 tests PASS. No learned-model gain claim."
+  },
+  "research_boundaries": [
+    "Reported reverse-order judgment is not direct proof of reverse phenomenological time flow.",
+    "Reversing narration or playback does not imply reversed first-person experience.",
+    "Reversal of relative ordering does not cause physical earlier events to occur later.",
+    "Any physical witness provenance cannot be proven independent by a fabricated source root string.",
+    "Clock discrepancies, duplicate witnesses or unknown event IDs require abstention.",
+    "Planned future cannot be mistaken for observed event; no time-travel claim.",
+    "No clinical diagnosis, real subjects, patient data or modification of any production weights."
+  ],
+  "relations": [
+    "Hawkar-usls/janus-meta-registry/data/JANUS-RULE-001-FIRST-PERSON-TEMPORAL-CONSTRUCTION-2026-11-22-v1.0.json",
+    "Hawkar-usls/janus-meta-registry/data/JANUS-TODAY-SIGNAL-FOR-TOMORROW-FORWARD-CAUSAL-CONTROL-2026-09-01-v1.0.json",
+    "Hawkar-usls/janus-meta-registry/data/JANUS-TAHYON-TRAVELER-DISTRIBUTED-TIME-ARRIVAL-ORDER-INVERSION-v1.0.json",
+    "Hawkar-usls/Demi_Head/research/tachyon/r5d_external_source_result_20261122.json"
+  ],
+  "admission": "RESEARCH_ONLY__SCIENTIFIC_HOLD",
+  "no_production_changes": true
+}
