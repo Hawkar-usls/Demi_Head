@@ -1,0 +1,82 @@
+name: DemiHead TACHYON R5B - Anti Shortcut Witness Exam
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5b_witness_audit.py'
+      - 'tests/test_tachyon_r5b_witness_audit.py'
+      - 'research/tachyon/r5b_anti_shortcut_protocol_20261122.json'
+      - 'research/tachyon/r5b_time_retro_archive_sources_20261122.json'
+      - 'research/tachyon/r5b_anti_shortcut_result_20261122.json'
+      - '.github/workflows/tachyon-r5b-anti-shortcut.yml'
+  push:
+    branches:
+      - research/tachyon-r5b-anti-shortcut-witnesses-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5b_witness_audit.py'
+      - 'tests/test_tachyon_r5b_witness_audit.py'
+      - 'research/tachyon/r5b_anti_shortcut_protocol_20261122.json'
+      - 'research/tachyon/r5b_time_retro_archive_sources_20261122.json'
+      - 'research/tachyon/r5b_anti_shortcut_result_20261122.json'
+      - '.github/workflows/tachyon-r5b-anti-shortcut.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  witness-exam:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install checked-in DemiHead validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Validate existing original DemiHead safety invariants
+        run: |
+          python tools/validate_repository.py
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+      - name: Execute R5B anti-shortcut tests
+        run: python -m unittest discover -s tests -p 'test_tachyon_r5b_witness_audit.py' -v
+      - name: Execute synthetic anti-shortcut exam and verify archive provenance
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5b_witness_audit --audit > out/tachyon/r5b_anti_shortcut_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("out/tachyon/r5b_anti_shortcut_receipt.json").read_text())
+          p=json.loads(Path("research/tachyon/r5b_anti_shortcut_protocol_20261122.json").read_text())
+          a=json.loads(Path("research/tachyon/r5b_time_retro_archive_sources_20261122.json").read_text())
+          assert len(a["source_files"]) == a["source_count"] == 15
+          assert all(len(x["blob_sha"]) == 40 for x in a["source_files"])
+          assert p["generation"]["heldout_cases"] == r["cases"] == 320
+          assert r["valid_engineering_safety_gate"]
+          assert r["core_DemiHead_outputs_unchanged"] == r["cases"]
+          assert r["arms"]["C_INDEPENDENT_WITNESS_RULE"]["unsupported_assertions"] == 0
+          assert r["arms"]["B_FROZEN_R4_NO_FEATURE_BACKFILL"]["answered_count"] == 0
+          assert not r["r4_learned_predictions_executed"]
+          assert r["arms"]["C_INDEPENDENT_WITNESS_RULE"]["coverage"] == 0.4
+          assert r["arms"]["C_INDEPENDENT_WITNESS_RULE"]["selective_accuracy"] == 1.0
+          assert all(not r[x] for x in ("neural_gain_established","production_weights_changed",
+                       "physical_retrocausality_claim","human_or_clinical_data_used"))
+          print("R5B_CASE_SHA256=" + r["challenge_input_sha256"])
+          print("R5B_WITNESS_RULE_COVERAGE=" + str(r["arms"]["C_INDEPENDENT_WITNESS_RULE"]["coverage"]))
+          print("R5B_WITNESS_RULE_SELECTIVE_ACCURACY=" + str(r["arms"]["C_INDEPENDENT_WITNESS_RULE"]["selective_accuracy"]))
+          print("R5B_FROZEN_R4_COVERAGE=" + str(r["arms"]["B_FROZEN_R4_NO_FEATURE_BACKFILL"]["coverage"]))
+          print("R5B_SINGLE_CLOCK_UNSUPPORTED_ASSERTIONS=" + str(r["arms"]["D_SINGLE_CLOCK_BASELINE"]["unsupported_assertions"]))
+          print("R5B_WITNESS_ONLY_ENGINEERING_PASS__NEURAL_SCIENCE_HOLD")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5b-witness-only-anti-shortcut
+          path: out/tachyon/r5b_anti_shortcut_receipt.json
+          if-no-files-found: error
+          retention-days: 60

@@ -1,0 +1,82 @@
+{
+  "schema": "janus.demihead.tachyon.r5b.anti_shortcut_result.v1",
+  "artifact_id": 14756948890,
+  "date": "2026-11-22",
+  "status": "ENGINEERING_CI_PASS__FROZEN_R4_OUT_OF_DOMAIN__NEURAL_GAIN_UNESTABLISHED__SCIENCE_HOLD",
+  "source_repo": "Hawkar-usls/Demi_Head",
+  "first_successful_run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45029741965",
+  "validated_source_commit": "b4936d8e820f23a43b57757cebbbe4186304fbfe",
+  "artifact_name": "demihead-tachyon-r5b-witness-only-anti-shortcut",
+  "artifact_digest": "sha256:1623999cc20dab6f51c24dabc93b12e475c759e4c5bf97f474f584a58455a131",
+  "protocol": "research/tachyon/r5b_anti_shortcut_protocol_20261122.json",
+  "archive_manifest": "research/tachyon/r5b_time_retro_archive_sources_20261122.json",
+  "research_only": true,
+  "heldout_contract": {
+    "developer_generated_source_namespace_disjoint": true,
+    "external_blind": false,
+    "seed": 2026112251,
+    "development_cases": 80,
+    "heldout_cases": 320,
+    "scenario_families": 10,
+    "real_witnesses": 0,
+    "positive_decidable_cases": 128,
+    "mandatory_abstention_cases": 192,
+    "input_sha256": "4be3740c3f45e52ff4819bf90e0d88207bc9b058ee59eb31618134f1a569e5f1"
+  },
+  "ci": {
+    "new_tests_pass": 26,
+    "existing_reference_tests_pass": 7,
+    "source_code_unchanged_core_head": 320,
+    "branch_ci_conclusion": "success"
+  },
+  "arms": {
+    "A_ORIGINAL_DEMIHEAD": {
+      "temporal_classification_supported": false,
+      "unchanged_outputs": 320,
+      "not_accuracy_zero": true
+    },
+    "B_FROZEN_R4": {
+      "input_admissible": false,
+      "answer_bearing_features_missing": [
+        "event_a_id",
+        "event_b_id",
+        "b_status"
+      ],
+      "fabricated_inputs": 0,
+      "answered_count": 0,
+      "coverage": 0,
+      "selective_accuracy": null,
+      "learned_inference_executed": false,
+      "interpretation": "OOD / interface incompatibility, not failure at classification or evidence of lower intelligence"
+    },
+    "C_CORROBORATED_WITNESS_RULE": {
+      "answered_count": 128,
+      "heldout_cases": 320,
+      "coverage": 0.4,
+      "conditional_accuracy": 1,
+      "wrong_nonabstention": 0,
+      "correct_mandatory_abstention": 192,
+      "unsupported_assertions": 0,
+      "interpretation": "Perfect on its own deterministic synthetic scenarios; not proof of generalization or real independent witness authentication"
+    },
+    "D_SINGLE_CLOCK_BASELINE": {
+      "unsupported_assertions": 121,
+      "interpretation": "Unsafe non-abstention where the synthetic ground-truth contract requires uncertainty; other per-arm metrics available in full Actions receipt"
+    },
+    "E_ALWAYS_ABSTAIN": {
+      "answered_count": 0,
+      "coverage": 0,
+      "interpretation": "Conservative control; full-input gold match limited by 128 answerable cases"
+    }
+  },
+  "retro_json_source_count": 15,
+  "retrocausal_archive_conclusion": "No physical tachyon or future-to-past information transmission established by these JSON sources or R5B.",
+  "gate": "HOLD_NO_EXTERNALLY_AUTHORED_REAL_WORLD_WITNESS_DATA_AND_NO_LEARNED_WITNESS_INTERFACE",
+  "model_gain": "NOT_ESTABLISHED",
+  "production_weights_modified": false,
+  "human_data_ingested": false,
+  "clinical_diagnosis_performed": false,
+  "subjective_consciousness_measured": false,
+  "physical_time_change_measured": false,
+  "next_experiment": "R5C create observation-native trainable model using development-only source sets, freeze external holdout and compare to strong corroboration rules on independently authenticated source data; no model promotion without paired gain and safety."
+}
