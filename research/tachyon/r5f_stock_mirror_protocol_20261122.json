@@ -1,0 +1,71 @@
+{
+  "schema": "janus.demihead.tachyon.r5f.stock_mirror_reversal_protocol.v1",
+  "id": "DEMIHEAD-TACHYON-R5F-STOCK-MIRROR-REVERSE-2026-11-22",
+  "created_utc_date": "2026-11-22",
+  "status": "FROZEN_BEFORE_FIRST_CI",
+  "user_goal_ru": "Сбросить экспериментальные параметры до стоковых, провести обычный R5F тест, но с отзеркаленной ориентацией причинного графа.",
+  "scope": "RESEARCH_SYNTHETIC_GRAPH_TRANSPOSE__NO_PHYSICAL_REVERSE_TIME",
+  "stock_parameters": {
+    "source_file": "tools/tachyon_r5f_causal_memory_audit.py",
+    "source_git_blob_sha1": "ea3ebbbd14594291adcde4f403a7e040d65f76a3",
+    "operation_budget_per_case": 500,
+    "graph_forward_edges_per_case": 9,
+    "dataset": "Original deterministic developer-heldout 40 source families × 15 scenarios = 600 cases",
+    "seed": 20261122,
+    "external_authorship": false,
+    "source_namespaces": "Original synthetic witness roots, do not synthesize additional identities",
+    "x100_replication_applied": false,
+    "negative_999_rejection_gate_applied": false,
+    "production_weights_unchanged": true
+  },
+  "mirror_definition": {
+    "forward_graph": "Original A→B→C is transformed to exactly transposed DAG C→B→A; every physical graph edge u→v is mapped to a research-graph edge v→u.",
+    "anchored_source": "Original observed terminal C becomes fixed mirrored source; old A endpoints are enumerated rather than arbitrarily selecting an old A as a terminal.",
+    "mirror_witness_stage": "Original A witness stage becomes mirrored C; original B remains mirrored B; no original witness is added or deleted.",
+    "time_axis": "Abstract order labels 0,1,2 are remapped to 2,1,0 only in synthetic layer coordinates.",
+    "real_clock_rule": "Preserve every original capture_utc string exactly. No physical clocks, UTC instants, observer experiences, thermodynamic entropy or causal histories are reversed.",
+    "reverse_proposal": "Original reverse_proposals.C_B and reverse_proposals.B_A become mirrored predecessor candidates in forward direction; ghosts and incomplete certificates preserved, never promoted as authoritative.",
+    "output_normalization": "Mirrored (C,B,A) path normalized to stock (A,B,C) for per-case paired evaluation."
+  },
+  "paired_arms": {
+    "A_MIRROR_FORWARD_EXACT": "Traverse authoritative transposed graph C→B→A; constrain reliable mirrored witness roots.",
+    "B_MIRROR_PROPOSALS_UNVERIFIED": "Traverse original reverse-edge proposals in mirrored direction without forward replay, negative control.",
+    "C_MIRROR_PROPOSALS_PLUS_REPLAY": "Traverse proposals and check against authoritative mirrored graph C→B→A before asserting path.",
+    "D_STRONG_EXACT_MIRROR": "Strong complete transposed graph baseline, identical to exact mirror arm by definition.",
+    "E_ALWAYS_ABSTAIN": "Null model control.",
+    "original_stock_controls": "Original R5F forward_only, reverse_only and reverse_then_forward on exact same underlying 600 cases."
+  },
+  "reference_and_metrics": {
+    "gold": "Original authoritative forward DAG complete unique-history criterion; identical graph transpose should be isomorphic. NOT independent hidden physical history.",
+    "primary": [
+      "Stock mirror exact vs original forward exact agreement count /600",
+      "Stock mirror proposal+replay vs original reverse+replay agreement count /600",
+      "Safe answered cases, correct abstentions, false confident causal assertions",
+      "Actual counted graph traversals under 500 limit",
+      "Strong mirrored exhaustive baseline and unverified proposal control"
+    ],
+    "secondary": [
+      "Uncalibrated single-worker median time, not production benchmark",
+      "Per-case SHA256 digest for original and mirrored input",
+      "Checks that UTC capture timestamps are byte-for-byte preserved"
+    ],
+    "scientific_interpretation": "If 600/600 paired agreement, that is correct transposition/representation invariant, NOT an inference gain or time travel. Optimized reversed traversal may use fewer counted graph steps by starting from known C but must be compared to strong target-conditioned baseline.",
+    "independent_custodian": false,
+    "real_witnesses": false,
+    "scientific_gate": "ENGINEERING_SYNTHETIC_ONLY__PHYSICAL_TIME_REVERSAL_NOT_TESTED__SCIENCE_HOLD"
+  },
+  "test_contract": {
+    "new_tests": 33,
+    "existing_reference_tests": 7,
+    "existing_R5F_tests": 29,
+    "hard_fail_conditions": [
+      "Source R5F BUDGET !=500",
+      "Edges !=9 in any baseline graph",
+      "Input physical UTC changed",
+      "Any result over budget accepted as definite",
+      "Any unsupported causal assertion",
+      "Any original-vs-mirror 600-case mismatch"
+    ],
+    "no_production_changes": true
+  }
+}
