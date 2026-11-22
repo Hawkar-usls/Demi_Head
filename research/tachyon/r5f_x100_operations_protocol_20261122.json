@@ -1,0 +1,70 @@
+{
+  "schema": "janus.demihead.tachyon.r5f_x100.operation_scaling_protocol.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-X100-OPERATIONS-2026-11-22",
+  "freeze_status": "PREREGISTERED_BEFORE_FIRST_X100_CI",
+  "date": "2026-11-22",
+  "user_request_ru": "Увеличить в 100 раз учитываемые операции и прогнать R5F заново.",
+  "original": {
+    "source_main": "tools/tachyon_r5f_causal_memory_audit.py",
+    "source_result": "research/tachyon/r5f_causal_memory_result_20261122.json",
+    "original_budget": 500,
+    "original_heldout_cases": 600,
+    "original_candidate_graph_edges": 9,
+    "original_outcome": "Strong exact forward 200 answers, reverse-only 120, reverse+replay 160; no strong-baseline advantage.",
+    "original_model_unchanged": true
+  },
+  "interventions": {
+    "first": "BUDGET_ONLY: original unchanged 9-edge DAG at 50,000 hard counted edge/candidate operations, control whether budget alone changes answers.",
+    "second": "EXPANDED_CAUSAL_GRAPH: 100 disjoint copies of original 5 A-to-B and 4 B-to-C edges, 900 total authoritative graph edges, 50000 allowed counted operations. All 100 alternative A/B subgraphs can reach the fixed terminal C0; copies are not independent sensor observations.",
+    "scale_operations_allowed": 100,
+    "scale_actual_graph_edges": 100,
+    "original_graph_edges_per_case": 9,
+    "enlarged_graph_edges_per_case": 900,
+    "original_budget_per_case": 500,
+    "enlarged_budget_per_case": 50000,
+    "workload_confound": "Added alternatives make causal ambiguity at least as difficult, while original witness roots and authored scenario types remain unchanged. This is a structural stress test not new external independent tasks.",
+    "fair_inputs": "All algorithms receive exact same expanded graph, terminal, reverse proposals, source-root evidence, authoritatively complete forward DAG and 50k max counted operations.",
+    "no_fake_repetitions": "Operation count increments only inside real original graph traversals and actual replays. No artificial multiplier or repeated same-case timer padding.",
+    "check_budget": "If a solver exceeds 50k counted operations it must ABSTAIN; all arms report budget-exceeded cases.",
+    "source_provenance": "Synthetic roots not authenticated physical instruments."
+  },
+  "split": {
+    "source_families": "same frozen R5F heldout families 100..139",
+    "scenarios": 15,
+    "heldout_cases": 600,
+    "no_new_gold": "Gold is uniquely identifiable path under synthetic forward authoritative graph plus corroborated witness constraints; not observed physical history or external blind.",
+    "control": "Original R5F replay on exact same 600 cases at 500 budget, budget-only replay at 50k, real expanded graph replay at 50k; measured in same CI run.",
+    "test_leakage": "No scenario labels or oracle paths in visible graph; no updating algorithm from test errors."
+  },
+  "arms": {
+    "A_FORWARD_ONLY_EXHAUSTIVE": "Authoritative exhaustive A→B→C path search",
+    "B_REVERSE_ONLY_UNVERIFIED": "Backward proposed predecessors without authoritative forward replay",
+    "C_REVERSE_PLUS_FORWARD_REPLAY": "Backward C→B→A plus exact frozen A→B→C forward verification",
+    "D_STRONG_EXHAUSTIVE_PROVENANCE": "Exact forward search with same corroborated witness constraints (strong control)",
+    "E_ALWAYS_ABSTAIN": "Null coverage/uncertainty control"
+  },
+  "metrics": {
+    "primary": [
+      "Valid answers, selective accuracy among answered, abstention count",
+      "Unsupported positive assertions when gold ambiguous",
+      "Mean actually counted graph operations/case and scaling ratio vs original",
+      "Cases over budget and fail-closed behavior",
+      "Coverage delta C vs strong D"
+    ],
+    "secondary": [
+      "Actual graph edge count vs original",
+      "Raw deterministic case input SHA-256 each arm/control",
+      "Uncalibrated same-worker median runtime; not standardized",
+      "Original vs budget-only prediction invariance"
+    ]
+  },
+  "acceptance": {
+    "engineering_pass": "Checks show exactly 900 authoritative graph edges vs 9, hard budget exactly 50k vs 500, 22 R5F-X100 checks pass, original R5F checks pass, strong reference correct under own graph oracle, no unsafe confident reconstruction, full Actions receipt.",
+    "algorithmic_gain": "If C beats strong exact D on valid coverage with no increase in incorrect claims and accounted cost (not expected by construction), label tentative synthetic-only.",
+    "science": "HOLD until independent externally authored, prospectively hidden, authenticated physical witness data and stronger realistic budget accounting.",
+    "original_production_model_weights_changed": false,
+    "retrocausality_established": false,
+    "human_memory_measured": false
+  },
+  "next": "If no advantage, test optimized path-consistency algorithms, indexed reachability and causal uncertainty on truly new graph distributions with independently authored gold; no automatic promotion."
+}
