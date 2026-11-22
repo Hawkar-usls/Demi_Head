@@ -1,0 +1,90 @@
+{
+  "schema": "janus.demihead.tachyon.r5c.observation_native_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5C-OBSERVATION-NATIVE-RESULT-2026-11-22",
+  "created_on": "2026-11-22",
+  "status": "ENGINEERING_CI_PASS__NATIVE_WITNESS_LEARNING__NO_GAIN_OVER_STRONG_RULES__SCIENTIFIC_HOLD",
+  "repo": "Hawkar-usls/Demi_Head",
+  "pr": "https://github.com/Hawkar-usls/Demi_Head/pull/110",
+  "source_branch": "research/tachyon-r5c-observation-native-learning-20261122",
+  "first_successful_ci": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45030698172",
+  "ci_artifact": {
+    "name": "demihead-tachyon-r5c-observation-native-training",
+    "id": 14757691915,
+    "sha256": "6c1e6a67114160bf8dd8d8933ea2f02769d72a68855e7984764be9b471b76619"
+  },
+  "protocol": "research/tachyon/r5c_observation_native_protocol_20261122.json",
+  "training_module": "tools/tachyon_r5c_observation_native_train.py",
+  "test_module": "tests/test_tachyon_r5c_observation_native_train.py",
+  "baseline_pinned": {
+    "path": "tools/tachyon_r5b_witness_audit.py",
+    "github_blob_sha": "5f462b79177ca5fcb86f4e8c14266e0ead3078a8"
+  },
+  "test_counts": {
+    "R5C_new_pass": 25,
+    "R5B_prior_pass": 26,
+    "original_DemiHead_reference_pass": 7
+  },
+  "dataset": {
+    "synthetically_generated": true,
+    "independent_external_author": false,
+    "real_participants": 0,
+    "train": 800,
+    "validation": 200,
+    "developer_heldout": 320,
+    "source_family_partition_disjoint": true,
+    "same_generator_across_splits": true,
+    "r5b_previous_holdout_not_reused": true
+  },
+  "model": {
+    "architecture": "5_CLASS_LINEAR_SOFTMAX_SGD",
+    "epochs": 36,
+    "features": "Numeric summaries of witness timestamps, signature comparisons, sync quality, source root counts, evidence medium and schedule notices",
+    "confidence_threshold_selected_on_validation_only": 0.5,
+    "learned_on_evidence_only": true,
+    "direct_ground_truth_fields_used": false,
+    "production_weights_modified": false
+  },
+  "paired_result": {
+    "B_R5C_LEARNED_WITNESSES": {
+      "attempted": 128,
+      "total": 320,
+      "coverage": 0.4,
+      "selective_accuracy": 1,
+      "unsupported_assertions": 0,
+      "approximate_median_decision_microseconds_single_worker": 20.941
+    },
+    "C_FROZEN_R5B_STRONG_RULE": {
+      "attempted": 128,
+      "total": 320,
+      "coverage": 0.4,
+      "selective_accuracy": 1,
+      "unsupported_assertions": 0,
+      "approximate_median_decision_microseconds_single_worker": 8.0835
+    },
+    "D_WEAK_SINGLE_CLOCK": {
+      "coverage": 0.78125,
+      "selective_accuracy": 0.512,
+      "unsupported_assertions": 122,
+      "approximate_median_decision_microseconds_single_worker": 2.451
+    },
+    "E_ALWAYS_ABSTAIN": {
+      "coverage": 0,
+      "selective_accuracy": null,
+      "unsupported_assertions": 0
+    },
+    "B_minus_C_coverage_pp": 0,
+    "B_minus_C_selective_accuracy_pp": 0,
+    "demonstrable_neural_advantage": false,
+    "original_demihead_outputs_unchanged": 320,
+    "training_cost_excluded_from_per_inference_medians": true,
+    "latency_is_exploratory": true
+  },
+  "interpretation_ru": "Впервые новая обученная модель R5C обработала входы формата наблюдаемых свидетельств без известных идентификаторов физических событий и статусов R4. На той же синтетической серии её ответы соответствуют сильным правилам R5B, но преимуществ в покрытии/безопасности нет; одно CI-измерение задержки медленнее у модели. Это совпадение с генератором, а не доказательство обобщения на реальный мир.",
+  "archive_lineage": "research/tachyon/r5b_time_retro_archive_sources_20261122.json",
+  "scientific_gate": "HOLD_EXTERNAL_AUTHENTICATED_WITNESS_DATA_AND_INDEPENDENT_CUSTODIAN",
+  "no_clinical_claim": true,
+  "no_subjective_time_phenomenology_measured": true,
+  "no_physical_retrocausality_proven": true,
+  "no_production_model_adoption": true,
+  "next_gate": "R5D independent externally authored source-disjoint challenges; nontrivial noisy observations beyond common generator; prospective hidden gold, real authenticated timing roots, noninferiority safety and paired confidence intervals against strong transparent rules. Absent external custody do not label independent validated."
+}
