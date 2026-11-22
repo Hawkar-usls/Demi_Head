@@ -1,0 +1,116 @@
+{
+  "evidence_metrics": {
+    "physical_signal_evidence": false,
+    "real_future_forecast_skill_established": false,
+    "reference_alternative": {
+      "eta": 0.7,
+      "n": 10000,
+      "observed_forward_draws_per_postselected_history": 1.7205,
+      "observed_hidden_correlations": {
+        "causal_null": -0.0018,
+        "postselection": 0.0806,
+        "two_boundary": 0.073
+      },
+      "paired_difference": -0.0076000000000000095,
+      "paired_standard_error": 0.014085952768859501,
+      "paired_z": -0.539544617585379,
+      "public_parity_tv": 0.0,
+      "rho": 0.65,
+      "steps": 5,
+      "theory": 0.08122034375000001
+    },
+    "reference_default": {
+      "eta": 0.9,
+      "n": 40000,
+      "observed_forward_draws_per_postselected_history": 1.891875,
+      "observed_hidden_correlations": {
+        "causal_null": -0.00615,
+        "postselection": 0.243,
+        "two_boundary": 0.2402
+      },
+      "paired_difference": -0.002799999999999997,
+      "paired_standard_error": 0.006857549099313197,
+      "paired_z": -0.40830914360940196,
+      "public_parity_tv": 0.0,
+      "rho": 0.85,
+      "steps": 8,
+      "theory": 0.2452414725351562
+    }
+  },
+  "five_axis_spiral": {
+    "D1_TEMPORAL_ORDER": "OFFLINE_B_IS_GIVEN_BEFORE_TWO_BOUNDARY_SAMPLING",
+    "D2_MODEL_FIT": "TWO_BOUNDARY_AND_POSTSELECTION_SHARE_EXACT_PATH_LAW",
+    "D3_EARLY_OBSERVABLE": "SELECTED_SPIN_PARITY_TV_ZERO_BY_SYMMETRY",
+    "D4_PROVENANCE": "SOURCE_PINNED_DEMIHEAD_CI__NO_EXTERNAL_PHYSICAL_TIMESTAMPS",
+    "D5_EVIDENCE_ASCENT": "PLATEAU_NO_NEW_PHYSICAL_IDENTIFIABILITY",
+    "origin_prime_claim": false,
+    "real_physical_spacetime_dimensions_measured": false
+  },
+  "governance": {
+    "external_effect_authorized": false,
+    "may_assign_world_forecast_probability": false,
+    "may_autoseal_or_publish_forecast": false,
+    "may_change_tachyon_weights": false,
+    "may_override_DemiHead_gate": false,
+    "may_promote_production": false,
+    "may_resolve_own_forecast": false,
+    "may_submit_physical_experiment": false,
+    "may_train_predictive_head": false,
+    "scientific_verdict": "R1_SYNTHETIC_VALIDATION_PASS__PHYSICAL_RETROCAUSALITY_HOLD"
+  },
+  "hypotheses": [
+    {
+      "explanation": "Earlier external record independent of genuinely later free choice under controlled ordinary causality.",
+      "id": "H_CAUSAL_NULL",
+      "physical_truth_probability": null,
+      "status": "NOT_PHYSICALLY_TESTED"
+    },
+    {
+      "explanation": "Conditioning a forward-generated history reproduces exactly the RETROBOUND R1 conditional distribution.",
+      "id": "H_FORWARD_POSTSELECTION",
+      "physical_truth_probability": null,
+      "status": "MATHEMATICAL_EQUIVALENCE_SHOWN"
+    },
+    {
+      "explanation": "A specified accessible early measurement would depend on a genuinely later independent physical choice.",
+      "id": "H_RETROCAUSAL_PHYSICAL",
+      "physical_truth_probability": null,
+      "status": "UNIDENTIFIED_PREDICTION_NOT_TESTED"
+    },
+    {
+      "explanation": "Timing leaks, hidden prior choice, selection or apparatus bias can imitate physical effects.",
+      "id": "H_LEAKAGE_OR_SELECTION",
+      "physical_truth_probability": null,
+      "status": "MUST_CONTROL_PROSPECTIVELY"
+    }
+  ],
+  "hypothesis_discrimination": {
+    "R1_identifiability": "TWO_BOUNDARY_VS_POSTSELECTION_NOT_IDENTIFIABLE",
+    "calibrated_forecast_probability": null,
+    "information_gain": "NOT_NUMERICALLY_ESTIMABLE_WITHOUT_PHYSICAL_LIKELIHOODS",
+    "prospective_controls": [
+      "SPECIFY_PHYSICAL_READOUT_PREDICTION_DIFFERENT_FROM_FORWARD_POSTSELECTION",
+      "INDEPENDENTLY_FREEZE_AND_TIMESTAMP_EARLY_READOUT_BEFORE_LATE_CHOICE",
+      "GENUINELY_LATE_INDEPENDENT_PHYSICAL_ENTROPY",
+      "APPEND_ONLY_ALL_TRIALS_LEDGER_INCLUDE_ABORTS",
+      "PRECOMMITTED_FORWARD_AND_LEAKAGE_NULLS_WITH_MULTIPLICITY",
+      "INDEPENDENT_BLINDED_EXTERNAL_CUSTODIAN"
+    ],
+    "question": "Can an independently frozen accessible early physical measurement discriminate a genuinely later independent setting, with every trial included and no postselection?",
+    "question_id": "R2_FREEZE_BEFORE_LATE_ENTROPY"
+  },
+  "mode": "OFFLINE_READ_ONLY_ADVISORY",
+  "packet_digest_sha256": "f52e09096c07ea3a4e1fb0f98a5f19f5b1b6d366792c79fcfc0046c62103e20e",
+  "peer": "AURA_ORACLE__HYPOTHESIS_DISCRIMINATION",
+  "schema": "janus.aura.tachyon.retrobound_r1.advisory.v1",
+  "source": {
+    "commit_sha": "a6f84e3707828f59946be3848e0bc128d9e2b8cc",
+    "external_physical_witness": false,
+    "git_blob_sha1": "44f422bd450e1a29d4927235502868c49955002c",
+    "path": "research/tachyon/retrobound_r1_validation_result_20261123.json",
+    "raw_sha256": "5c5b2496d8240e7c01cc532c2548d3d70703b6a6f1c51a5f148891a1ef7704e7",
+    "repository": "Hawkar-usls/Demi_Head",
+    "source_json_canonical_sha256": "5654a0680e7790341b970f3145a2e8bbfec16e4317298e95641009a5de2f36ad",
+    "source_kind": "DEMIHEAD_TACHYON_R1_SYNTHETIC_CI_RECEIPT"
+  }
+}

@@ -1,0 +1,68 @@
+name: TACHYON AURA Oracle Read-only Research Ingress
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_aura_oracle_ingress.py'
+      - 'tests/test_tachyon_aura_oracle_ingress.py'
+      - 'tests/fixtures/aura_tachyon_r1_advisory_ci_20261123.json'
+      - '.github/workflows/tachyon-aura-oracle-ingress.yml'
+  push:
+    branches:
+      - research/tachyon-aura-oracle-bridge-20261123
+    paths:
+      - 'tools/tachyon_aura_oracle_ingress.py'
+      - 'tests/test_tachyon_aura_oracle_ingress.py'
+      - 'tests/fixtures/aura_tachyon_r1_advisory_ci_20261123.json'
+      - '.github/workflows/tachyon-aura-oracle-ingress.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  aura-ingress:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate TACHYON AURA protocol implementation and exact source CI packet
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/tachyon_aura_oracle_ingress.py tests/test_tachyon_aura_oracle_ingress.py
+          python -m unittest discover -s tests -p 'test_tachyon_aura_oracle_ingress.py' -v
+      - name: Re-run bounded RETROBOUND regression guard
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_tachyon_retrobound_r1*.py' -v
+      - name: Generate a non-authoritative TACHYON acknowledgement
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon-aura
+          python tools/tachyon_aura_oracle_ingress.py \
+            --input tests/fixtures/aura_tachyon_r1_advisory_ci_20261123.json \
+            --output out/tachyon-aura/ingress_ack.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('out/tachyon-aura/ingress_ack.json').read_text())
+          assert j['physical_retrocausality']=='NOT_ESTABLISHED'
+          assert not j['evidence_state_upgrade']
+          assert not j['production_activated']
+          assert not j['new_simulations_run']
+          assert not j['model_weights_changed']
+          assert not j['automated_future_random_choice']
+          assert len(j['received_discrimination_question']['controls'])==6
+          print("TACHYON_AURA_ORACLE_READONLY_ROUNDTRIP_PASS__SCIENCE_HOLD")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-aura-oracle-ingress
+          path: out/tachyon-aura/ingress_ack.json
+          if-no-files-found: error
+          retention-days: 60
