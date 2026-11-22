@@ -113,7 +113,7 @@ def extract_observation_features(inp: dict) -> list[float]:
     if ref is None or not isinstance(rows, list):
         raise ValueError("R5C requires visible witness records and reference time")
     a, b = _slot(rows, "a", ref), _slot(rows, "b", ref)
-    signed_gap = ((b["time"]-a["time"])/(24*3600)
+    signed_gap = ((b["time"]-a["time"]).total_seconds()/(24*3600)
                   if a["time"] is not None and b["time"] is not None else 0.0)
     same_sig = a["signature"] is not None and b["signature"] is not None
     feats = [
