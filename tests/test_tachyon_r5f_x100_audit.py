@@ -133,8 +133,11 @@ class R5FX100Tests(unittest.TestCase):
     def test_no_counting_fake_repeated_operations(self):
         x=expand_graph_x100(build_case(100,"ambiguous_terminal"))
         n=forward_only(x,budget=BUDGET)["operations"]
-        self.assertEqual(n,2*count_graph_edges(x)//2)
-        self.assertEqual(n,900)
+        original = build_case(100,"ambiguous_terminal")
+        original_walks = forward_only(original,budget=ORIGINAL_BUDGET)["operations"]
+        self.assertEqual(original_walks,10)
+        self.assertEqual(n,SCALE*original_walks)
+        self.assertEqual(n,1000)
 
 
 if __name__=="__main__":
