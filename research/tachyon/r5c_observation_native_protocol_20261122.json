@@ -1,0 +1,93 @@
+{
+  "schema": "janus.demihead.tachyon.r5c.observation_native_learning_protocol.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5C-OBSERVATION-NATIVE-LEARNING-2026-11-22",
+  "created_on": "2026-11-22",
+  "status": "FROZEN_BEFORE_FIRST_R5C_CI",
+  "question": "Can a learned witness-only model safely infer supported temporal relationships when event_id and known-status metadata from R4 are absent? Does it improve over the frozen strong R5B witness rule on independent challenge inputs?",
+  "scope": "SYNTHETIC_DEVELOPER_HOLDOUT__NO_EXTERNAL_BLIND_OR_HUMAN_DATA",
+  "input_contract": {
+    "schema": "janus.demihead.tachyon.r5b.synthetic_witness_input.v1",
+    "source": "tools/tachyon_r5b_witness_audit.py::build_case",
+    "forbidden_fields": [
+      "event_a_id",
+      "event_b_id",
+      "b_status",
+      "target",
+      "gold",
+      "scenario"
+    ],
+    "allowed_visible_fields": [
+      "reference_time_utc",
+      "witnesses[].slot",
+      "witnesses[].root (distinct-root counts only)",
+      "witnesses[].source_medium (category counts)",
+      "witnesses[].claim_medium",
+      "witnesses[].captured_at_utc",
+      "witnesses[].receipt_created_at_utc (not used as observed time)",
+      "witnesses[].content_signature (comparisons only)",
+      "witnesses[].clock_quality"
+    ],
+    "ground_truth": "Hidden scenario-derived label held by synthetic evaluator, excluded from input model feature extractor",
+    "source_independence": "Only simulated, distinct root strings; source independent-authentication NOT demonstrated.",
+    "physical_event_identity": "No event-id reconstruction or fabricated occurrence claim. Similar source content does not prove same physical event."
+  },
+  "split_and_model": {
+    "seed": 2026112252,
+    "train_families": "500..579 (development)",
+    "validation_families": "900..919 (development; threshold selection only)",
+    "test_families": "3000..3031 (holdout partition; distinct from published R5B 100..131)",
+    "train_examples": 800,
+    "validation_examples": 200,
+    "test_examples": 320,
+    "same_scenario_generator_warning": "Shared synthetic scenario family across train and test. This is source-root-disjoint but NOT an independently authored or sealed blind test.",
+    "classes": 5,
+    "feature_policy": "Numerical aggregates of visible witness evidence only; neither IDs nor hidden labels nor source root literal strings fed to model.",
+    "learner": "5-class linear softmax SGD, 36 epochs, learning_rate 0.085, weights frozen before heldout test",
+    "threshold_selection": "Validation only: choose widest coverage with zero unsupported claims and >=0.98 selective accuracy; candidate thresholds [0.50,0.60,0.70,0.80,0.90,0.95,0.98,0.995,1.01]. Threshold 1.01 enforces abstention if none qualifies.",
+    "test_protocol": "Evaluate exactly once on heldout after validation-only threshold selection, no post-hoc threshold adjustments"
+  },
+  "paired_arms": {
+    "A": "Original tools.keto_reference.summarize_case, preserved and not scored as temporal classifier",
+    "B": "R5C learned witness-only softmax with validation-chosen rejection threshold",
+    "C": "Unmodified strong R5B witness_rule baseline",
+    "D": "Single-clock weak baseline",
+    "E": "Always-abstain coverage control"
+  },
+  "metrics": {
+    "primary": [
+      "Coverage excluding abstentions",
+      "Selective accuracy conditional on answered examples",
+      "Unsupported positive claims on required-abstention cases",
+      "Incorrect nonabstentions",
+      "Original DemiHead invariant outputs"
+    ],
+    "secondary": [
+      "Full-label match fraction including abstentions",
+      "Validation-only threshold and calibration grid",
+      "Total training runtime distinct from inference runtime",
+      "Per-case median inference microseconds on a single uncalibrated CI worker",
+      "Challenge and split SHA256"
+    ],
+    "statistical_note": "320 synthetic examples from one generator do not represent 320 independent physical experiments or medical subjects. No p-value for general intelligence gain from synthetic examples."
+  },
+  "promotion_policy": {
+    "engineering_pass": "CI executes reproducibly, 25 new tests pass, zero model inferences on real data, no feature leakage, no production changes; model accuracy is reported even when poor.",
+    "scientific_pass": "Impossible under this synthetic-only protocol: independent external witness provenance and source-authored hidden tasks not available.",
+    "neural_gain": "Strict descriptive gain only if B has 0 unsupported claims and 0 wrong nonabstentions and higher coverage than C; any such synthetic result still requires external independent replication and compute cost accounting.",
+    "production_adoption": false
+  },
+  "retro_and_time_source_manifest": "Hawkar-usls/Demi_Head/research/tachyon/r5b_time_retro_archive_sources_20261122.json",
+  "epistemic_boundaries": [
+    "OPEN-009 prospective frozen targets are separate from a valid demonstration of future-to-past information.",
+    "ZENO drand negative result must remain a negative control.",
+    "Distributed timestamp inversion is not physical retrocausality.",
+    "Subjective day relabeling is not physical change of yesterday.",
+    "No Alzheimer disease or consciousness diagnosis.",
+    "Only synthetic records and public metadata may be processed."
+  ],
+  "independent_external_custodian": false,
+  "real_people": false,
+  "medical_records": false,
+  "production_core_unchanged": true,
+  "next_required": "External provenance-authenticated witness dataset and truly blind competing-model challenge from a source-independent custodian"
+}
