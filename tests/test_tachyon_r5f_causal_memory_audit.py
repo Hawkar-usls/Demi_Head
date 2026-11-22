@@ -136,7 +136,8 @@ class R5FCausalMemoryTests(unittest.TestCase):
     def test_strong_baseline_has_correct_reference_labels(self):
         a=self.report["arms"]["A_FORWARD_ONLY_EXHAUSTIVE"]
         d=self.report["arms"]["D_STRONG_EXHAUSTIVE_PROVENANCE"]
-        self.assertEqual(a,d)
+        self.assertEqual({k:v for k,v in a.items() if k!="median_decision_us"},
+                         {k:v for k,v in d.items() if k!="median_decision_us"})
         self.assertEqual(d["exact_matches"],self.report["heldout_cases"])
 
     def test_tiny_budget_fails_closed(self):
