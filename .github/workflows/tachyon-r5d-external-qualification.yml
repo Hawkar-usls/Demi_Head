@@ -49,6 +49,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install checked-in repository validation requirements
+        run: python -m pip install -r requirements-dev.txt
       - name: Confirm source pins, frozen R5C and repository safety
         run: |
           set -euo pipefail
