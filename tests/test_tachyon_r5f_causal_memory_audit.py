@@ -60,7 +60,8 @@ class R5FCausalMemoryTests(unittest.TestCase):
 
     def test_collider_B_does_not_identify_A(self):
         x=build_case(101,"collider_shared_B")
-        self.assertEqual(constraints(x).get("B"),next(iter(x["reverse_proposals"]["B_A"].keys().__iter__())) if False else constraints(x)["B"])
+        self.assertEqual(len(constraints(x)),1)
+        self.assertIn("B",constraints(x))
         self.assertEqual(gold_reference(x),ABSTAIN)
 
     def test_duplicate_source_roots_not_independent(self):
@@ -137,6 +138,12 @@ class R5FCausalMemoryTests(unittest.TestCase):
         d=self.report["arms"]["D_STRONG_EXHAUSTIVE_PROVENANCE"]
         self.assertEqual(a,d)
         self.assertEqual(d["exact_matches"],self.report["heldout_cases"])
+
+    def test_tiny_budget_fails_closed(self):
+        x=build_case(101,"unique_B_only")
+        r=reverse_then_forward(x,budget=1)
+        self.assertTrue(r["budget_exceeded"])
+        self.assertEqual(r["prediction"],ABSTAIN)
 
     def test_all_budget_limits_respected(self):
         for x in self.report["arms"].values():
