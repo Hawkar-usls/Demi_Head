@@ -1,0 +1,81 @@
+name: DemiHead TACHYON R5F - Causal Memory Reconstruction
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5f_causal_memory_audit.py'
+      - 'tests/test_tachyon_r5f_causal_memory_audit.py'
+      - 'research/tachyon/r5f_causal_memory_protocol_20261122.json'
+      - 'research/tachyon/r5f_causal_memory_result_20261122.json'
+      - '.github/workflows/tachyon-r5f-causal-memory.yml'
+  push:
+    branches:
+      - research/tachyon-r5f-causal-memory-reconstruction-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5f_causal_memory_audit.py'
+      - 'tests/test_tachyon_r5f_causal_memory_audit.py'
+      - 'research/tachyon/r5f_causal_memory_protocol_20261122.json'
+      - 'research/tachyon/r5f_causal_memory_result_20261122.json'
+      - '.github/workflows/tachyon-r5f-causal-memory.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  causal-memory-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing repository validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Verify original reference and R5B causal witness controls
+        run: |
+          set -euo pipefail
+          python tools/validate_repository.py
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+          python -m unittest discover -s tests -p 'test_tachyon_r5b_witness_audit.py' -v
+      - name: Test R5F reverse C to A and frozen forward replay
+        run: python -m unittest discover -s tests -p 'test_tachyon_r5f_causal_memory_audit.py' -v
+      - name: Run preregistered five-arm synthetic reconstruction comparison
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5f_causal_memory_audit --audit > out/tachyon/r5f_causal_memory_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('research/tachyon/r5f_causal_memory_protocol_20261122.json').read_text())
+          r=json.loads(Path('out/tachyon/r5f_causal_memory_receipt.json').read_text())
+          assert r['source_blob_sha1']==p['source_of_method']['git_blob_sha1']
+          assert r['heldout_cases']==600 and r['development_cases']==300 and r['validation_cases']==150
+          assert r['all_arms_receive_identical_input']
+          assert r['operation_budget_per_case']==500
+          assert len(r['arms'])==5
+          assert all(v['total']==600 and v['over_budget_cases']==0 for v in r['arms'].values())
+          assert r['arms']['C_REVERSE_PLUS_FORWARD_REPLAY']['unsupported_assertions']==0
+          assert r['arms']['D_STRONG_EXHAUSTIVE_PROVENANCE']['exact_matches']==600
+          assert not r['human_memory_measured'] and not r['physical_reverse_time_measured']
+          assert not r['independent_external_custodian'] and not r['production_weights_changed']
+          for arm,metrics in r['arms'].items():
+              print('R5F_ARM='+arm+',coverage='+str(metrics['coverage'])+
+                    ',selective_accuracy='+str(metrics['selective_accuracy'])+
+                    ',unsupported='+str(metrics['unsupported_assertions'])+
+                    ',mean_ops='+str(metrics['mean_operations_per_case'])+
+                    ',median_us='+str(metrics['median_decision_us']))
+          print('R5F_SYNTHETIC_GAIN_OVER_STRONG_RULE='+str(r['gain_vs_strong_baseline_established']))
+          print('R5F_REVERSE_CAUSAL_MEMORY_ENGINEERING_PASS__SCIENCE_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5f-causal-memory-reconstruction
+          path: out/tachyon/r5f_causal_memory_receipt.json
+          if-no-files-found: error
+          retention-days: 60
