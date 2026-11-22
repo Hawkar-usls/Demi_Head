@@ -1,6 +1,6 @@
 # TACHYON / RETROBOUND R1 — opt-in integration
 
-**Status:** INTEGRATION PROPOSED; NEW TESTS / MC EXPERIMENTS NOT YET EXECUTED; physical science HOLD.
+**Status:** R1 PORT VALIDATED IN GITHUB ACTIONS; 16/16 UNIT TESTS, GOLDEN REPLAY AND TWO PAIRED SYNTHETIC CONTROLS PASS; PHYSICAL SCIENCE HOLD; DRAFT PR NOT MERGED.
 
 This repository is the active JANUS DemiHead TACHYON research home.
 RETROBOUND is a **separate classical mathematical lane**, not an upgrade to
@@ -28,8 +28,8 @@ The prior R5F procedure remains available, independently:
 
     python -m tools.tachyon_experiment_router run --lane r5f-causal-replay
 
-**Never infer that the presence of these commands or a CI PASS means the
-experiments were run in this PR or that any physical effect was demonstrated.**
+**Validation was executed only after the pre-test protocol was committed.**
+CI checks are engineering and mathematical, not an independent physical test. 
 
 ## Three non-interchangeable evidence layers
 
@@ -90,3 +90,31 @@ These identities bind methodology; they do NOT authenticate the original
 simulated conclusions as physically verified. No production weights,
 sensors, human data, GitHub Actions schedules, quantum hardware, or
 autonomous external actions are modified.
+
+## R1 validation receipt (2026-11-23)
+
+The source-preserving port was compared against an independently rerun
+standalone original R1 frozen numeric fixture, with no parameter retuning.
+
+- [Push Actions run](https://github.com/Hawkar-usls/Demi_Head/actions/runs/45081949821) **SUCCESS**, 16/16 unit tests
+- [Pull-request Actions run](https://github.com/Hawkar-usls/Demi_Head/actions/runs/45081955109) **SUCCESS**
+- Nine original-port self checks: **9/9 PASS**
+- Common-choice paired default: **11/11 checks PASS**, T=8, rho=.85, eta=.9, 40,000 accepted histories per arm
+- Common-choice paired alternative: **11/11 checks PASS**, T=5, rho=.65, eta=.7, 10,000 per arm
+- Paired default expected hidden/boundary correlation **0.24524147**:
+  conditional **0.2402**, forward-null **-0.00615**, postselected **0.2430**
+- Default early public parity deltas: **+0.000307**, **-0.004462** and **+0.001770**
+- Paired conditional minus postselection hidden correlation difference **-0.0028**,
+  standard error **0.00686**; the conventional control was not rejected
+- Postselection cost: **1.891875 forward draws per accepted trajectory**,
+  analytic expectation **1.9**
+- The chosen early parity record has **exact TV distance 0 by model symmetry**,
+  which is not a universal prohibition of signalling for other observables.
+
+Full machine-readable result and immutable source/run/artifact identities:
+[retrobound_r1_validation_result_20261123.json](retrobound_r1_validation_result_20261123.json).
+
+**Do not treat passing R1 as physical retrocausality, a future-information
+channel, proof of two-boundary ontology, or authorization to alter production
+models or the frozen R5F track.** The next research gate is prospective,
+independent late physical entropy after externally frozen early observations.
