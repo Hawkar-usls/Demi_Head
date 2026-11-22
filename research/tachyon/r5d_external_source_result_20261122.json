@@ -1,0 +1,99 @@
+{
+  "schema": "janus.demihead.tachyon.r5d.external_source_qualification_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5D-EXTERNAL-SOURCE-QUALIFICATION-2026-11-22",
+  "date": "2026-11-22",
+  "status": "EXTERNAL_PUBLIC_CORPUS_QUALIFICATION_CI_PASS__R5C_OOD__BLIND_GENERALIZATION_HOLD",
+  "repo": "Hawkar-usls/Demi_Head",
+  "branch": "research/tachyon-r5d-external-qualification-20261122",
+  "verified_run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45037692753",
+  "artifact": {
+    "id": 14760029619,
+    "name": "demihead-tachyon-r5d-external-source-qualification",
+    "digest": "sha256:3d043937b264109373a40f54b45082d7d4e87a939d0ea51f598420d6b238e931"
+  },
+  "protocol": "research/tachyon/r5d_external_blind_qualification_protocol_20261122.json",
+  "code": "tools/tachyon_r5d_external_qualification.py",
+  "tests": "tests/test_tachyon_r5d_external_qualification.py",
+  "frozen_model": {
+    "source_main_commit": "b09be91438f63df86b01f239cb46c6520c0c14c9",
+    "module": "tools/tachyon_r5c_observation_native_train.py",
+    "git_blob_sha1": "f535f2337facedcb327d8766658399f8af9a2ec0",
+    "model_weights_unchanged": true
+  },
+  "data_sources": [
+    {
+      "name": "TDT Expert",
+      "repo": "yuchenz/crowdsourced_EN_TDT_corpus",
+      "pinned_commit": "da2a91e7d7edded1b4cf2369e2496cffeb4dfa35",
+      "file": "data/timebank-dense.expert.tdt",
+      "blob_sha1": "6b6d76a270e2ffcfc4a2324ca68c74c9834003c5",
+      "verified_annotation_rows": 822,
+      "license": "BSD-2-Clause",
+      "task": "textual temporal dependency relation"
+    },
+    {
+      "name": "TDT Crowd",
+      "repo": "yuchenz/crowdsourced_EN_TDT_corpus",
+      "pinned_commit": "da2a91e7d7edded1b4cf2369e2496cffeb4dfa35",
+      "file": "data/timebank.crowd.tdt",
+      "blob_sha1": "d0410382f7ef2da368159977198319419163fc9d",
+      "verified_annotation_rows": 3628,
+      "license": "BSD-2-Clause",
+      "task": "textual temporal dependency relation"
+    },
+    {
+      "name": "TORQUE Dev",
+      "repo": "qiangning/TORQUE-dataset",
+      "pinned_commit": "ab27019cc6a317fde3c879900499f02acce8b16d",
+      "file": "data/dev.json",
+      "blob_sha1": "d7ac85423dd40df7c5bfeb637f801a275746858b",
+      "verified_questions": 1483,
+      "license": "Apache-2.0",
+      "task": "temporal ordering questions about passages"
+    },
+    {
+      "name": "TORQUE Test",
+      "repo": "qiangning/TORQUE-dataset",
+      "pinned_commit": "ab27019cc6a317fde3c879900499f02acce8b16d",
+      "file": "data/test.json",
+      "blob_sha1": "acbf618c824753fce67c6fb6f10826141ab0829a",
+      "verified_questions": 4468,
+      "license": "Apache-2.0",
+      "test_gold_in_release": false,
+      "task": "temporal ordering questions without released gold"
+    }
+  ],
+  "engineering_tests": {
+    "R5D_new": 18,
+    "DemiHead_reference": 7,
+    "ci_conclusion": "success",
+    "all_data_blob_sha1_matched": true,
+    "validator_refuses_external_real_text": true
+  },
+  "generalization_exam": {
+    "model_reachable_on_external_input": false,
+    "eligible_examples": 0,
+    "predictions_issued": 0,
+    "accuracy": null,
+    "learned_gain_percentage_points": null,
+    "interpretation": "INADMISSIBLE_INPUT_SCHEMA_NOT_ZERO_PERCENT_ACCURACY",
+    "independence": "Dataset authored by external research teams; not externally blind physical sensor witness evaluation of JANUS",
+    "external_gold_custodian_assigned": false,
+    "external_hidden_gold_obtained": false,
+    "public_test_gold_not_present": true,
+    "actual_physical_witnesses": 0,
+    "scientific_gate": "HOLD_NO_AUTHENTICATED_EXTERNAL_WITNESS_AND_CUSTODIAN"
+  },
+  "safety": {
+    "no_patient_data_ingested": true,
+    "no_time_travel_inference": true,
+    "no_subjective_consciousness_classification": true,
+    "no_production_code_modified": true,
+    "no_external_corpus_copied_into_JANUS": true
+  },
+  "next": [
+    "Secure independent custodian willing to author new authentic independent timestamped observation pairs and retain hidden adjudication.",
+    "Freeze compatible scoring interface and signed R5C checkpoint before dataset reveal; do not backfill event IDs/status or turn gold temporal relation into synthetic timestamps.",
+    "Run paired R5C vs strong R5B rules only when externally authenticated independent witnesses exist; score coverage, selective accuracy, unsupported claims and compute."
+  ]
+}

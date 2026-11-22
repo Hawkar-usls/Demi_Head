@@ -1,0 +1,98 @@
+name: DemiHead TACHYON R5D - External Source Qualification
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5d_external_qualification.py'
+      - 'tests/test_tachyon_r5d_external_qualification.py'
+      - 'research/tachyon/r5d_external_blind_qualification_protocol_20261122.json'
+      - 'research/tachyon/r5d_external_source_result_20261122.json'
+      - '.github/workflows/tachyon-r5d-external-qualification.yml'
+  push:
+    branches:
+      - research/tachyon-r5d-external-qualification-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5d_external_qualification.py'
+      - 'tests/test_tachyon_r5d_external_qualification.py'
+      - 'research/tachyon/r5d_external_blind_qualification_protocol_20261122.json'
+      - 'research/tachyon/r5d_external_source_result_20261122.json'
+      - '.github/workflows/tachyon-r5d-external-qualification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  external-qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout unchanged research-only DemiHead
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout independent TDT annotations pinned to upstream commit
+        uses: actions/checkout@v4
+        with:
+          repository: yuchenz/crowdsourced_EN_TDT_corpus
+          ref: da2a91e7d7edded1b4cf2369e2496cffeb4dfa35
+          path: _external_tdt
+          persist-credentials: false
+      - name: Checkout independent TORQUE dataset pinned to upstream commit
+        uses: actions/checkout@v4
+        with:
+          repository: qiangning/TORQUE-dataset
+          ref: ab27019cc6a317fde3c879900499f02acce8b16d
+          path: _external_torque
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install checked-in repository validation requirements
+        run: python -m pip install -r requirements-dev.txt
+      - name: Confirm source pins, frozen R5C and repository safety
+        run: |
+          set -euo pipefail
+          python tools/validate_repository.py
+          test "$(git hash-object tools/tachyon_r5c_observation_native_train.py)" = "f535f2337facedcb327d8766658399f8af9a2ec0"
+          test "$(git -C _external_tdt rev-parse HEAD)" = "da2a91e7d7edded1b4cf2369e2496cffeb4dfa35"
+          test "$(git -C _external_torque rev-parse HEAD)" = "ab27019cc6a317fde3c879900499f02acce8b16d"
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+          python -m unittest discover -s tests -p 'test_tachyon_r5d_external_qualification.py' -v
+      - name: Verify external corpus annotations and fail closed without compatible witness inputs
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5d_external_qualification --qualify --tdt-root _external_tdt --torque-root _external_torque > out/tachyon/r5d_external_source_qualification_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("out/tachyon/r5d_external_source_qualification_receipt.json").read_text())
+          protocol=json.loads(Path("research/tachyon/r5d_external_blind_qualification_protocol_20261122.json").read_text())
+          assert len(r["datasets"]) == 4
+          assert all(x["blob_sha1"] for x in r["datasets"].values())
+          assert r["tdt"]["expert"]["rows"] > 0 and r["tdt"]["crowd"]["rows"] > 0
+          assert r["torque"]["dev"]["questions"] > 0 and r["torque"]["test"]["questions"] > 0
+          assert r["torque"]["test"]["answer_field_occurrences"] == 0
+          assert r["r5c_frozen_model"]["r5c_safe_real_text_rejection"]
+          assert r["r5c_frozen_model"]["eligible_instances"] == 0
+          assert r["r5c_frozen_model"]["predictions_executed"] == 0
+          assert r["r5c_frozen_model"]["accuracy"] is None
+          assert r["r5c_frozen_model"]["learned_gain_percentage_points"] is None
+          assert not r["external_blind_model_exam_completed"] and not r["independent_custodian"]
+          assert not r["model_weights_updated"] and not r["clinical_data_ingested"]
+          assert not r["physical_retrocausality_proven"]
+          print("R5D_TDT_EXPERT_ROWS="+str(r["tdt"]["expert"]["rows"]))
+          print("R5D_TDT_CROWD_ROWS="+str(r["tdt"]["crowd"]["rows"]))
+          print("R5D_TORQUE_DEV_QUESTIONS="+str(r["torque"]["dev"]["questions"]))
+          print("R5D_TORQUE_TEST_QUESTIONS="+str(r["torque"]["test"]["questions"]))
+          print("R5D_CORPUS_BLOBS="+json.dumps({k:v["blob_sha1"] for k,v in r["datasets"].items()},sort_keys=True))
+          print("R5D_EXTERNAL_SOURCE_QUALIFICATION_PASS__MODEL_BLIND_EXAM_SCIENTIFIC_HOLD")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5d-external-source-qualification
+          path: out/tachyon/r5d_external_source_qualification_receipt.json
+          if-no-files-found: error
+          retention-days: 60

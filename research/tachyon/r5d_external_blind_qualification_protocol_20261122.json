@@ -1,0 +1,95 @@
+{
+  "schema": "janus.demihead.tachyon.r5d.external_blind_generalization_qualification.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5D-EXTERNAL-BLIND-QUALIFICATION-2026-11-22",
+  "date": "2026-11-22",
+  "preregistered_status": "FROZEN_BEFORE_DATA_QUALIFICATION_CI__NO_BLIND_SCORE",
+  "problem": "R5C learns synthetic structured sensor witnesses (paired event slots, two source roots, clock quality and physical timestamps). A valid independent challenge must measure evidence-based chronological inference without fabricating sensor input fields, known event identities or hidden labels.",
+  "fixed_model": {
+    "repository": "Hawkar-usls/Demi_Head",
+    "source_commit": "b09be91438f63df86b01f239cb46c6520c0c14c9",
+    "source_file": "tools/tachyon_r5c_observation_native_train.py",
+    "source_git_blob_sha1": "f535f2337facedcb327d8766658399f8af9a2ec0",
+    "checkpoint_policy": "No retraining, no hyperparameter or selective-confidence adjustment using external corpus labels. Frozen code and interface.",
+    "synthetic_only_runtime_gate": true
+  },
+  "candidate_public_external_corpora": [
+    {
+      "id": "TDT_EXPERT_AND_CROWD",
+      "author": "Yuchen Zhang and Nianwen Xue et al., 2019, Temporal Dependency Tree",
+      "repo": "yuchenz/crowdsourced_EN_TDT_corpus",
+      "commit": "da2a91e7d7edded1b4cf2369e2496cffeb4dfa35",
+      "files": [
+        {
+          "path": "data/timebank-dense.expert.tdt",
+          "blob_sha1": "6b6d76a270e2ffcfc4a2324ca68c74c9834003c5"
+        },
+        {
+          "path": "data/timebank.crowd.tdt",
+          "blob_sha1": "d0410382f7ef2da368159977198319419163fc9d"
+        }
+      ],
+      "license": "BSD-2-Clause",
+      "external_author": true,
+      "labels": "Expert and crowdsourced textual event-time dependencies, e.g. before/after/overlap",
+      "compatibility": "DIFFERENT_TASK__NO_PHYSICAL_SENSOR_WITNESS_PAIR",
+      "blind_custodian": "NO"
+    },
+    {
+      "id": "TORQUE_TEMPORAL_ORDERING",
+      "author": "Qiang Ning et al., EMNLP 2020",
+      "repo": "qiangning/TORQUE-dataset",
+      "commit": "ab27019cc6a317fde3c879900499f02acce8b16d",
+      "files": [
+        {
+          "path": "data/dev.json",
+          "blob_sha1": "d7ac85423dd40df7c5bfeb637f801a275746858b"
+        },
+        {
+          "path": "data/test.json",
+          "blob_sha1": "acbf618c824753fce67c6fb6f10826141ab0829a"
+        }
+      ],
+      "license": "Apache-2.0",
+      "external_author": true,
+      "labels": "Temporal ordering question answering about passages, not sensor witness chronology",
+      "hidden_test_answers": "Author README says all test annotations have been removed. Leaderboard/custodian needed for gold.",
+      "compatibility": "DIFFERENT_TASK__NO_MODEL_ANSWER_FORMAT_FOR_TORQUE",
+      "blind_custodian": "NO_EXTERNAL_CUSTODY_FOR_JANUS"
+    }
+  ],
+  "qualification_method": {
+    "checkout": "GitHub Actions read-only checkout of two public external repos at immutable commit SHA",
+    "integrity": "Recompute git-blob SHA-1 of each external annotation file and fail if unexpected",
+    "external_data_rules": "No original articles or annotated question answers committed back to JANUS, only aggregate counts and source SHA256",
+    "source_checks": "TDT nine-column tab-separated annotation integrity and relation counts; TORQUE passage/question schema, test gold absence",
+    "model_admission": "Frozen R5C refuses any non-synthetic or unadapted external text; do not fill fields with predicted or expected labels.",
+    "output": "JSON receipt with qualified sources and zero eligible model examples unless independently specified compatible witness adapter exists",
+    "forbidden": "No backdoor conversion textual BEFORE/AFTER relations into independent physical sensor readings; no synthetic_only override; no unauthorized labels or time travel claims."
+  },
+  "required_genuine_blind_experiment": {
+    "independent_source_contract": "Externally authenticated origin records with two evidence roots of verified independence, witness sensor clock calibration and capture vs arrival timestamp separation; no direct event ID or known target label in visible inputs",
+    "external_custodian": "Custodian prepares unseen cases, holds adjudication gold and release commitment; prevents authors from inspecting labels before frozen prediction submission",
+    "precommit": "Container digest, exact frozen weights and code hashes, inference cost budget, outcomes, abstention threshold and paired adjudication preregistered prior to gold release",
+    "original_task": "Chronological evidence-based inference, not textual QA relabeled as physical observation",
+    "baselines": "Frozen transparent R5B witness rule, single-clock weak baseline and always-abstain",
+    "primary_metrics": [
+      "Paired selective-accuracy difference at equivalent safe coverage",
+      "Unsupported confident assertion count",
+      "Coverage with noninferior safety against strong rules",
+      "Independent family/root split and source checks"
+    ],
+    "secondary_metrics": [
+      "Runtime and full training/inference costs",
+      "Equalized compute accounting",
+      "Stratified timestamps/contradiction uncertainty",
+      "Paired uncertainty interval and sensitivity to shared-source dependence"
+    ],
+    "gold_reveal": "Independent custodian scores immutable predictions only after receiving signed/no-edit prediction digest",
+    "scientific_pass_condition": "Requires actual externally hidden compatible witness records and demonstrated benefit over strong rules without extra unsupported claims; without data no pass/fail on generalization."
+  },
+  "expected_qualifier_result": "PUBLIC_EXTERNAL_DATA_VERIFIED__MODEL_INELIGIBLE_FOR_THESE_SCHEMAS__SCIENTIFIC_HOLD",
+  "scientific_gate": "HOLD_NO_COMPATIBLE_EXTERNAL_WITNESS_CASES_OR_CUSTODIAN",
+  "no_clinical_or_human_subject_data_aspired": true,
+  "no_production_weights_changed": true,
+  "physical_retrocausality_unproven": true
+}
