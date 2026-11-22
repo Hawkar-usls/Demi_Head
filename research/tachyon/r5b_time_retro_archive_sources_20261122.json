@@ -1,0 +1,153 @@
+{
+  "schema": "janus.demihead.tachyon.r5b.retrocausality_time_source_manifest.v1",
+  "artifact_id": "DEMIHEAD_TACHYON_R5B_TIME_RETRO_ARCHIVE_2026-11-22",
+  "as_of": "2026-11-22",
+  "repository": "Hawkar-usls/janus-meta-registry",
+  "ref": "main",
+  "selection_method": "Read-only paths and current blob SHA verified in connected GitHub; selection restricted to research/epistemic/provenance relevance, not all registry mentions of time.",
+  "source_count": 15,
+  "source_files": [
+    {
+      "name": "Retro-Tahyon.json",
+      "path": "data/Retro-Tahyon.json",
+      "blob_sha": "2510b5ae1fcc375e5b336644683b32945a83c745",
+      "archival_status": "ARCHIVAL_SIGNAL_FOUND__PHYSICAL_TACHYON_NOT_DETECTED__OPERATIONAL_RETROCAUSALITY_NOT_ESTABLISHED",
+      "role": "ARCHIVAL_BOUNDARY",
+      "how_r5b_uses_it": "Distinguish historical documents, hypotheses and actual testable retrocausal signals",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/Retro-Tahyon.json"
+    },
+    {
+      "name": "Janus_Time.json",
+      "path": "data/Janus_Time.json",
+      "blob_sha": "26f3164d9c57b5242c784fd316b82868fa984391",
+      "archival_status": "COMPRESSED_ARCHIVE_CONTENT_NOT_FULLY_EXPANDED",
+      "role": "TIME_ONTOLOGY",
+      "how_r5b_uses_it": "Time glossary and categories; no unverified compressed claim promoted",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/Janus_Time.json"
+    },
+    {
+      "name": "OPEN-009 prereg",
+      "path": "data/experiments/JANUS-OPEN-CAUSALITY-009-PREREG-2026-11-10-v1.json",
+      "blob_sha": "3702f76b5499b7c414f979e1a4a4c3027b684199",
+      "archival_status": "FROZEN_DESIGN__NO_TARGET_FORECAST_SCORED_YET",
+      "role": "FUTURE_BLIND_DESIGN",
+      "how_r5b_uses_it": "Prospective precommit is distinct from retrospective report",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/experiments/JANUS-OPEN-CAUSALITY-009-PREREG-2026-11-10-v1.json"
+    },
+    {
+      "name": "OPEN-009D baseline prereg",
+      "path": "data/experiments/JANUS-OPEN-CAUSALITY-009D-INDEPENDENT-BASELINE-PREREG-2026-11-10.json",
+      "blob_sha": "bfb93725282e45f8d05b5a64953a70478a007658",
+      "archival_status": "PUBLIC_PRECOMMIT_FROZEN__ALL_TARGET_OBSERVATIONS_FUTURE",
+      "role": "BASELINE_PRECOMMIT",
+      "how_r5b_uses_it": "Independent baseline and frozen source timing",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/experiments/JANUS-OPEN-CAUSALITY-009D-INDEPENDENT-BASELINE-PREREG-2026-11-10.json"
+    },
+    {
+      "name": "ZENO drand null",
+      "path": "data/experiments/JANUS-ZENO-TEMPORAL-003-BLIND-DRAND-2026-11-09-v1.json",
+      "blob_sha": "9b262268c488c1a9f890d7177908ea446b606900",
+      "archival_status": "BLINDED_EXTERNAL_FUTURE_BEACON_NULL_CONTROL_COMPLETE__NO_RETROCAUSAL_SIGNAL_EVIDENCE",
+      "role": "REAL_NEGATIVE_CONTROL",
+      "how_r5b_uses_it": "Null control prohibits claims of information from future",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/experiments/JANUS-ZENO-TEMPORAL-003-BLIND-DRAND-2026-11-09-v1.json"
+    },
+    {
+      "name": "Entropy Time Causality synthesis",
+      "path": "data/JANUS-ENTROPY-TIME-CAUSALITY-REGISTRY-SYNTHESIS-2026-11-01-v1.0.json",
+      "blob_sha": "4c362e770279ac2968d2295d0b333349242c1b3d",
+      "archival_status": "SYNTHESIS_NO_EMPIRICAL_PHYSICAL_TIME_REVERSAL",
+      "role": "EPISTEMIC_MAP",
+      "how_r5b_uses_it": "Separate theoretical models and internal synthesis from confirmed physical effects",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/JANUS-ENTROPY-TIME-CAUSALITY-REGISTRY-SYNTHESIS-2026-11-01-v1.0.json"
+    },
+    {
+      "name": "Today tomorrow forward control",
+      "path": "data/JANUS-TODAY-SIGNAL-FOR-TOMORROW-FORWARD-CAUSAL-CONTROL-2026-09-01-v1.0.json",
+      "blob_sha": "d21f9b959d612e016e7080b675e077dc4b6dd74f",
+      "archival_status": "FROZEN_TODAY_FOR_TOMORROW__FORWARD_CAUSAL_POSITIVE_CONTROL",
+      "role": "RELATIVE_DAY_RELABELLING",
+      "how_r5b_uses_it": "Tomorrow's retrospective label does not move a physical event",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/JANUS-TODAY-SIGNAL-FOR-TOMORROW-FORWARD-CAUSAL-CONTROL-2026-09-01-v1.0.json"
+    },
+    {
+      "name": "Distributed arrival inversion",
+      "path": "data/JANUS-TAHYON-TRAVELER-DISTRIBUTED-TIME-ARRIVAL-ORDER-INVERSION-v1.0.json",
+      "blob_sha": "95c40449eda46e31216cac97ef9f8582a4243c0e",
+      "archival_status": "OBSERVED_DISTRIBUTED_TIMING_ORDER_INVERSION_NOT_PHYSICAL_RETROCAUSALITY",
+      "role": "LOG_ORDER_CONFOUND",
+      "how_r5b_uses_it": "Scheduler/arrival event order is not necessarily causal time order",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/JANUS-TAHYON-TRAVELER-DISTRIBUTED-TIME-ARRIVAL-ORDER-INVERSION-v1.0.json"
+    },
+    {
+      "name": "Scheduler/Git split",
+      "path": "registry/causal_topology/JANUS-DISTRIBUTED-TIME-SCHEDULER-GIT-VISIBILITY-SPLIT-v1.3.0.json",
+      "blob_sha": "62bd3aeecf5d0723ee5e20acb8e3b3c8aca6dd0b",
+      "archival_status": "OBSERVATIONAL_CANDIDATE_NOT_PHYSICAL_RETROCAUSALITY",
+      "role": "VISIBILITY_DELAY",
+      "how_r5b_uses_it": "Git materialization, scheduler status and event timestamps are separate layers",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/registry/causal_topology/JANUS-DISTRIBUTED-TIME-SCHEDULER-GIT-VISIBILITY-SPLIT-v1.3.0.json"
+    },
+    {
+      "name": "Witness consistency",
+      "path": "registry/causal_topology/JANUS-CAUSAL-CONSISTENCY-WITNESS-FRAMEWORK-v1.0.0.json",
+      "blob_sha": "c6a6f1a30fd1ebee1cd647642832e13106940f23",
+      "archival_status": "FRAMEWORK_NOT_INDEPENDENT_PHYSICAL_DISCOVERY",
+      "role": "CONTRADICTORY_SOURCES",
+      "how_r5b_uses_it": "Separate correlated copies, consistency and traceable witnesses",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/registry/causal_topology/JANUS-CAUSAL-CONSISTENCY-WITNESS-FRAMEWORK-v1.0.0.json"
+    },
+    {
+      "name": "Independent future no-go",
+      "path": "registry/causal_topology/JANUS-INDEPENDENT-FUTURE-NO-GO-HARDENING-v0.5.0.json",
+      "blob_sha": "6ba0ba937f1bbe4fcb7181f44b265a0312ae9ec9",
+      "archival_status": "MODEL_PROTOCOL_NOT_PHYSICAL_DEMONSTRATION",
+      "role": "INDEPENDENT_CHOICE",
+      "how_r5b_uses_it": "Require truly independent future target before temporal inference",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/registry/causal_topology/JANUS-INDEPENDENT-FUTURE-NO-GO-HARDENING-v0.5.0.json"
+    },
+    {
+      "name": "D separation",
+      "path": "data/proofs/JANUS-CAUSAL-ISOLATION-DSEPARATION-HARDENING-v0.8.json",
+      "blob_sha": "a4e18d54f7b93a7b0b87b5751c3f105f741fb3f9",
+      "archival_status": "PASS_CAUSAL_MODEL_ISOLATION_GATE_AND_COUNTEREXAMPLES",
+      "role": "COLLIDER_COMMON_CAUSE",
+      "how_r5b_uses_it": "Avoid counting dependent witnesses as independent evidence",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/proofs/JANUS-CAUSAL-ISOLATION-DSEPARATION-HARDENING-v0.8.json"
+    },
+    {
+      "name": "Rule 001",
+      "path": "data/JANUS-RULE-001-FIRST-PERSON-TEMPORAL-CONSTRUCTION-2026-11-22-v1.0.json",
+      "blob_sha": "8913375012e76dc236ffb49e21a293606ba753b8",
+      "archival_status": "FIRST_PERSON_HYPOTHESIS_NO_PHYSICAL_OVERRIDE",
+      "role": "MEMORY_TIME_DISTINCTION",
+      "how_r5b_uses_it": "First-person time label and externally observed clock are non-identical evidence",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/JANUS-RULE-001-FIRST-PERSON-TEMPORAL-CONSTRUCTION-2026-11-22-v1.0.json"
+    },
+    {
+      "name": "EYE competing models",
+      "path": "EYE/r4_7_rt/retro_tahyon_competing_model_benchmark.json",
+      "blob_sha": "8609731b3cb3768b41dc738039247dde1956d745",
+      "archival_status": "COMPETING_MODEL_RESEARCH_CONTRACT",
+      "role": "BENCHMARK_ABLATION",
+      "how_r5b_uses_it": "Compare conventional control explanations before considering exotic hypotheses",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/EYE/r4_7_rt/retro_tahyon_competing_model_benchmark.json"
+    },
+    {
+      "name": "Ramanujan time density analogy",
+      "path": "data/JANUS-RAMANUJAN-TIME-DENSITY-FORMAL-ANALOGIES-v1.1.json",
+      "blob_sha": "1de6d64b4b9452a6d5451821d0bc3e5b2c3d8e9d",
+      "archival_status": "MATHEMATICAL_ANALOGY_NOT_VALIDATED_COGNITIVE_MODEL",
+      "role": "SUBJECTIVE_TIME_HYPOTHESIS",
+      "how_r5b_uses_it": "An analogy about time density is not direct patient evidence",
+      "url": "https://github.com/Hawkar-usls/janus-meta-registry/blob/main/data/JANUS-RAMANUJAN-TIME-DENSITY-FORMAL-ANALOGIES-v1.1.json"
+    }
+  ],
+  "experiment_relation": "Archive records justify negative controls and source-identity distinctions, not new future observations. R5B challenge is newly synthesized and does not use archival hypotheses as training labels.",
+  "archive_boundary": "Janus_Time.json contents are compressed; archived claims beyond visible wrapper not independently decoded during this inventory.",
+  "source_rights": "No private experimental participant records imported; only published repository public textual JSON metadata.",
+  "scientific_ceiling": "NO_PHYSICAL_RETROCAUSAL_CHANNEL_OR_TIMELESS_CONSCIOUSNESS_ESTABLISHED",
+  "new_peer_review_evidence": false,
+  "source_independent_external_reviewer": false,
+  "production_edits": false
+}
