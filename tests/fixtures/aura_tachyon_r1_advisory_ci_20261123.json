@@ -14,7 +14,7 @@
       "paired_difference": -0.0076000000000000095,
       "paired_standard_error": 0.014085952768859501,
       "paired_z": -0.539544617585379,
-      "public_parity_tv": 0,
+      "public_parity_tv": 0.0,
       "rho": 0.65,
       "steps": 5,
       "theory": 0.08122034375000001
@@ -31,7 +31,7 @@
       "paired_difference": -0.002799999999999997,
       "paired_standard_error": 0.006857549099313197,
       "paired_z": -0.40830914360940196,
-      "public_parity_tv": 0,
+      "public_parity_tv": 0.0,
       "rho": 0.85,
       "steps": 8,
       "theory": 0.2452414725351562
