@@ -1,0 +1,59 @@
+{
+  "schema": "janus.demihead.tachyon.r5e.subjective_180_order_reversal_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5E-180-SUBJECTIVE-ORDER-REVERSAL-2026-11-22",
+  "date": "2026-11-22",
+  "status": "ENGINEERING_SYNTHETIC_CI_PASS__REPORTED_180_REVERSAL_GUARD_PASS__SCIENCE_HOLD",
+  "research_branch": "research/tachyon-r5e-subjective-180-reversal-20261122",
+  "source_repo": "Hawkar-usls/Demi_Head",
+  "code_path": "tools/tachyon_r5e_180_order_reversal.py",
+  "test_path": "tests/test_tachyon_r5e_180_order_reversal.py",
+  "protocol_path": "research/tachyon/r5e_subjective_180_order_reversal_protocol_20261122.json",
+  "run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45040004500",
+  "artifact": {
+    "name": "demihead-tachyon-r5e-180-subjective-order",
+    "id": 14761231514,
+    "sha256": "9e58101da842201b6ac496347900c08a88a18c66596a19383fa8a2647d135d5e"
+  },
+  "testing": {
+    "cases": 384,
+    "synthetic_scenarios": 16,
+    "synthetic_families": 24,
+    "new_tests_pass": 29,
+    "existing_R5B_tests_pass": 26,
+    "original_reference_tests_pass": 7
+  },
+  "arms": {
+    "verified_guard": {
+      "exact_correct": 384,
+      "total": 384,
+      "coverage": 0.5625,
+      "answered": 216,
+      "abstained": 168,
+      "selective_accuracy": 1,
+      "unsupported_180_reversal_claims": 0
+    },
+    "naive_reverse_report": {
+      "unsupported_180_reversal_claims": 168,
+      "interpretation": "Mistakenly equates reverse retelling, presentation, future plans, missing/wrong clocks and other unsuitable reports with reversed temporal judgment."
+    },
+    "always_abstain": {
+      "answered": 0,
+      "coverage": 0,
+      "selective_accuracy": null
+    }
+  },
+  "interpretation_ru": "Условные «180°» — точный реверс перестановки субъективно *сообщаемого временного суждения* C-B-A относительно зафиксированной последовательности физических событий A-B-C. Это не прямое измерение феноменального восприятия течения времени; воспоминание в обратном порядке или обратная демонстрация событий помечаются отдельно. Разные одинаковые по содержанию события сохраняют разные уникальные идентификаторы. Утверждать обратный ход физических часов или ретрокаузальность запрещено.",
+  "scientific_boundaries": {
+    "trained_model_updated": false,
+    "production_DemiHead_model_modified": false,
+    "real_patient_data": false,
+    "real_first_person_subjective_experience_measured": false,
+    "physical_time_reversal_observed": false,
+    "retrocausal_information_transfer_established": false,
+    "independently_authenticated_external_witnesses": false,
+    "external_blind_generalization_evidence": false,
+    "new_neural_gain_established": false,
+    "scientific_gate": "HOLD_ONLY_SYNTHETIC_REPORTED_ORDER_PROXY"
+  },
+  "required_next": "If a participant study is ethically authorized, independently measure actual order judgments versus retelling/presentation controls with externally verified event timestamps, preregister scoring and account for repeated identical stimuli; do not promote a synthetic proxy to evidence of timeless consciousness."
+}
