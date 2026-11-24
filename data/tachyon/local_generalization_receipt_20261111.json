@@ -1,0 +1,258 @@
+{
+  "schema": "janus.demihead.tachyon.generalization.v2",
+  "model_name": "Tachyon",
+  "version": "TACHYON-0.2-NUMERIC-CAUSAL",
+  "source": {
+    "record_id": "JANUS-TIME-HOMODEUS-PwOk0GKDv9c-20261111",
+    "sha256": "44c1030da28ecea4ca1fc6891dea34a63445f9a981e2387b1e4bf4d189f43409",
+    "use": "physics_equation_provenance; source_narrative_not_presented_as_numerical_measurements"
+  },
+  "task": {
+    "inputs": [
+      "q=c*delta_t/delta_x",
+      "beta=v/c"
+    ],
+    "constraints": "delta_t>0, delta_x>0, 0<=beta<1",
+    "outputs": [
+      "reverse_coordinate_order",
+      "spacelike_interval"
+    ],
+    "label_rules": [
+      "beta>q",
+      "q<1"
+    ],
+    "physical_signal_claim": "NONE; coordinate ordering is not controllable FTL"
+  },
+  "train": {
+    "n": 7000,
+    "epochs_budget": 20,
+    "best_epoch_on_tuning_only": 7,
+    "seed": 20261111,
+    "tuning_examples": 1500,
+    "samples_are_synthetic_from_exact_formula": true,
+    "time_labels_as_input": false,
+    "trained_on_holdout": false,
+    "train_beta_range": [
+      0.03,
+      0.85
+    ],
+    "history": [
+      {
+        "epoch": 1,
+        "tuning_loss_sum": 0.419814
+      },
+      {
+        "epoch": 2,
+        "tuning_loss_sum": 0.206487
+      },
+      {
+        "epoch": 3,
+        "tuning_loss_sum": 0.101457
+      },
+      {
+        "epoch": 4,
+        "tuning_loss_sum": 0.06553
+      },
+      {
+        "epoch": 5,
+        "tuning_loss_sum": 0.08729
+      },
+      {
+        "epoch": 6,
+        "tuning_loss_sum": 0.053064
+      },
+      {
+        "epoch": 7,
+        "tuning_loss_sum": 0.033945
+      },
+      {
+        "epoch": 8,
+        "tuning_loss_sum": 0.08744
+      },
+      {
+        "epoch": 9,
+        "tuning_loss_sum": 0.041663
+      },
+      {
+        "epoch": 10,
+        "tuning_loss_sum": 0.059733
+      },
+      {
+        "epoch": 11,
+        "tuning_loss_sum": 0.04528
+      },
+      {
+        "epoch": 12,
+        "tuning_loss_sum": 0.041806
+      },
+      {
+        "epoch": 13,
+        "tuning_loss_sum": 0.062873
+      },
+      {
+        "epoch": 14,
+        "tuning_loss_sum": 0.044771
+      },
+      {
+        "epoch": 15,
+        "tuning_loss_sum": 0.062203
+      },
+      {
+        "epoch": 16,
+        "tuning_loss_sum": 0.038353
+      },
+      {
+        "epoch": 17,
+        "tuning_loss_sum": 0.06166
+      },
+      {
+        "epoch": 18,
+        "tuning_loss_sum": 0.080858
+      },
+      {
+        "epoch": 19,
+        "tuning_loss_sum": 0.078127
+      },
+      {
+        "epoch": 20,
+        "tuning_loss_sum": 0.088723
+      }
+    ]
+  },
+  "architecture": {
+    "type": "torch TransformerEncoder numerical tokens",
+    "parameters": 8802,
+    "layers": 1,
+    "heads": 4,
+    "width": 32
+  },
+  "holdout": {
+    "iid": {
+      "reverse_coordinates": {
+        "count": 2500,
+        "positive_fraction": 0.3408,
+        "accuracy": 0.9852,
+        "brier": 0.007849,
+        "logloss": 0.027044,
+        "majority_class_accuracy": 0.6592,
+        "majority_class_brier": 0.224655
+      },
+      "spacelike": {
+        "count": 2500,
+        "positive_fraction": 0.7604,
+        "accuracy": 0.9972,
+        "brier": 0.002611,
+        "logloss": 0.012744,
+        "majority_class_accuracy": 0.7604,
+        "majority_class_brier": 0.182192
+      }
+    },
+    "new_beta_band": {
+      "reverse_coordinates": {
+        "count": 2000,
+        "positive_fraction": 0.5385,
+        "accuracy": 0.975,
+        "brier": 0.016237,
+        "logloss": 0.050636,
+        "majority_class_accuracy": 0.5385,
+        "majority_class_brier": 0.248518
+      },
+      "spacelike": {
+        "count": 2000,
+        "positive_fraction": 0.6335,
+        "accuracy": 0.9965,
+        "brier": 0.003614,
+        "logloss": 0.018237,
+        "majority_class_accuracy": 0.6335,
+        "majority_class_brier": 0.232178
+      }
+    },
+    "order_boundary": {
+      "reverse_coordinates": {
+        "count": 1500,
+        "positive_fraction": 0.484,
+        "accuracy": 0.934,
+        "brier": 0.043648,
+        "logloss": 0.153988,
+        "majority_class_accuracy": 0.516,
+        "majority_class_brier": 0.249744
+      },
+      "spacelike": {
+        "count": 1500,
+        "positive_fraction": 1.0,
+        "accuracy": 1.0,
+        "brier": 1e-06,
+        "logloss": 0.000531,
+        "majority_class_accuracy": 1.0,
+        "majority_class_brier": 0.0
+      }
+    },
+    "lightcone_boundary": {
+      "reverse_coordinates": {
+        "count": 1500,
+        "positive_fraction": 0.0,
+        "accuracy": 1.0,
+        "brier": 0.0,
+        "logloss": 0.000314,
+        "majority_class_accuracy": 1.0,
+        "majority_class_brier": 0.0
+      },
+      "spacelike": {
+        "count": 1500,
+        "positive_fraction": 0.500667,
+        "accuracy": 0.984,
+        "brier": 0.042725,
+        "logloss": 0.189544,
+        "majority_class_accuracy": 0.500667,
+        "majority_class_brier": 0.25
+      }
+    }
+  },
+  "source_sweep_sanity": {
+    "points": 6,
+    "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ],
+    "predicted": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ],
+    "correct": 6,
+    "probabilities": [
+      0.005141,
+      0.001088,
+      0.404104,
+      0.998673,
+      0.999411,
+      0.999451
+    ]
+  },
+  "baselines": {
+    "analytic_formula_accuracy": 1.0,
+    "majority_class_per_holdout": true,
+    "narrative_order_v0_1_holdout_accuracy": 0.5
+  },
+  "gate": {
+    "definition": "iid both>=0.95, new beta reverse>=0.90, order boundary reverse>=0.80, lightcone boundary spacelike>=0.80, video sweep >=5/6",
+    "passed": true,
+    "training_admission": false,
+    "status": "RESEARCH_NUMERIC_GATE_PASS_NO_EXTERNAL_VALIDATION"
+  },
+  "limitations": [
+    "synthetic equations only, not independent laboratory measurements",
+    "not proof of novelty, time travel, FTL, or retrocausality",
+    "not evidence that narrative ordering on heldout video segments improved",
+    "numeric extrapolation outside declared ranges not established"
+  ],
+  "authority_delta": 0,
+  "external_effects": false
+}

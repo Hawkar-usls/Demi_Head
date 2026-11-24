@@ -1,0 +1,37 @@
+{
+  "authority_delta": 0,
+  "baseline": "GR_GRAVITATIONAL_REDSHIFT_g_delta_h_over_c_squared",
+  "external_effects": false,
+  "external_validation_status": "PUBLISHED_AGGREGATE_CHECK_ONLY__RAW_MEASUREMENT_VALIDATION_OPEN",
+  "future_information_claim": false,
+  "input_sha256": "6744b9d25abb32829aea2b5bee40f69912d12df81008371606c351a1e30389a4",
+  "raw_independent_reproductions": 0,
+  "rows": [
+    {
+      "id": "CHOU_NIST_2010",
+      "reason": "PUBLISHED_SUMMARY_ONLY_WITHOUT_EXACT_MEASUREMENT_AND_UNCERTAINTY",
+      "scored": false
+    },
+    {
+      "consistent_with_baseline_at_2sigma": true,
+      "data_class": "PUBLISHED_AGGREGATE_NOT_RAW_TIME_SERIES",
+      "id": "TOKYO_SKYTREE_2020",
+      "observed_in_1e18": 49337.8,
+      "observed_sigma_in_1e18": 4.3,
+      "published_geodetic_prediction_in_1e18": 49337.1,
+      "reconstructed_weak_field_prediction_in_1e18": 49337.076,
+      "reported_combined_uncertainty_z": 0.15479,
+      "scored": true
+    },
+    {
+      "id": "BOTHWELL_JILA_2022",
+      "reason": "PUBLISHED_SUMMARY_ONLY_WITHOUT_EXACT_MEASUREMENT_AND_UNCERTAINTY",
+      "scored": false
+    }
+  ],
+  "schema": "janus.demihead.tachyon.clock_benchmark.v1",
+  "scoreable_published_aggregates": 1,
+  "source_laboratories": 3,
+  "tachyon_neural_model_evaluated": false,
+  "tachyon_trained_on_clock_studies": false
+}

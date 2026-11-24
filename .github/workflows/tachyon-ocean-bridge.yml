@@ -1,0 +1,148 @@
+name: JANUS Tachyon × Ocean 009B read-only shadow bridge
+on:
+  pull_request:
+    paths:
+      - 'tachyon/ocean_link.py'
+      - 'tests/test_tachyon_ocean_link.py'
+      - 'docs/TACHYON_OCEAN_LINK.md'
+      - '.github/workflows/tachyon-ocean-bridge.yml'
+  workflow_dispatch:
+    inputs:
+      ocean_run_id:
+        description: 'Optional Ocean 009B early GitHub Actions run ID (public)' 
+        required: false
+        type: string
+        default: ''
+      target_date:
+        description: 'UTC cohort YYYY-MM-DD between 2026-11-12 and 2026-11-19'
+        required: false
+        type: string
+        default: ''
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tachyon-ocean-shadow-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  safety-and-shadow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      GH_TOKEN: ${{ github.token }}
+      OCEAN_SOURCE_SHA: '2eb40f516ca53d56141b5408f2e5c241f75fd936'
+      OCEAN_RUN_ID: ${{ inputs.ocean_run_id }}
+      TARGET_DATE: ${{ inputs.target_date }}
+    steps:
+      - name: Read local Tachyon code (not production authority)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pin canonical TOPA validation code
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/TOPA
+          ref: 98a92e8abb4f05c41aae2921f0d956a210a74429
+          path: external/topa
+          persist-credentials: false
+          sparse-checkout: |
+            integrations/janus-distributed-ai-swarm/topa_epistemic_router.py
+      - name: Pin JANUS Ocean 009B contract
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Demiurge
+          ref: 2eb40f516ca53d56141b5408f2e5c241f75fd936
+          path: external/ocean
+          persist-credentials: false
+          sparse-checkout: |
+            experiments/ocean_transformer/open_causality_009/future_009b.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify Ocean producer source and run offline negative controls
+        run: |
+          set -euo pipefail
+          test "$(cd external/ocean && git rev-parse HEAD)" = "$OCEAN_SOURCE_SHA"
+          python -m unittest discover -s tests -p 'test_tachyon_ocean_link.py' -v
+      - name: Test real TOPA v1.3 adapter contract with synthetic-only early fixture
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/synthetic-smoke
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tests')
+          from test_tachyon_ocean_link import sample_early
+          Path('artifacts/synthetic-smoke/synthetic-early.json').write_text(json.dumps(sample_early()))
+          PY
+          python -m tachyon.ocean_link \
+            --precommit artifacts/synthetic-smoke/synthetic-early.json \
+            --github-created-at '2026-11-09T04:23:00Z' \
+            --ocean-commit "$OCEAN_SOURCE_SHA" \
+            --topa-router external/topa/integrations/janus-distributed-ai-swarm/topa_epistemic_router.py \
+            --output artifacts/synthetic-smoke/topa-accepted-hypothesis.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('artifacts/synthetic-smoke/topa-accepted-hypothesis.json').read_text())
+          assert r['topa']['provider_admission']=='HYPOTHESIS_ONLY_ACCEPTED'
+          assert r['physical_retrocausality_established'] is False
+          assert r['tachyon']['learned_training_signal'] is False
+          print('TACHYON_OCEAN_TOPA_SYNTHETIC_CONTRACT_PASS')
+          PY
+      - name: "Optional: retrieve exact witnessed early Ocean artifact (no future data)"
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.ocean_run_id != '' }}
+        run: |
+          set -euo pipefail
+          [[ "$OCEAN_RUN_ID" =~ ^[0-9]{6,20}$ ]] || exit 21
+          [[ "$TARGET_DATE" =~ ^2026-11-(1[2-9])$ ]] || exit 22
+          NAME="janus-open-future-009b-$TARGET_DATE"
+          mkdir -p artifacts/ocean-source artifacts/tachyon-ocean
+          gh api "repos/Hawkar-usls/Janus-Demiurge/actions/runs/$OCEAN_RUN_ID" > artifacts/ocean-source/run.json
+          gh api "repos/Hawkar-usls/Janus-Demiurge/actions/runs/$OCEAN_RUN_ID/artifacts?per_page=100" > artifacts/ocean-source/artifacts.json
+          python - "$NAME" "$OCEAN_RUN_ID" <<'PY'
+          import json,sys
+          from pathlib import Path
+          data=json.loads(Path('artifacts/ocean-source/artifacts.json').read_text())
+          run=json.loads(Path('artifacts/ocean-source/run.json').read_text())
+          if (str(run.get('id'))!=sys.argv[2] or run.get('conclusion')!='success'
+              or run.get('name')!='JANUS Ocean / 009B Future drand 128bit Early'
+              or run.get('path')!='.github/workflows/janus-ocean-open-future-009b-precommit.yml'):
+              raise SystemExit('UNEXPECTED_OCEAN_RUN_IDENTITY_OR_STATE')
+          commit=run.get('head_sha')
+          if not isinstance(commit,str) or len(commit)!=40 or any(c not in '0123456789abcdef' for c in commit):
+              raise SystemExit('INVALID_ORIGINAL_OCEAN_SOURCE_COMMIT')
+          Path('artifacts/ocean-source/ocean-source-commit.txt').write_text(commit)
+          found=[a for a in data.get('artifacts',[]) if a.get('name')==sys.argv[1] and not a.get('expired')
+                 and str(a.get('workflow_run',{}).get('id'))==sys.argv[2]]
+          if len(found)!=1:raise SystemExit('EXACT_UNEXPIRED_EARLY_ARTIFACT_REQUIRED')
+          Path('artifacts/ocean-source/created-at.txt').write_text(found[0]['created_at'])
+          Path('artifacts/ocean-source/source-artifact.json').write_text(json.dumps({
+            'artifact_id':found[0]['id'],'name':found[0]['name'],'created_at':found[0]['created_at'],
+            'digest':found[0].get('digest'),'workflow_run_id':sys.argv[2],
+            'original_ocean_source_commit':commit},sort_keys=True))
+          PY
+          SOURCE_COMMIT="$(cat artifacts/ocean-source/ocean-source-commit.txt)"
+          SOURCE_BLOB="$(gh api "repos/Hawkar-usls/Janus-Demiurge/contents/experiments/ocean_transformer/open_causality_009/future_009b.py?ref=$SOURCE_COMMIT" --jq '.sha')"
+          test "$SOURCE_BLOB" = 'd9bcef596207488594453a01755a16a97606cba7' || {
+            echo 'ORIGINAL_OCEAN_MODEL_SOURCE_NOT_MATCHING_PINNED_009B_PROTOCOL'; exit 23;
+          }
+          gh run download "$OCEAN_RUN_ID" --repo Hawkar-usls/Janus-Demiurge \
+            --name "$NAME" --dir artifacts/ocean-source/payload
+          python -m tachyon.ocean_link \
+            --precommit artifacts/ocean-source/payload/early_009b_128_bit_model_forecast.json \
+            --github-created-at "$(cat artifacts/ocean-source/created-at.txt)" \
+            --ocean-commit "$SOURCE_COMMIT" \
+            --topa-router external/topa/integrations/janus-distributed-ai-swarm/topa_epistemic_router.py \
+            --output artifacts/tachyon-ocean/shadow-review.json
+      - name: Archive read-only review and source binding; do not deploy
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tachyon-ocean-shadow-review
+          path: |
+            artifacts/tachyon-ocean/
+            artifacts/ocean-source/source-artifact.json
+          retention-days: 30
+          if-no-files-found: ignore

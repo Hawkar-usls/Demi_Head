@@ -1,0 +1,49 @@
+{
+  "four_height_diagnostic": {
+    "covariances_not_available": true,
+    "heights_cm": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "independent_confirmation": false,
+    "naive_diagonal_uncertainty": 0.561679,
+    "through_origin_slope": -11.931498
+  },
+  "physics_comparison": {
+    "combined_stat_and_published_systematic_z": -0.560013,
+    "consistent_with_GR_at_2sigma": true,
+    "model": "weak_field_gravitational_redshift",
+    "sign_convention": "experimental negative signed gradient",
+    "theory_gradient_1e19_per_cm": -10.91137
+  },
+  "primary_measurement": {
+    "count_individual_runs": 14,
+    "published_rounded_mean": -12.4,
+    "published_rounded_stat_uncertainty": 0.7,
+    "published_systematic_uncertainty": 2.5,
+    "uncertainty_stat_in_1e19_per_cm": 0.680959,
+    "weighted_mean_gradient_in_1e19_per_cm": -12.362409
+  },
+  "schema": "janus.tachyon.clock_process_replay.v1",
+  "scientific_limits": {
+    "authority_delta": 0,
+    "independent_fresh_instrument_experiment": false,
+    "model_predictions_frozen_before_2023_publication": false,
+    "processed_published_data_replayed": true,
+    "proof_of_retrocausality": false,
+    "raw_instrument_data_replicated": false,
+    "tachyon_neural_evaluation": false,
+    "trained_on_this_dataset": false
+  },
+  "source": {
+    "data_kind": "AUTHORS_PUBLISHED_PROCESSED_FIGURE_DATA_NOT_INSTRUMENT_RAW",
+    "file": "Fig3.csv",
+    "file_size_bytes": 958,
+    "md5": "257eab6f29cf3480c536cac73ed3998a",
+    "paper_doi": "10.1038/s41467-023-40629-8",
+    "sha256": "a4384040d5678893b4df15ea0be2980661023305f5009de876179fab1dea632f",
+    "zenodo_doi": "10.5281/zenodo.8184043"
+  }
+}

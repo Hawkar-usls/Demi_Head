@@ -1,0 +1,602 @@
+{
+  "schema": "janus.research.video_time_relativistic_mechanics.v1",
+  "record_id": "JANUS-TIME-HOMODEUS-PwOk0GKDv9c-20261111",
+  "created_utc": "2026-11-11",
+  "source_video": {
+    "id": "PwOk0GKDv9c",
+    "title": "Где все путешественники из будущего?",
+    "channel": "Homo Deus",
+    "published_utc": "2025-12-10T22:26:01Z",
+    "url": "https://youtu.be/PwOk0GKDv9c",
+    "language": "ru",
+    "duration_approx": "01:13:52"
+  },
+  "transcription_provenance": {
+    "retrieved": "2026-11-11",
+    "available": "yes",
+    "caption_language": "ru",
+    "estimated_timed_caption_chunks": 254,
+    "wrapped_text_lines": 1157,
+    "representation": "timestamped semantic paraphrases, NOT full verbatim copyrighted captions",
+    "ads_marked": true,
+    "timing_caveat": "Глава из описания видео и фактические временны́е метки речи могут не совпадать; сохраняются отдельно"
+  },
+  "publisher_chapters": [
+    {
+      "start": "00:00:20",
+      "title": "Можно ли превысить скорость света?",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:01:50",
+      "title": "Варп-двигатель Алькубьерре",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:03:51",
+      "title": "Парадокс дедушки",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:04:52",
+      "title": "Реальные путешествия в будущее: замедление времени",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:07:11",
+      "title": "Для путешествий в прошлое нужна замкнутая времениподобная петля",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:10:08",
+      "title": "«Взгляд из никогда» и три лица времени",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:18:08",
+      "title": "Чем отличаются пространство и время?",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:21:57",
+      "title": "Стрела времени и второе начало термодинамики",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:24:09",
+      "title": "Энтропия, память и причина-следствие",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:27:05",
+      "title": "Мозг против энтропии",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:29:05",
+      "title": "Стивен Хокинг и защита хронологии",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:30:36",
+      "title": "Эйнштейн, Пуанкаре и скорость света для всех",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:35:41",
+      "title": "Специальная теория относительности",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:37:00",
+      "title": "Световые конусы",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:39:00",
+      "title": "Пространство-время в общей теории относительности",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:40:25",
+      "title": "Уравнение E=mc²",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:42:23",
+      "title": "Время — понятие растяжимое",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:45:10",
+      "title": "Четырехмерное пространство-время искривляется",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:48:24",
+      "title": "Чёрные дыры, белые дыры и сингулярность",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:52:02",
+      "title": "Петли времени: Гёдель, цилиндр Типлера",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:54:26",
+      "title": "Центральное свойство ОТО",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "00:58:00",
+      "title": "Всегда ли CTC приводят к парадоксам?",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "01:00:42",
+      "title": "Свобода воли и путешествия во времени",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "01:04:35",
+      "title": "Флатландия Готта, ограничение ’т Хоофта, кротовые норы",
+      "origin": "author_description_not_transcript"
+    },
+    {
+      "start": "01:10:15",
+      "title": "Кротовые норы и машина времени",
+      "origin": "author_description_not_transcript"
+    }
+  ],
+  "subtitle_semantic_segments": [
+    {
+      "start": "00:00:00",
+      "summary_ru": "Рекламная вставка и вступление об огромных межзвёздных расстояниях.",
+      "category": "advertisement_and_intro",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:00:16",
+      "summary_ru": "Размер галактики сопоставляется с пределом скорости передачи сигналов.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:01:30",
+      "summary_ru": "Сверхсветовое космологическое удаление противопоставляется локальному движению вещества и сигналов.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:01:45",
+      "summary_ru": "Представлена идея варп-пузыря Алькубьерре как геометрического решения уравнений Эйнштейна.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:02:03",
+      "summary_ru": "Обсуждаются форма варп-пузыря, отрицательная энергия и крайне высокие требования к ресурсам.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:02:20",
+      "summary_ru": "Рассказ о квантовых проблемах сверхсветовых варп-геометрий и расчётах Финацци 2009 года.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:02:58",
+      "summary_ru": "Приведены альтернативные спекулятивные идеи: кротовые норы, тахионы, туннелирование, запутанность.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:03:35",
+      "summary_ru": "Автор связывает гипотетическое сверхсветовое сообщение с возможностью нарушения обычной хронологии.",
+      "category": "scientific_claim",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:03:51",
+      "summary_ru": "Парадокс дедушки иллюстрирует логический конфликт изменения собственного прошлого.",
+      "category": "thought_experiment",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:04:52",
+      "summary_ru": "Замедление собственного времени вследствие движения и гравитационного потенциала.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:05:34",
+      "summary_ru": "Релятивистское сокращение длины и существенные различия хода часов при больших скоростях.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:07:12",
+      "summary_ru": "Замкнутые времениподобные кривые; решение Гёделя и возвращение к прежнему событию.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:10:11",
+      "summary_ru": "Реклама серверов для вычислений; не относится к физическим доказательствам.",
+      "category": "advertisement",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:13:04",
+      "summary_ru": "Различаются последовательность событий, измерение длительности и психологический поток времени.",
+      "category": "philosophy_and_physics",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:16:00",
+      "summary_ru": "Объясняются часы как периодические физические процессы и сравнение интервалов.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:19:03",
+      "summary_ru": "Различаются координатное время и собственное время по мировой линии наблюдателя.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:21:57",
+      "summary_ru": "Обсуждается блок-вселенная и альтернативные философские представления о времени.",
+      "category": "interpretation",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:23:24",
+      "summary_ru": "Рекламная вставка про аквариумы и уход за рыбами; не относится к теме.",
+      "category": "advertisement",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:25:11",
+      "summary_ru": "Кино и художественные истории используются для объяснения направления времени.",
+      "category": "analogy",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:26:28",
+      "summary_ru": "Связываются статистическая стрела времени и рост энтропии.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:28:13",
+      "summary_ru": "Низкая энтропия ранней Вселенной обсуждается как источник термодинамической асимметрии.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:31:02",
+      "summary_ru": "Память и сознание в гипотетическом путешествии в прошлое сопоставляются с энтропией.",
+      "category": "speculative_inference",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:34:00",
+      "summary_ru": "Переход к историческому развитию специальной теории относительности и постоянству c.",
+      "category": "science_history",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:37:00",
+      "summary_ru": "Причинная структура: световые конусы, различие причинных и пространственноподобных интервалов.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:40:01",
+      "summary_ru": "Мировые линии и различие ньютоновской абсолютной одновременности и относительности.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:43:11",
+      "summary_ru": "Вводится связь массы и энергии, обсуждается роль E=mc².",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:46:06",
+      "summary_ru": "Принцип эквивалентности и геометрическое описание гравитации.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:49:09",
+      "summary_ru": "Релятивистская коррекция часов GPS и уравнения поля Эйнштейна.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:52:07",
+      "summary_ru": "Горизонты чёрных дыр и наклон световых конусов.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:55:14",
+      "summary_ru": "Путешествие в будущее через собственное время космического путешественника.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "00:58:07",
+      "summary_ru": "Математические примеры CTC: вращающаяся геометрия Керра, цилиндр Типлера и периодическое время.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "01:01:15",
+      "summary_ru": "Вопрос о самосогласованности событий на замкнутых времениподобных траекториях.",
+      "category": "thought_experiment",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "01:04:11",
+      "summary_ru": "Совместимость причинной петли с термодинамической стрелой и памятью ставится под сомнение.",
+      "category": "interpretation",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "01:07:15",
+      "summary_ru": "Глобальные граничные условия, модели Готта и ограничения построения машины времени.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "01:10:08",
+      "summary_ru": "Аргументы об энергетических ограничениях в моделях 2+1-мерной гравитации.",
+      "category": "science",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "01:12:06",
+      "summary_ru": "Подводится итог о гипотезе защиты хронологии: это убедительная исследовательская идея, не доказанная теорема общего вида.",
+      "category": "interpretation",
+      "origin": "original_caption_paraphrase"
+    },
+    {
+      "start": "01:13:16",
+      "summary_ru": "Финальный философский вывод о необратимости прошлого и человеческом выборе.",
+      "category": "conclusion",
+      "origin": "original_caption_paraphrase"
+    }
+  ],
+  "scientific_claims_audit": [
+    {
+      "id": "claim_001",
+      "topic": "Время при движении и гравитации",
+      "verdict": "supported",
+      "detail": "Часы на разных мировых линиях накапливают разные интервалы собственного времени; подтверждается GPS и прецизионными часами."
+    },
+    {
+      "id": "claim_002",
+      "topic": "Сверхсветовое расширение пространства означает готовую технологию FTL",
+      "verdict": "not_supported",
+      "detail": "Космологическая скорость удаления не является доступным локальным сверхсветовым каналом передачи информации."
+    },
+    {
+      "id": "claim_003",
+      "topic": "Алькубьерре — решение ОТО",
+      "verdict": "mathematical_model_only",
+      "detail": "Для заданной метрики можно вычислить требуемый тензор энергии-импульса, но не доказана физически реализуемая его поддержка."
+    },
+    {
+      "id": "claim_004",
+      "topic": "Сверхсветовой варп может вести к замкнутым временным траекториям",
+      "verdict": "theoretically_supported_not_realized",
+      "detail": "Строгие геометрические конструкции с двумя warp-регионами опубликованы в 2024–2025 годах; физическая реализуемость остается открытой."
+    },
+    {
+      "id": "claim_005",
+      "topic": "Все возможные способы FTL обязательно являются машинами времени",
+      "verdict": "overstated",
+      "detail": "Вывод о парадоксах требует дополнительных предпосылок о доступности управляемых FTL-сигналов в разных инерциальных системах."
+    },
+    {
+      "id": "claim_006",
+      "topic": "Мозг неизбежно теряет память в прошлом из-за энтропии",
+      "verdict": "speculative_not_established",
+      "detail": "Глобально более раннее низкоэнтропийное состояние не означает автоматическую потерю локально сохраненной памяти. Замкнутые траектории предъявляют другие ограничения на самосогласованность."
+    },
+    {
+      "id": "claim_007",
+      "topic": "Защита хронологии строго доказана",
+      "verdict": "not_proven",
+      "detail": "Гипотеза Хокинга и квантовые нестабильности в отдельных геометриях не составляют универсальной теоремы невозможности."
+    },
+    {
+      "id": "claim_008",
+      "topic": "Запутанность или обычное квантовое туннелирование отправляет управляемую информацию быстрее света",
+      "verdict": "not_supported",
+      "detail": "Доступные эксперименты и стандартная квантовая теория не дают управляемой сверхсветовой связи посредством одной запутанности."
+    },
+    {
+      "id": "claim_009",
+      "topic": "Варп-пузырь автоматически замедляет собственные часы путешественника",
+      "verdict": "false_in_standard_center_limit",
+      "detail": "В идеализированном центре оригинальной метрики при dx=v_s dt и f≈1 получается dτ=dt: мгновенного выигрыша собственного времени внутри нет."
+    }
+  ],
+  "reproducible_calculations": {
+    "lorentz_transform": "Δt′ = γ(Δt-vΔx/c²), γ=1/sqrt(1-v²/c²)",
+    "proper_time": "dτ= sqrt(-ds²)/c on timelike worldlines in (-+++) signature",
+    "alcubierre_metric": "ds²=-c²dt²+[dx-v_s f(r_s)dt]²+dy²+dz²",
+    "gps_reference_correction_microseconds_per_day": {
+      "kinematic": -7,
+      "gravitational": 45,
+      "combined": 38
+    },
+    "ftl_event_order_sweep": {
+      "delta_t_seconds": 1,
+      "delta_x_lightseconds": 2,
+      "cases": [
+        {
+          "relative_speed_over_c": 0,
+          "signal_speed_over_c": 2.0,
+          "delta_t_prime_seconds": 1.0,
+          "coordinate_order_reversed": false
+        },
+        {
+          "relative_speed_over_c": 0.3,
+          "signal_speed_over_c": 2.0,
+          "delta_t_prime_seconds": 0.41931393,
+          "coordinate_order_reversed": false
+        },
+        {
+          "relative_speed_over_c": 0.5,
+          "signal_speed_over_c": 2.0,
+          "delta_t_prime_seconds": 0.0,
+          "coordinate_order_reversed": false
+        },
+        {
+          "relative_speed_over_c": 0.6,
+          "signal_speed_over_c": 2.0,
+          "delta_t_prime_seconds": -0.25,
+          "coordinate_order_reversed": true
+        },
+        {
+          "relative_speed_over_c": 0.8,
+          "signal_speed_over_c": 2.0,
+          "delta_t_prime_seconds": -1.0,
+          "coordinate_order_reversed": true
+        },
+        {
+          "relative_speed_over_c": 0.9,
+          "signal_speed_over_c": 2.0,
+          "delta_t_prime_seconds": -1.83532587,
+          "coordinate_order_reversed": true
+        }
+      ],
+      "reversal_condition": "beta>0.5 for this choice; no physical FTL channel demonstrated",
+      "status": "algebraically_computed_2026_11_11"
+    },
+    "v_0_9c_clock": {
+      "gamma": 2.294157,
+      "remote_years_per_one_traveler_year_on_ideal_inertial_segment": 2.294157
+    }
+  },
+  "experiment_candidates": [
+    {
+      "id": "JANUS-TIME-01",
+      "title": "FTL antitelephone: смена порядка событий",
+      "kind": "exact_special_relativity_calculation",
+      "input": {
+        "outbound_signal_speed_over_c": 2.0,
+        "relative_frame_speed_over_c": 0.8,
+        "delta_t_seconds": 1.0,
+        "delta_x_lightseconds": 2.0
+      },
+      "expected": {
+        "boosted_delta_t_seconds": -1.0,
+        "interpretation": "Другой наблюдатель присваивает событию получения меньшую временную координату; это не физический канал без реализуемой FTL-передачи и обратного направления."
+      },
+      "falsification": "Проверить формулу преобразования Лоренца и построить причинную петлю только при явно заданной двусторонней FTL-схеме.",
+      "status": "formula_sweep_calculated_not_physical_test"
+    },
+    {
+      "id": "JANUS-TIME-02",
+      "title": "Варп-профиль: энергия, горизонты, устойчивость",
+      "kind": "symbolic_and_numerical_general_relativity",
+      "metric": "ds^2 = -c^2 dt^2 + (dx - v_s f(r_s)dt)^2 + dy^2 + dz^2",
+      "checks": [
+        "Численно вычислить G_mu_nu и T_mu_nu= c^4 G_mu_nu/(8 pi G)",
+        "Проверить WEC и NEC на стенке пузыря",
+        "Отличать геометрическое решение от физически доступного источника T_mu_nu",
+        "Исследовать световые конусы, горизонты и устойчивость к полуклассическим возмущениям",
+        "Не объявлять CTC реальным каналом без физически реализуемого источника"
+      ],
+      "status": "not_run"
+    },
+    {
+      "id": "JANUS-TIME-03",
+      "title": "Chronology Filter для JANUS Ocean: исключение ложного сигнала из будущего",
+      "kind": "test_protocol",
+      "checks": [
+        "Разделить собственное время τ, координатное t и UTC timestamp логов",
+        "Использовать пространственно-временные интервалы для класса событий: timelike/lightlike/spacelike",
+        "Учитывать GNSS/сетевые задержки, clock drift, пропуски, дисперсию, детекторные задержки",
+        "Прогноз записать до позднего независимого выбора; проверять hash commitment",
+        "Сравнить с причинным baseline и негативными контролями; не переобучать по результату"
+      ],
+      "criteria_for_anomalous_signal": "Повторяемый статистический выигрыш над причинными baseline в слепой пререгистрированной серии после исключения всех известных задержек",
+      "status": "proposed"
+    },
+    {
+      "id": "JANUS-TIME-04",
+      "title": "Практическая релятивистская синхронизация",
+      "kind": "metrology",
+      "data_needed": "Публичные датированные записи времени/частот GPS, оптических часов или гравитационного красного смещения с известной геометрией",
+      "known_reference": "GPS net +38 microseconds/day vs earth clocks, -7 special +45 gravitational, NIST 2026",
+      "benefit": "Уменьшение ошибок временных меток и ложных опережающих корреляций; потенциальная геодезия и точная синхронизация",
+      "status": "proposed"
+    }
+  ],
+  "originality_caution": "Геометрические CTC и варп-метрики уже изучались в опубликованных работах; ни один эксперимент здесь не объявляется новой физикой или доказательством ретропричинности.",
+  "registry_write_status": "NOT_COMMITTED: локальный JSON-артефакт, GitHub JANUS Meta Registry не изменен",
+  "sources": [
+    {
+      "title": "Субтитры (русский), оригинальная дорожка YouTube",
+      "url": "https://youtu.be/PwOk0GKDv9c",
+      "type": "primary_video_caption_track",
+      "retrieval": "vidIQ video transcript; 254 временных маркера и 1157 переносимых строк; программа пересказа не воспроизводит оригинальный текст"
+    },
+    {
+      "title": "Описание видео и список глав автора",
+      "url": "https://www.youtube.com/watch?v=PwOk0GKDv9c",
+      "type": "primary_video_description"
+    },
+    {
+      "title": "Semiclassical instability of dynamical warp drives",
+      "url": "https://doi.org/10.1103/PhysRevD.79.124017",
+      "year": 2009,
+      "type": "peer_reviewed"
+    },
+    {
+      "title": "Introducing physical warp drives",
+      "url": "https://doi.org/10.1088/1361-6382/abdf6e",
+      "year": 2021,
+      "type": "peer_reviewed"
+    },
+    {
+      "title": "Warp drives and closed timelike curves",
+      "url": "https://doi.org/10.1088/1361-6382/ad74d1",
+      "year": 2024,
+      "type": "peer_reviewed"
+    },
+    {
+      "title": "Looping back to the past through free fall in a controlled warp drive spacetime",
+      "url": "https://doi.org/10.1103/1gmk-3zdq",
+      "year": 2025,
+      "type": "peer_reviewed"
+    },
+    {
+      "title": "Novel Realizations of Warp Drive Spacetimes as Solutions of General Relativity",
+      "url": "https://doi.org/10.3390/universe12050132",
+      "year": 2026,
+      "type": "peer_reviewed"
+    },
+    {
+      "title": "Putting Einstein to the Test With the World’s Most Accurate Clocks",
+      "url": "https://www.nist.gov/blogs/taking-measure/putting-einstein-test-worlds-most-accurate-clocks",
+      "year": 2026,
+      "type": "metrology"
+    },
+    {
+      "title": "Relation between the psychological and thermodynamic arrows of time",
+      "url": "https://doi.org/10.1103/PhysRevE.89.052102",
+      "year": 2014,
+      "type": "peer_reviewed"
+    }
+  ]
+}

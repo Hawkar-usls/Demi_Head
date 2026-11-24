@@ -1,0 +1,67 @@
+{
+  "schema": "janus.demihead.tachyon.training.v1",
+  "model_name": "Tachyon",
+  "model_kind": "tiny_transformer_text_pair_chronology",
+  "source_record_id": "JANUS-TIME-HOMODEUS-PwOk0GKDv9c-20261111",
+  "source_sha256": "44c1030da28ecea4ca1fc6891dea34a63445f9a981e2387b1e4bf4d189f43409",
+  "source_kind": "timestamped_semantic_paraphrases_NOT_raw_physical_measurements",
+  "dataset": {
+    "total_segments": 34,
+    "train_segments": 23,
+    "holdout_segments": 11,
+    "train_pairs": 506,
+    "holdout_pairs": 110,
+    "holdout_strategy": "chronological_segment_disjoint",
+    "excluded_categories": [
+      "advertisement",
+      "advertisement_and_intro"
+    ],
+    "training_only_vocab": true,
+    "timestamps_as_input": false
+  },
+  "architecture": {
+    "layers": 1,
+    "width": 32,
+    "heads": 2,
+    "vocab_size": 183,
+    "max_len": 48,
+    "parameters": 15969
+  },
+  "training": {
+    "epochs": 8,
+    "seed": 1729,
+    "batch_size": 32,
+    "lr": 0.002,
+    "cpu_only": true,
+    "training_loss": {
+      "count": 506,
+      "accuracy": 0.948617,
+      "log_loss": 0.17531,
+      "brier": 0.044365
+    }
+  },
+  "validation": {
+    "holdout": {
+      "count": 110,
+      "accuracy": 0.5,
+      "log_loss": 1.477341,
+      "brier": 0.445427
+    },
+    "constant_baseline": {
+      "accuracy": 0.5,
+      "brier": 0.25,
+      "log_loss": 0.693147
+    },
+    "admission_gate": "accuracy>=0.55_and_brier<0.25",
+    "passed": false
+  },
+  "status": "HOLD_NO_HOLDOUT_GAIN",
+  "scientific_claims": {
+    "new_physics": false,
+    "future_information_access": false,
+    "retrocausality_demonstrated": false,
+    "physical_signal_measured": false
+  },
+  "authority_delta": 0,
+  "external_effects": false
+}

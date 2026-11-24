@@ -1,0 +1,35 @@
+{
+  "authority_delta": 0,
+  "auto_deploy": false,
+  "best_epoch_selected_using_tune_only": 10,
+  "candidate_gate": {
+    "passed": false,
+    "required_accuracy": 0.65,
+    "status": "HOLD_NO_TEXT_GENERALIZATION_GAIN"
+  },
+  "claim": "MECHANISM_FAMILY_CLASSIFICATION_ONLY_NOT_VERIFIED_EXPLANATION_OR_RETROCAUSAL_SIGNAL",
+  "external_physical_validation": false,
+  "frozen_heldout": {
+    "accuracy": 0.333333,
+    "loss": 1.633096,
+    "n": 12
+  },
+  "heldout_majority_class_baseline": 0.166667,
+  "heldout_uses_unseen_phrasing_but_known_physical_families": true,
+  "model": "small torch TransformerEncoder 1 layer 4 heads width 40",
+  "model_parameters": 23046,
+  "schema": "janus.tachyon.explanation_generalization.v0.3",
+  "source_sha256": "e466ec34a4dbcc99291de0c04335f8b9b473ee13ae7a93eeefedb207e52ba97c",
+  "split": "6 training, 2 tuning, 2 heldout questions per each of six mechanism classes",
+  "train": {
+    "accuracy": 0.944444,
+    "loss": 0.932015,
+    "n": 36
+  },
+  "training_samples_are_human_curated_not_physical_measurements": true,
+  "tune": {
+    "accuracy": 0.333333,
+    "loss": 1.737965,
+    "n": 12
+  }
+}
