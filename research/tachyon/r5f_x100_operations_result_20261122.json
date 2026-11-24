@@ -1,0 +1,126 @@
+{
+  "schema": "janus.demihead.tachyon.r5f_x100.causal_memory_result.v1",
+  "artifact_id": "DEMIHEAD-TACHYON-R5F-X100-OPERATIONS-RESULT-2026-11-22",
+  "as_of_date": "2026-11-22",
+  "status": "ENGINEERING_CI_PASS__ACTUAL_CAUSAL_WORK_X100__NO_GAIN_OVER_STRONG_RULES__SCIENCE_HOLD",
+  "repo": "Hawkar-usls/Demi_Head",
+  "branch": "research/tachyon-r5f-x100-operations-20261122",
+  "pull_request": "https://github.com/Hawkar-usls/Demi_Head/pull/115",
+  "successful_run": "https://github.com/Hawkar-usls/Demi_Head/actions/runs/45043996755",
+  "run_artifact": {
+    "id": 14763196297,
+    "name": "demihead-tachyon-r5f-x100-operations",
+    "digest": "sha256:faf450fb9e905562cf21021075be8d353f5a74608cc8b43ffabb173b36aab7ed",
+    "size_bytes": 1921
+  },
+  "source_method": "data/JANUS-DOUGAN-FREESTYLER-REVERSE-ROAD-CAUSAL-TRACE-2026-08-18-v1.4.json",
+  "previous_R5F_source": "tools/tachyon_r5f_causal_memory_audit.py",
+  "experiment_code": "tools/tachyon_r5f_x100_audit.py",
+  "protocol": "research/tachyon/r5f_x100_operations_protocol_20261122.json",
+  "tests": "tests/test_tachyon_r5f_x100_audit.py",
+  "ci_tests": {
+    "original_DemiHead_reference": 7,
+    "original_R5F": 29,
+    "new_R5F_X100": 22,
+    "all_pass": true
+  },
+  "design": {
+    "heldout_cases": 600,
+    "scenarios": 15,
+    "original_graph_unique_forward_edges": 9,
+    "expanded_graph_unique_forward_edges": 900,
+    "actual_forward_walk_operations_per_fully_executed_case": 1000,
+    "reason_for_edge_walk_difference": "One B branch is reached by two separate A predecessors, so a path enumerator traverses the shared B→C edge twice.",
+    "budget_original": 500,
+    "budget_x100": 50000,
+    "distinct_subgraphs": 100,
+    "replicas_added": 99,
+    "synthetic_witnesses_added": 0,
+    "multiple_competing_histories": true,
+    "shared_terminal": true,
+    "same_case_generator_and_families_as_original": true,
+    "independent_external_blind": false,
+    "original_production_weights_unchanged": true,
+    "three_controls": [
+      "Original graph, original budget 500",
+      "Same original graph, enlarged budget 50000",
+      "100x graph edges with enlarged budget 50000"
+    ],
+    "original_vs_budget_only_predictions_identical": true,
+    "workload_not_fake_software_counter_multiplier": true,
+    "gold_semantics": "Unique consistent history under authoritative synthetic DAG and corroborated simulated witness-root constraints; strong baseline exact by construction.",
+    "physical_sensor_root_authentication": false
+  },
+  "expanded_holdout_measures": {
+    "A_FORWARD_ONLY_EXHAUSTIVE": {
+      "answered": 200,
+      "coverage": 0.333333,
+      "selective_accuracy": 1,
+      "mean_actual_counted_operations_per_case": 866.6667,
+      "ratio_to_original_operations": 99.9996,
+      "median_decision_us_exploratory": 381.883,
+      "unsupported_assertions": 0
+    },
+    "B_REVERSE_ONLY_UNVERIFIED": {
+      "answered": 120,
+      "coverage": 0.2,
+      "selective_accuracy": 1,
+      "mean_actual_counted_operations_per_case": 560.0667,
+      "ratio_to_original_operations": 98.8347,
+      "median_decision_us_exploratory": 272.7445,
+      "unsupported_assertions": 0
+    },
+    "C_REVERSE_PLUS_FORWARD_REPLAY": {
+      "answered": 160,
+      "coverage": 0.266667,
+      "selective_accuracy": 1,
+      "mean_actual_counted_operations_per_case": 934.3333,
+      "ratio_to_original_operations": 90.4196,
+      "median_decision_us_exploratory": 266.261,
+      "unsupported_assertions": 0
+    },
+    "D_STRONG_EXHAUSTIVE_PROVENANCE": {
+      "answered": 200,
+      "coverage": 0.333333,
+      "selective_accuracy": 1,
+      "mean_actual_counted_operations_per_case": 866.6667,
+      "ratio_to_original_operations": 99.9996,
+      "median_decision_us_exploratory": 376.5785,
+      "unsupported_assertions": 0
+    },
+    "E_ALWAYS_ABSTAIN": {
+      "answered": 0,
+      "coverage": 0,
+      "selective_accuracy": null,
+      "mean_actual_counted_operations_per_case": 0,
+      "ratio_to_original_operations": null,
+      "median_decision_us_exploratory": 0.967,
+      "unsupported_assertions": 0
+    }
+  },
+  "findings": {
+    "algorithmic_gain_vs_exact_baseline": false,
+    "safe_answers_delta_replay_vs_strong": -40,
+    "coverage_delta_replay_vs_strong_pp": -6.6666,
+    "mean_operations_replay_vs_strong_delta": 67.6666,
+    "replay_improves_over_reverse_only_by_40_safe_answers": true,
+    "budget_500_to_50000_alone_did_not_change_answers": true,
+    "new_synthetic_causal_graph_900_edges_per_case": true,
+    "all_checked_arms_zero_unsupported_assertions": true,
+    "neural_or_consciousness_gain_established": false,
+    "interpretation": "Under this larger common synthetic DAG, reverse+forward replay has no accuracy, coverage or operation-count superiority over the exact strong forward/provenance baseline. The 100x expansion creates alternatives but not new independent real observations. CI timings were a single uncalibrated runner and are not a calibrated production benchmark."
+  },
+  "scientific_limits": {
+    "independent_custodian": false,
+    "externally_authored_data": false,
+    "real_witnesses": false,
+    "memory_or_subjective_perception_measured": false,
+    "physical_time_reversal_verified": false,
+    "retrocause_established": false,
+    "neural_improvement_verified": false,
+    "production_weights_modified": false,
+    "admission": "ENGINEERING_STRESS_TEST_PASS__SCIENTIFIC_HOLD"
+  },
+  "initial_ci_issue": "One unit test incorrectly equated 900 distinct graph edges to 900 traversals; it was corrected to assert 1000 actual traversals from original 10, because a shared intermediate edge is traversed through two A predecessors. Source algorithm unchanged; final CI 22/22 PASS.",
+  "next": "R5G: optimized exact causal and indexed reachability baselines on independently authored hidden graphs and authenticated evidence; measure calibrated full end-to-end cost and safety before adoption."
+}

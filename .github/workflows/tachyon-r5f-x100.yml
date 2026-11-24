@@ -1,0 +1,88 @@
+name: DemiHead TACHYON R5F-X100 - 50k Operations Graph Stress Test
+
+on:
+  pull_request:
+    paths:
+      - 'tools/tachyon_r5f_x100_audit.py'
+      - 'tests/test_tachyon_r5f_x100_audit.py'
+      - 'research/tachyon/r5f_x100_operations_protocol_20261122.json'
+      - 'research/tachyon/r5f_x100_operations_result_20261122.json'
+      - '.github/workflows/tachyon-r5f-x100.yml'
+  push:
+    branches:
+      - research/tachyon-r5f-x100-operations-20261122
+      - main
+    paths:
+      - 'tools/tachyon_r5f_x100_audit.py'
+      - 'tests/test_tachyon_r5f_x100_audit.py'
+      - 'research/tachyon/r5f_x100_operations_protocol_20261122.json'
+      - 'research/tachyon/r5f_x100_operations_result_20261122.json'
+      - '.github/workflows/tachyon-r5f-x100.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-graph-x100:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install checked-in DemiHead dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Verify original DemiHead and baseline R5F controls
+        run: |
+          python tools/validate_repository.py
+          python -m unittest discover -s tests -p 'test_keto_reference.py' -v
+          python -m unittest discover -s tests -p 'test_tachyon_r5f_causal_memory_audit.py' -v
+      - name: Run actual 100x expanded graph budget tests
+        run: python -m unittest discover -s tests -p 'test_tachyon_r5f_x100_audit.py' -v
+      - name: Run 3-control paired stress test and freeze receipt
+        run: |
+          set -euo pipefail
+          mkdir -p out/tachyon
+          python -m tools.tachyon_r5f_x100_audit --audit > out/tachyon/r5f_x100_operations_receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('research/tachyon/r5f_x100_operations_protocol_20261122.json').read_text())
+          r=json.loads(Path('out/tachyon/r5f_x100_operations_receipt.json').read_text())
+          assert r['heldout_cases']==600
+          assert r['scale_graph_edges']==100
+          assert r['scale_budget']==100
+          assert r['original_replayed_control']['budget_per_case']==500
+          assert r['budget_only_intervention']['budget_per_case']==50000
+          assert r['expanded_graph_x100']['budget_per_case']==50000
+          assert r['original_replayed_control']['average_graph_edges']==9
+          assert r['expanded_graph_x100']['average_graph_edges']==900
+          assert r['original_vs_budget_only_predictions_identical']
+          assert r['expanded_zero_unsupported_assertions']
+          assert r['expanded_strong_baseline_exact']
+          assert not r['synthetic_external_custodian']
+          assert not r['model_or_production_weights_changed']
+          assert not r['physical_reverse_time_proven']
+          for name,s in r['expanded_graph_x100']['arms'].items():
+              print('R5F_X100_ARM='+name+
+                    ',answers='+str(s['answered'])+
+                    ',coverage='+str(s['coverage'])+
+                    ',accuracy='+str(s['selective_accuracy'])+
+                    ',mean_actual_ops='+str(s['mean_counted_operations_per_case'])+
+                    ',ops_ratio='+str(r['operation_ratios_expanded_over_original'][name])+
+                    ',median_us='+str(s['median_decision_microseconds_uncontrolled']))
+          print('R5F_X100_GRAPH_EDGES=900')
+          print('R5F_X100_OPERATION_BUDGET=50000')
+          print('R5F_X100_GAIN_VS_EXACT='+str(r['reverse_plus_replay_superior_to_strong_exact_baseline']))
+          print('R5F_X100_SYNTHETIC_ENGINEERING_PASS__SCIENCE_HOLD')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demihead-tachyon-r5f-x100-operations
+          path: out/tachyon/r5f_x100_operations_receipt.json
+          retention-days: 60
+          if-no-files-found: error
