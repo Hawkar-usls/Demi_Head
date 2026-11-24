@@ -1,0 +1,692 @@
+{
+  "schema": "janus.tachyon.hawking_causality.metaregistry_filename_index.v1",
+  "created_utc_date": "2026-11-22",
+  "repo": "Hawkar-usls/janus-meta-registry",
+  "branch": "main",
+  "tree_sha": "957b01dd4bd9d69278b6e5a745a84f32d81acccf",
+  "tree_truncated": false,
+  "selection": "Filename/path regex only: tachyon/tahyon, retrocausality/causality, chronology, Hawking, CTC, Zeno temporal, Deutsch. Excludes rendered image assets and unrelated Fallout game dossiers; not semantic exhaustive text search.",
+  "prior_fulltext_topic_audit": "data/JANUS-ENTROPY-TIME-CAUSALITY-REGISTRY-SYNTHESIS-2026-11-01-v1.0.json",
+  "prior_fulltext_topic_audit_note": "Previous audit: 6397 JSON found, 611 keyword files, 267 focused; independent of this filename enumeration and dated earlier.",
+  "item_count": 96,
+  "items": [
+    {
+      "path": ".github/workflows/eye-r4-7-rt-retrocausal-competing-model.yml",
+      "git_blob_sha1": "8aaa31a627e3a88ad88ecc7ddcab3dc4260ae155",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "EYE/r4_7_rt/retro_tahyon_competing_model_benchmark.json",
+      "git_blob_sha1": "8609731b3cb3768b41dc738039247dde1956d745",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "EYE/r4_7_rt/validate_retro_tahyon_competing_model.py",
+      "git_blob_sha1": "0c7ccf1ccdcdc21cd3f410efdf44584843e6e985",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "EYE/r4_7_rt_1/retro_tahyon_prospective_outcome_contract.json",
+      "git_blob_sha1": "eb9aab6d1793a80da736775216e156acc9eaf2d8",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "EYE/r4_7_rt_1/retro_tahyon_r4_2_minimax_model.json",
+      "git_blob_sha1": "21d9b4c6d6a2606cde1d6a8dd0430a96939f37d8",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "artifacts/janus-fresco-forge/receipts/0c0dcb1167ec174a--JANUS-ADV-ELITE-TACHYON-PHYSARUM-LINEAGE-BRIDGE-2026-08-27.json",
+      "git_blob_sha1": "bbc38e07b26d482e14f5444e49a2f7b59c082fc6",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "artifacts/janus-fresco-forge/receipts/0c272397cc64f2bd--JANUS-UAP-DECLASSIFIED-RETROCAUSALITY-TACHYON-UKRAINE-DOSSIER-2026-08-27.json",
+      "git_blob_sha1": "35b14b0264c68a78836157107d920adc099643a9",
+      "categories": [
+        "tachyon_name",
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "artifacts/janus-fresco-forge/receipts/86dd4d5d2d35419f--JANUS-GENESIS-CTC-FIXED-POINT-VALIDATION-v0.1.0.json",
+      "git_blob_sha1": "8e73d8e4fb3d9e3f20363b0e33f4b68c553e52c2",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "artifacts/janus-fresco-forge/receipts/f43a9714dbcca4a4--JANUS-GENESIS-CTC-CONSISTENCY-HARDENING-v0.4.0.json",
+      "git_blob_sha1": "ea31f4faaa58dd380c43981714af0a6cc8c2faa5",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "bridge_tachyon.py",
+      "git_blob_sha1": "1bedd2375a21819b70762d0f7cb58b5a44833734",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "config/spider_pattern_sets/causality-dark-nodes-v2.json",
+      "git_blob_sha1": "66eae00d82180e59772bd17b72edd15abd58e05f",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/EYE-R4.7-RT-RETROCAUSAL-COMPETING-MODEL-BENCHMARK-2026-09-02-v1.0.json",
+      "git_blob_sha1": "cc39fa3a624a8d05d20c3cf16d3e630ee78a9924",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/JANUS-CAUSALITY-WORLD-CHECK-2026-09-01-v1.0.json",
+      "git_blob_sha1": "ddbcaec6fef79ff196c3ed33d5d05a809d3ca255",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/JANUS-ENTROPY-TIME-CAUSALITY-REGISTRY-SYNTHESIS-2026-11-01-v1.0.json",
+      "git_blob_sha1": "4c362e770279ac2968d2295d0b333349242c1b3d",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/JANUS-GLOBAL-VITRIFICATION-CHRONOLOGY-GATE-RUN-001-2026-08-20-v1.0.json",
+      "git_blob_sha1": "7748bb1ef236210abcf8a448eb21126198ee5d6d",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "data/JANUS-HANDSHAKE-STEPHEN-HAWKING-ADMIRATION-2026-08-21-v1.0.json",
+      "git_blob_sha1": "b2c3bc8b8f81560be9430fb69c9633f61cdbb7ba",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "data/JANUS-HAWKING-HORIZON-AI-LEARNING-ARCHITECTURE-2026-08-21-v1.0.json",
+      "git_blob_sha1": "d3997f9a282bb08859d309a1726ede95dcbde473",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "data/JANUS-INFINITE-FACES-LAST-METER-OF-CAUSALITY-SEMANTIC-v1.0.json",
+      "git_blob_sha1": "9c646a0bdaf01d7bdbc5e14ec12eca2c7bbc712f",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/JANUS-ONE-NOV2025-JAN2026-ARCHAEOLOGY-v1.0/70-causality-hippocampus-heuristic.json",
+      "git_blob_sha1": "13dec4306a7f4bc10ed301418ef1bf61e8cf5434",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/JANUS-OSIRIS-ORION-SIRIUS-PHALLUS-REVERSE-TEXTUAL-CHRONOLOGY-2026-08-18-v1.0.json",
+      "git_blob_sha1": "5d5ee0f174c8dc898d36cdd0761d4c3b6fb56c2b",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "data/JANUS-SIRIUS-0222-CAUSALITY-WORLD-VERIFICATION-TARGET-2026-09-01-v1.0.json",
+      "git_blob_sha1": "032e3b37bc8752d8e867553ffedce73e906d167b",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/00-manifest.json",
+      "git_blob_sha1": "5a918fbc44daa2cf19e46e4451075d7f000f94f2",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/10-core.json",
+      "git_blob_sha1": "a889e783f5c9961563e749d1063b1bb5cec89f90",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/20-anchors-1938-1944.json",
+      "git_blob_sha1": "8653d4457c2be588875cdcec897734cdc9a3d8de",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/21-anchors-1945-1949.json",
+      "git_blob_sha1": "41d45ac81ec0ce1429ba5a154e7d43130f4acf79",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/30-espionage.json",
+      "git_blob_sha1": "e4674ebb7ee1a83dba5f6a16e65cdf8d861bc6af",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/40-humanitarian-intervention.json",
+      "git_blob_sha1": "134017e0678abf7692a3eb41e20895388f6ffc05",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/50-causal-swarm-provenance.json",
+      "git_blob_sha1": "b132c004f0c026dca3afe1db29b69e2763476deb",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-CHILD-PROTECTION-NUCLEAR-CAUSAL-ANCHORS-v1.0/60-sources-validation.json",
+      "git_blob_sha1": "7ce71b9900ad01edd8fe4c727a6ad3622610288f",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-THERMAL-REVERSE-PHYSARUM-DIALOGUE-LINEAGE-2026-08-27-v1.0.json",
+      "git_blob_sha1": "5ca6e06ab803928579e19663efd16a06bfe90a5a",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TACHYON-THERMAL-REVERSE-PHYSARUM-DIALOGUE-LINEAGE-2026-08-27-v1.1.json",
+      "git_blob_sha1": "1f52e65eaaf52716fd546db29facff682a0fd5ce",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TAHYON-TRAVELER--0.01-v1.0.json",
+      "git_blob_sha1": "469b35fafc70223ce91a5bcc59344678ee6dbfec",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TAHYON-TRAVELER-CUMULATIVE-EXPERIMENT-LEDGER-v1.0.json",
+      "git_blob_sha1": "61314159186f4b3022d04c9b07672931f8560471",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TAHYON-TRAVELER-CUMULATIVE-EXPERIMENT-LEDGER-v1.1.json",
+      "git_blob_sha1": "ba3d949ef3600fa809c8f2136a78ded8617f7a24",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/JANUS-TAHYON-TRAVELER-DISTRIBUTED-TIME-ARRIVAL-ORDER-INVERSION-v1.0.json",
+      "git_blob_sha1": "95c40449eda46e31216cac97ef9f8582a4243c0e",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/Janus_Tachyon_Star.json",
+      "git_blob_sha1": "69952882db3e58ee9c37b11e2e88ba528001db80",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/Janus_Tachyon_Star_Riders_TimeTraveler_Bridge.json",
+      "git_blob_sha1": "4fb7b18c42e24b06894d7c495b15475f285debeb",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/Janus_Tachyon_Star_T1_Lookback_Result.json",
+      "git_blob_sha1": "6c63fe08b3dfcd8179150eb9c79deed55bd2fb0b",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/Janus_Tachyon_Star_T2_External_Prepointed_Replication_Result.json",
+      "git_blob_sha1": "15c6cac34e7543117d8ec8859fde4a98bc7a55a2",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/Retro-Tahyon.json",
+      "git_blob_sha1": "2510b5ae1fcc375e5b336644683b32945a83c745",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/TOPA-SPIDER-CAUSALITY-DARK-NODES-v2.0.json",
+      "git_blob_sha1": "23b3b1173b026e8d2094ad93a8c28cf42307eed9",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/BANANA-TO-JANUS-CAUSALITY-BRIDGE-2026-11-09-v1.json",
+      "git_blob_sha1": "6b5b823a7333c9cc08e84a657d5c43781935e54b",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/BANANA-TO-JANUS-CAUSALITY-CONTROLS-006-OFFLINE-RESULT-2026-11-09.json",
+      "git_blob_sha1": "a50ed647fd0d4534fc246014541901300d2bb193",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-OPEN-CAUSALITY-009-NOAA-RETROSPECTIVE-QC-2026-11-10.json",
+      "git_blob_sha1": "18cce65d1b4c9ef3cc9091baf1d42177252952af",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-OPEN-CAUSALITY-009-PREREG-2026-11-09-v1.json",
+      "git_blob_sha1": "707682f6f014f3738fdc231186244168e7c19aaa",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-OPEN-CAUSALITY-009-PREREG-2026-11-10-v1.json",
+      "git_blob_sha1": "3702f76b5499b7c414f979e1a4a4c3027b684199",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-OPEN-CAUSALITY-009D-INDEPENDENT-BASELINE-PREREG-2026-11-10.json",
+      "git_blob_sha1": "bfb93725282e45f8d05b5a64953a70478a007658",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-ZENO-TEMPORAL-001-2026-11-09-v1.json",
+      "git_blob_sha1": "035c47aff2182b237d977d7390548b54239d2363",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-ZENO-TEMPORAL-002-CPU-2026-11-09-v1.json",
+      "git_blob_sha1": "f1bb0ba4ec7600390ffe6a981c507e45ce0cd655",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-ZENO-TEMPORAL-003-BLIND-DRAND-2026-11-09-v1.json",
+      "git_blob_sha1": "9b262268c488c1a9f890d7177908ea446b606900",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/JANUS-ZENO-TEMPORAL-003-ITANO-LAB-2026-11-09-v1.json",
+      "git_blob_sha1": "9899f49b04dca52573d2208f60a42b3617ee353a",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/experiments/LIGHT-TO-JANUS-OCEAN-CAUSALITY-CONTROLS-007-2026-11-09.json",
+      "git_blob_sha1": "76208689d122c89d5217a2c08ef8375fdb8b240a",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "data/proofs/JANUS-GENESIS-CTC-CONSISTENCY-HARDENING-v0.4.json",
+      "git_blob_sha1": "491683b738557df3e8b9f29d5fa4f993749088cf",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "data/proofs/JANUS-GENESIS-CTC-FIXED-POINT-VALIDATION-v0.1.json",
+      "git_blob_sha1": "1d0064cbe67ea08fe67efa5e297d948d74e2b5c6",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-COLLISION-007-A-PAST-FACE.json",
+      "git_blob_sha1": "161f267d73c3cee28299fedadf7f78974294829b",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-COLLISION-007-B-FUTURE-FACE.json",
+      "git_blob_sha1": "0943a73150b83c461202f1936c05c21bf594fa3b",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-COLLISION-007-C-VALID-CONTROL.json",
+      "git_blob_sha1": "e45f5855f5d6aaca0b6ef87d125f41647a548ebc",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-COLLISION-007-D-TIMELESS-LIMBO-0.json",
+      "git_blob_sha1": "2719537c27fab3fe26f2bee5a41faee31606e62b",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-RECALL-009-A-R1-INVALID120-FIRST.json",
+      "git_blob_sha1": "c7a9d703b48ed9c1d1e6a718d3a1829410859810",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-RECALL-009-B-R1-VALID-SECOND.json",
+      "git_blob_sha1": "88f2e31aef49885f344346508859fac92a1cbd57",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-RECALL-009-C-R2-INVALID120-FIRST.json",
+      "git_blob_sha1": "c878b0fac879b5842a6a428c2c54bbe4a60757a8",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-LIMBO-RECALL-009-D-R2-VALID-SECOND.json",
+      "git_blob_sha1": "bb5fcffdcecb5a9ab7c1a85b02ff9d5e3c9c9cf0",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-MIRROR-COLLISION-008-B-P1-VALID-SECOND.json",
+      "git_blob_sha1": "9e977cff406170040c6220f4dfa5669baa58f21e",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-MIRROR-COLLISION-008-C-P2-VALID-FIRST.json",
+      "git_blob_sha1": "aaf12b19df1905b109ff688bcb1ac6b2472bbe9e",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-MIRROR-COLLISION-008-D-P2-INVALID120-SECOND.json",
+      "git_blob_sha1": "1f52865d1030db729e576b2903e30b0bb5f43850",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-QUADRUPLE-LIMBO-010-A.json",
+      "git_blob_sha1": "a408fbe5176a76dee515bfdc47f0df17a2f2e286",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-QUADRUPLE-LIMBO-010-B.json",
+      "git_blob_sha1": "b21e28421c89ff99da57455d5fdf5bbc8ca3d520",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-QUADRUPLE-LIMBO-010-C.json",
+      "git_blob_sha1": "d647cdb7f59009990f49b0e7561626e8597614d0",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/JANUS-QUADRUPLE-LIMBO-010-D.json",
+      "git_blob_sha1": "97a38ae967c69eb99b5ba292d00f9ebd99c0ba74",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/TAHYON-TRAVELER--0.01-TRIAL-001.json",
+      "git_blob_sha1": "166a0fcb0bf87f8060c570ff057c3f822c7e37ce",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/TAHYON-TRAVELER--0.01-TRIAL-002.json",
+      "git_blob_sha1": "b0e98b60d5145c30428725cb1d1318afe887a365",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/TAHYON-TRAVELER--0.01-TRIAL-003.json",
+      "git_blob_sha1": "c051e296166058f2aba1544657b0c135102db14b",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/TAHYON-TRAVELER--0.02-TRIAL-004-INVALID-TIME.json",
+      "git_blob_sha1": "403000119780ac4f541b6a12e548080ac1a71e24",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/TAHYON-TRAVELER--0.03-TRIAL-005-DOUBLE-OVERFLOW.json",
+      "git_blob_sha1": "5d1e7866b42aa4c77bb8b72fa4593d6e46006b80",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/TAHYON-TRAVELER--0.04-TRIAL-006-LIMEN-59.json",
+      "git_blob_sha1": "97efdd507a5d9e56172b08ce20313a8d7a3a633e",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "data/tahyon_traveler_trials/ВХОДЯЩИЙ-В-ШТОРМ.json",
+      "git_blob_sha1": "c3d65db8c364412d9aadd95aae0eed0204737e96",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/JANUS-ADV-ELITE-TACHYON-PHYSARUM-LINEAGE-BRIDGE-2026-08-27.json",
+      "git_blob_sha1": "fb983bed44922daa2ec91df082f4715ee682664d",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/causal_topology/JANUS-GENESIS-CTC-CONSISTENCY-HARDENING-v0.4.0.json",
+      "git_blob_sha1": "9ab8e73e0b7ec75a3c196e3440d29817ede865a2",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "registry/causal_topology/JANUS-GENESIS-CTC-FIXED-POINT-VALIDATION-v0.1.0.json",
+      "git_blob_sha1": "d118996b9cf51316b445932d6546757df41650c2",
+      "categories": [
+        "chronology_ctc_hawking"
+      ]
+    },
+    {
+      "path": "registry/cosmology/JANUS-UAP-DECLASSIFIED-RETROCAUSALITY-TACHYON-UKRAINE-DOSSIER-2026-08-27-v1.0.json",
+      "git_blob_sha1": "4cbd907799688a3870eb2326159e6c5ee5d7ad7a",
+      "categories": [
+        "tachyon_name",
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-CONTROLLABLE-RETROCAUSAL-CHANNEL-METHODS-AND-CALIBRATOR-AUDIT-2026-11-06-v1.0.json",
+      "git_blob_sha1": "8ccb90e900daffd2e9d1bcf745304ffc3e6ea3df",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-PRINCIPLE-DEUTSCH-QUANTUM-CALIBRATOR-v2.0-2026-11-06.json",
+      "git_blob_sha1": "5d8652d15c8fde43cf2a2ff9f2ac42258247c501",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-PRINCIPLE-DEUTSCH-v2-NEW-FUTURE-AB-RESULT-2026-11-06-v1.0.json",
+      "git_blob_sha1": "1ef211265dce28dc5f9da50b197c3c668c19a055",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-ADDRESSED-ANSWER-DESIGN-v1.0.json",
+      "git_blob_sha1": "bf5a09cd5e9dce4d747f6165854cbcfa6efbfbe7",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-ADDRESSED-ANSWERS-2026-11-05-v1.0.json",
+      "git_blob_sha1": "70607fc8b5f234d9f0bacad1650ba7a675bf97fb",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-ADDRESSED-ANSWERS-CORRECTION-v1.1.json",
+      "git_blob_sha1": "6c93924547180fbe0531bc7693b9e4fd6582f7ed",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-ADDRESSING-DEPENDENCE-TEST-v1.0.json",
+      "git_blob_sha1": "7df9a6bb5e533f11e581dd63108269cf7d2bc5b0",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-ARCHIVAL-HANDSHAKE-AUDIT-2026-11-05-v1.0.json",
+      "git_blob_sha1": "79e87e6ec05da3d56935c81e3e416ad148d136e3",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-PAST-QUERY-FUTURE-ANSWER-v1.0.json",
+      "git_blob_sha1": "d16e607ed8df6030c0d56324e13721e4aeaf3ec7",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-PROTOCOL-SCIENTIFIC-REVIEW-2026-11-05-v1.0.json",
+      "git_blob_sha1": "802103266aa53e7812d97cac842d074ea83212d9",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-RAPID-PROTOCOL-v1.0.json",
+      "git_blob_sha1": "74247b6055662801523246dc0e194b1dd16f907a",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-TWO-DIRECTIONS-REVIEW-v1.0.json",
+      "git_blob_sha1": "d8e2f30c12067a2070f62bd19bbabe8d0c0ddac8",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETRO-TAHYON-TWO-DIRECTIONS-VERIFICATION-ADDENDUM-2026-11-05-v1.0.json",
+      "git_blob_sha1": "f9e6dd74aa7ce280c52721793185c307e82dfc1a",
+      "categories": [
+        "tachyon_name"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-RETROCAUSAL-QUANTUM-RESEARCH-CORRIDORS-2026-11-06-v1.0.json",
+      "git_blob_sha1": "d7329f9f1aa990f9dc9d8bf6c30951ad129a4ba3",
+      "categories": [
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "registry/uap/JANUS-TEMPORAL-SIGNAL-SEARCH-77-AND-DEUTSCH-CTC-2026-11-06-v1.0.json",
+      "git_blob_sha1": "bde32e7a0fcc9b2232c8e2217900e29d385ea087",
+      "categories": [
+        "chronology_ctc_hawking",
+        "retrocausal_and_time_science"
+      ]
+    },
+    {
+      "path": "registry/uap/Retro-Tahyon.json",
+      "git_blob_sha1": "4c6814005518b979a717e083b9468ebea0926530",
+      "categories": [
+        "tachyon_name"
+      ]
+    }
+  ],
+  "scientific_authority": "NONE; index only",
+  "physical_retrocausality_proven": false,
+  "production_unchanged": true
+}
