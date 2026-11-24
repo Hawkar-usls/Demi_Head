@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Hawkar-usls/Demi_Head/blob/main/contracts/TACHYON_TEMPORAL_EVIDENCE_V1.json",
+  "title": "JANUS Tachyon R1 temporal evidence envelope",
+  "description": "Structural schema only. Python verifier separately enforces ordering, digest, phase/label exclusivity, and scientific nonpromotion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "record_id",
+    "target_id",
+    "kind",
+    "source",
+    "times",
+    "value",
+    "controls",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "janus.tachyon.temporal_evidence.v1"
+    },
+    "record_id": {
+      "$ref": "#/$defs/id"
+    },
+    "target_id": {
+      "$ref": "#/$defs/id"
+    },
+    "kind": {
+      "enum": [
+        "FEATURE",
+        "FORECAST",
+        "RESOLUTION"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit_sha",
+        "path",
+        "content_sha256",
+        "source_family_id",
+        "evidence_class"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^Hawkar-usls/[A-Za-z0-9_.-]{1,80}$"
+        },
+        "commit_sha": {
+          "$ref": "#/$defs/sha40"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha64"
+        },
+        "source_family_id": {
+          "$ref": "#/$defs/id"
+        },
+        "evidence_class": {
+          "enum": [
+            "PUBLISHED_MEASUREMENT",
+            "INSTRUMENT_TELEMETRY",
+            "FROZEN_FORECAST",
+            "RESOLVED_OUTCOME",
+            "SYNTHETIC_CONTROL"
+          ]
+        }
+      }
+    },
+    "times": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at",
+        "available_at",
+        "feature_cutoff_at",
+        "forecast_frozen_at",
+        "target_at",
+        "resolved_at"
+      ],
+      "properties": {
+        "observed_at": {
+          "$ref": "#/$defs/timeOrNull"
+        },
+        "available_at": {
+          "$ref": "#/$defs/timeOrNull"
+        },
+        "feature_cutoff_at": {
+          "$ref": "#/$defs/timeOrNull"
+        },
+        "forecast_frozen_at": {
+          "$ref": "#/$defs/timeOrNull"
+        },
+        "target_at": {
+          "$ref": "#/$defs/timeOrNull"
+        },
+        "resolved_at": {
+          "$ref": "#/$defs/timeOrNull"
+        }
+      }
+    },
+    "value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "probability_1",
+        "observed_label",
+        "description"
+      ],
+      "properties": {
+        "probability_1": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "observed_label": {
+          "enum": [
+            null,
+            0,
+            1
+          ]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 280
+        }
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provenance_checked_externally",
+        "training_permitted",
+        "automatic_deployment",
+        "scientific_claim_promoted",
+        "forecast_link_sha256"
+      ],
+      "properties": {
+        "provenance_checked_externally": {
+          "const": false
+        },
+        "training_permitted": {
+          "const": false
+        },
+        "automatic_deployment": {
+          "const": false
+        },
+        "scientific_claim_promoted": {
+          "const": false
+        },
+        "forecast_link_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha64"
+            }
+          ]
+        }
+      }
+    },
+    "content_sha256": {
+      "$ref": "#/$defs/sha64"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha40": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha64": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timeOrNull": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      ]
+    }
+  }
+}
