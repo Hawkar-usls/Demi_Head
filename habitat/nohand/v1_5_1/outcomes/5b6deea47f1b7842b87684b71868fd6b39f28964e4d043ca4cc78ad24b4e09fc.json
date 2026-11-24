@@ -1,0 +1,10 @@
+{
+  "action": "GIT_TO_LOCAL_CREATE",
+  "authority_delta": 0,
+  "outcome_sha256": "5b6deea47f1b7842b87684b71868fd6b39f28964e4d043ca4cc78ad24b4e09fc",
+  "request_id": "NASV142-SELFUPDATE-000002-NOHAND-003-GIT_TO_LOCAL-c0b673bd2529-14db8c1d776d",
+  "request_sha256": "4c1929a84322c129f791258c107e9df7fd2f83aaf7a78b145a2f4635ec0bb6e1",
+  "response_sha256": null,
+  "schema": "janus.habitat.nohand.demihead_outcome.v1",
+  "success": false
+}

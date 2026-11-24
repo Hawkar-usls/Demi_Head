@@ -1,0 +1,105 @@
+{
+  "action_counts": {
+    "STARTUP_HANDSHAKE": 2
+  },
+  "action_success": {
+    "STARTUP_HANDSHAKE": {
+      "successes": 2,
+      "total": 2
+    }
+  },
+  "authority_delta": 0,
+  "bins": [
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 1,
+      "sum_p": 0.5,
+      "total": 1
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 1,
+      "sum_p": 0.7222222222222222,
+      "total": 1
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    },
+    {
+      "successes": 0,
+      "sum_p": 0.0,
+      "total": 0
+    }
+  ],
+  "context_action_counts": {
+    "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058": {
+      "STARTUP_HANDSHAKE": 2
+    }
+  },
+  "context_action_success": {
+    "eb5ed45edcf907b055bfaa8e0fcca4aa64186e9ad016811ed094588a8cb8b058|STARTUP_HANDSHAKE": {
+      "successes": 2,
+      "total": 2
+    }
+  },
+  "global_success": {
+    "successes": 2,
+    "total": 2
+  },
+  "metric_sums": {
+    "cal_brier": 0.3271604938271605,
+    "logloss": 1.0185695809945732,
+    "n": 2,
+    "raw_brier": 0.3271604938271605
+  },
+  "pending": {
+    "v151-ci-seed": {
+      "action": "STARTUP_HANDSHAKE",
+      "calibrated_success_probability": 0.5,
+      "context_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "forecast_sha256": "7116cc587e591afd9e8e4c20f9972d945b975d6d6b238e5cd22ada1763d15e26",
+      "next_action_probability": 0.25,
+      "prediction_is_command": false,
+      "prediction_is_permission": false,
+      "prediction_is_truth": false,
+      "raw_success_probability": 0.5,
+      "request_id": "v151-ci-seed",
+      "state_sequence": 1,
+      "uncertainty": 0.3535533905932738
+    }
+  },
+  "raw_context_persisted": false,
+  "schema": "janus.habitat.nohand.demihead_predictor_state.v1",
+  "sequence": 5,
+  "state_sha256": "6bdfc79dc696bc4dd954e5ab2883cc9566daf3118f1c3a42dbccf60c0a520ca5"
+}
