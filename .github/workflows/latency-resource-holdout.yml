@@ -1,0 +1,159 @@
+name: Validate frozen latency/resource holdout
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  latency-resource-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Independently verify frozen performance corpus before execution
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          expected = 'e92f2441825cf56c8876cc522e056e21bd93bc9ceff7434aedde4cd29879efa3'
+          corpus = json.loads(Path('holdout/latency_resource_v1/frozen_corpus.json').read_text(encoding='utf-8'))
+          payload = corpus['freeze_payload']
+          raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
+          actual = hashlib.sha256(raw).hexdigest()
+          assert corpus['freeze_sha256'] == expected
+          assert actual == expected
+          assert payload['frozen_before_first_execution'] is True
+          assert payload['parent_demihead_sha'] == '467e31ff3f6a2bb26af2aea21d97d20f2cc448c6'
+          assert len(payload['calibration_cases']) == 18
+          assert len(payload['holdout_cases']) == 16
+          assert [c['config_id'] for c in payload['candidate_grid']] == ['BASELINE_SEQ', 'THREADS_2', 'THREADS_4']
+          assert payload['selection']['uses_calibration_only'] is True
+          assert payload['selection']['holdout_may_not_change_selection'] is True
+          assert payload['claim_ceiling']['speed_improvement_established_before_holdout'] is False
+          assert payload['claim_ceiling']['authority_delta'] == 0
+          assert payload['claim_ceiling']['mass_effect_budget_delta'] == 0
+          print('PERFORMANCE_FREEZE_VERIFIED=true')
+          print('FREEZE_SHA256', actual)
+          PY
+
+      - name: Test benchmark engine without full timing run
+        run: python -m unittest tests.test_latency_resource_holdout -v
+
+      - name: Run frozen calibration and independent holdout
+        id: benchmark
+        continue-on-error: true
+        run: |
+          python tools/latency_resource_holdout.py \
+            --corpus holdout/latency_resource_v1/frozen_corpus.json \
+            --output /tmp/latency-resource-result.json
+
+      - name: Validate scientific result and claim ceiling
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path('/tmp/latency-resource-result.json')
+          assert path.exists(), 'benchmark did not preserve a result receipt'
+          result = json.loads(path.read_text(encoding='utf-8'))
+          assert result['schema'] == 'janus.demihead.latency_resource_result.v1'
+          assert result['freeze_sha256'] == 'e92f2441825cf56c8876cc522e056e21bd93bc9ceff7434aedde4cd29879efa3'
+          assert result['parent_demihead_sha'] == '467e31ff3f6a2bb26af2aea21d97d20f2cc448c6'
+          assert result['protocol']['selection_uses_calibration_only'] is True
+          assert result['protocol']['holdout_may_not_change_selection'] is True
+          assert result['protocol']['calibration_repeats'] == 21
+          assert result['protocol']['holdout_repeats'] == 31
+          assert result['protocol']['inner_loops_per_case'] == 12
+
+          calibration = result['calibration']
+          assert set(calibration['metrics']) == {'BASELINE_SEQ', 'THREADS_2', 'THREADS_4'}
+          selected = calibration['selected_candidate']
+          assert selected in {'THREADS_2', 'THREADS_4'}
+          holdout = result['holdout']
+          assert holdout['executed_configs'] == ['BASELINE_SEQ', selected]
+          assert set(holdout['metrics']) == {'BASELINE_SEQ', selected}
+
+          integrity = result['integrity']
+          assert integrity['benchmark_integrity_pass'] is True
+          assert integrity['exact_output_digest_equality'] is True
+          assert integrity['protected_boundary_equality'] is True
+          assert integrity['baseline_errors'] == 0
+          assert integrity['baseline_timeouts'] == 0
+
+          status = result['status']
+          assert status in {'PERFORMANCE_CANDIDATE_ADMITTED', 'NO_CANDIDATE_ADMITTED'}
+          checks = holdout['admission_checks']
+          if status == 'PERFORMANCE_CANDIDATE_ADMITTED':
+              assert all(checks.values())
+              assert result['scientific_result']['speed_improvement_established'] is True
+              assert result['scientific_result']['negative_performance_certificate'] is False
+          else:
+              assert not all(checks.values())
+              assert result['scientific_result']['speed_improvement_established'] is False
+              assert result['scientific_result']['negative_performance_certificate'] is True
+
+          ceiling = result['claim_ceiling']
+          assert ceiling['functional_correctness_implied_by_performance'] is False
+          assert ceiling['production_latency_established'] is False
+          assert ceiling['cross_machine_generalization_established'] is False
+          assert ceiling['production_readiness_established'] is False
+          assert ceiling['authority_delta'] == 0
+          assert ceiling['mass_effect_budget_delta'] == 0
+          assert result['observer_overhead']['used_for_candidate_selection'] is False
+          assert result['observer_overhead']['used_for_admission'] is False
+
+          baseline = holdout['metrics']['BASELINE_SEQ']
+          candidate = holdout['metrics'][selected]
+          lines = [
+              '# Frozen latency/resource holdout',
+              '',
+              f"- status: `{status}`",
+              f"- selected candidate: `{selected}`",
+              f"- freeze: `{result['freeze_sha256']}`",
+              f"- baseline p95 wall: `{baseline['p95_wall_ns']} ns`",
+              f"- candidate p95 wall: `{candidate['p95_wall_ns']} ns`",
+              f"- baseline p99 wall: `{baseline['p99_wall_ns']} ns`",
+              f"- candidate p99 wall: `{candidate['p99_wall_ns']} ns`",
+              f"- baseline p95 CPU: `{baseline['p95_cpu_ns']} ns`",
+              f"- candidate p95 CPU: `{candidate['p95_cpu_ns']} ns`",
+              f"- baseline peak allocation: `{baseline['peak_memory_bytes']} bytes`",
+              f"- candidate peak allocation: `{candidate['peak_memory_bytes']} bytes`",
+              '',
+              '`NO_CANDIDATE_ADMITTED` is a valid negative performance certificate, not an experiment failure.',
+              '',
+              '`FASTER != TRUER`; authority delta = 0; mass-effect budget delta = 0.',
+          ]
+          summary = os.environ.get('GITHUB_STEP_SUMMARY')
+          if summary:
+              Path(summary).write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          print('PERFORMANCE_SCIENTIFIC_STATUS', status)
+          print('SELECTED_CANDIDATE', selected)
+          print('BENCHMARK_INTEGRITY=PASS')
+          PY
+
+      - name: Preserve machine-readable latency/resource receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: latency-resource-holdout-${{ github.sha }}
+          path: /tmp/latency-resource-result.json
+          if-no-files-found: error
+          retention-days: 30
