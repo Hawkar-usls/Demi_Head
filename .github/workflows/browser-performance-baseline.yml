@@ -1,0 +1,153 @@
+name: Frozen browser performance baseline
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out DemiHead
+        uses: actions/checkout@v7
+
+      - name: Check out exact HRain implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/Hrain
+          ref: ceb81210c2f70b71d6c941e0b088a68969ead7b9
+          path: _perf/Hrain
+          persist-credentials: false
+
+      - name: Check out exact iNaiHR implementation
+        uses: actions/checkout@v7
+        with:
+          repository: Hawkar-usls/iNaiHR
+          ref: b27cd8732b3137caea1036024acc1778ea02213a
+          path: _perf/iNaiHR
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify frozen protocol independently before first measurement
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p=Path('holdout/browser_performance_baseline_v1/frozen_protocol.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          raw=json.dumps(x['freeze_payload'],ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8')
+          actual=hashlib.sha256(raw).hexdigest()
+          expected='1434413edcc37317a0a1b748e074428b1c1ec9c4c58380871d3860d18a4e0da1'
+          assert actual==expected
+          assert x['freeze_sha256']==expected
+          f=x['freeze_payload']
+          assert f['frozen_before_first_execution'] is True
+          assert f['workload']['warmup_cycles_per_hemisphere']==3
+          assert f['workload']['measured_cycles_per_hemisphere']==20
+          assert f['workload']['observer_roundtrips']==100
+          assert f['admission']['required_measured_cycles_total']==40
+          assert f['admission']['required_operation_samples_per_operation']==40
+          assert f['admission']['latency_thresholds'] is None
+          assert f['admission']['resource_thresholds'] is None
+          assert f['admission']['candidate_comparison'] is False
+          assert f['admission']['performance_tuning_permitted_before_baseline'] is False
+          print('PERFORMANCE_PROTOCOL_FROZEN_BEFORE_FIRST_EXECUTION=true')
+          print('FREEZE_SHA256',actual)
+          PY
+
+      - name: Install frozen browser dependency
+        run: npm install --no-save playwright@1.55.0
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Start isolated localhost fixture server
+        run: |
+          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/janus-perf-server.log 2>&1 &
+          echo $! >/tmp/janus-perf-server.pid
+          for i in $(seq 1 80); do
+            if curl -fsS http://127.0.0.1:8766/examples/hemisphere_proposal_lab.html >/dev/null; then
+              echo 'PERFORMANCE_FIXTURE_SERVER=READY'
+              exit 0
+            fi
+            sleep 0.1
+          done
+          cat /tmp/janus-perf-server.log
+          exit 1
+
+      - name: Run frozen real-browser baseline
+        run: |
+          node tools/run-browser-performance-baseline.js \
+            holdout/browser_performance_baseline_v1/frozen_protocol.json \
+            /tmp/browser-performance-baseline.json
+
+      - name: Validate baseline receipt and claim ceiling
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/browser-performance-baseline.json').read_text(encoding='utf-8'))
+          assert r['status']=='PASS'
+          assert r['freeze_sha256']=='1434413edcc37317a0a1b748e074428b1c1ec9c4c58380871d3860d18a4e0da1'
+          assert r['baseline_only'] is True
+          assert r['candidate_comparison_performed'] is False
+          assert r['tuning_performed'] is False
+          assert r['workload']['measured_cycles_total']==40
+          for name in [
+              'sidecar_export','proposal_build','proposal_download','apply_preview',
+              'apply_decline','apply_repreview','apply_accept','reload_verify',
+              'full_validation_cycle'
+          ]:
+              s=r['latency_ms']['combined'][name]
+              assert s['n']==40
+              assert 0 <= s['min_ms'] <= s['p50_ms'] <= s['p95_ms'] <= s['p99_ms'] <= s['max_ms']
+          assert r['observer_roundtrip_overhead_ms']['n']==100
+          assert r['resources']['sample_count'] > 0
+          assert r['resources']['observed_chromium_process_cpu_time_delta_s'] >= 0
+          assert r['resources']['peak_sum_rss_bytes_for_observed_chromium_processes'] > 0
+          assert r['resources']['peak_js_heap_used_bytes'] > 0
+          assert r['resources']['peak_js_heap_total_bytes'] > 0
+          assert r['errors']['count']==0
+          assert r['errors']['timeouts']==0
+          assert r['errors']['page_errors']==[]
+          assert r['errors']['external_network_requests']==[]
+          c=r['claim_ceiling']
+          assert c['faster_than_baseline_established'] is False
+          assert c['production_network_latency_measured'] is False
+          assert c['production_readiness_established'] is False
+          assert c['cross_runner_generalization_established'] is False
+          assert c['authenticated_human_identity_established'] is False
+          assert c['real_user_workspace_touched'] is False
+          assert c['truth_or_authority_affected_by_latency'] is False
+          assert c['authority_delta']==0
+          assert c['mass_effect_budget_delta']==0
+          print('FROZEN_BROWSER_PERFORMANCE_BASELINE=PASS')
+          print('FULL_CYCLE_P50_MS',r['latency_ms']['combined']['full_validation_cycle']['p50_ms'])
+          print('FULL_CYCLE_P95_MS',r['latency_ms']['combined']['full_validation_cycle']['p95_ms'])
+          print('FULL_CYCLE_P99_MS',r['latency_ms']['combined']['full_validation_cycle']['p99_ms'])
+          print('PEAK_BROWSER_RSS_BYTES',r['resources']['peak_sum_rss_bytes_for_observed_chromium_processes'])
+          print('OBSERVED_BROWSER_CPU_DELTA_S',r['resources']['observed_chromium_process_cpu_time_delta_s'])
+          print('FASTER_THAN_BASELINE_ESTABLISHED=false')
+          PY
+
+      - name: Preserve baseline receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-performance-baseline-${{ github.sha }}
+          path: /tmp/browser-performance-baseline.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Stop isolated fixture server
+        if: always()
+        run: |
+          if [ -f /tmp/janus-perf-server.pid ]; then
+            kill "$(cat /tmp/janus-perf-server.pid)" || true
+          fi
