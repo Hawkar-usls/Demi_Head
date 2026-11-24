@@ -1,0 +1,141 @@
+name: DemiHead Synesthetic Associative Core v1
+
+on:
+  pull_request:
+    paths:
+      - '.janus/JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE_V1.json'
+      - 'tools/demihead_synesthetic_associative_core.py'
+      - 'tests/test_demihead_synesthetic_associative_core.py'
+      - 'docs/SYNAESTHETIC_ASSOCIATIVE_CORE.md'
+      - 'contracts/JANUS_DEMIHEAD_SYNESTHETIC_ASSOCIATIVE_CORE_V1.json'
+      - '.github/workflows/synesthetic-associative-core-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.janus/JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE_V1.json'
+      - 'tools/demihead_synesthetic_associative_core.py'
+      - 'tests/test_demihead_synesthetic_associative_core.py'
+      - 'docs/SYNAESTHETIC_ASSOCIATIVE_CORE.md'
+      - 'contracts/JANUS_DEMIHEAD_SYNESTHETIC_ASSOCIATIVE_CORE_V1.json'
+      - '.github/workflows/synesthetic-associative-core-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  local-core:
+    name: local-core (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile tools/demihead_synesthetic_associative_core.py
+      - name: Verify shared contract digest
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib
+          p = pathlib.Path('.janus/JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE_V1.json')
+          obj = json.loads(p.read_text(encoding='utf-8'))
+          raw = json.dumps(obj, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode()
+          got = hashlib.sha256(raw).hexdigest()
+          want = '3aec527be027fc280fc9a8ace1255c9a3a7da73fc884d9b4856694a1f1530306'
+          assert got == want, (got, want)
+          print('contract_sha256', got)
+          PY
+      - name: Self-test
+        run: python tools/demihead_synesthetic_associative_core.py
+      - name: Regression tests
+        run: python -m unittest -v tests.test_demihead_synesthetic_associative_core
+
+  cousteau-unison:
+    name: Cousteau ↔ DemiHead unison
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout DemiHead
+        uses: actions/checkout@v4
+        with:
+          path: demihead
+      - name: Checkout Cousteau research-core candidate
+        uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus-Cosmos
+          ref: feature/cousteau-synesthetic-research-v2-20260825
+          path: cosmos
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Cross-repository contract and packet handshake
+        run: |
+          python - <<'PY'
+          import hashlib, importlib, json, pathlib, sys
+          root = pathlib.Path.cwd()
+          demi = root / 'demihead'
+          cosmos = root / 'cosmos'
+
+          def contract_hash(path):
+              obj = json.loads(path.read_text(encoding='utf-8'))
+              raw = json.dumps(obj, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode()
+              return hashlib.sha256(raw).hexdigest()
+
+          expected = '3aec527be027fc280fc9a8ace1255c9a3a7da73fc884d9b4856694a1f1530306'
+          dh = contract_hash(demi / '.janus/JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE_V1.json')
+          cs = contract_hash(cosmos / '.janus/JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE_V1.json')
+          assert dh == cs == expected, (dh, cs, expected)
+
+          sys.path.insert(0, str(cosmos / 'workspace'))
+          import cousteau_synesthetic_research_core as c
+          sys.path.insert(0, str(demi / 'tools'))
+          import demihead_synesthetic_associative_core as d
+
+          payload = {
+              'em122_depth': 3421.4,
+              'ea600_depth': 3419.1,
+              'em122_minus_ea600': 2.3,
+              'latitude': -7.845673,
+              'longitude': -14.48023,
+              'heading': 359.0,
+              'cadence_jitter': 0.04,
+              'missing_fraction': 0.02,
+              'verdict': 'H1_REAL_MORPHOLOGY',
+              'target_label': '0012',
+          }
+          rp = c.build_research_passport(
+              payload,
+              event_id='CROSS-REPO-SYNTH-001',
+              direction='HEAD_FORWARD',
+              scale='60s',
+              profile='SYNTHETIC_TEST',
+          )
+          packet = c.export_handshake_packet(rp)
+          assert c.verify_handshake_packet(packet)
+          assert d.verify_cousteau_packet(packet)
+          receipt = d.build_associative_receipt(
+              packet,
+              structural_context={'track': 'synthetic-control', 'hypothesis': 'does-not-score'},
+              associative_context={'memory': 'cross-repo-fixture', 'target': 'does-not-score'},
+          )
+          unison = d.build_unison_receipt(packet, receipt)
+          assert unison['cousteau_measurement_fingerprint_bit_preserved'] is True
+          assert unison['scientific_convergence_claim'] is False
+          assert receipt['measurement_fingerprint'] == packet['measurement_fingerprint']
+
+          blocked = c.build_research_passport(
+              payload,
+              event_id='HANNAH-NO-RAW-CONTROL',
+              profile='HANNAH_BODC',
+          )
+          blocked_packet = c.export_handshake_packet(blocked)
+          blocked_receipt = d.build_associative_receipt(blocked_packet)
+          assert blocked['status'] == 'BLOCKED'
+          assert blocked_receipt['status'] == 'BLOCKED_HOLD'
+          assert blocked_receipt['associative_tags'] == []
+          print('UNISON_PASS', unison['unison_sha256'])
+          PY

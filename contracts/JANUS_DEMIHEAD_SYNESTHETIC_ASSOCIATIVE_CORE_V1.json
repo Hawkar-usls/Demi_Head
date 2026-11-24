@@ -1,0 +1,100 @@
+{
+  "artifact_id": "JANUS-DEMIHEAD-SYNESTHETIC-ASSOCIATIVE-CORE-2026-08-25-v1.0",
+  "schema": "janus.demihead.synesthetic_associative_core.contract.v1",
+  "status": "IMPLEMENTED_CANDIDATE__CI_REQUIRED_BEFORE_PROMOTION",
+  "core": {
+    "id": "JANUS_DEMIHEAD_SYNESTHETIC_ASSOCIATIVE_CORE",
+    "version": "1.0.0",
+    "entrypoint": "tools/demihead_synesthetic_associative_core.py",
+    "test_entrypoint": "tests/test_demihead_synesthetic_associative_core.py"
+  },
+  "shared_handshake": {
+    "protocol_id": "JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE",
+    "protocol_version": "1.0.0",
+    "contract_path": ".janus/JANUS_SYNAESTHETIC_RESEARCH_HANDSHAKE_V1.json",
+    "contract_sha256": "3aec527be027fc280fc9a8ace1255c9a3a7da73fc884d9b4856694a1f1530306",
+    "upstream_role": "COUSTEAU_MEASUREMENT_SENSORY_CORE",
+    "local_role": "DEMIHEAD_ASSOCIATIVE_MEMORY_CORE"
+  },
+  "role_split": {
+    "cousteau": "measurements -> immutable sensory fingerprint",
+    "demihead": "immutable sensory fingerprint -> bounded associative memory and disagreement-preserving retrieval",
+    "unison": "same measurement identity travels through both cores without mutation"
+  },
+  "hemisphere_binding": {
+    "LEFT_HRAIN": "STRUCTURAL_CONTEXT",
+    "RIGHT_INAIHR": "ASSOCIATIVE_CONTEXT",
+    "automatic_graph_merge": false,
+    "disagreement_preserved": true
+  },
+  "comparison_states": [
+    "IDENTICAL_MEASUREMENT_MEMORY",
+    "MNEMONIC_NEIGHBOR_ONLY",
+    "PROVENANCE_CONFLICT_HOLD",
+    "BLOCKED_OR_INCOMPARABLE"
+  ],
+  "memory_index": {
+    "type": "DETERMINISTIC_IN_MEMORY_REFERENCE_INDEX",
+    "duplicate_identical_receipt": "IDEMPOTENT_PRESENT",
+    "same_event_source_changed_fingerprint": "PROVENANCE_CONFLICT_HOLD",
+    "persistence_authority": false,
+    "evidence_admission_authority": false
+  },
+  "semantic_firewall": {
+    "story_context_may_be_retained_for_inspection": true,
+    "story_context_may_influence_similarity_score": false,
+    "forbidden_score_tokens": [
+      "verdict",
+      "hypothesis",
+      "interpretation",
+      "claim",
+      "pyramid",
+      "target",
+      "candidate",
+      "anomaly",
+      "h0",
+      "h1",
+      "h2",
+      "artificial",
+      "natural",
+      "control_label",
+      "class_label",
+      "expected",
+      "prediction",
+      "story"
+    ]
+  },
+  "authority_firewall": {
+    "MEMORY_EQUALS_TRUTH": false,
+    "MNEMONIC_SIMILARITY_IS_SCIENTIFIC_SIMILARITY": false,
+    "ASSOCIATION_IS_EVIDENCE": false,
+    "MAY_CHANGE_RAW_DATA": false,
+    "MAY_CHANGE_CALIBRATION": false,
+    "MAY_CHANGE_SCIENTIFIC_VERDICT": false,
+    "MAY_REORDER_REVIEW_PRIORITY": true,
+    "AUTHORITY_DELTA": 0,
+    "MASS_EFFECT_BUDGET_DELTA": 0
+  },
+  "required_unison_gates": [
+    "SHARED_CONTRACT_HASH_IDENTICAL",
+    "COUSTEAU_PACKET_SIGNATURE_REPLAY_PASS",
+    "DEMIHEAD_RECEIPT_SIGNATURE_REPLAY_PASS",
+    "MEASUREMENT_FINGERPRINT_BIT_EXACT_PRESERVATION",
+    "BLOCKED_INPUT_REMAINS_BLOCKED",
+    "DISAGREEMENT_PRESERVED",
+    "STORY_CONTEXT_NOT_USED_IN_SCORE",
+    "SCIENTIFIC_CONVERGENCE_CLAIM_FALSE",
+    "EVIDENCE_ADMISSION_FALSE",
+    "AUTHORITY_DELTA_ZERO"
+  ],
+  "hard_rules": [
+    "MODEL_OUTPUT_NE_EVIDENCE",
+    "ASSOCIATION_NE_EVIDENCE",
+    "MEMORY_NE_TRUTH",
+    "DISAGREEMENT_NE_ERROR",
+    "UNKNOWN_NE_ZERO",
+    "BLOCKED_NE_MEASURED",
+    "COUSTEAU_MEASUREMENT_FINGERPRINT_IS_IMMUTABLE_IN_DEMIHEAD",
+    "SENSORY_MATCH_NE_SCIENTIFIC_CONVERGENCE"
+  ]
+}
