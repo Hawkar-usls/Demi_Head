@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: Hawkar-usls/Janus_Genesis
-          ref: 662c7d6803ad2456e6c7791fef24b75753f59bc2
+          ref: 28562679afa70c769aed0314f5a06e1b7929565c
           path: eye
           sparse-checkout: src/janus_genesis/eye_r3_transport.py
           sparse-checkout-cone-mode: false
