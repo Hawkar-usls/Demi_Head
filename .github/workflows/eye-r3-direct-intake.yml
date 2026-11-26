@@ -1,0 +1,68 @@
+name: EYE R3 DemiHead direct artifact intake
+on:
+  push:
+    branches: [research/nexus-cosmos-eye-spatial]
+    paths: ['.github/workflows/eye-r3-direct-intake.yml']
+  pull_request:
+    paths: ['.github/workflows/eye-r3-direct-intake.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/Janus_Genesis
+          ref: 28562679afa70c769aed0314f5a06e1b7929565c
+          path: eye
+          sparse-checkout: src/janus_genesis/eye_r3_transport.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: 4411695e1e54b690613fe6db45809a663e0f3b47
+          path: registry
+          sparse-checkout: |
+            experiments/kusto/zn-r2/2026-11-26-run-45830969841.json
+            experiments/janus-eye/r1/2026-11-26-run-45833030382.json
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Consume EYE output from another completed run and return review
+        env:
+          GH_READ_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p eye-r3
+          PYTHONPATH=tools:eye/src/janus_genesis python - <<'PY'
+          import os,json
+          from pathlib import Path
+          from eye_r3_transport import pull
+          from cosmos_eye_spatial_review import build_request,review,verify_review
+          root=Path('registry');out=Path('eye-r3')
+          raw,source=pull('eye',os.environ['GH_READ_TOKEN'])
+          received=json.loads(raw)
+          archived=json.loads((root/'experiments/janus-eye/r1/2026-11-26-run-45833030382.json').read_text())['receipt']
+          assert received==archived
+          req=build_request(root);res=review(root,req)
+          assert verify_review(root,req,res) and res['decision']=='ACCEPT_DESCRIPTIVE_MODEL_ONLY'
+          record={'schema':'janus.eye.r3.demihead_delivery.v1','run_id':os.environ['GITHUB_RUN_ID'],'source':source,'request':req,'review':res,'decision':'DIRECT_EYE_INTAKE_PASS','production_promotion':False}
+          (out/'receipt.json').write_text(json.dumps(record,indent=2)+'\n')
+          print(json.dumps(record,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eye-r3-demihead-delivery
+          path: eye-r3/
+          retention-days: 90

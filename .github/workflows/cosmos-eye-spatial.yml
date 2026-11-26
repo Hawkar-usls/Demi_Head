@@ -1,0 +1,70 @@
+name: COSMOS EYE DemiHead spatial witness R1
+on:
+  pull_request:
+    paths: ['tools/cosmos_eye_spatial_review.py','contracts/NEXUS_COSMOS_EYE_SPATIAL_R1_FROZEN_CONTRACT.json','.github/workflows/cosmos-eye-spatial.yml']
+  push:
+    branches: [research/nexus-cosmos-eye-spatial]
+    paths: ['.github/workflows/cosmos-eye-spatial.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Hawkar-usls/janus-meta-registry
+          ref: 4411695e1e54b690613fe6db45809a663e0f3b47
+          path: registry
+          sparse-checkout: |
+            experiments/kusto/zn-r2/2026-11-26-run-45830969841.json
+            experiments/janus-eye/r1/2026-11-26-run-45833030382.json
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Review frozen COSMOS and EYE receipts, exercise rejection controls
+        run: |
+          mkdir -p spatial-review
+          PYTHONPATH=tools python - <<'PY'
+          import copy,json,tempfile,shutil,os
+          from pathlib import Path
+          from cosmos_eye_spatial_review import build_request,review,verify_review,SOURCES
+          from nexus_guardian_ingress import self_test
+          root=Path('registry');out=Path('spatial-review')
+          req=build_request(root);r=review(root,req)
+          assert verify_review(root,req,r)
+          assert r['decision']=='ACCEPT_DESCRIPTIVE_MODEL_ONLY'
+          assert self_test()['status']=='PASS'
+          checks={}
+          for key,change in [('coordinate',lambda q:q['node']['sample_xy_m'].__setitem__(0,999)),('field',lambda q:q['node']['fields'].__setitem__('gravity',999)),('authority',lambda q:q.__setitem__('data_class','MEASURED'))]:
+              q=copy.deepcopy(req);change(q)
+              try:review(root,q)
+              except ValueError:checks[key+'_rejected']=True
+              else:raise AssertionError(key)
+          for claim in ('UNIQUE_OBJECT','DIRECT_SONAR','INDEPENDENT_REPLICATION'):
+              q=build_request(root,claim);v=review(root,q)
+              assert v['decision']=='HOLD_FOR_NEW_INDEPENDENT_EVIDENCE'
+              checks[claim+'_held']=True
+          bad=copy.deepcopy(r);bad['decision']='CONFIRMED'
+          assert not verify_review(root,req,bad);checks['forged_review_rejected']=True
+          with tempfile.TemporaryDirectory() as tmp:
+              for name,(path,_) in SOURCES.items():
+                  p=Path(tmp)/path;p.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(root/path,p)
+              p=Path(tmp)/SOURCES['eye'][0];p.write_bytes(p.read_bytes()+b' ')
+              try:build_request(tmp)
+              except ValueError:checks['source_mutation_rejected']=True
+              else:raise AssertionError('source mutation')
+          receipt={'schema':'janus.demihead.cosmos_eye_witness.v1','run_id':os.environ['GITHUB_RUN_ID'],'request':req,'review':r,'negative_controls':checks,'guardian_self_test':'PASS','decision':'SOURCE_BOUND_REVIEW_PASS','production_promotion':False}
+          (out/'receipt.json').write_text(json.dumps(receipt,indent=2))
+          print(json.dumps(receipt,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cosmos-eye-demihead-review
+          path: spatial-review/

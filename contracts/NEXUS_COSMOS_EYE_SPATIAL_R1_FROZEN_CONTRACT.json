@@ -1,0 +1,56 @@
+{
+  "schema": "janus.demihead.nexus.cosmos_eye_spatial_contract.v1",
+  "contract_id": "NEXUS_COSMOS_EYE_SPATIAL_R1",
+  "status": "FROZEN_RESEARCH_BEFORE_IMPLEMENTATION",
+  "inherits": [
+    "contracts/NEXUS_V2_COSMOS_TYPED_PROOF_EDGE_FROZEN_CONTRACT.json",
+    "tools/nexus_guardian_ingress.py",
+    "tools/epistemic_execution_gate.py",
+    "Hawkar-usls/janus-meta-registry:EYE/EYE-ROOT-CONSTITUTION-v1.0.json"
+  ],
+  "routes": [
+    [
+      "COSMOS",
+      "EYE",
+      "HEIGHTFIELD_SCENE"
+    ],
+    [
+      "EYE",
+      "DEMIHEAD",
+      "SPATIAL_REVIEW_REQUEST"
+    ],
+    [
+      "DEMIHEAD",
+      "COSMOS",
+      "SPATIAL_REVIEW_RECEIPT"
+    ],
+    [
+      "DEMIHEAD",
+      "EYE",
+      "SPATIAL_REVIEW_RECEIPT"
+    ]
+  ],
+  "existing_proof_route_unchanged": true,
+  "registry_ref": "4411695e1e54b690613fe6db45809a663e0f3b47",
+  "sources": {
+    "cosmos": {
+      "path": "experiments/kusto/zn-r2/2026-11-26-run-45830969841.json",
+      "git_blob": "fc495da08d13c10e11953a7ecab58338fb24d0d6"
+    },
+    "eye": {
+      "path": "experiments/janus-eye/r1/2026-11-26-run-45833030382.json",
+      "git_blob": "2a2d84bb0c0b4a78d93d205fa0d22cce71168223"
+    }
+  },
+  "negative_controls": [
+    "source bytes mutated",
+    "coordinate substitution",
+    "field value substitution",
+    "authority upgrade",
+    "unique object claim",
+    "forged review"
+  ],
+  "authority_delta": 0,
+  "production_promotion": false,
+  "scope": "Pinned public source replay and typed review; not new sensor observation, deployed messaging or general proof route"
+}
